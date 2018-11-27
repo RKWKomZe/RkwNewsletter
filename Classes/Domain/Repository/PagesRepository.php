@@ -23,7 +23,7 @@ use RKW\RkwBasics\Helper\QueryTypo3;
  * @author Maximilian Fäßler <maximilian@faesslerweb.de>
  * @author Steffen Kroggel <developer@steffenkroggel.de>
  * @copyright Rkw Kompetenzzentrum
- * @package RKW_RkwMailer
+ * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository

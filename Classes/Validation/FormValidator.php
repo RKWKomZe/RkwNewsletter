@@ -23,7 +23,7 @@ use \RKW\RkwBasics\Helper\Common;
  * @author Maximilian Fäßler <maximilian@faesslerweb.de>
  * @author Steffen Kroggel <developer@steffenkroggel.de>
  * @copyright Rkw Kompetenzzentrum
- * @package RKW_RkwMailer
+ * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class FormValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator
