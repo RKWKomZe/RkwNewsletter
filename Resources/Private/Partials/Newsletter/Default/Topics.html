@@ -1,0 +1,68 @@
+{namespace rkwMailer=RKW\RkwMailer\ViewHelpers}
+{namespace rkwNewsletter=RKW\RkwNewsletter\ViewHelpers}
+
+<!-- PLAINTEXT -->
+<f:section name="Plaintext"><f:if condition="{pages}"><f:for each="{pages}" as="page" iteration="iterator">
+– {page.txRkwnewsletterTopic.name}
+</f:for></f:if></f:section>
+
+
+
+<!-- HTML -->
+<f:section name="Html">
+
+    <tr>
+        <td style="padding: 0 16px 21px">
+            <table cellpadding="0" cellspacing="0" border="0" style="width: 100%; font-family: 'Arial', sans-serif; font-size: 14px">
+                <tr>
+                    <f:if condition="{pages}">
+                        <f:for each="<rkwNewsletter:getNewsletterTopicsWithSubscriptions issue='{issue}' pages='{pages}' />" as="item" iteration="iterator">
+                            <f:if condition="{iterator.isFirst}">
+                                <f:then>
+                                    <td style="width: 33%; text-align: left">
+                                        <f:if condition="{item.subscribed}">
+                                            <f:then>
+                                                <a href="#topic-{item.topic.uid}"><img src="###baseUrlImages###/topic-{item.topic.uid}.png" alt="{item.topic.name}" style="max-width: 100%" /></a>
+                                            </f:then>
+                                            <f:else>
+                                                <img src="###baseUrlImages###/topic-{item.topic.uid}-disabled.png" alt="{item.topic.name}" style="max-width: 100%" />
+                                            </f:else>
+                                        </f:if>
+                                    </td>
+                                </f:then>
+                                <f:else>
+                                    <f:if condition="{iterator.isLast}">
+                                        <f:then>
+                                            <td style="width: 33%; text-align: right">
+                                                <f:if condition="{item.subscribed}">
+                                                    <f:then>
+                                                        <a href="#topic-{item.topic.uid}"><img src="###baseUrlImages###/topic-{item.topic.uid}.png" alt="{item.topic.name}" style="max-width: 100%" /></a>
+                                                    </f:then>
+                                                    <f:else>
+                                                        <img src="###baseUrlImages###/topic-{item.topic.uid}-disabled.png" alt="{item.topic.name}" style="max-width: 100%" />
+                                                    </f:else>
+                                                </f:if>                                            </td>
+                                        </f:then>
+                                        <f:else>
+                                            <td style="width: 33%; text-align: center">
+                                                <f:if condition="{item.subscribed}">
+                                                    <f:then>
+                                                        <a href="#topic-{item.topic.uid}"><img src="###baseUrlImages###/topic-{item.topic.uid}.png" alt="{item.topic.name}" style="max-width: 100%" /></a>
+                                                    </f:then>
+                                                    <f:else>
+                                                        <img src="###baseUrlImages###/topic-{item.topic.uid}-disabled.png" alt="{item.topic.name}" style="max-width: 100%" />
+                                                    </f:else>
+                                                </f:if>                                            </td>
+                                        </f:else>
+                                    </f:if>
+                                </f:else>
+                            </f:if>
+                        </f:for>
+                    </f:if>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+
+</f:section>

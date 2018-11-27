@@ -1,0 +1,43 @@
+{namespace rkwMailer=RKW\RkwMailer\ViewHelpers}
+{namespace rkwNewsletter=RKW\RkwNewsletter\ViewHelpers}
+
+<!-- PLAINTEXT -->
+<f:section name="Plaintext"><rkwMailer:recipientSalutation queueRecipient="{queueRecipient}" prependText="<rkwMailer:frontend.translate key='partials_newsletter_main.headline' languageKey='{queueRecipient.languageCode}' extensionName='rkwNewsletter' /> " appendText="," />
+
+<rkwMailer:frontend.translate key="partials_newsletter_main.introduction" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />
+<rkwMailer:frontend.translate key="partials_newsletter_main.topics" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" /><f:if condition="{hash}">&nbsp;(<rkwMailer:frontend.translate key="partials_newsletter_main.topicChange" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />: <rkwMailer:frontend.link action="edit" controller="Subscription" extensionName="rkwNewsletter" pluginName="Subscription" pageUid="{settings.subscriptionPid}" absolute="true" queueMail="{queueMail}" queueRecipient="{queueRecipient}" arguments="{hash: hash}" noCacheHash="true" />)</f:if>:
+<f:render partial="Default/Topics" section="Plaintext" arguments="{_all}" />
+<f:render partial="Default/Contents" section="Plaintext" arguments="{pages: specialPages, issue: issue, queueMail: queueMail, queueRecipient: queueRecipient, maxItemsPerTopic: maxItemsPerTopic, pageTypeMore: pageTypeMore}" />
+<f:render partial="Default/Contents" section="Plaintext" arguments="{pages: pages, issue: issue, queueMail: queueMail, queueRecipient: queueRecipient, maxItemsPerTopic: maxItemsPerTopic, pageTypeMore: pageTypeMore}" />
+</f:section>
+
+
+
+<!-- HTML -->
+<f:section name="Html">
+
+    <!-- Headline -->
+    <tr>
+        <td style="padding: 0 16px">
+            <p style="margin: 24px 0 12px; font-size:24px; line-height: 28px">
+                <rkwMailer:recipientSalutation queueRecipient="{queueRecipient}" prependText="<rkwMailer:frontend.translate key='partials_newsletter_main.headline' languageKey='{queueRecipient.languageCode}' extensionName='rkwNewsletter' /> " appendText=","/>
+            </p>
+            <p style="margin: 24px 0 12px; line-height: 20px">
+                <rkwMailer:frontend.translate key="partials_newsletter_main.introduction" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />
+            </p>
+            <p style="margin: 24px 0 12px; line-height: 20px">
+                <rkwMailer:frontend.translate key="partials_newsletter_main.topics" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" /><f:if condition="{hash}">&nbsp;(<a href="<rkwMailer:frontend.link action='edit' controller='Subscription' extensionName='rkwNewsletter' pluginName='Subscription' pageUid='{settings.subscriptionPid}' absolute='true' queueMail='{queueMail}' queueRecipient='{queueRecipient}' arguments='{hash: hash}' noCacheHash='true' />" target="_blank"><rkwMailer:frontend.translate key="partials_newsletter_main.topicChange" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" /></a>)</f:if>:
+            </p>
+        </td>
+    </tr>
+
+    <!-- Topics -->
+    <f:render partial="Default/Topics" section="Html" arguments="{_all}" />
+
+    <!-- Special Contents -->
+    <f:render partial="Default/Contents" section="Html" arguments="{pages: specialPages, issue: issue, queueMail: queueMail, queueRecipient: queueRecipient, maxItemsPerTopic: maxItemsPerTopic, pageTypeMore: pageTypeMore}" />
+
+    <!-- Normal Contents -->
+    <f:render partial="Default/Contents" section="Html" arguments="{pages: pages, issue: issue, queueMail: queueMail, queueRecipient: queueRecipient, maxItemsPerTopic: maxItemsPerTopic, pageTypeMore: pageTypeMore}" />
+
+</f:section>

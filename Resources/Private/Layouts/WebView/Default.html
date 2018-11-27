@@ -1,0 +1,20 @@
+{namespace rkwMailer=RKW\RkwMailer\ViewHelpers}
+
+<style type="text/css">
+    body{background-color:#fff; margin:0; padding:0;}
+</style>
+
+<table cellpadding="0" cellspacing="0" border="0" id="backgroundTable" style="margin:auto;">
+    <tr>
+        <td align="center">
+            <table class="contentTable" cellpadding="0" cellspacing="0" border="0" width="600" style="width: 100%; max-width: 600px; background: #e6e6e6; font-family: 'Arial', sans-serif; font-size: 14px">
+
+                <f:render partial="Default/Header" section="Html" />
+
+                <f:render section="Default" />
+
+                <f:render partial="Default/Footer" section="Html" />
+            </table>
+        </td>
+    </tr>
+</table>

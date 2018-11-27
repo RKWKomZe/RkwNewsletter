@@ -1,0 +1,36 @@
+
+<f:be.container includeCssFiles="{0: '{f:uri.resource(path:\'Styles/tx_rkwnewsletter.css\')}'}" loadJQuery="true" includeJsFiles="{0: '{f:uri.resource(path:\'Scripts/newsletter.js\')}'}">
+	<div class="typo3-fullDoc">
+		<div id="typo3-docheader">
+			<div class="typo3-docheader-functions">
+				<div class="left">
+					<f:be.buttons.csh />
+					<f:be.menus.actionMenu>
+						<f:be.menus.actionMenuItem label="Freigabe" action="list" controller="Release" />
+						<f:be.menus.actionMenuItem label="Testversand" action="testList" controller="Release" />
+						<f:be.menus.actionMenuItem label="Versand" action="sendList" controller="Release" />
+					</f:be.menus.actionMenu>
+				</div>
+				<div class="right">
+					<f:be.pagePath />
+					<f:be.pageInfo />
+				</div>
+			</div>
+			<div class="typo3-docheader-buttons">
+				<div class="left">
+
+				</div>
+				<div class="right">
+					<f:be.buttons.shortcut />
+				</div>
+			</div>
+
+		</div>
+		<div id="typo3-docbody">
+			<div id="typo3-inner-docbody" class="tx-rkwnewsletter">
+				<f:flashMessages renderMode="div" />
+				<f:render section="content" />
+			</div>
+		</div>
+	</div>
+</f:be.container>

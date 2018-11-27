@@ -1,0 +1,140 @@
+{namespace rkwNewsletter=RKW\RkwNewsletter\ViewHelpers}
+
+
+<f:if condition="{issue}">
+    <table class="tx-rkwnewsletter-list__inner">
+        <f:for each="{issue.approvals}" as="approval">
+            <tr>
+                <th>
+                    <f:translate key="tx_rkwnewsletter_backend_partials_release_approval.topic" />
+                </th>
+                <th>
+                    <f:translate key="tx_rkwnewsletter_backend_partials_release_approval.approvalUser" />
+                </th>
+                <th>
+                    <f:translate key="tx_rkwnewsletter_backend_partials_release_approval.approvalTime" />
+                </th>
+    
+                 <th>
+                     <f:translate key="tx_rkwnewsletter_backend_partials_release_approval.actions" />
+                 </th>
+            </tr>
+            <tr>
+                <td>
+                    {approval.topic.name}
+                </td>
+                <td>
+                    <f:if condition="{stage} == 2">
+                        <f:then>
+                            <f:if condition="{approval.allowedByUserStage2}">
+                                <f:then>
+                                    <f:if condition="{approval.allowedByUserStage2.realName}">
+                                        <f:then>
+                                            {approval.allowedByUserStage2.realName}
+                                        </f:then>
+                                        <f:else>
+                                            {approval.allowedByUserStage2.username}
+                                        </f:else>
+                                    </f:if>
+                                </f:then>
+                                <f:else>
+                                    &ndash;
+                                </f:else>
+                            </f:if>
+                        </f:then>
+                        <f:else>
+                            <f:if condition="{approval.allowedByUserStage1}">
+                                <f:then>
+                                    <f:if condition="{approval.allowedByUserStage1.realName}">
+                                        <f:then>
+                                            {approval.allowedByUserStage1.realName}
+                                        </f:then>
+                                        <f:else>
+                                            {approval.allowedByUserStage1.username}
+                                        </f:else>
+                                    </f:if>
+                                </f:then>
+                                <f:else>
+                                    &ndash;
+                                </f:else>
+                            </f:if>
+                        </f:else>
+                    </f:if>
+                </td>
+                <td>
+                    <f:if condition="{stage} == 2">
+                        <f:then>
+                            <f:if condition="{approval.allowedTstampStage2}">
+                                <f:then>
+                                    <f:format.date format="d-m-Y H:i:s">{approval.allowedTstampStage2}</f:format.date>
+                                </f:then>
+                                <f:else>
+                                    <f:translate key="tx_rkwnewsletter_backend_partials_release_approval.approvalPending" />
+                                </f:else>
+                            </f:if>                 
+                        </f:then>
+                        <f:else>
+                            <f:if condition="{approval.allowedTstampStage1}">
+                                <f:then>
+                                    <f:format.date format="d-m-Y H:i:s">{approval.allowedTstampStage1}</f:format.date>
+                                </f:then>
+                                <f:else>
+                                    <f:translate key="tx_rkwnewsletter_backend_partials_release_approval.approvalPending" />
+                                </f:else>
+                            </f:if>
+                        </f:else>
+                    </f:if>
+                </td>
+                <td>
+                    <f:if condition="{stage} == 2">
+                        <f:then>
+                            <f:if condition="{approval.allowedTstampStage1}">
+                                <f:then>
+                                    <f:if condition="{approval.allowedTstampStage2}">
+                                        <f:then>
+                                            <f:translate key="tx_rkwnewsletter_backend_partials_release_approval.alreadyApproved" />
+                                        </f:then>
+                                        <f:else>
+                                            <f:if condition="<rkwNewsletter:IsBackendUserAllowedApproval approval='{approval}' backendUserId='{backendUserId}' stage='{stage}' />">
+                                                <f:then>
+                                                    <f:link.action action="approve" arguments="{approval : approval, stage : stage}">
+                                                        &gt; <f:translate key="tx_rkwnewsletter_backend_partials_release_approval.approve" />
+                                                    </f:link.action>
+                                                </f:then>
+                                                <f:else>
+                                                    &ndash;
+                                                </f:else>
+                                            </f:if>
+                                        </f:else>
+                                    </f:if>
+                                </f:then>
+                                <f:else>
+                                    <f:translate key="tx_rkwnewsletter_backend_partials_release_approval.approvalStage1Pending" />
+                                </f:else>
+                            </f:if>
+                        </f:then>
+                        <f:else>
+                            <f:if condition="{approval.allowedTstampStage1}">
+                                <f:then>
+                                    <f:translate key="tx_rkwnewsletter_backend_partials_release_approval.alreadyApproved" />
+                                </f:then>
+                                <f:else>
+                                    <f:if condition="<rkwNewsletter:IsBackendUserAllowedApproval approval='{approval}' backendUserId='{backendUserId}' stage='{stage}' />">
+                                        <f:then>
+                                            <f:link.action action="approve" arguments="{approval : approval, stage : stage}">
+                                                &gt; <f:translate key="tx_rkwnewsletter_backend_partials_release_approval.approve" />
+                                            </f:link.action>
+                                        </f:then>
+                                        <f:else>
+                                            &ndash;
+                                        </f:else>
+                                    </f:if>
+                                </f:else>
+                            </f:if>
+                        </f:else>
+                    </f:if>
+                </td>
+            </tr>
+        </f:for>
+    </table>
+</f:if>

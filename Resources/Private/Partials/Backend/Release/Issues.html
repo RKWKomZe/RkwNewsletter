@@ -1,0 +1,62 @@
+{namespace rkwNewsletter=RKW\RkwNewsletter\ViewHelpers}
+
+
+<f:if condition="{issues}">
+    <f:then>
+        <table class="tx-rkwnewsletter-list">
+            <tr>
+                <th>
+                    <f:translate key="tx_rkwnewsletter_backend_partials_release_issues.title" />
+                </th>
+                <th>
+                    <f:translate key="tx_rkwnewsletter_backend_partials_release_issues.approvals" />
+                </th>
+                <th>
+                    <f:translate key="tx_rkwnewsletter_backend_partials_release_issues.globalActions" />
+                </th>
+            </tr>
+
+            <f:for each="{issues}" as="issue">
+                <tr>
+                    <!-- title -->
+                    <td>
+                        <f:if condition="{issue.status} < 2">
+                            <f:then>
+                                {issue.title}
+                            </f:then>
+                            <f:else>
+                                <f:form.textfield property="name" value="{issue.name}" />
+                            </f:else>
+                        </f:if>
+                    </td>
+
+                    <!-- approvals -->
+                    <td>
+                        <f:render partial="Release/Approval" arguments="{_all}" />
+                    </td>
+
+                    <td>
+                        <f:if condition="<rkwNewsletter:IsBackendUserAllowedRelease issue='{issue}' backendUserId='{backendUserId}' />">
+                            <f:then>
+                                <f:link.action action="defer" arguments="{issue : issue}">
+                                    &gt; <f:translate key="tx_rkwnewsletter_backend_partials_release_issues.deferIssue" />
+                                </f:link.action>
+                            </f:then>
+                            <f:else>
+                                &ndash;
+                            </f:else>
+                        </f:if>
+                        &nbsp;
+                    </td>
+
+                </tr>
+            </f:for>
+        </table>
+    </f:then>
+    <f:else>
+        <f:translate key="tx_rkwnewsletter_backend_partials_release_issues.noIssuesWaiting" />
+    </f:else>
+</f:if>
+
+
+

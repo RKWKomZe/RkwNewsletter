@@ -1,0 +1,16 @@
+{namespace rkwMailer=RKW\RkwMailer\ViewHelpers}
+{namespace rkwNewsletter=RKW\RkwNewsletter\ViewHelpers}
+
+<f:layout name="Default/{mailType}" />
+
+<!-- PLAINTEXT -->
+<f:section name="Plaintext">
+<f:render partial="Default/Body" section="Plaintext" arguments="{_all}" />
+</f:section>
+
+<!-- HTML -->
+<f:section name="Html">
+
+    <f:render partial="Default/Body" section="Html" arguments="{_all}" />
+
+</f:section>

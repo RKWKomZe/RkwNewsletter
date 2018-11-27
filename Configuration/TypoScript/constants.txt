@@ -1,0 +1,81 @@
+plugin.tx_rkwnewsletter {
+
+	view {
+        # cat=plugin.tx_rkwnewsletter/file; type=string; label=Path to template layouts (FE)
+        layoutRootPath = EXT:rkw_newsletter/Resources/Private/Layouts/
+
+		# cat=plugin.tx_rkwnewsletter/file; type=string; label=Path to template root (FE)
+		templateRootPath = EXT:rkw_newsletter/Resources/Private/Templates/
+
+		# cat=plugin.tx_rkwnewsletter/file; type=string; label=Path to template partials (FE)
+		partialRootPath = EXT:rkw_newsletter/Resources/Private/Partials/
+	}
+	persistence {
+		# cat=plugin.tx_rkwnewsletter//a; type=string; label=Default storage PID
+		storagePid =
+	}
+
+	settings {
+
+		# cat=plugin.tx_rkwnewsletter//a; type=integer; label=remind BackendUser on stage 1 to approve pages of a new issue
+		reminderApprovalStage1 = 302400
+
+		# cat=plugin.tx_rkwnewsletter//a; type=integer; label=remind BackendUser on stage 2 to approve pages of a new issue
+		reminderApprovalStage2 = 302400
+
+		# cat=plugin.tx_rkwnewsletter//a; type=integer; label=remind BackendUser on stage 3 to approve pages of a new issue
+		reminderApprovalStage3 = 302400
+
+		# cat=plugin.tx_rkwnewsletter//a; type=integer; label=automatic approval of stage 1 after a certain time
+		automaticApprovalStage1 = 604800
+
+		# cat=plugin.tx_rkwnewsletter//a; type=integer; label=automatic approval of stage 2 after a certain time
+		automaticApprovalStage2 = 604800
+
+		# cat=plugin.tx_rkwnewsletter//a; type=integer; label=Pid of login mask
+		loginPid =
+
+        # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Pid of terms
+        termsPid =
+
+        # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Pid for subscriptions
+        subscriptionPid =
+
+        # cat=plugin.tx_rkwnewsletter//a; type=integer; label=TypeNum for webview of newsletter
+        webViewPageNum = 1536732477
+
+        # cat=plugin.tx_rkwnewsletter//a; type=string; label=Required fields for subscription
+        requiredFieldsSubscription = txRkwregistrationGender, firstName, lastName
+
+	}
+}
+
+module.tx_rkwnewsletter {
+
+	settings < plugin.tx_rkwnewsletter.settings
+	persistence < plugin.tx_rkwnewsletter.persistence
+	view < plugin.tx_rkwnewsletter.view
+
+	view {
+		# cat=module.tx_rkwnewsletter/file; type=string; label=Path to template root (BE)
+		templateRootPath = EXT:rkw_newsletter/Resources/Private/Templates/Backend/
+
+		# cat=module.tx_rkwnewsletter/file; type=string; label=Path to template partials (BE)
+		partialRootPath = EXT:rkw_newsletter/Resources/Private/Partials/Backend/
+
+		# cat=module.tx_rkwnewsletter/file; type=string; label=Path to template layouts (BE)
+		layoutRootPath = EXT:rkw_newsletter/Resources/Private/Layouts/Backend/
+
+
+        newsletter {
+            # cat=module.tx_rkwnewsletter/file; type=string; label=Path to template root for newsletter
+            templateRootPath = EXT:rkw_newsletter/Resources/Private/Templates/Newsletter/
+
+            # cat=module.tx_rkwnewsletter/file; type=string; label=Path to template partials for newsletter
+            partialRootPath = EXT:rkw_newsletter/Resources/Private/Partials/Newsletter/
+
+            # cat=module.tx_rkwnewsletter/file; type=string; label=Path to template layouts for newsletter
+            layoutRootPath = EXT:rkw_newsletter/Resources/Private/Layouts/Newsletter/
+        }
+	}
+}

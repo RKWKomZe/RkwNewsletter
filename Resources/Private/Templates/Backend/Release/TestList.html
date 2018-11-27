@@ -1,0 +1,61 @@
+{namespace rkwNewsletter=RKW\RkwNewsletter\ViewHelpers}
+<f:layout name="Default" />
+
+This Template is responsible for creating a table of domain objects.
+
+If you modify this template, do not forget to change the overwrite settings
+in /Configuration/ExtensionBuilder/settings.yaml:
+  Resources:
+    Private:
+      Templates:
+        List.html: keep
+
+Otherwise your changes will be overwritten the next time you save the extension in the extension builder
+
+<f:section name="content">
+	<h1>
+		<f:translate key="templates_backend_release_testList" />
+	</h1>
+    
+    <p class="tx-rkwnewsletter-description"><f:translate key="templates_backend_release_testList.description" /></p>
+
+	<f:flashMessages />
+
+        <table class="tx-rkwnewsletter-list">
+            <tr>
+                <th>
+                    <f:translate key="templates_backend_release_testList.title" />
+                </th>
+                <th>
+                    <f:translate key="templates_backend_release_testList.email" />
+                </th>
+                <th>
+                    <f:translate key="templates_backend_release_testList.deliveryMyTopics" />
+                </th>
+                <th>
+                    <f:translate key="templates_backend_release_testList.deliveryAllTopics"  />
+                </th>
+            </tr>
+
+            <f:for each="{issues}" as="issue">
+                <f:form action="test" name="issue" object="{issue}" >
+                    <tr>
+                        <td><f:form.textfield name="title" value="{issue.title}" /></td>
+                        <td><f:form.textfield name="email" value="{backendUser.email}" /></td>
+                        <td>
+                            <f:form.button type="submit" name="myTopicsOnly" value="1">
+                                <f:translate key="templates_backend_release_testList.go"  />
+                            </f:form.button>
+                        </td>
+                        <td>
+                            <f:form.button type="submit" name="myTopicsOnly" value="0">
+                                <f:translate key="templates_backend_release_testList.go"  />
+                            </f:form.button>
+                        </td>
+                    </tr>
+                </f:form>
+            </f:for>
+        </table>
+
+
+</f:section>

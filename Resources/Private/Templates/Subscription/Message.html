@@ -1,0 +1,26 @@
+{namespace rkwNewsletter=RKW\RkwNewsletter\ViewHelpers}
+{namespace rkwRegistration=RKW\RkwRegistration\ViewHelpers}
+
+<f:layout name="Default" />
+
+This Template is responsible for creating a table of domain objects.
+
+If you modify this template, do not forget to change the overwrite settings
+in /Configuration/ExtensionBuilder/settings.yaml:
+  Resources:
+    Private:
+      Templates:
+        List.html: keep
+
+Otherwise your changes will be overwritten the next time you save the extension in the extension builder
+
+<f:section name="main">
+
+    <f:flashMessages renderMode="div" />
+
+    <f:if condition="{frontendUser}">
+        <if condition="{frontendUser.txRkwnewsletterHash}">
+            <f:link.action action="edit" arguments="{hash : frontendUser.txRkwnewsletterHash}" class="button"><f:translate key="templates_subscription_message.goToSettings" /></f:link.action>
+        </if>
+    </f:if>
+</f:section>

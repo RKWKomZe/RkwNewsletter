@@ -1,0 +1,40 @@
+{namespace rkwNewsletter=RKW\RkwNewsletter\ViewHelpers}
+
+<table class="v320-1">
+    <f:for each="{newsletterList}" as="newsletter" iteration="newsletterIterator">
+        <f:if condition="<rkwNewsletter:IsNewsletterSubscriptionAllowed frontendUser='{frontendUser}' newsletter='{newsletter}' />">
+            <tr>
+                <th>{newsletter.name}</th>
+            </tr>
+            <tr>
+                <td>
+                    <f:for each="{newsletter.topic}" as="topic" iteration="topicIterator">
+                        <f:if condition="{topic.isSpecial} == 0">
+                            <span class="checkbox">
+                                <label>
+                                    <f:if condition="{topicList}">
+                                        <f:then>
+                                            <f:form.checkbox name="topics[{topicIterator.index}]" value="{topic.uid}" checked="<rkwNewsletter:IsTopicInList topicList='{topicList}' topic='{topic}' />" />
+                                        </f:then>
+                                        <f:else>
+                                             <f:form.checkbox name="topics[{topicIterator.index}]" value="{topic.uid}" checked="<rkwNewsletter:IsTopicSubscribed frontendUser='{frontendUser}' topic='{topic}' />" />
+                                        </f:else>
+                                    </f:if>
+                                    {topic.name}
+                                </label>
+                            </span>
+                        </f:if>
+                    </f:for>
+                </td>
+            </tr>
+        </f:if>
+    </f:for>
+</table>
+
+
+
+
+
+
+
+

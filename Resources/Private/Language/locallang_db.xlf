@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2015-04-09T13:46:25Z" product-name="rkw_newsletter">
+		<header/>
+		<body>
+
+
+
+            <!-- ##################################################### -->
+            <!-- tx_rkwnewsletter_domain_model_newsletter              -->
+            <!-- ##################################################### -->
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter">
+				<source>RKW Newsletter: Basic Configuration</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.name">
+				<source>Name configuration</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.issue_title">
+				<source>Issue Title (e.g. "RKW Newsletter {M}/{Y}" will dynamically insert month and year)</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.sender_name">
+				<source>Sender Name (e.g. RKW Redaktion)</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.sender_mail">
+				<source>Sender Mail (e.g. newsletter@rkw-news.de)</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.reply_name">
+				<source>Reply Name (e.g. RKW Redaktion)</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.reply_mail">
+				<source>Reply Mail (e.g. info@rkw-news.de)</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.return_path">
+				<source>Return Path (e.g. newsletter@rkw-news.de)</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.priority">
+				<source>Priority</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.priority.normal">
+				<source>Normal</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.priority.high">
+				<source>High</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.priority.low">
+				<source>Low</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.template">
+				<source>Template</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.settings_page">
+				<source>Page with TypoScript-Settings</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.format">
+				<source>Format</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.rythm">
+				<source>Sending-Rythm</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.rythm.weekly">
+				<source>Weekly</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.rythm.monthly">
+				<source>Monthly</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.rythm.quarterly">
+				<source>Quarterly</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.rythm.yearly">
+				<source>Yearly</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.approval">
+				<source>Final Approval for Sending</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.type">
+				<source>Type</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.usergroup">
+				<source>FE-User Groups</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.topic">
+				<source>Topic</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.issue">
+				<source>Issues</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.last_sent_tstamp">
+				<source>Recently sent</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.last_issue_tstamp">
+                <source>Last Issue Built</source>
+			</trans-unit>
+
+
+
+            <!-- ##################################################### -->
+            <!-- tx_rkwnewsletter_domain_model_topic                   -->
+            <!-- ##################################################### -->
+			<trans-unit id="tx_rkwnewsletter_domain_model_topic">
+				<source>RKW Newsletter: Topic</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_topic.name">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_topic.short_description">
+				<source>Short Description</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_topic.newsletter">
+				<source>Newsletter</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_topic.approval_stage1">
+				<source>Approval on Stage 1 by</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_topic.approval_stage2">
+				<source>Approval on Stage 2 by</source>
+			</trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_topic.container_page">
+                <source>Container Page for Editions</source>
+            </trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_topic.primary_color">
+                <source>Primary Color</source>
+            </trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_topic.secondary_color">
+                <source>Secondary Color</source>
+            </trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_topic.is_special">
+                <source>Always include this topic in newsletter issues</source>
+            </trans-unit>
+
+
+            <!-- ##################################################### -->
+            <!-- tx_rkwnewsletter_domain_model_approval           -->
+            <!-- ##################################################### -->
+			<trans-unit id="tx_rkwnewsletter_domain_model_approval">
+				<source>RKW Newsletter: Approval</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_approval.topic">
+				<source>Topic</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_approval.page">
+				<source>Page</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_approval.allowed_by_user_stage1">
+				<source>Stage 1: Allowed By User</source>
+			</trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_approval.allowed_by_user_stage2">
+                <source>Stage 2: Allowed By User</source>
+            </trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_approval.allowed_tstamp_stage1">
+                <source>Stage 1: Allowed At</source>
+            </trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_approval.allowed_tstamp_stage2">
+                <source>Stage 2: Allowed At</source>
+            </trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_approval.sent_info_tstamp_stage1">
+				<source>Stage 1: Sent Info At</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_approval.sent_info_tstamp_stage2">
+				<source>Stage 2: Sent Info At</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_approval.sent_reminder_tstamp_stage1">
+				<source>Stage 1: Sent Reminder At</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_approval.sent_reminder_tstamp_stage2">
+				<source>Stage 2: Sent Reminder At</source>
+			</trans-unit>
+
+            <!-- ##################################################### -->
+            <!-- tx_rkwnewsletter_domain_model_issue                 -->
+            <!-- ##################################################### -->
+			<trans-unit id="tx_rkwnewsletter_domain_model_issue">
+				<source>RKW Newsletter: Issue</source>
+			</trans-unit>                <target>Themen</target>
+
+			<trans-unit id="tx_rkwnewsletter_domain_model_issue.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_issue.status">
+				<source>Status</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_issue.status.issue">
+				<source>Issue prepared</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_issue.status.approval">
+				<source>Waiting for Approval</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_issue.status.ready">
+				<source>Ready to Send</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_issue.status.sending">
+				<source>Sending</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_issue.status.sent">
+				<source>Sent</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_issue.status.deferred">
+				<source>Deferred</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_issue.status.error">
+				<source>Error</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_issue.pages">
+				<source>Pages</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_issue.newsletter">
+				<source>Newsletter</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_issue.approvals">
+				<source>Approvals</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_issue.info_tstamp">
+				<source>Info Time</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_issue.reminder_tstamp">
+				<source>Reminder Sent</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_issue.release_tstamp">
+				<source>Issue Released</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_issue.sent_tstamp">
+				<source>Issue Sent</source>
+            </trans-unit>
+
+
+            <!-- ##################################################### -->
+            <!-- pages                                                 -->
+            <!-- ##################################################### -->
+			<trans-unit id="pages.tx_rkwnewsletter">
+				<source>RKW Newsletter</source>
+			</trans-unit>
+			<trans-unit id="pages.tx_rkwnewsletter_newsletter">
+				<source>Newsletter</source>
+			</trans-unit>
+			<trans-unit id="pages.tx_rkwnewsletter_newsletter.please_choose">
+				<source>Please Choose</source>
+			</trans-unit>
+			<trans-unit id="pages.tx_rkwnewsletter_topic">
+				<source>Topic</source>
+			</trans-unit>
+            <trans-unit id="pages.tx_rkwnewsletter_topic.please_choose">
+                <source>Please Choose</source>
+            </trans-unit>
+			<trans-unit id="pages.tx_rkwnewsletter_exclude">
+				<source>Exclude From Sendings</source>
+			</trans-unit>
+			<trans-unit id="pages.tx_rkwnewsletter_teaser_heading">
+				<source>Teaser-Headline (optional)</source>
+			</trans-unit>
+            <trans-unit id="pages.tx_rkwnewsletter_teaser_image">
+                <source>Teaser-Image (optional)</source>
+            </trans-unit>
+			<trans-unit id="pages.tx_rkwnewsletter_teaser_text">
+				<source>Teaser-Text (optional)</source>
+			</trans-unit>
+			<trans-unit id="pages.tx_rkwnewsletter_teaser_link">
+				<source>Link (optional)</source>
+			</trans-unit>
+			<trans-unit id="pages.tx_rkwnewsletter_include_tstamp">
+				<source>Included in Newsletter</source>
+			</trans-unit>
+
+
+
+            <!-- ##################################################### -->
+            <!-- tt_content                                            -->
+            <!-- ##################################################### -->
+			<trans-unit id="tt_content.tx_rkwnewsletter">
+                <source>RKW Newsletter</source>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_rkwnewsletter_authors">
+                <source>Authors</source>
+            </trans-unit>
+
+
+            <!-- ##################################################### -->
+            <!-- fe_user                                               -->
+            <!-- ##################################################### -->
+			<trans-unit id="fe_user.tx_rkwnewsletter_domain_model_subscription">
+                <source>Topics</source>
+            </trans-unit>
+
+		</body>
+	</file>
+</xliff>

@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2014-08-01T14:10:48Z" product-name="rkw_energyfounder">
+		<header/>
+		<body>
+
+
+            <!-- ##################################################### -->
+            <!-- tx_rkwnewsletter_domain_model_newsletter              -->
+            <!-- ##################################################### -->
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter">
+				<source>RKW Newsletter: Basic Configuration</source>
+				<target>RKW Newsletter: Grundkonfiguration</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.name">
+				<source>Name configuration</source>
+				<target state="translated">Name der Konfiguration</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.issue_title">
+				<source>Issue Title (e.g. "RKW Newsletter {M}/{Y}" will dynamically insert month and year)</source>
+				<target state="translated">Name der Ausgabe (z.B. "RKW Newsletter {M}/{Y}" generiert automatisch Monat/Jahr)</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.sender_name">
+				<source>Sender Name (e.g. RKW Redaktion)</source>
+				<target state="translated">Absender-Name (z.B. RKW Redaktion)</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.sender_mail">
+				<source>Sender Mail (e.g. newsletter@rkw-news.de)</source>
+				<target state="translated">Absender-E-Mail (z.B. newsletter@rkw-news.de)</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.reply_name">
+				<source>Reply Name (e.g. RKW Redaktion)</source>
+				<target state="translated">Reply-Name (z.B. RKW Redaktion)</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.reply_mail">
+				<source>Reply Mail (e.g. info@rkw-news.de)</source>
+				<target state="translated">Reply-E-Mail (z.B. info@rkw-news.de)</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.return_path">
+				<source>Return Path (e.g. newsletter@rkw-news.de)</source>
+				<target state="translated">Return Path (z.B. newsletter@rkw-news.de)</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.priority">
+				<source>Priority</source>
+				<target state="translated">Priorität</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.priority.normal">
+				<source>Normal</source>
+				<target state="translated">Normal</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.priority.high">
+				<source>High</source>
+				<target state="translated">Hoch</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.priority.low">
+				<source>Low</source>
+				<target state="translated">Niedrig</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.template">
+				<source>Template</source>
+				<target state="translated">Template</target>
+			</trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_newsletter.settings_page">
+                <source>Page with TypoScript-Settings</source>
+                <target state="translated">Seite mit TypoScript-Einstellungen</target>
+            </trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.format">
+				<source>Format</source>
+				<target state="translated">Format</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.rythm">
+				<source>Sending-Rythm</source>
+				<target state="translated">Versand-Rythmus</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.rythm.weekly">
+				<source>Weekly</source>
+				<target state="translated">Wöchentlich</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.rythm.monthly">
+				<source>Monthly</source>
+				<target state="translated">Monatlich</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.rythm.quarterly">
+				<source>Quarterly</source>
+				<target state="translated">Quartalsweise</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.rythm.yearly">
+				<source>Yearly</source>
+				<target state="translated">Jährlich</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.approval">
+				<source>Final Approval for Sending</source>
+				<target state="translated">Finale Freigabe zum Versand</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.type">
+				<source>Type</source>
+				<target state="translated">Newsletter Typ (unterschiedliche Templates)</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.usergroup">
+				<source>FE-User Groups</source>
+				<target state="translated">FE-Nutzergruppen (Beschränkung)</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.topic">
+				<source>Topic</source>
+				<target state="translated">Verknüpfte Themen</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.issue">
+				<source>Issues</source>
+				<target state="translated">Ausgaben</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.last_sent_tstamp">
+				<source>Recently sent</source>
+				<target state="translated">Zuletzt versendet</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.last_issue_tstamp">
+                <source>Last Issue Built</source>
+				<target state="translated">Letzte Ausgabe zusammengestellt</target>
+			</trans-unit>
+
+
+
+            <!-- ##################################################### -->
+            <!-- tx_rkwnewsletter_domain_model_topic                   -->
+            <!-- ##################################################### -->
+			<trans-unit id="tx_rkwnewsletter_domain_model_topic">
+				<source>RKW Newsletter: Topic</source>
+				<target state="translated">RKW Newsletter: Thema</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_topic.name">
+				<source>Title</source>
+				<target state="translated">Titel</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_topic.short_description">
+				<source>Short Description</source>
+				<target state="translated">Kurzbeschreibung</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_topic.newsletter">
+				<source>Newsletter</source>
+				<target state="translated">Newsletter Konfiguration</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_topic.approval_stage1">
+				<source>Approval on Stage 1 by</source>
+				<target state="translated">Freigabe auf Stufe 1 durch</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_topic.approval_stage2">
+				<source>Approval on Stage 2 by</source>
+				<target state="translated">Freigabe auf Stufe 2 durch</target>
+			</trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_topic.container_page">
+                <source>Container Page for Editions</source>
+                <target state="translated">Sammelseite für Ausgaben</target>
+            </trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_topic.primary_color">
+                <source>Primary Color</source>
+                <target state="translated">Primärfarbe</target>
+            </trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_topic.secondary_color">
+                <source>Secondary Color</source>
+                <target state="translated">Sekundärfarbe</target>
+            </trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_topic.is_special">
+                <source>Always include this topic in newsletter issues</source>
+                <target state="translated">Dieses Thema in Newsletterausgaben immer berücksichtigen</target>
+            </trans-unit>
+
+
+            <!-- ##################################################### -->
+            <!-- tx_rkwnewsletter_domain_model_approval           -->
+            <!-- ##################################################### -->
+			<trans-unit id="tx_rkwnewsletter_domain_model_approval">
+				<source>RKW Newsletter: Approval</source>
+				<target state="translated">RKW Newsletter: Freigabem</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_approval.topic">
+				<source>Topic</source>
+				<target state="translated">Thema</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_approval.page">
+				<source>Page</source>
+				<target state="translated">Sammelseiten</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_approval.allowed_by_user_stage1">
+				<source>Stage 1: Allowed By User</source>
+				<target state="translated">Stufe 1: Freigabe durch Nutzer</target>
+			</trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_approval.allowed_by_user_stage2">
+                <source>Stage 2: Allowed By User</source>
+                <target state="translated">Stufe 2: Freigabe durch Nutzer</target>
+            </trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_approval.allowed_tstamp_stage1">
+                <source>Stage 1: Allowed At</source>
+                <target state="translated">Stufe 1: Freigabe am</target>
+            </trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_approval.allowed_tstamp_stage2">
+                <source>Stage 2: Allowed At</source>
+                <target state="translated">Stufe 2: Freigabe am</target>
+            </trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_approval.sent_info_tstamp_stage1">
+				<source>Stage 1: Sent Info At</source>
+				<target state="translated">Stufe 1: Info gesendet am</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_approval.sent_info_tstamp_stage2">
+				<source>Stage 2: Sent Info At</source>
+				<target state="translated">Stufe 2: Info gesendet am</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_approval.sent_reminder_tstamp_stage1">
+				<source>Stage 1: Sent Reminder At</source>
+				<target state="translated">Stufe 1: Erinnerung gesendet am</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_approval.sent_reminder_tstamp_stage2">
+				<source>Stage 2: Sent Reminder At</source>
+				<target state="translated">Stufe 2: Erinnerung gesendet am</target>
+			</trans-unit>
+
+            <!-- ##################################################### -->
+            <!-- tx_rkwnewsletter_domain_model_issue                 -->
+            <!-- ##################################################### -->
+			<trans-unit id="tx_rkwnewsletter_domain_model_issue">
+				<source>RKW Newsletter: Issue</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_issue.title">
+				<source>Title</source>
+				<target state="translated">Titel</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_issue.status">
+				<source>Status</source>
+				<target state="translated">Status</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_issue.status.issue">
+				<source>Issue prepared</source>
+				<target state="translated">Ausgabe vorbereitet</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_issue.status.approval">
+				<source>Waiting for Approval</source>
+				<target state="translated">Warten auf Freigabe</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_issue.status.ready">
+				<source>Ready to Send</source>
+				<target state="translated">Bereit zum Versand</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_issue.status.sending">
+				<source>Sending</source>
+				<target state="translated">Versand läuft</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_issue.status.sent">
+				<source>Sent</source>
+				<target state="translated">Versendet</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_issue.status.deferred">
+				<source>Deferred</source>
+				<target state="translated">Zurückgestellt</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_issue.status.error">
+				<source>Error</source>
+				<target state="translated">Fehler</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_issue.pages">
+				<source>Pages</source>
+				<target state="translated">Sammelseiten</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_issue.newsletter">
+				<source>Newsletter</source>
+				<target state="translated">Verwendete Newsletter-Konfiguration</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_issue.approvals">
+				<source>Approvals</source>
+				<target state="translated">Genehmigungen</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_issue.info_tstamp">
+				<source>Info Time</source>
+				<target state="translated">Info gesendet am</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_issue.reminder_tstamp">
+				<source>Reminder Sent</source>
+				<target state="translated">Erinnerung gesendet am</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_issue.release_tstamp">
+				<source>Issue Released</source>
+				<target state="translated">Ausgabe freigegeben am</target>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_issue.sent_tstamp">
+				<source>Issue Sent</source>
+				<target state="translated">Ausgabe gesendet am</target>
+			</trans-unit>
+
+
+            <!-- ##################################################### -->
+            <!-- pages                                                 -->
+            <!-- ##################################################### -->
+			<trans-unit id="pages.tx_rkwnewsletter">
+				<source>RKW Newsletter</source>
+				<target state="translated">RKW Newsletter</target>
+			</trans-unit>
+			<trans-unit id="pages.tx_rkwnewsletter_newsletter">
+				<source>Newsletter</source>
+				<target state="translated">Newsletter</target>
+			</trans-unit>
+			<trans-unit id="pages.tx_rkwnewsletter_newsletter.please_choose">
+				<source>Please Choose</source>
+				<target state="translated">Bitte wählen</target>
+			</trans-unit>
+			<trans-unit id="pages.tx_rkwnewsletter_topic">
+				<source>Topic</source>
+				<target state="translated">Thema</target>
+			</trans-unit>
+            <trans-unit id="pages.tx_rkwnewsletter_topic.please_choose">
+                <source>Please Choose</source>
+                <target state="translated">Bitte wählen</target>
+            </trans-unit>
+			<trans-unit id="pages.tx_rkwnewsletter_exclude">
+				<source>Exclude From Sendings</source>
+				<target state="translated">Vom Versand ausschließen</target>
+			</trans-unit>
+			<trans-unit id="pages.tx_rkwnewsletter_teaser_heading">
+				<source>Teaser-Headline (optional)</source>
+				<target state="translated">Teaser-Überschrift (optional)</target>
+			</trans-unit>
+            <trans-unit id="pages.tx_rkwnewsletter_teaser_image">
+                <source>Teaser-Image (optional)</source>
+                <target state="translated">Teaser-Image (optional)</target>
+            </trans-unit>
+			<trans-unit id="pages.tx_rkwnewsletter_teaser_text">
+				<source>Teaser-Text (optional)</source>
+				<target state="translated">Teaser-Text (optional)</target>
+			</trans-unit>
+			<trans-unit id="pages.tx_rkwnewsletter_teaser_link">
+				<source>Link (optional)</source>
+				<target state="translated">Link (optional)</target>
+			</trans-unit>
+			<trans-unit id="pages.tx_rkwnewsletter_include_tstamp">
+				<source>Included in Newsletter</source>
+				<target state="translated">In einer Newsletter-Ausgabe verwendet am</target>
+			</trans-unit>
+
+
+
+            <!-- ##################################################### -->
+            <!-- tt_content                                            -->
+            <!-- ##################################################### -->
+			<trans-unit id="tt_content.tx_rkwnewsletter">
+                <source>RKW Newsletter</source>
+                <target>RKW Newsletter</target>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_rkwnewsletter_authors">
+                <source>Authors</source>
+                <target>Ansprechpartner</target>
+            </trans-unit>
+
+
+            <!-- ##################################################### -->
+            <!-- fe_user                                               -->
+            <!-- ##################################################### -->
+			<trans-unit id="fe_user.tx_rkwnewsletter_domain_model_subscription">
+                <source>Topics</source>
+                <target>Themen</target>
+            </trans-unit>
+		</body>
+	</file>
+</xliff>
