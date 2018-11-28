@@ -26,7 +26,7 @@
         "typo3/cms-core": "^7.6.0 || ^8.7.0",
         "rkw/rkw-basics": "~7.6.12", 
         "rkw/rkw-mailer": "~7.6.13",
-        "rkw/rkw-registration": "~7.6.10", 
+        "rkw/rkw-registration": "~7.6.10"
     },
     "autoload": {
         "psr-4": {
