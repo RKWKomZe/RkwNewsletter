@@ -1,0 +1,81 @@
+config.tx_extbase.persistence {
+
+    // make sure ref_index is updated
+    updateReferenceIndex = 1
+
+    // enableAutomaticCacheClearing = 1
+    classes {
+
+        // Subclasses
+        RKW\RkwBasics\Domain\Model\Pages {
+            subclasses {
+                Tx_RkwNewsletter_Pages = RKW\RkwNewsletter\Domain\Model\Pages
+            }
+        }
+
+        // Classes
+        RKW\RkwNewsletter\Domain\Model\Pages {
+            mapping {
+                tableName = pages
+                columns {
+                    doktype.mapOnProperty = dokType
+                }
+            }
+        }
+
+        #===============================================
+
+        RKW\RkwNewsletter\Domain\Model\PagesLanguageOverlay {
+            mapping {
+                tableName = pages_language_overlay
+                columns {
+                    sys_language_uid.mapOnProperty = sysLanguageUid
+                }
+            }
+        }
+
+        #===============================================
+
+        RKW\RkwNewsletter\Domain\Model\TtContent {
+            mapping {
+                tableName = tt_content
+                columns {
+                    CType.mapOnProperty = contentType
+                    imagecols.mapOnProperty = imageCols
+                    uid.mapOnProperty = uid
+                    pid.mapOnProperty = pid
+                    sys_language_uid.mapOnProperty = sysLanguageUid
+
+                }
+            }
+        }
+
+        #===============================================
+
+        RKW\RkwRegistration\Domain\Model\FrontendUser {
+            subclasses {
+                Tx_RkwNewsletter_FrontendUser = RKW\RkwNewsletter\Domain\Model\FrontendUser
+            }
+        }
+
+        RKW\RkwNewsletter\Domain\Model\FrontendUser {
+            mapping {
+                tableName = fe_users
+            }
+        }
+
+        #===============================================
+
+        RKW\RkwRegistration\Domain\Model\BackendUser {
+            subclasses {
+                Tx_RkwNewsletter_BackendUser = RKW\RkwNewsletter\Domain\Model\BackendUser
+            }
+        }
+
+        RKW\RkwNewsletter\Domain\Model\BackendUser {
+            mapping {
+                tableName = be_users
+            }
+        }
+    }
+}
