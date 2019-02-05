@@ -155,7 +155,7 @@ CREATE TABLE pages (
 
   tx_rkwnewsletter_exclude tinyint(4) unsigned DEFAULT '0' NOT NULL,
   tx_rkwnewsletter_teaser_heading varchar(255) DEFAULT '' NOT NULL,
-  tx_rkwnewsletter_teaser_text text NOT NULL,,
+  tx_rkwnewsletter_teaser_text text NOT NULL,
   tx_rkwnewsletter_teaser_image varchar(255) DEFAULT '' NOT NULL,
   tx_rkwnewsletter_teaser_link varchar(255) DEFAULT '' NOT NULL,
   tx_rkwnewsletter_include_tstamp int(11) DEFAULT '0' NOT NULL,
