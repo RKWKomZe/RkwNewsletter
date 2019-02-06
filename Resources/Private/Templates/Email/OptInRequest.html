@@ -6,7 +6,7 @@
 
 <!-- PLAINTEXT -->
 <f:section name="Plaintext">
-<rkwMailer:recipientSalutation queueRecipient="{queueRecipient}" prependText="<rkwMailer:frontend.translate key='templates_email_optInRequest.headline' languageKey='{queueRecipient.languageCode}' extensionName='rkwNewsletter' />" appendText=","/>
+<rkwMailer:recipientSalutation queueRecipient="{queueRecipient}" prependText="<rkwMailer:frontend.translate key='templates_email_optInRequest.headline' languageKey='{queueRecipient.languageCode}' extensionName='rkwNewsletter' /> " appendText=","/>
 
 <rkwMailer:frontend.translate key="templates_email_optInRequest.text1" languageKey="{frontendUser.txRkwregistrationLanguageKey}" extensionName="rkwNewsletter"  />
 
@@ -25,7 +25,7 @@
 
 <!-- HTML -->
 <f:section name="Html">
-    <h1><rkwMailer:recipientSalutation queueRecipient="{queueRecipient}" prependText="<rkwMailer:frontend.translate key='templates_email_optInRequest.headline' languageKey='{queueRecipient.languageCode}' extensionName='rkwNewsletter' />" appendText=","/></h1>
+    <h1><rkwMailer:recipientSalutation queueRecipient="{queueRecipient}" prependText="<rkwMailer:frontend.translate key='templates_email_optInRequest.headline' languageKey='{queueRecipient.languageCode} ' extensionName='rkwNewsletter' /> " appendText=","/></h1>
     <p>
         <rkwMailer:frontend.translate key="templates_email_optInRequest.text1" languageKey="{frontendUser.txRkwregistrationLanguageKey}" extensionName="rkwNewsletter" /><br>
     </p>
