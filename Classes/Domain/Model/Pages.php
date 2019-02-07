@@ -25,6 +25,40 @@ namespace RKW\RkwNewsletter\Domain\Model;
  */
 class Pages extends \RKW\RkwNewsletter\Domain\Model\PagesAbstract
 {
+    /**
+     * permsUserId
+     *
+     * @var integer
+     */
+    protected $permsUserId = 0;
+
+    /**
+     * permsGroupId
+     *
+     * @var integer
+     */
+    protected $permsGroupId = 0;
+
+    /**
+     * permsUser
+     *
+     * @var integer
+     */
+    protected $permsUser = 0;
+
+    /**
+     * permsGroup
+     *
+     * @var integer
+     */
+    protected $permsGroup = 0;
+
+    /**
+     * permsEverybody
+     *
+     * @var integer
+     */
+    protected $permsEverybody = 0;
 
     /**
      * doktype
@@ -98,6 +132,110 @@ class Pages extends \RKW\RkwNewsletter\Domain\Model\PagesAbstract
      */
     protected $txRkwnewsletterIncludeTstamp;
 
+    /**
+     * Returns the permsUserId
+     *
+     * @return integer $permsUserId
+     */
+    public function getPermsUserId()
+    {
+        return $this->permsUserId;
+    }
+
+    /**
+     * Sets the permsUserId
+     *
+     * @param integer $permsUserId
+     * @return void
+     */
+    public function setPermsUserId($permsUserId)
+    {
+        $this->permsUserId = $permsUserId;
+    }
+
+    /**
+     * Returns the permsGroupId
+     *
+     * @return integer $permsGroupId
+     */
+    public function getPermsGroupId()
+    {
+        return $this->permsGroupId;
+    }
+
+    /**
+     * Sets the permsGroupId
+     *
+     * @param integer $permsGroupId
+     * @return void
+     */
+    public function setPermsGroupId($permsGroupId)
+    {
+        $this->permsGroupId = $permsGroupId;
+    }
+
+    /**
+     * Returns the permsUser
+     *
+     * @return integer $permsUser
+     */
+    public function getPermsUser()
+    {
+        return $this->permsUser;
+    }
+
+    /**
+     * Sets the permsUser
+     *
+     * @param integer $permsUser
+     * @return void
+     */
+    public function setPermsUser($permsUser)
+    {
+        $this->permsUser = $permsUser;
+    }
+
+    /**
+     * Returns the permsGroup
+     *
+     * @return integer $permsGroup
+     */
+    public function getPermsGroup()
+    {
+        return $this->permsGroup;
+    }
+
+    /**
+     * Sets the permsGroup
+     *
+     * @param integer $permsGroup
+     * @return void
+     */
+    public function setPermsGroup($permsGroup)
+    {
+        $this->permsGroup = $permsGroup;
+    }
+
+    /**
+     * Returns the permsEverybody
+     *
+     * @return integer $permsEverybody
+     */
+    public function getPermsEverybody()
+    {
+        return $this->permsEverybody;
+    }
+
+    /**
+     * Sets the permsEverybody
+     *
+     * @param integer $permsEverybody
+     * @return void
+     */
+    public function setPermsEverybody($permsEverybody)
+    {
+        $this->permsEverybody = $permsEverybody;
+    }
 
     /**
      * Returns the dokType

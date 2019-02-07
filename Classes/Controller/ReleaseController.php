@@ -115,6 +115,15 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     protected $validatorHelper;
 
+    /**
+     * Approval Helper
+     *
+     * @var \RKW\RkwNewsletter\Helper\Approval
+     * @inject
+     */
+    protected $approvalHelper;
+
+
 
     /**
      * action list
@@ -164,6 +173,8 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             $approval->$setterTstamp(time());
             $approval->$setterBackendUser($backendUser);
             $this->approvalRepository->update($approval);
+
+            $this->approvalHelper->updatePagePerms($approval);
 
             $this->addFlashMessage(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(
                 'releaseController.message.approvalSuccessful',
@@ -338,7 +349,15 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         // set final title and mark as sending
         $issue->setTitle($title);
         $issue->setStatus(3);
+        $issue->setReleaseTstamp(time());
         $this->issueRepository->update($issue);
+
+        // Issue is sent: Update page permissions
+        // Or more exactly: Is enabled to sent through cronjob
+        /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
+        foreach ($issue->getApprovals() as $approval) {
+            $this->approvalHelper->updatePagePerms($approval);
+        }
 
         $this->addFlashMessage(
             \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(

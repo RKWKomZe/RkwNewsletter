@@ -131,6 +131,7 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
                         $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Sending info mail for automatic approval: stage %s, topic "%s", issue id=%s, newsletter-configuration id=%s.', $stage, $approval->getTopic()->getName(), $approval->getIssue()->getUid(), $approval->getIssue()->getNewsletter()->getUid()));
                     }
 
+                    $this->updatePagePerms($approval);
                     $this->approvalRepository->update($approval);
                 }
 
@@ -179,6 +180,7 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
                     }
                 }
 
+                $this->updatePagePerms($approval);
                 $this->approvalRepository->update($approval);
             }
 
@@ -302,6 +304,63 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
             $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('No info mails/reminder mails for approval needed.'));
         }
     }
+
+
+
+    /**
+     * updatePagePerms
+     *
+     * @param \RKW\RkwNewsletter\Domain\Model\Approval $approval
+     * @return void
+     */
+    public function updatePagePerms(\RKW\RkwNewsletter\Domain\Model\Approval $approval)
+    {
+        // $pagesPermsHelper = $objectManager->get('RKW\\RkwNewsletter\\Helper\\PagesPerms', $approval->getPage(), 'everybody');
+        if ($approval->getIssue()->getReleaseTstamp()) {
+            // -> after final sending
+            $this->setPagePerms($approval->getPage(), 'finalSentIssue');
+        } else if ($approval->getAllowedTstampStage2()) {
+            // -> allowed on stage 2
+            $this->setPagePerms($approval->getPage(), 'approvalStage2');
+        } else if ($approval->getAllowedTstampStage1()) {
+            // -> allowed on stage 1
+            $this->setPagePerms($approval->getPage(), 'approvalStage1');
+        } else {
+            // -> new page
+            $this->setPagePerms($approval->getPage(), 'new');
+        }
+        $this->approvalRepository->update($approval);
+    }
+
+
+
+    /**
+     * setPagePerms
+     *
+     * @param \RKW\RkwNewsletter\Domain\Model\Pages $page
+     * @param string $stage
+     */
+    protected function setPagePerms ($page, $stage)
+    {
+        // get settings
+        $settings = $this->getSettings();
+        if ($settings['pages']['permissions'][$stage]['perms_userid']) {
+            $page->setPermsUserId(intval($settings['pages']['permissions'][$stage]['perms_userid']));
+        }
+        if ($settings['pages']['permissions'][$stage]['perms_groupid']) {
+            $page->setPermsGroupId(intval($settings['pages']['permissions'][$stage]['perms_groupid']));
+        }
+        if ($settings['pages']['permissions'][$stage]['perms_user']) {
+            $page->setPermsUser(intval($settings['pages']['permissions'][$stage]['perms_user']));
+        }
+        if ($settings['pages']['permissions'][$stage]['perms_group']) {
+            $page->setPermsGroup(intval($settings['pages']['permissions'][$stage]['perms_group']));
+        }
+        if ($settings['pages']['permissions'][$stage]['perms_everybody']) {
+            $page->setPermsEverybody(intval($settings['pages']['permissions'][$stage]['perms_everybody']));
+        }
+    }
+
 
 
     /**
