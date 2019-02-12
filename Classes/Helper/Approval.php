@@ -318,16 +318,16 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
         // $pagesPermsHelper = $objectManager->get('RKW\\RkwNewsletter\\Helper\\PagesPerms', $approval->getPage(), 'everybody');
         if ($approval->getIssue()->getReleaseTstamp()) {
             // -> after final sending
-            $this->setPagePerms($approval->getPage(), 'finalSentIssue');
+            $this->setPagePerms($approval->getPage(), 'sent');
         } else if ($approval->getAllowedTstampStage2()) {
             // -> allowed on stage 2
-            $this->setPagePerms($approval->getPage(), 'approvalStage2');
+            $this->setPagePerms($approval->getPage(), 'release');
         } else if ($approval->getAllowedTstampStage1()) {
             // -> allowed on stage 1
-            $this->setPagePerms($approval->getPage(), 'approvalStage1');
+            $this->setPagePerms($approval->getPage(), 'stage2');
         } else {
             // -> new page
-            $this->setPagePerms($approval->getPage(), 'new');
+            $this->setPagePerms($approval->getPage(), 'stage1');
         }
         $this->approvalRepository->update($approval);
     }

@@ -51,7 +51,7 @@ plugin.tx_rkwnewsletter {
             # permissions for pages elements
             permissions {
                 # on create of a new issue
-                new {
+                stage1 {
                     # cat=plugin.tx_rkwnewsletter//a; type=integer; label=UserId permission
                     userid =
                     # cat=plugin.tx_rkwnewsletter//a; type=integer; label=GroupId permission
@@ -64,7 +64,7 @@ plugin.tx_rkwnewsletter {
                     everybody =
                 }
                 # perms which come into effect on approve stage 1
-                approvalStage1 {
+                stage2 {
                     userid =
                     groupid =
                     user =
@@ -72,7 +72,7 @@ plugin.tx_rkwnewsletter {
                     everybody =
                 }
                 # perms which come into effect on approve stage 2
-                approvalStage2 {
+                release {
                     userid =
                     groupid =
                     user =
@@ -80,7 +80,7 @@ plugin.tx_rkwnewsletter {
                     everybody =
                 }
                 # perms which come into effect after final sending of the issue
-                finalSentIssue {
+                sent {
                     userid =
                     groupid =
                     user =
