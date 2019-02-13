@@ -19,6 +19,11 @@ config.tx_extbase.persistence {
                 tableName = pages
                 columns {
                     doktype.mapOnProperty = dokType
+                    perms_userid.mapOnProperty = permsUserId
+                    perms_groupid.mapOnProperty = permsGroupId
+                    perms_user.mapOnProperty = permsUser
+                    perms_group.mapOnProperty = permsGroup
+                    perms_everybody.mapOnProperty = permsEverybody
                 }
             }
         }
@@ -122,37 +127,33 @@ plugin.tx_rkwnewsletter {
 
         pages {
             permissions {
-                //new {
                 stage1 {
-                    userid = {$plugin.tx_rkwnewsletter.settings.pages.permissions.new.userid}
-                    groupid = {$plugin.tx_rkwnewsletter.settings.pages.permissions.new.groupid}
-                    user = {$plugin.tx_rkwnewsletter.settings.pages.permissions.new.user}
-                    group = {$plugin.tx_rkwnewsletter.settings.pages.permissions.new.group}
-                    everybody = {$plugin.tx_rkwnewsletter.settings.pages.permissions.new.everybody}
+                    userid = {$plugin.tx_rkwnewsletter.settings.pages.permissions.stage1.userid}
+                    groupid = {$plugin.tx_rkwnewsletter.settings.pages.permissions.stage1.groupid}
+                    user = {$plugin.tx_rkwnewsletter.settings.pages.permissions.stage1.user}
+                    group = {$plugin.tx_rkwnewsletter.settings.pages.permissions.stage1.group}
+                    everybody = {$plugin.tx_rkwnewsletter.settings.pages.permissions.stage1.everybody}
                 }
-                //approvalStage1 {
                 stage2 {
-                    userid = {$plugin.tx_rkwnewslet     ter.settings.pages.permissions.approvalStage1.userid}
-                    groupid = {$plugin.tx_rkwnewsletter.settings.pages.permissions.approvalStage1.groupid}
-                    user = {$plugin.tx_rkwnewsletter.settings.pages.permissions.approvalStage1.user}
-                    group = {$plugin.tx_rkwnewsletter.settings.pages.permissions.approvalStage1.group}
-                    everybody = {$plugin.tx_rkwnewsletter.settings.pages.permissions.approvalStage1.everybody}
+                    userid = {$plugin.tx_rkwnewsletter.settings.pages.permissions.stage2.userid}
+                    groupid = {$plugin.tx_rkwnewsletter.settings.pages.permissions.stage2.groupid}
+                    user = {$plugin.tx_rkwnewsletter.settings.pages.permissions.stage2.user}
+                    group = {$plugin.tx_rkwnewsletter.settings.pages.permissions.stage2.group}
+                    everybody = {$plugin.tx_rkwnewsletter.settings.pages.permissions.stage2.everybody}
                 }
-                //approvalStage2 {
                 release {
-                    userid = {$plugin.tx_rkwnewsletter.settings.pages.permissions.approvalStage2.userid}
-                    groupid = {$plugin.tx_rkwnewsletter.settings.pages.permissions.approvalStage2.groupid}
-                    user = {$plugin.tx_rkwnewsletter.settings.pages.permissions.approvalStage2.user}
-                    group = {$plugin.tx_rkwnewsletter.settings.pages.permissions.approvalStage2.group}
-                    everybody = {$plugin.tx_rkwnewsletter.settings.pages.permissions.approvalStage2.everybody}
+                    userid = {$plugin.tx_rkwnewsletter.settings.pages.permissions.release.userid}
+                    groupid = {$plugin.tx_rkwnewsletter.settings.pages.permissions.release.groupid}
+                    user = {$plugin.tx_rkwnewsletter.settings.pages.permissions.release.user}
+                    group = {$plugin.tx_rkwnewsletter.settings.pages.permissions.release.group}
+                    everybody = {$plugin.tx_rkwnewsletter.settings.pages.permissions.release.everybody}
                 }
-                //finalSentIssue {
                 sent {
-                    userid = {$plugin.tx_rkwnewsletter.settings.pages.permissions.finalSentIssue.userid}
-                    groupid = {$plugin.tx_rkwnewsletter.settings.pages.permissions.finalSentIssue.groupid}
-                    user = {$plugin.tx_rkwnewsletter.settings.pages.permissions.finalSentIssue.user}
-                    group = {$plugin.tx_rkwnewsletter.settings.pages.permissions.finalSentIssue.group}
-                    everybody = {$plugin.tx_rkwnewsletter.settings.pages.permissions.finalSentIssue.everybody}
+                    userid = {$plugin.tx_rkwnewsletter.settings.pages.permissions.sent.userid}
+                    groupid = {$plugin.tx_rkwnewsletter.settings.pages.permissions.sent.groupid}
+                    user = {$plugin.tx_rkwnewsletter.settings.pages.permissions.sent.user}
+                    group = {$plugin.tx_rkwnewsletter.settings.pages.permissions.sent.group}
+                    everybody = {$plugin.tx_rkwnewsletter.settings.pages.permissions.sent.everybody}
                 }
             }
         }

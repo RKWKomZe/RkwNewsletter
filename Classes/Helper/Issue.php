@@ -4,6 +4,7 @@ namespace RKW\RkwNewsletter\Helper;
 
 use \RKW\RkwBasics\Helper\Common;
 use \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -80,6 +81,13 @@ class Issue implements \TYPO3\CMS\Core\SingletonInterface
      */
     protected $persistenceManager = null;
 
+    /**
+     * Approval Helper
+     *
+     * @var \RKW\RkwNewsletter\Helper\Approval
+     * @inject
+     */
+    protected $approvalHelper;
 
     /**
      * @var \TYPO3\CMS\Core\Log\Logger
@@ -180,6 +188,8 @@ class Issue implements \TYPO3\CMS\Core\SingletonInterface
                                 $approval = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('RKW\\RkwNewsletter\\Domain\\Model\\Approval');
                                 $approval->setTopic($topic);
                                 $approval->setPage($containerPage);
+                                // set initial page perms
+                                $this->approvalHelper->updatePagePerms($approval);
                                 $this->approvalRepository->add($approval);
 
                                 $issue->addApprovals($approval);

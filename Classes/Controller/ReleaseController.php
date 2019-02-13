@@ -13,6 +13,7 @@ namespace RKW\RkwNewsletter\Controller;
  *
  * The TYPO3 project - inspiring people to share!
  */
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * ReleaseController
@@ -151,7 +152,7 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * action approve
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Approval $approval
-     * @param int stage
+     * @param int $stage
      * @return void
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
@@ -161,7 +162,6 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     public function approveAction(\RKW\RkwNewsletter\Domain\Model\Approval $approval, $stage = 1)
     {
-
         if (in_array($stage, array(1, 2))) {
 
             $setterTstamp = 'setAllowedTstampStage' . intval($stage);

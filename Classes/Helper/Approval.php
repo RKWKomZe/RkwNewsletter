@@ -4,6 +4,7 @@ namespace RKW\RkwNewsletter\Helper;
 
 use \RKW\RkwBasics\Helper\Common;
 use \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -316,7 +317,12 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
     public function updatePagePerms(\RKW\RkwNewsletter\Domain\Model\Approval $approval)
     {
         // $pagesPermsHelper = $objectManager->get('RKW\\RkwNewsletter\\Helper\\PagesPerms', $approval->getPage(), 'everybody');
-        if ($approval->getIssue()->getReleaseTstamp()) {
+
+        // maybe an Issue does not exists (on initial create e.g.)
+        if (
+            $approval->getIssue()
+            && $approval->getIssue()->getReleaseTstamp()
+        ) {
             // -> after final sending
             $this->setPagePerms($approval->getPage(), 'sent');
         } else if ($approval->getAllowedTstampStage2()) {
@@ -329,7 +335,11 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
             // -> new page
             $this->setPagePerms($approval->getPage(), 'stage1');
         }
-        $this->approvalRepository->update($approval);
+
+        // Important: Do not make an update, if the issue does not exists yet (throws 99 status error on issue create)
+        if ($approval->getIssue()) {
+            $this->approvalRepository->update($approval);
+        }
     }
 
 
@@ -344,20 +354,20 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
     {
         // get settings
         $settings = $this->getSettings();
-        if ($settings['pages']['permissions'][$stage]['perms_userid']) {
-            $page->setPermsUserId(intval($settings['pages']['permissions'][$stage]['perms_userid']));
+        if ($settings['pages']['permissions'][$stage]['userid']) {
+            $page->setPermsUserId(intval($settings['pages']['permissions'][$stage]['userid']));
         }
-        if ($settings['pages']['permissions'][$stage]['perms_groupid']) {
-            $page->setPermsGroupId(intval($settings['pages']['permissions'][$stage]['perms_groupid']));
+        if ($settings['pages']['permissions'][$stage]['groupid']) {
+            $page->setPermsGroupId(intval($settings['pages']['permissions'][$stage]['groupid']));
         }
-        if ($settings['pages']['permissions'][$stage]['perms_user']) {
-            $page->setPermsUser(intval($settings['pages']['permissions'][$stage]['perms_user']));
+        if ($settings['pages']['permissions'][$stage]['user']) {
+            $page->setPermsUser(intval($settings['pages']['permissions'][$stage]['user']));
         }
-        if ($settings['pages']['permissions'][$stage]['perms_group']) {
-            $page->setPermsGroup(intval($settings['pages']['permissions'][$stage]['perms_group']));
+        if ($settings['pages']['permissions'][$stage]['group']) {
+            $page->setPermsGroup(intval($settings['pages']['permissions'][$stage]['group']));
         }
-        if ($settings['pages']['permissions'][$stage]['perms_everybody']) {
-            $page->setPermsEverybody(intval($settings['pages']['permissions'][$stage]['perms_everybody']));
+        if ($settings['pages']['permissions'][$stage]['everybody']) {
+            $page->setPermsEverybody(intval($settings['pages']['permissions'][$stage]['everybody']));
         }
     }
 
