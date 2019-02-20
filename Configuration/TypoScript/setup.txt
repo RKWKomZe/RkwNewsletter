@@ -128,29 +128,29 @@ plugin.tx_rkwnewsletter {
         pages {
             permissions {
                 stage1 {
-                    userid = {$plugin.tx_rkwnewsletter.settings.pages.permissions.stage1.userid}
-                    groupid = {$plugin.tx_rkwnewsletter.settings.pages.permissions.stage1.groupid}
+                    userId = {$plugin.tx_rkwnewsletter.settings.pages.permissions.stage1.userId}
+                    groupId = {$plugin.tx_rkwnewsletter.settings.pages.permissions.stage1.groupId}
                     user = {$plugin.tx_rkwnewsletter.settings.pages.permissions.stage1.user}
                     group = {$plugin.tx_rkwnewsletter.settings.pages.permissions.stage1.group}
                     everybody = {$plugin.tx_rkwnewsletter.settings.pages.permissions.stage1.everybody}
                 }
                 stage2 {
-                    userid = {$plugin.tx_rkwnewsletter.settings.pages.permissions.stage2.userid}
-                    groupid = {$plugin.tx_rkwnewsletter.settings.pages.permissions.stage2.groupid}
+                    userId = {$plugin.tx_rkwnewsletter.settings.pages.permissions.stage2.userId}
+                    groupId = {$plugin.tx_rkwnewsletter.settings.pages.permissions.stage2.groupId}
                     user = {$plugin.tx_rkwnewsletter.settings.pages.permissions.stage2.user}
                     group = {$plugin.tx_rkwnewsletter.settings.pages.permissions.stage2.group}
                     everybody = {$plugin.tx_rkwnewsletter.settings.pages.permissions.stage2.everybody}
                 }
                 release {
-                    userid = {$plugin.tx_rkwnewsletter.settings.pages.permissions.release.userid}
-                    groupid = {$plugin.tx_rkwnewsletter.settings.pages.permissions.release.groupid}
+                    userId = {$plugin.tx_rkwnewsletter.settings.pages.permissions.release.userId}
+                    groupId = {$plugin.tx_rkwnewsletter.settings.pages.permissions.release.groupId}
                     user = {$plugin.tx_rkwnewsletter.settings.pages.permissions.release.user}
                     group = {$plugin.tx_rkwnewsletter.settings.pages.permissions.release.group}
                     everybody = {$plugin.tx_rkwnewsletter.settings.pages.permissions.release.everybody}
                 }
                 sent {
-                    userid = {$plugin.tx_rkwnewsletter.settings.pages.permissions.sent.userid}
-                    groupid = {$plugin.tx_rkwnewsletter.settings.pages.permissions.sent.groupid}
+                    userId = {$plugin.tx_rkwnewsletter.settings.pages.permissions.sent.userId}
+                    groupId = {$plugin.tx_rkwnewsletter.settings.pages.permissions.sent.groupId}
                     user = {$plugin.tx_rkwnewsletter.settings.pages.permissions.sent.user}
                     group = {$plugin.tx_rkwnewsletter.settings.pages.permissions.sent.group}
                     everybody = {$plugin.tx_rkwnewsletter.settings.pages.permissions.sent.everybody}
