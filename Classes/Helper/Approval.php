@@ -89,6 +89,7 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     public function doAutomaticApprovalsByTime()
     {
@@ -132,7 +133,7 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
                         $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Sending info mail for automatic approval: stage %s, topic "%s", issue id=%s, newsletter-configuration id=%s.', $stage, $approval->getTopic()->getName(), $approval->getIssue()->getUid(), $approval->getIssue()->getNewsletter()->getUid()));
                     }
 
-                    $this->updatePagePerms($approval);
+                    $this->updatePagePermissions($approval);
                     $this->approvalRepository->update($approval);
                 }
 
@@ -158,6 +159,7 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     public function doAutomaticApprovalsByAdminsMissing()
     {
@@ -181,7 +183,7 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
                     }
                 }
 
-                $this->updatePagePerms($approval);
+                $this->updatePagePermissions($approval);
                 $this->approvalRepository->update($approval);
             }
 
@@ -204,6 +206,7 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     public function sendInfoAndReminderMailsForApprovals()
     {
@@ -231,7 +234,7 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
                         $approvalAdmins = $approval->getTopic()->getApprovalStage1();
                     }
 
-                    // Case 2: reminder at stage 1
+                // Case 2: reminder at stage 1
                 } else {
                     if (
                         ($approval->getAllowedTstampStage1() < 1)
@@ -245,7 +248,7 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
                             $approvalAdmins = $approval->getTopic()->getApprovalStage1();
                         }
 
-                        // Case 3: infomail at stage 2
+                    // Case 3: infomail at stage 2
                     } else {
                         if (
                             ($approval->getAllowedTstampStage1() > 0)
@@ -260,7 +263,7 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
                                 $approvalAdmins = $approval->getTopic()->getApprovalStage2();
                             }
 
-                            // Case 4: reminder at stage 2
+                        // Case 4: reminder at stage 2
                         } else {
                             if (
                                 ($approval->getAllowedTstampStage1() > 0)
@@ -288,7 +291,11 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
                     $this->signalSlotDispatcher->dispatch(__CLASS__, self::SIGNAL_FOR_SENDING_MAIL_APPROVAL, array($approvalAdmins, $approval, $stage, $isReminder));
                     if ($isReminder) {
                         $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Sending reminder mail for approval: stage %s, topic "%s", issue id=%s, newsletter-configuration id=%s.', $stage, $approval->getTopic()->getName(), $approval->getIssue()->getUid(), $approval->getIssue()->getNewsletter()->getUid()));
+
                     } else {
+
+                        // Update permissions
+                        $this->updatePagePermissions($approval);
                         $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Sending info mail for approval: stage %s, topic "%s", issue id=%s, newsletter-configuration id=%s.', $stage, $approval->getTopic()->getName(), $approval->getIssue()->getUid(), $approval->getIssue()->getNewsletter()->getUid()));
                     }
 
@@ -309,56 +316,56 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
 
 
     /**
-     * updatePagePerms
+     * updatePagePermissions
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Approval $approval
      * @return void
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
-    public function updatePagePerms(\RKW\RkwNewsletter\Domain\Model\Approval $approval)
+    public function updatePagePermissions(\RKW\RkwNewsletter\Domain\Model\Approval $approval)
     {
-        // $pagesPermsHelper = $objectManager->get('RKW\\RkwNewsletter\\Helper\\PagesPerms', $approval->getPage(), 'everybody');
 
-        // maybe an Issue does not exists (on initial create e.g.)
         if (
             $approval->getIssue()
             && $approval->getIssue()->getReleaseTstamp()
         ) {
             // -> after final sending
-            $this->setPagePerms($approval->getPage(), 'sent');
+            $this->setPagePermissions($approval->getPage(), 'sent');
         } else if ($approval->getAllowedTstampStage2()) {
             // -> allowed on stage 2
-            $this->setPagePerms($approval->getPage(), 'release');
+            $this->setPagePermissions($approval->getPage(), 'release');
         } else if ($approval->getAllowedTstampStage1()) {
             // -> allowed on stage 1
-            $this->setPagePerms($approval->getPage(), 'stage2');
+            $this->setPagePermissions($approval->getPage(), 'stage2');
         } else {
             // -> new page
-            $this->setPagePerms($approval->getPage(), 'stage1');
+            $this->setPagePermissions($approval->getPage(), 'stage1');
         }
 
-        // Important: Do not make an update, if the issue does not exists yet (throws 99 status error on issue create)
-        if ($approval->getIssue()) {
-            $this->approvalRepository->update($approval);
-        }
+        $this->approvalRepository->update($approval);
+
     }
 
 
 
     /**
-     * setPagePerms
+     * setPagePermissions
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Pages $page
      * @param string $stage
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
-    protected function setPagePerms ($page, $stage)
+    protected function setPagePermissions ($page, $stage)
     {
         // get settings
         $settings = $this->getSettings();
-        if ($settings['pages']['permissions'][$stage]['userid']) {
-            $page->setPermsUserId(intval($settings['pages']['permissions'][$stage]['userid']));
+        if ($settings['pages']['permissions'][$stage]['userId']) {
+            $page->setPermsUserId(intval($settings['pages']['permissions'][$stage]['userId']));
         }
-        if ($settings['pages']['permissions'][$stage]['groupid']) {
-            $page->setPermsGroupId(intval($settings['pages']['permissions'][$stage]['groupid']));
+        if ($settings['pages']['permissions'][$stage]['groupId']) {
+            $page->setPermsGroupId(intval($settings['pages']['permissions'][$stage]['groupId']));
         }
         if ($settings['pages']['permissions'][$stage]['user']) {
             $page->setPermsUser(intval($settings['pages']['permissions'][$stage]['user']));
@@ -378,6 +385,7 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
      *
      * @param string $which Which type of settings will be loaded
      * @return array
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     protected function getSettings($which = ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS)
     {
@@ -393,7 +401,6 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
      */
     protected function getLogger()
     {
-
         if (!$this->logger instanceof \TYPO3\CMS\Core\Log\Logger) {
             $this->logger = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Log\\LogManager')->getLogger(__CLASS__);
         }

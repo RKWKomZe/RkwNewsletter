@@ -1,4 +1,5 @@
 <?php
+
 namespace RKW\RkwNewsletter\Helper;
 /*
  * This file is part of the TYPO3 CMS project.
@@ -14,7 +15,7 @@ namespace RKW\RkwNewsletter\Helper;
  */
 
 /**
- * PagesPerms Helper
+ * PagesPermissions Helper
  *
  * This class is initially using a "pages" element and a permTarget ("user", "group", "everybody"). After construct this class
  * rights can be set or deprived (through boolean setter methods)
@@ -24,7 +25,7 @@ namespace RKW\RkwNewsletter\Helper;
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class PagesPerms
+class PagesPermissions
 {
     const PAGES_PERM_SHOW = 1;
     const PAGES_PERM_EDIT = 2;
@@ -37,7 +38,7 @@ class PagesPerms
      *
      * @var \RKW\RkwNewsletter\Domain\Model\Pages
      */
-    protected $pages = NULL;
+    protected $pages = null;
 
     /**
      * permTarget
@@ -94,7 +95,7 @@ class PagesPerms
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Pages $pages
      * @param string $userGroupOrEverybody ("user", "group" or "everybody")
-     * @throws \Exception
+     * @throws \RKW\RkwNewsletter\Exception
      */
     public function __construct($pages, $userGroupOrEverybody)
     {
@@ -104,13 +105,15 @@ class PagesPerms
         // get rights from $pages and set it to this class
         $permGetter = 'getPerms' . ucfirst($this->permTarget);
         if (!method_exists($this->pages, $permGetter)) {
-            throw new \Exception("Getter method does not exist!", 1540554503);
+            throw new \RKW\RkwNewsletter\Exception("Getter method does not exist!", 1540554503);
+            //===
         }
-        // this intval is not important: Just convert "null" to "0" (code below - function parsePerms - also works with "null")
+        
+        // this intval is not important: Just convert "null" to "0" (code below - function parsePermissions - also works with "null")
         $this->permsAddedUp = intval($this->pages->$permGetter);
 
         // fill properties
-        $this->parsePerms();
+        $this->parsePermissions();
     }
 
     /**
@@ -132,7 +135,7 @@ class PagesPerms
     public function setPermsAddedUp($permsAddedUp)
     {
         $this->permsAddedUp = $permsAddedUp;
-        $this->parsePerms();
+        $this->parsePermissions();
     }
 
     /**
@@ -140,11 +143,12 @@ class PagesPerms
      *
      * @param boolean $permShow
      * @return void
+     * @throws \RKW\RkwNewsletter\Exception
      */
     public function setPermShow($permShow)
     {
         $this->permShow = $permShow;
-        $this->mergeAndAddUpPerms();
+        $this->mergeAndSetPermissions();
     }
 
     /**
@@ -152,11 +156,12 @@ class PagesPerms
      *
      * @param boolean $permEdit
      * @return void
+     * @throws \RKW\RkwNewsletter\Exception
      */
     public function setPermEdit($permEdit)
     {
         $this->permEdit = $permEdit;
-        $this->mergeAndAddUpPerms();
+        $this->mergeAndSetPermissions();
     }
 
     /**
@@ -164,11 +169,12 @@ class PagesPerms
      *
      * @param boolean $permDelete
      * @return void
+     * @throws \RKW\RkwNewsletter\Exception
      */
     public function setPermDelete($permDelete)
     {
         $this->permDelete = $permDelete;
-        $this->mergeAndAddUpPerms();
+        $this->mergeAndSetPermissions();
     }
 
     /**
@@ -176,11 +182,12 @@ class PagesPerms
      *
      * @param boolean $permCreate
      * @return void
+     * @throws \RKW\RkwNewsletter\Exception
      */
     public function setPermCreate($permCreate)
     {
         $this->permCreate = $permCreate;
-        $this->mergeAndAddUpPerms();
+        $this->mergeAndSetPermissions();
     }
 
     /**
@@ -188,22 +195,22 @@ class PagesPerms
      *
      * @param boolean $permContentCreate
      * @return void
+     * @throws \RKW\RkwNewsletter\Exception
      */
     public function setPermContentCreate($permContentCreate)
     {
         $this->permContentCreate = $permContentCreate;
-        $this->mergeAndAddUpPerms();
+        $this->mergeAndSetPermissions();
     }
 
 
-
     /**
-     * parsePerms
+     * parsePermissions
      * Calculates with the total count which actions for this page are allowed
      *
      * @return void
      */
-    protected function parsePerms()
+    protected function parsePermissions()
     {
         $permsAddedUp = $this->permsAddedUp;
 
@@ -234,14 +241,13 @@ class PagesPerms
     }
 
 
-
     /**
-     * mergePerms
+     * mergePermissions
      * Add single values to one value
      *
      * @return void
      */
-    protected function mergePerms()
+    protected function mergePermissions()
     {
         // reset permTotalCount and write new below
         $this->permsAddedUp = 0;
@@ -269,23 +275,24 @@ class PagesPerms
     }
 
 
-
     /**
-     * mergeAndAddUpPerms
+     * mergeAndSetPermissions
      * is called by every setter and sets the new value directly to the pages element
      *
      * @return void
-     * @throws \Exception
+     * @throws \RKW\RkwNewsletter\Exception
      */
-    protected function mergeAndAddUpPerms()
+    protected function mergeAndSetPermissions()
     {
-        $this->mergePerms();
+        $this->mergePermissions();
+        
         // get rights from $pages and set it to this class
         $permSetter = 'setPerms' . ucfirst($this->permTarget);
 
         if (!method_exists($this->pages, $permSetter)) {
-            throw new \Exception("Setter method does not exist!", 1540558505);
+            throw new \RKW\RkwNewsletter\Exception("Setter method does not exist!", 1540558505);
         }
+        
         $this->pages->$permSetter($this->permsAddedUp);
     }
 }

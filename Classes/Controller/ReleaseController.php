@@ -158,6 +158,7 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      * @ignorevalidation $approval
      */
     public function approveAction(\RKW\RkwNewsletter\Domain\Model\Approval $approval, $stage = 1)
@@ -173,8 +174,6 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             $approval->$setterTstamp(time());
             $approval->$setterBackendUser($backendUser);
             $this->approvalRepository->update($approval);
-
-            $this->approvalHelper->updatePagePerms($approval);
 
             $this->addFlashMessage(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(
                 'releaseController.message.approvalSuccessful',
@@ -333,6 +332,7 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      * @ignorevalidation $issue
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     public function sendAction(\RKW\RkwNewsletter\Domain\Model\Issue $issue, $title = null)
     {
@@ -342,6 +342,7 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
         /** @var \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser */
         foreach ($subscribers as $frontendUser) {
+
             // add to issue
             $issue->addRecipients($frontendUser);
         }
@@ -352,11 +353,10 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $issue->setReleaseTstamp(time());
         $this->issueRepository->update($issue);
 
-        // Issue is sent: Update page permissions
-        // Or more exactly: Is enabled to sent through cronjob
+        // Issue is sent: Update page permissions to "sent"
         /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
         foreach ($issue->getApprovals() as $approval) {
-            $this->approvalHelper->updatePagePerms($approval);
+            $this->approvalHelper->updatePagePermissions($approval);
         }
 
         $this->addFlashMessage(

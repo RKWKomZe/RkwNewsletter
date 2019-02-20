@@ -188,10 +188,8 @@ class Issue implements \TYPO3\CMS\Core\SingletonInterface
                                 $approval = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('RKW\\RkwNewsletter\\Domain\\Model\\Approval');
                                 $approval->setTopic($topic);
                                 $approval->setPage($containerPage);
-                                // set initial page perms
-                                $this->approvalHelper->updatePagePerms($approval);
-                                $this->approvalRepository->add($approval);
 
+                                $this->approvalRepository->add($approval);
                                 $issue->addApprovals($approval);
                                 $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Added an approval with uid=%s for topic "%s" for newsletter with id=%s.', $approval->getUid(), $topic->getName(), $newsletter->getUid()));
 
@@ -324,6 +322,7 @@ class Issue implements \TYPO3\CMS\Core\SingletonInterface
      *
      * @param string $which Which type of settings will be loaded
      * @return array
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     protected function getSettings($which = ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS)
     {
