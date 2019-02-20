@@ -19,6 +19,11 @@ config.tx_extbase.persistence {
                 tableName = pages
                 columns {
                     doktype.mapOnProperty = dokType
+                    perms_userid.mapOnProperty = permsUserId
+                    perms_groupid.mapOnProperty = permsGroupId
+                    perms_user.mapOnProperty = permsUser
+                    perms_group.mapOnProperty = permsGroup
+                    perms_everybody.mapOnProperty = permsEverybody
                 }
             }
         }
@@ -120,6 +125,38 @@ plugin.tx_rkwnewsletter {
 
         requiredFieldsSubscription = {$plugin.tx_rkwnewsletter.settings.requiredFieldsSubscription}
 
+        pages {
+            permissions {
+                stage1 {
+                    userId = {$plugin.tx_rkwnewsletter.settings.pages.permissions.stage1.userId}
+                    groupId = {$plugin.tx_rkwnewsletter.settings.pages.permissions.stage1.groupId}
+                    user = {$plugin.tx_rkwnewsletter.settings.pages.permissions.stage1.user}
+                    group = {$plugin.tx_rkwnewsletter.settings.pages.permissions.stage1.group}
+                    everybody = {$plugin.tx_rkwnewsletter.settings.pages.permissions.stage1.everybody}
+                }
+                stage2 {
+                    userId = {$plugin.tx_rkwnewsletter.settings.pages.permissions.stage2.userId}
+                    groupId = {$plugin.tx_rkwnewsletter.settings.pages.permissions.stage2.groupId}
+                    user = {$plugin.tx_rkwnewsletter.settings.pages.permissions.stage2.user}
+                    group = {$plugin.tx_rkwnewsletter.settings.pages.permissions.stage2.group}
+                    everybody = {$plugin.tx_rkwnewsletter.settings.pages.permissions.stage2.everybody}
+                }
+                release {
+                    userId = {$plugin.tx_rkwnewsletter.settings.pages.permissions.release.userId}
+                    groupId = {$plugin.tx_rkwnewsletter.settings.pages.permissions.release.groupId}
+                    user = {$plugin.tx_rkwnewsletter.settings.pages.permissions.release.user}
+                    group = {$plugin.tx_rkwnewsletter.settings.pages.permissions.release.group}
+                    everybody = {$plugin.tx_rkwnewsletter.settings.pages.permissions.release.everybody}
+                }
+                sent {
+                    userId = {$plugin.tx_rkwnewsletter.settings.pages.permissions.sent.userId}
+                    groupId = {$plugin.tx_rkwnewsletter.settings.pages.permissions.sent.groupId}
+                    user = {$plugin.tx_rkwnewsletter.settings.pages.permissions.sent.user}
+                    group = {$plugin.tx_rkwnewsletter.settings.pages.permissions.sent.group}
+                    everybody = {$plugin.tx_rkwnewsletter.settings.pages.permissions.sent.everybody}
+                }
+            }
+        }
 	}
 }
 

@@ -13,6 +13,7 @@ namespace RKW\RkwNewsletter\Controller;
  *
  * The TYPO3 project - inspiring people to share!
  */
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * ReleaseController
@@ -115,6 +116,15 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     protected $validatorHelper;
 
+    /**
+     * Approval Helper
+     *
+     * @var \RKW\RkwNewsletter\Helper\Approval
+     * @inject
+     */
+    protected $approvalHelper;
+
+
 
     /**
      * action list
@@ -142,17 +152,17 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * action approve
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Approval $approval
-     * @param int stage
+     * @param int $stage
      * @return void
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      * @ignorevalidation $approval
      */
     public function approveAction(\RKW\RkwNewsletter\Domain\Model\Approval $approval, $stage = 1)
     {
-
         if (in_array($stage, array(1, 2))) {
 
             $setterTstamp = 'setAllowedTstampStage' . intval($stage);
@@ -322,6 +332,7 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      * @ignorevalidation $issue
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     public function sendAction(\RKW\RkwNewsletter\Domain\Model\Issue $issue, $title = null)
     {
@@ -331,6 +342,7 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
         /** @var \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser */
         foreach ($subscribers as $frontendUser) {
+
             // add to issue
             $issue->addRecipients($frontendUser);
         }
@@ -338,7 +350,14 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         // set final title and mark as sending
         $issue->setTitle($title);
         $issue->setStatus(3);
+        $issue->setReleaseTstamp(time());
         $this->issueRepository->update($issue);
+
+        // Issue is sent: Update page permissions to "sent"
+        /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
+        foreach ($issue->getApprovals() as $approval) {
+            $this->approvalHelper->updatePagePermissions($approval);
+        }
 
         $this->addFlashMessage(
             \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(

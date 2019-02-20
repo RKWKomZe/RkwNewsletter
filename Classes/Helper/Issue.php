@@ -4,6 +4,7 @@ namespace RKW\RkwNewsletter\Helper;
 
 use \RKW\RkwBasics\Helper\Common;
 use \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -80,6 +81,13 @@ class Issue implements \TYPO3\CMS\Core\SingletonInterface
      */
     protected $persistenceManager = null;
 
+    /**
+     * Approval Helper
+     *
+     * @var \RKW\RkwNewsletter\Helper\Approval
+     * @inject
+     */
+    protected $approvalHelper;
 
     /**
      * @var \TYPO3\CMS\Core\Log\Logger
@@ -180,8 +188,8 @@ class Issue implements \TYPO3\CMS\Core\SingletonInterface
                                 $approval = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('RKW\\RkwNewsletter\\Domain\\Model\\Approval');
                                 $approval->setTopic($topic);
                                 $approval->setPage($containerPage);
-                                $this->approvalRepository->add($approval);
 
+                                $this->approvalRepository->add($approval);
                                 $issue->addApprovals($approval);
                                 $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Added an approval with uid=%s for topic "%s" for newsletter with id=%s.', $approval->getUid(), $topic->getName(), $newsletter->getUid()));
 
@@ -314,6 +322,7 @@ class Issue implements \TYPO3\CMS\Core\SingletonInterface
      *
      * @param string $which Which type of settings will be loaded
      * @return array
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     protected function getSettings($which = ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS)
     {
