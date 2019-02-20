@@ -42,9 +42,19 @@ class NewsletterRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query->statement(
             'SELECT * FROM tx_rkwnewsletter_domain_model_newsletter WHERE
             (
-              (rythm = 1 AND WEEKOFYEAR(FROM_UNIXTIME(last_issue_tstamp)) < WEEKOFYEAR(DATE_ADD(NOW(), INTERVAL +' . intval($tolerance) . ' SECOND))) OR 			
-	          (rythm = 2 AND MONTH(FROM_UNIXTIME(last_issue_tstamp)) < MONTH(DATE_ADD(NOW(), INTERVAL +' . intval($tolerance) . ' SECOND)) AND DAY(DATE_ADD(NOW(), INTERVAL +' . intval($tolerance) . ' SECOND)) >= ' . intval($dayOfMonth) . ') OR
-	          (rythm = 3 AND QUARTER(FROM_UNIXTIME(last_issue_tstamp)) < QUARTER(DATE_ADD(NOW(), INTERVAL +' . intval($tolerance) . ' SECOND)) AND DAY(DATE_ADD(NOW(), INTERVAL +' . intval($tolerance) . ' SECOND)) >= ' . intval($dayOfMonth) . ')
+              (rythm = 1 AND WEEKOFYEAR(FROM_UNIXTIME(last_issue_tstamp)) < WEEKOFYEAR(DATE_ADD(NOW(), INTERVAL +' . intval($tolerance) . ' SECOND))) 			
+	          OR (rythm = 2 
+	            AND (
+                    (
+                        MONTH(FROM_UNIXTIME(last_issue_tstamp)) < MONTH(DATE_ADD(NOW(), INTERVAL +' . intval($tolerance) . ' SECOND)) 
+                    )
+                    OR (
+                        MONTH(FROM_UNIXTIME(last_issue_tstamp)) = 12 AND YEAR(FROM_UNIXTIME(last_issue_tstamp)) < YEAR(DATE_ADD(NOW(), INTERVAL +' . intval($tolerance) . ' SECOND))
+                    )
+                )
+                AND DAY(DATE_ADD(NOW(), INTERVAL +' . intval($tolerance) . ' SECOND)) >= ' . intval($dayOfMonth) . ' 
+	          )
+	          OR (rythm = 3 AND QUARTER(FROM_UNIXTIME(last_issue_tstamp)) < QUARTER(DATE_ADD(NOW(), INTERVAL +' . intval($tolerance) . ' SECOND)) AND DAY(DATE_ADD(NOW(), INTERVAL +' . intval($tolerance) . ' SECOND)) >= ' . intval($dayOfMonth) . ')
             )' .
             \RKW\RkwBasics\Helper\QueryTypo3::getWhereClauseForEnableFields('tx_rkwnewsletter_domain_model_newsletter') .
             \RKW\RkwBasics\Helper\QueryTypo3::getWhereClauseForVersioning('tx_rkwnewsletter_domain_model_newsletter')
