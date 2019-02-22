@@ -42,20 +42,28 @@ class TtContentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @param int $pid
      * @param int $languageUid
      * @param int $limit
+     * @param bool $includeEditorials
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      */
-    public function findAllByPidAndLanguageUid($pid, $languageUid = 0, $limit = 0)
+    public function findAllByPidAndLanguageUid($pid, $languageUid = 0, $limit = 0, $includeEditorials = false)
     {
         $query = $this->createQuery();
 
+        $constraints = [
+            $query->equals('pid', $pid),
+            $query->equals('sysLanguageUid', $languageUid),
+            $query->equals('sysLanguageUid', $languageUid)
+        ];
+
+        if (! $includeEditorials) {
+            $constraints[] = $query->equals('txRkwnewsletterIsEditorial', 0);
+        }
+
         $query->matching(
-            $query->logicalAnd(
-                $query->equals('pid', $pid),
-                $query->equals('sysLanguageUid', $languageUid)
-            )
+            $query->logicalAnd($constraints)
         );
 
-        if ($limit) {
+        if ($limit > 0) {
             $query->setLimit($limit);
         }
 

@@ -34,16 +34,18 @@ class GetNewsletterContentsViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\A
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
      * @param \RKW\RkwNewsletter\Domain\Model\Pages $page
-     * @param int limit
+     * @param int $limit
+     * @param bool $includeEditorials
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      */
-    public function render(\RKW\RkwNewsletter\Domain\Model\Issue $issue, \RKW\RkwNewsletter\Domain\Model\Pages $page, $limit = 0)
+    public function render(\RKW\RkwNewsletter\Domain\Model\Issue $issue, \RKW\RkwNewsletter\Domain\Model\Pages $page, $limit = 0, $includeEditorials = false)
     {
         return static::renderStatic(
             array(
                 'issue' => $issue,
                 'page'  => $page,
                 'limit' => $limit,
+                'includeEditorials' => $includeEditorials
             ),
             $this->buildRenderChildrenClosure(),
             $this->renderingContext
@@ -61,7 +63,8 @@ class GetNewsletterContentsViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\A
     {
         $issue = $arguments['issue'];
         $page = $arguments['page'];
-        $limit = $arguments['limit'];
+        $limit = intval($arguments['limit']);
+        $includeEditorials = boolval($arguments['includeEditorials']);
 
         /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
         $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Object\ObjectManager');
@@ -72,7 +75,7 @@ class GetNewsletterContentsViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\A
         // get language of newsletter
         $language = $issue->getNewsletter()->getSysLanguageUid();
 
-        return $ttContentRepository->findAllByPidAndLanguageUid($page->getUid(), $language, $limit);
+        return $ttContentRepository->findAllByPidAndLanguageUid($page->getUid(), $language, $limit, $includeEditorials);
         //===
     }
 

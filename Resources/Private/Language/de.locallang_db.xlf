@@ -154,9 +154,17 @@
                 <source>Primary Color</source>
                 <target state="translated">Primärfarbe</target>
             </trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_topic.primary_color_editorial">
+                <source>Primary Color Editorial</source>
+                <target state="translated">Primärfarbe Editorial</target>
+            </trans-unit>
             <trans-unit id="tx_rkwnewsletter_domain_model_topic.secondary_color">
                 <source>Secondary Color</source>
                 <target state="translated">Sekundärfarbe</target>
+            </trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_topic.secondary_color_editorial">
+                <source>Secondary Color Editorial</source>
+                <target state="translated">Sekundärfarbe Editorial</target>
             </trans-unit>
             <trans-unit id="tx_rkwnewsletter_domain_model_topic.is_special">
                 <source>Always include this topic in newsletter issues</source>
@@ -344,6 +352,10 @@
             <trans-unit id="tt_content.tx_rkwnewsletter_authors">
                 <source>Authors</source>
                 <target>Ansprechpartner</target>
+            </trans-unit>
+            <trans-unit id="tt_content.tx_rkwnewsletter_is_editorial">
+                <source>This is an editorial</source>
+                <target>Dieser Beitrag ist ein Editorial</target>
             </trans-unit>
 
 

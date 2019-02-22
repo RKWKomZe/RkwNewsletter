@@ -77,11 +77,25 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $primaryColor;
 
     /**
+     * primaryColorEditorial
+     *
+     * @var string
+     */
+    protected $primaryColorEditorial;
+
+    /**
      * secondaryColor
      *
      * @var string
      */
     protected $secondaryColor;
+
+    /**
+     * secondaryColorEditorial
+     *
+     * @var string
+     */
+    protected $secondaryColorEditorial;
 
     /**
      * isSpecial
@@ -323,6 +337,27 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
+     * Returns the primaryColorEditorial
+     *
+     * @return string $primaryColorEditorial
+     */
+    public function getPrimaryColorEditorial()
+    {
+        return $this->primaryColorEditorial;
+    }
+
+    /**
+     * Sets the primaryColorEditorial
+     *
+     * @param string $primaryColorEditorial
+     * @return void
+     */
+    public function setPrimaryColorEditorial($primaryColorEditorial)
+    {
+        $this->primaryColorEditorial = $primaryColorEditorial;
+    }
+
+    /**
      * Returns the secondaryColor
      *
      * @return string $secondaryColor
@@ -342,6 +377,28 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->secondaryColor = $secondaryColor;
     }
+
+    /**
+     * Returns the secondaryColorEditorial
+     *
+     * @return string $secondaryColorEditorial
+     */
+    public function getSecondaryColorEditorial()
+    {
+        return $this->secondaryColorEditorial;
+    }
+
+    /**
+     * Sets the secondaryColorEditorial
+     *
+     * @param string $secondaryColorEditorial
+     * @return void
+     */
+    public function setSecondaryColorEditorial($secondaryColorEditorial)
+    {
+        $this->secondaryColorEditorial = $secondaryColorEditorial;
+    }
+
 
     /**
      * Returns the isSpecial
