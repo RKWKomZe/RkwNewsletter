@@ -117,6 +117,8 @@ plugin.tx_rkwnewsletter {
         automaticApprovalStage1 = {$plugin.tx_rkwnewsletter.settings.automaticApprovalStage1}
         automaticApprovalStage2 = {$plugin.tx_rkwnewsletter.settings.automaticApprovalStage2}
 
+        randomTopicOrder = {$plugin.tx_rkwnewsletter.settings.randomTopicOrder}
+
 		loginPid = {$plugin.tx_rkwnewsletter.settings.loginPid}
         termsPid = {$plugin.tx_rkwnewsletter.settings.termsPid}
         subscriptionPid = {$plugin.tx_rkwnewsletter.settings.subscriptionPid}

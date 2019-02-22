@@ -32,6 +32,9 @@ plugin.tx_rkwnewsletter {
 		# cat=plugin.tx_rkwnewsletter//a; type=integer; label=automatic approval of stage 2 after a certain time
 		automaticApprovalStage2 = 604800
 
+        # cat=plugin.tx_rkwnewsletter//a; type=boolean; label=Order topics randomly
+        randomTopicOrder = 1
+
 		# cat=plugin.tx_rkwnewsletter//a; type=integer; label=Pid of login mask
 		loginPid =
 

@@ -3,6 +3,8 @@
 namespace RKW\RkwNewsletter\Domain\Repository;
 
 use RKW\RkwBasics\Helper\QueryTypo3;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use \RKW\RkwBasics\Helper\Common;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -73,9 +75,16 @@ class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @param bool $isSpecial
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     public function findAllByIssueAndBackendUserAndSpecialTopic(\RKW\RkwNewsletter\Domain\Model\Issue $issue, \RKW\RkwNewsletter\Domain\Model\BackendUser $backendUser, $isSpecial = false)
     {
+
+        $settings = $this->getSettings();
+        $ordering = 'tx_rkwnewsletter_domain_model_topic.sorting ASC';
+        if ($settings['randomTopicOrder']) {
+            $ordering = 'RAND()';
+        }
 
         $statement = 'SELECT DISTINCT 
             pages.* 
@@ -103,7 +112,8 @@ class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             AND 
             (
                 1 = 1 ' . QueryTypo3::getWhereClauseForEnableFields('tx_rkwnewsletter_domain_model_topic') . '
-            ) ORDER BY tx_rkwnewsletter_domain_model_topic.sorting ASC
+            ) 
+            ORDER BY ' . $ordering . '
         ';
 
 
@@ -121,9 +131,16 @@ class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
      * @param bool $isSpecial
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     public function findAllByIssueAndSpecialTopic(\RKW\RkwNewsletter\Domain\Model\Issue $issue, $isSpecial = false)
     {
+
+        $settings = $this->getSettings();
+        $ordering = 'tx_rkwnewsletter_domain_model_topic.sorting ASC';
+        if ($settings['randomTopicOrder']) {
+            $ordering = 'RAND()';
+        }
 
         $statement = 'SELECT DISTINCT 
             pages.*
@@ -146,7 +163,7 @@ class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 (
                     1 = 1 ' . QueryTypo3::getWhereClauseForEnableFields('tx_rkwnewsletter_domain_model_topic') . '
                 )
-            ORDER BY tx_rkwnewsletter_domain_model_topic.sorting ASC
+            ORDER BY ' . $ordering . '
         ';
 
         /** @var \TYPO3\CMS\Extbase\Persistence\QueryInterface $query */
@@ -165,9 +182,16 @@ class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @param bool $isSpecial
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     public function findAllByIssueAndSubscriptionAndSpecialTopic(\RKW\RkwNewsletter\Domain\Model\Issue $issue, \TYPO3\CMS\Extbase\Persistence\ObjectStorage $subscriptions, $isSpecial = false)
     {
+
+        $settings = $this->getSettings();
+        $ordering = 'tx_rkwnewsletter_domain_model_topic.sorting ASC';
+        if ($settings['randomTopicOrder']) {
+            $ordering = 'RAND()';
+        }
 
         $subscriptionsList = [];
         foreach ($subscriptions as $subscription) {
@@ -201,7 +225,7 @@ class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 (
                     1 = 1 ' . QueryTypo3::getWhereClauseForEnableFields('tx_rkwnewsletter_domain_model_topic') . '
                 )
-            ORDER BY tx_rkwnewsletter_domain_model_topic.sorting ASC
+            ORDER BY ' . $ordering . '
         ';
 
         /** @var \TYPO3\CMS\Extbase\Persistence\QueryInterface $query */
@@ -212,4 +236,17 @@ class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         //===
     }
 
+
+    /**
+     * Returns TYPO3 settings
+     *
+     * @param string $which Which type of settings will be loaded
+     * @return array
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
+     */
+    public function getSettings($which = ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS)
+    {
+        return Common::getTyposcriptConfiguration('Rkwnewsletter', $which);
+        //===
+    }
 }
