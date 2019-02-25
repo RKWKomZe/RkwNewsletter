@@ -2,10 +2,14 @@
 {namespace rkwAuthors=RKW\RkwAuthors\ViewHelpers}
 
 <!-- PLAINTEXT -->
-<f:section name="Plaintext"><f:if condition="{itemIterator.isFirst}"><f:then><f:render partial="Default/Items/Default/TopicBadge" section="Plaintext" arguments="{_all}" />
-</f:then></f:if><f:render partial="Default/Items/Default/Content" section="Plaintext" arguments="{_all}" />
-
-<f:render partial="Default/Items/Default/Contact" section="Plaintext" arguments="{_all}" />
+<f:section name="Plaintext">
+    <f:if condition="{itemIterator.isFirst}">
+        <f:then>
+            <f:render partial="Default/Items/Default/TopicBadge" section="Plaintext" arguments="{_all}" />
+        </f:then>
+    </f:if>
+    <f:render partial="Default/Items/Default/Content" section="Plaintext" arguments="{_all}" />\n
+    <f:render partial="Default/Items/Default/Contact" section="Plaintext" arguments="{_all}" />
 </f:section>
 
 
