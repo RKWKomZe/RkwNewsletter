@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
-	<file source-language="en" datatype="plaintext" original="messages" date="2015-04-09T13:46:25Z" product-name="rkw_newsletter">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2014-08-01T14:10:48Z" product-name="rkw_energyfounder">
 		<header/>
 		<body>
-
 
 
             <!-- ##################################################### -->
@@ -48,9 +47,9 @@
 			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.template">
 				<source>Template</source>
 			</trans-unit>
-			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.settings_page">
-				<source>Page with TypoScript-Settings</source>
-			</trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_newsletter.settings_page">
+                <source>Page with TypoScript-Settings</source>
+            </trans-unit>
 			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.format">
 				<source>Format</source>
 			</trans-unit>
@@ -170,8 +169,7 @@
             <!-- ##################################################### -->
 			<trans-unit id="tx_rkwnewsletter_domain_model_issue">
 				<source>RKW Newsletter: Issue</source>
-			</trans-unit>                <target>Themen</target>
-
+			</trans-unit>
 			<trans-unit id="tx_rkwnewsletter_domain_model_issue.title">
 				<source>Title</source>
 			</trans-unit>
@@ -219,7 +217,7 @@
 			</trans-unit>
 			<trans-unit id="tx_rkwnewsletter_domain_model_issue.sent_tstamp">
 				<source>Issue Sent</source>
-            </trans-unit>
+			</trans-unit>
 
 
             <!-- ##################################################### -->
@@ -244,13 +242,13 @@
 				<source>Exclude From Sendings</source>
 			</trans-unit>
 			<trans-unit id="pages.tx_rkwnewsletter_teaser_heading">
-				<source>Teaser-Headline (optional)</source>
+				<source>Teaser-Headline</source>
 			</trans-unit>
             <trans-unit id="pages.tx_rkwnewsletter_teaser_image">
                 <source>Teaser-Image (optional)</source>
             </trans-unit>
 			<trans-unit id="pages.tx_rkwnewsletter_teaser_text">
-				<source>Teaser-Text (optional)</source>
+				<source>Teaser-Text</source>
 			</trans-unit>
 			<trans-unit id="pages.tx_rkwnewsletter_teaser_link">
 				<source>Link (optional)</source>
@@ -278,7 +276,6 @@
 			<trans-unit id="fe_user.tx_rkwnewsletter_domain_model_subscription">
                 <source>Topics</source>
             </trans-unit>
-
 		</body>
 	</file>
 </xliff>

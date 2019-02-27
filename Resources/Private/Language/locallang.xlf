@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
-	<file source-language="en" datatype="plaintext" original="messages" date="2015-04-09T13:46:25Z" product-name="rkw_newsletter">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2015-04-07T16:19:42Z" product-name="rkw_newsletter">
 		<header/>
 		<body>
 
 
-            <!-- ##################### -->
-            <!-- Models                -->
-            <!-- ##################### -->
+			<!-- ##################### -->
+			<!-- Models                -->
+			<!-- ##################### -->
             <trans-unit id="tx_rkwnewsletter_domain_model_frontenduser.email">
-                <source>E-Mail</source>
-            </trans-unit>
-            <trans-unit id="tx_rkwnewsletter_domain_model_frontenduser.first_name">
-                <source>Firstname</source>
-            </trans-unit>
-            <trans-unit id="tx_rkwnewsletter_domain_model_frontenduser.last_name">
-                <source>Lastname</source>
-            </trans-unit>
-            <trans-unit id="tx_rkwnewsletter_domain_model_frontenduser.title">
-                <source>Title</source>
-            </trans-unit>
-            <trans-unit id="tx_rkwnewsletter_domain_model_frontenduser.company">
-                <source>Company</source>
-            </trans-unit>
+				<source>E-Mail</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_frontenduser.first_name">
+				<source>Firstname</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_frontenduser.last_name">
+				<source>Lastname</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_frontenduser.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_frontenduser.company">
+				<source>Company</source>
+			</trans-unit>
             <trans-unit id="tx_rkwnewsletter_domain_model_frontenduser.tx_rkwregistration_gender">
                 <source>Salutation</source>
             </trans-unit>
@@ -38,57 +38,57 @@
 
 
 
-            <!-- ##################### -->
-            <!-- Email- Subjects       -->
-            <!-- ##################### -->
-            <trans-unit id="rkwMailService.subject.adminApproval">
-                <source>A newsletter issue has to be checked</source>
-            </trans-unit>
-            <trans-unit id="rkwMailService.subject.adminApprovalReminder">
-                <source>Reminder: A newsletter issue has to be checked</source>
-            </trans-unit>
-            <trans-unit id="rkwMailService.subject.adminApprovalAutomatic">
-                <source>A newsletter issue has been approved automatically</source>
-            </trans-unit>
-            <trans-unit id="rkwMailService.subject.adminRelease">
-                <source>A newsletter issue is ready to be sent</source>
-            </trans-unit>
-            <trans-unit id="rkwMailService.subject.adminReleaseReminder">
-                <source>Reminder: A newsletter issue is ready to be sent</source>
-            </trans-unit>
-            <trans-unit id="rkwMailService.subject.testMail">
-                <source>Test: %s</source>
-            </trans-unit>
-            <trans-unit id="rkwMailService.subject.optInRequest">
-                <source>Confirmation for RKW Newsletter</source>
-            </trans-unit>
+			<!-- ##################### -->
+			<!-- Email- Subjects       -->
+			<!-- ##################### -->
+			<trans-unit id="rkwMailService.subject.adminApproval">
+				<source>A newsletter issue has to be checked</source>
+			</trans-unit>
+			<trans-unit id="rkwMailService.subject.adminApprovalReminder">
+				<source>Reminder: A newsletter issue has to be checked</source>
+			</trans-unit>
+			<trans-unit id="rkwMailService.subject.adminApprovalAutomatic">
+				<source>A newsletter issue has been approved automatically</source>
+			</trans-unit>
+			<trans-unit id="rkwMailService.subject.adminRelease">
+				<source>A newsletter issue is ready to be sent</source>
+			</trans-unit>
+			<trans-unit id="rkwMailService.subject.adminReleaseReminder">
+				<source>Reminder: A newsletter issue is ready to be sent</source>
+			</trans-unit>
+			<trans-unit id="rkwMailService.subject.testMail">
+				<source>Test: %s</source>
+			</trans-unit>
+			<trans-unit id="rkwMailService.subject.optInRequest">
+				<source>Confirmation for RKW Newsletter</source>
+			</trans-unit>
 
 
 
-            <!-- ##################### -->
-            <!-- Controllers -->
-            <!-- ##################### -->
+			<!-- ##################### -->
+			<!-- Controllers -->
+			<!-- ##################### -->
             <!-- releaseController -->
-            <trans-unit id="releaseController.message.approvalSuccessful">
-                <source>Wohoo! Successfully approved.  The newsletter output was set to the next stage. A notification to the respective editors will be sent shortly.</source>
-            </trans-unit>
-            <trans-unit id="releaseController.message.issueDeferredSuccessfully">
-                <source>Wohoo! Issue sucessfuly deferred.</source>
-            </trans-unit>
-            <trans-unit id="releaseController.message.testMailSent">
-                <source>Wohoo! The test-E-mail has been sent successfully.</source>
-            </trans-unit>
-            <trans-unit id="releaseController.message.sendingStarted">
-                <source>Wohoo! The newsletter issue has been successfully released for dispatch..</source>
-            </trans-unit>
+			<trans-unit id="releaseController.message.approvalSuccessful">
+				<source>Wohoo! Successfully approved.  The newsletter output was set to the next stage. A notification to the respective editors will be sent shortly.</source>
+			</trans-unit>
+			<trans-unit id="releaseController.message.issueDeferredSuccessfully">
+				<source>Wohoo! Issue sucessfuly deferred.</source>
+			</trans-unit>
+			<trans-unit id="releaseController.message.testMailSent">
+				<source>Wohoo! The test-E-mail has been sent successfully.</source>
+			</trans-unit>
+			<trans-unit id="releaseController.message.sendingStarted">
+				<source>Wohoo! The newsletter issue has been successfully released for dispatch..</source>
+			</trans-unit>
             <trans-unit id="releaseController.error.emailIncorrect">
-                <source>Oh no! The given E-Mail address seems to be incorrect. Please check and try again.</source>
-            </trans-unit>
+				<source>Oh no! The given E-Mail address seems to be incorrect. Please check and try again.</source>
+			</trans-unit>
             <trans-unit id="releaseController.error.unexpected">
                 <source>Oh no! An unexpected error occurred. Please contact your trusted administrator.</source>
             </trans-unit>
-
-
+            
+            
             <!-- subscriptionController -->
             <trans-unit id="subscriptionController.message.optInCreated">
                <source>An e-mail has been send to you. Please click the link in the e-mail to confirm your request.</source>
@@ -112,10 +112,10 @@
                <source>Upps, unfortunately something went wrong. Please contact our support.</source>
             </trans-unit>
             <trans-unit id="subscriptionController.error.acceptTerms">
-                <source>You have to accept our terms and conditions.</source>
+				<source>You have to accept our terms and conditions.</source>
             </trans-unit>
             <trans-unit id="subscriptionController.error.notIdentified">
-                <source>Upps, it seems that we have not been able to identify you via the link used. You may already have cancelled your subscription. Would you like to sign up again?</source>
+				<source>Upps, it seems that we have not been able to identify you via the link used. You may already have cancelled your subscription. Would you like to sign up again?</source>
             </trans-unit>
             <trans-unit id="subscriptionController.error.nothingChanged">
                 <source>Oops, it seems that you have not made any changes. Please check your details again.</source>
@@ -125,135 +125,152 @@
             </trans-unit>
 
 
-
-
             <!-- ##################### -->
-            <!-- Backend Templates -->
-            <!-- ##################### -->
-            <!-- Templates/Backend/Release/List.html -->
-            <trans-unit id="templates_backend_release_list">
-                <source>Open Approvals for %s</source>
-            </trans-unit>
-            <trans-unit id="templates_backend_release_list.description">
-                <source>Here you will find all newsletters for which you still have to give editorial approval. Only when all approvals have been granted can the newsletter actually be sent.</source>
-            </trans-unit>
-            <trans-unit id="templates_backend_release_list.approvalsStage1">
-                <source>Approvals Stage 1</source>
-            </trans-unit>
-            <trans-unit id="templates_backend_release_list.approvalsStage2">
-                <source>Approvals Stage 2</source>
-            </trans-unit>
-            <trans-unit id="templates_backend_release_list.stage1">
-                <source>Stage 1</source>
-            </trans-unit>
+			<!-- Validation -->
+			<!-- ##################### -->
+            <!-- newsletterTeaserLengthEvaluation -->
+			<trans-unit id="newsletterTeaserLengthEvaluation.header.tooShort">
+				<source>Teaser-Text</source>
+			</trans-unit>
+			<trans-unit id="newsletterTeaserLengthEvaluation.message.tooShort">
+				<source>So that the recipients of the newsletter also know what your contribution is about, the teaser text should be at least %s characters long (currently: %s characters). However, your teaser text was still saved.</source>
+			</trans-unit>
+			<trans-unit id="newsletterTeaserLengthEvaluation.header.tooLong">
+				<source>Teaser-Text</source>
+			</trans-unit>
+			<trans-unit id="newsletterTeaserLengthEvaluation.message.tooLong">
+				<source>Your contribution will appear in the newsletter along with some others. So that the newsletter is not overloaded, your teaser text should not exceed the length of %s characters (currently: %s characters). However, your teaser text was still saved.</source>
+			</trans-unit>
 
 
-            <!-- Backend/Partials/Release/Issues.html -->
-            <trans-unit id="tx_rkwnewsletter_backend_partials_release_issues.title">
-                <source>Title</source>
-            </trans-unit>
-            <trans-unit id="tx_rkwnewsletter_backend_partials_release_issues.approvals">
-                <source>Approvals</source>
-            </trans-unit>
-            <trans-unit id="tx_rkwnewsletter_backend_partials_release_issues.globalActions">
-                <source>Global Actions</source>
-            </trans-unit>
-            <trans-unit id="tx_rkwnewsletter_backend_partials_release_issues.actions">
-                <source>Actions</source>
-            </trans-unit>
+
+			<!-- ##################### -->
+			<!-- Backend Templates -->
+			<!-- ##################### -->
+			<!-- Templates/Backend/Release/List.html -->
+			<trans-unit id="templates_backend_release_list">
+				<source>Open Approvals for %s</source>
+			</trans-unit>
+			<trans-unit id="templates_backend_release_list.description">
+				<source>Here you will find all newsletters for which you still have to give editorial approval. Only when all approvals have been granted can the newsletter actually be sent.</source>
+			</trans-unit>
+			<trans-unit id="templates_backend_release_list.approvalsStage1">
+				<source>Approvals Stage 1</source>
+			</trans-unit>
+			<trans-unit id="templates_backend_release_list.approvalsStage2">
+				<source>Approvals Stage 2</source>
+			</trans-unit>
+			<trans-unit id="templates_backend_release_list.stage1">
+				<source>Stage 1</source>
+			</trans-unit>
+
+
+			<!-- Backend/Partials/Release/Issues.html -->
+			<trans-unit id="tx_rkwnewsletter_backend_partials_release_issues.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_backend_partials_release_issues.approvals">
+				<source>Approvals</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_backend_partials_release_issues.globalActions">
+				<source>Global Actions</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_backend_partials_release_issues.actions">
+				<source>Actions</source>
+			</trans-unit>
             <trans-unit id="tx_rkwnewsletter_backend_partials_release_issues.deferIssue">
-                <source>Defer issue</source>
-            </trans-unit>
-            <trans-unit id="tx_rkwnewsletter_backend_partials_release_issues.noIssuesWaiting">
-                <source>No issue is waiting for release.</source>
-            </trans-unit>
+				<source>Defer issue</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_backend_partials_release_issues.noIssuesWaiting">
+				<source>No issue is waiting for release.</source>
+			</trans-unit>
 
 
-            <!-- Backend/Partials/Release/Approval.html -->
-            <trans-unit id="tx_rkwnewsletter_backend_partials_release_approval.topic">
-                <source>Topic</source>
-            </trans-unit>
-            <trans-unit id="tx_rkwnewsletter_backend_partials_release_approval.actions">
-                <source>Actions</source>
-            </trans-unit>
-            <trans-unit id="tx_rkwnewsletter_backend_partials_release_approval.approvalPending">
-                <source>Pending</source>
-            </trans-unit>
-            <trans-unit id="tx_rkwnewsletter_backend_partials_release_approval.approvalStage1Pending">
-                <source>Stage 1 still pending</source>
-            </trans-unit>
-            <trans-unit id="tx_rkwnewsletter_backend_partials_release_approval.alreadyApproved">
-                <source>Already Approved</source>
-            </trans-unit>
-            <trans-unit id="tx_rkwnewsletter_backend_partials_release_approval.approvalUser">
-                <source>User</source>
-            </trans-unit>
+			<!-- Backend/Partials/Release/Approval.html -->
+			<trans-unit id="tx_rkwnewsletter_backend_partials_release_approval.topic">
+				<source>Topic</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_backend_partials_release_approval.actions">
+				<source>Actions</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_backend_partials_release_approval.approvalPending">
+				<source>Pending</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_backend_partials_release_approval.approvalStage1Pending">
+				<source>Stage 1 still pending</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_backend_partials_release_approval.alreadyApproved">
+				<source>Already Approved</source>
+			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_backend_partials_release_approval.approvalUser">
+				<source>User</source>
+			</trans-unit>
             <trans-unit id="tx_rkwnewsletter_backend_partials_release_approval.approvalTime">
                 <source>Time</source>
             </trans-unit>
-            <trans-unit id="tx_rkwnewsletter_backend_partials_release_approval.approve">
-                <source>Approve now</source>
-            </trans-unit>
+			<trans-unit id="tx_rkwnewsletter_backend_partials_release_approval.approve">
+				<source>Approve now</source>
+			</trans-unit>
 
 
-            <!-- Templates/Backend/Release/TestList.html -->
-            <trans-unit id="templates_backend_release_testList">
-                <source>Test</source>
-            </trans-unit>
-            <trans-unit id="templates_backend_release_testList.description">
-                <source>Here you will find all newsletter issues for which you are registered as the responsible editor. Here you can send a test to your e-mail address. You can decide whether the test mailing should cover all topics or only the topics for which you are registered as an editor.</source>
-            </trans-unit>
-            <trans-unit id="templates_backend_release_testList.title">
-                <source>Title</source>
-            </trans-unit>
-            <trans-unit id="templates_backend_release_testList.email">
-                <source>E-Mail</source>
-            </trans-unit>
-            <trans-unit id="templates_backend_release_testList.deliveryMyTopics">
-                <source>Test delivery my topics</source>
-            </trans-unit>
-            <trans-unit id="templates_backend_release_testList.deliveryAllTopics">
-                <source>Test delivery all topics</source>
-            </trans-unit>
-            <trans-unit id="templates_backend_release_testList.go">
-                <source>Go!</source>
-            </trans-unit>
+			<!-- Templates/Backend/Release/TestList.html -->
+			<trans-unit id="templates_backend_release_testList">
+				<source>Test</source>
+			</trans-unit>
+			<trans-unit id="templates_backend_release_testList.description">
+				<source>Here you will find all newsletter issues for which you are registered as the responsible editor. Here you can send a test to your e-mail address. You can decide whether the test mailing should cover all topics or only the topics for which you are registered as an editor.</source>
+			</trans-unit>
+			<trans-unit id="templates_backend_release_testList.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="templates_backend_release_testList.email">
+				<source>E-Mail</source>
+			</trans-unit>
+			<trans-unit id="templates_backend_release_testList.deliveryMyTopics">
+				<source>Test delivery my topics</source>
+			</trans-unit>
+			<trans-unit id="templates_backend_release_testList.deliveryAllTopics">
+				<source>Test delivery all topics</source>
+			</trans-unit>
+			<trans-unit id="templates_backend_release_testList.go">
+				<source>Go!</source>
+			</trans-unit>
 
 
 
             <!-- Templates/Backend/Release/sendList.html -->
-            <trans-unit id="templates_backend_release_sendList">
-                <source>Dispatching</source>
-            </trans-unit>
-            <trans-unit id="templates_backend_release_sendList.description">
-                <source>Here you will find all newsletter issues which you can start as responsible editor. Please note that the dispatch is staggered.</source>
-            </trans-unit>
-            <trans-unit id="templates_backend_release_sendList.title">
-                <source>Title</source>
-            </trans-unit>
-            <trans-unit id="templates_backend_release_sendList.subscriptions">
-                <source>Subscription</source>
-            </trans-unit>
-            <trans-unit id="templates_backend_release_sendList.subscriptionsAll">
-                <source>All</source>
-            </trans-unit>
-            <trans-unit id="templates_backend_release_sendList.subscriptionsAmong">
-                <source>among them</source>
-            </trans-unit>
-            <trans-unit id="templates_backend_release_sendList.go">
-                <source>Go!</source>
-            </trans-unit>
+			<trans-unit id="templates_backend_release_sendList">
+				<source>Dispatching</source>
+			</trans-unit>
+			<trans-unit id="templates_backend_release_sendList.description">
+				<source>Here you will find all newsletter issues which you can start as responsible editor. Please note that the dispatch is staggered.</source>
+			</trans-unit>
+			<trans-unit id="templates_backend_release_sendList.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="templates_backend_release_sendList.subscriptions">
+				<source>Subscription</source>
+			</trans-unit>
+			<trans-unit id="templates_backend_release_sendList.subscriptionsAll">
+				<source>All</source>
+			</trans-unit>
+			<trans-unit id="templates_backend_release_sendList.subscriptionsAmong">
+				<source>among them</source>
+			</trans-unit>
+			<trans-unit id="templates_backend_release_sendList.go">
+				<source>Go!</source>
+			</trans-unit>
 
 
-            <!-- ##################### -->
-            <!-- Newsletter Templates -->
-            <!-- ##################### -->
-            <trans-unit id="partials_newsletter_main.headline">
-                <source>Hello</source>
-            </trans-unit>
-            <trans-unit id="partials_newsletter_main.introduction">
-                <source>below you will find news about projects, publications and events of the RKW Competence Center. We hope you enjoy reading the current issue of our newsletter!</source>
-            </trans-unit>
+			<!-- ##################### -->
+			<!-- Newsletter Templates -->
+			<!-- ##################### -->
+			<trans-unit id="partials_newsletter_main.headline">
+				<source>Hello</source>
+			</trans-unit>
+			<trans-unit id="partials_newsletter_main.introduction">
+				<source>below you will find news about projects, publications and events of the RKW Competence Center. We hope you enjoy reading the current issue of our newsletter!</source>
+			</trans-unit>
             <trans-unit id="partials_newsletter_main.topics">
                 <source>You have subscribed to the following topics</source>
             </trans-unit>
@@ -263,86 +280,86 @@
 
 
 
-            <!-- ##################### -->
-            <!-- E-Mail Templates -->
-            <!-- ##################### -->
+			<!-- ##################### -->
+			<!-- E-Mail Templates -->
+			<!-- ##################### -->
             <!-- Templates/Email/OptInRequest.html -->
-            <trans-unit id="templates_email_optInRequest.headline">
-                <source>Hello,</source>
-            </trans-unit>
-            <trans-unit id="templates_email_optInRequest.text1">
-                <source>thank you for your interest in the newsletters of the RKW Competence Centre. We will be happy to send you future news on the following topics by e-mail:</source>
-            </trans-unit>
-            <trans-unit id="templates_email_optInRequest.text2">
-                <source>Please check the details for correctness and confirm them using the link below. Our service is of course free of charge.</source>
-            </trans-unit>
-            <trans-unit id="templates_email_optInRequest.textOptIn">
-                <source>Please click here to confirm your subscription. To make future changes easier for you, a free account will automatically be created if you are not already registered as a user. You will receive your password in another e-mail.</source>
-            </trans-unit>
-            <trans-unit id="templates_email_optInRequest.textOptOut">
-                <source>Did you change your mind or did you not request the subscription yourself? Simply click here to delete all data:</source>
-            </trans-unit>
-            <trans-unit id="templates_email_optInRequest.textOptInLinkLabel">
-                <source>Yes, I would like to subscribe to these newsletter topics</source>
-            </trans-unit>
-            <trans-unit id="templates_email_optInRequest.textOptOutLinkLabel">
-                <source>No, I don't want to subscribe to these topics</source>
-            </trans-unit>
+			<trans-unit id="templates_email_optInRequest.headline">
+				<source>Hello</source>
+			</trans-unit>
+			<trans-unit id="templates_email_optInRequest.text1">
+				<source>thank you for your interest in the newsletters of the RKW Competence Centre. We will be happy to send you future news on the following topics by e-mail:</source>
+			</trans-unit>
+			<trans-unit id="templates_email_optInRequest.text2">
+				<source>Please check the details for correctness and confirm them using the link below. Our service is of course free of charge.</source>
+			</trans-unit>
+			<trans-unit id="templates_email_optInRequest.textOptIn">
+				<source>Please click here to confirm your subscription. To make future changes easier for you, a free account will automatically be created if you are not already registered as a user. You will receive your password in another e-mail.</source>
+			</trans-unit>
+			<trans-unit id="templates_email_optInRequest.textOptOut">
+				<source>Did you change your mind or did you not request the subscription yourself? Simply click here to delete all data:</source>
+			</trans-unit>
+			<trans-unit id="templates_email_optInRequest.textOptInLinkLabel">
+				<source>Yes, I would like to subscribe to these newsletter topics</source>
+			</trans-unit>
+			<trans-unit id="templates_email_optInRequest.textOptOutLinkLabel">
+				<source>No, I don't want to subscribe to these topics</source>
+			</trans-unit>
 
 
             <!-- Templates/Backend/Email/AdminApproval.html -->
-            <trans-unit id="templates_backend_email_adminApproval.headline">
-                <source>Hello %s,</source>
-            </trans-unit>
-            <trans-unit id="templates_backend_email_adminApproval.text1">
-                <source>the following newsletter issue is waiting for an approval from you:</source>
-            </trans-unit>
-            <trans-unit id="templates_backend_email_adminApproval.text2">
+			<trans-unit id="templates_backend_email_adminApproval.headline">
+				<source>Hello %s,</source>
+			</trans-unit>
+			<trans-unit id="templates_backend_email_adminApproval.text1">
+				<source>the following newsletter issue is waiting for an approval from you:</source>
+			</trans-unit>
+			<trans-unit id="templates_backend_email_adminApproval.text2">
                 <source>You can see the details in TYPO3-Backend.</source>
-            </trans-unit>
-            <trans-unit id="templates_backend_email_adminApproval.stage">
+			</trans-unit>
+			<trans-unit id="templates_backend_email_adminApproval.stage">
                 <source>Stage</source>
-            </trans-unit>
+			</trans-unit>
 
 
             <!-- Templates/Backend/Email/AdminApprovalAutomatic.html -->
-            <trans-unit id="templates_backend_email_adminApprovalAutomatic.headline">
-                <source>Hello %s,</source>
-            </trans-unit>
-            <trans-unit id="templates_backend_email_adminApprovalAutomatic.text1">
-                <source>the following newsletter issue has been approved automatically because you did not react in time:</source>
-            </trans-unit>
-            <trans-unit id="templates_backend_email_adminApprovalAutomatic.text2">
+			<trans-unit id="templates_backend_email_adminApprovalAutomatic.headline">
+				<source>Hello %s,</source>
+			</trans-unit>
+			<trans-unit id="templates_backend_email_adminApprovalAutomatic.text1">
+				<source>the following newsletter issue has been approved automatically because you did not react in time:</source>
+			</trans-unit>
+			<trans-unit id="templates_backend_email_adminApprovalAutomatic.text2">
                 <source>You can see the details in TYPO3-Backend.</source>
-            </trans-unit>
-            <trans-unit id="templates_backend_email_adminApprovalAutomatic.stage">
+			</trans-unit>
+			<trans-unit id="templates_backend_email_adminApprovalAutomatic.stage">
                 <source>Stage</source>
-            </trans-unit>
+			</trans-unit>
 
 
-            <!-- Templates/Backend/Email/AdminRelease.html -->
-            <trans-unit id="templates_backend_email_adminRelease.headline">
-                <source>Hello %s,</source>
-            </trans-unit>
-            <trans-unit id="templates_backend_email_adminRelease.text1">
-                <source>the following newsletter issue is ready to be sent:</source>
-            </trans-unit>
-            <trans-unit id="templates_backend_email_adminRelease.text2">
+			<!-- Templates/Backend/Email/AdminRelease.html -->
+			<trans-unit id="templates_backend_email_adminRelease.headline">
+				<source>Hello %s,</source>
+			</trans-unit>
+			<trans-unit id="templates_backend_email_adminRelease.text1">
+				<source>the following newsletter issue is ready to be sent:</source>
+			</trans-unit>
+			<trans-unit id="templates_backend_email_adminRelease.text2">
                 <source>You can see the details in TYPO3-Backend.</source>
-            </trans-unit>
+			</trans-unit>
 
 
 
-            <!-- ##################### -->
-            <!-- Frontend Templates -->
-            <!-- ##################### -->
+			<!-- ##################### -->
+			<!-- Frontend Templates -->
+			<!-- ##################### -->
             <!-- Partials/Subscription/User.html -->
             <trans-unit id="partials_subscription_user.labelOptional">
                 <source>(optional)</source>
             </trans-unit>
 
 
-            <!-- Templates/Subscription/New.html -->
+			<!-- Templates/Subscription/New.html -->
             <trans-unit id="templates_subscription_new.subscribe">
                 <source>Subscribe now</source>
             </trans-unit>
@@ -357,7 +374,7 @@
             </trans-unit>
 
 
-            <!-- Templates/Subscription/Edit.html -->
+			<!-- Templates/Subscription/Edit.html -->
             <trans-unit id="templates_subscription_edit.subscribe">
                 <source>Save changes</source>
             </trans-unit>
@@ -366,22 +383,23 @@
             </trans-unit>
 
 
-            <!-- Templates/Subscription/Message.html -->
+			<!-- Templates/Subscription/Message.html -->
             <trans-unit id="templates_subscription_message.goToSettings">
                 <source>Show my settings</source>
             </trans-unit>
 
 
 
-            <!-- ##################### -->
-            <!-- Validator -->
-            <!-- ##################### -->
-            <trans-unit id="validator.email_invalid">
-                <source>Specified email address is not valid.</source>
-            </trans-unit>
+			<!-- ##################### -->
+			<!-- Validator -->
+			<!-- ##################### -->
+			<trans-unit id="validator.email_invalid">
+				<source>Specified email address is not valid.</source>
+			</trans-unit>
             <trans-unit id="validator.field_required">
                 <source>Please fill out the field '%s'.</source>
             </trans-unit>
+
 		</body>
 	</file>
 </xliff>
