@@ -25,9 +25,9 @@
     "require": {
         "php": ">=5.6",
         "typo3/cms-core": "^7.6.0 || ^8.7.0",
-        "rkw/rkw-basics": ">=7.6.12 <=8.7.99",
-        "rkw/rkw-mailer": ">=7.6.13 <=8.7.99",
-        "rkw/rkw-registration": ">=7.6.10 <=8.7.99"
+        "rkw/rkw-basics": ">=8.7.3 <=8.7.99",
+        "rkw/rkw-mailer": ">=8.7.1 <=8.7.99",
+        "rkw/rkw-registration": ">=8.7.0 <=8.7.99"
     },
     "autoload": {
         "psr-4": {
