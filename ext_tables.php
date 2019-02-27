@@ -17,11 +17,11 @@ if (TYPO3_MODE === 'BE') {
 	 */
 	\TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
 		'RKW.' . $_EXTKEY,
-		'web',	 		// Make module a submodule of 'tools'
+		'tools',	 		// Make module a submodule of 'tools'
 		'management',		// Submodule key
 		'',					// Position
 		array(
-			'Release' => 'list, approve, defer, testList, test, sendList, send',
+			'Release' => 'testList, test, list, approve, defer, sendList, send',
 		),
 		array(
 			'access' => 'user,group',

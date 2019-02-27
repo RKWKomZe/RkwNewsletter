@@ -57,7 +57,9 @@ CREATE TABLE tx_rkwnewsletter_domain_model_topic (
 	approval_stage2 varchar(255) DEFAULT '' NOT NULL,
 	container_page int(11) unsigned DEFAULT '0' NOT NULL,
 	primary_color varchar(255) DEFAULT '' NOT NULL,
+	primary_color_editorial varchar(255) DEFAULT '' NOT NULL,
 	secondary_color varchar(255) DEFAULT '' NOT NULL,
+	secondary_color_editorial varchar(255) DEFAULT '' NOT NULL,
 	is_special int(1) unsigned DEFAULT '0' NOT NULL,
 	newsletter int(11) unsigned DEFAULT '0' NOT NULL,
 
@@ -176,7 +178,8 @@ CREATE TABLE pages_language_overlay (
 #
 CREATE TABLE tt_content (
 
-	tx_rkwnewsletter_authors varchar(255) DEFAULT '' NOT NULL
+	tx_rkwnewsletter_authors varchar(255) DEFAULT '' NOT NULL,
+	tx_rkwnewsletter_is_editorial tinyint DEFAULT '0' NOT NULL,
 
 );
 

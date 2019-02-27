@@ -346,13 +346,15 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
                 ),
                 array(
                     'marker'  => array(
-                        'issue'            => $issue,
-                        'pages'            => $pages,
-                        'specialPages'     => $specialPages,
-                        'admin'            => $admin,
-                        'pageTypeMore'     => $settings['settings']['webViewPageNum'],
-                        'maxItemsPerTopic' => $itemsPerTopic,
-                        'settings'         => $settingsDefault,
+                        'issue'             => $issue,
+                        'pages'             => $pages,
+                        'specialPages'      => $specialPages,
+                        // 'includeEditorials'    => (((count($pages->toArray()) + count($specialPages->toArray())) > 1) ? false : true),
+                        'includeEditorials' => ((count($pages->toArray()) > 1) ? false : true),
+                        'admin'             => $admin,
+                        'pageTypeMore'      => $settings['settings']['webViewPageNum'],
+                        'maxItemsPerTopic'  => $itemsPerTopic,
+                        'settings'          => $settingsDefault,
                     ),
                     'subject' => \RKW\RkwMailer\Helper\FrontendLocalization::translate(
                         'rkwMailService.subject.testMail',
