@@ -255,7 +255,6 @@ txRkwNewsletterWebView {
         config.htmlTag_setParams = xmlns="http://www.w3.org/1999/xhtml" style="background: #ffffff;"
         metaCharset = utf-8
         noPageTitle = 1
-        prefixLocalAnchors = all
     }
 
     headerData {
