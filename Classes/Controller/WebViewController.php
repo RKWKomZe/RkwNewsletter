@@ -34,49 +34,89 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     protected $pagesRepository;
 
+    /**
+     * FrontendUserRepository
+     *
+     * @var \RKW\RkwNewsletter\Domain\Repository\FrontendUserRepository
+     * @inject
+     */
+    protected $frontendUserRepository;
+
+
+    /**
+     * QueueMailRepository
+     *
+     * @var \RKW\RkwMailer\Domain\Repository\QueueMailRepository
+     * @inject
+     */
+    protected $queueMailRepository;
+
+    /**
+     * QueueRecipientRepository
+     *
+     * @var \RKW\RkwMailer\Domain\Repository\QueueRecipientRepository
+     * @inject
+     */
+    protected $queueRecipientRepository;
+
 
     /**
      * action show
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
-     * @param \RKW\RkwMailer\Domain\Model\QueueRecipient $queueRecipient
-     * @param \RKW\RkwMailer\Domain\Model\QueueMail $queueMail
-     * @param array $pages
      * @return void
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
-    public function showAction(\RKW\RkwNewsletter\Domain\Model\Issue $issue, \RKW\RkwMailer\Domain\Model\QueueRecipient $queueRecipient, \RKW\RkwMailer\Domain\Model\QueueMail $queueMail, $pages = array())
+    public function showAction(\RKW\RkwNewsletter\Domain\Model\Issue $issue)
     {
 
-        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-        $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+        // check for queueMailId and queueRecipientId as params from redirection
+        $rkwMailerParams = \TYPO3\CMS\Core\Utility\GeneralUtility::_GP('tx_rkwmailer');
+        $queueMailId = intval($rkwMailerParams['mid']);
+        $queueRecipientId = intval($rkwMailerParams['uid']);
 
-        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\Pages> $finalPages */
-        $finalPages = $objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\ObjectStorage');
+        // set default recipient based on FE-language settings – just in case
+        /** @var \RKW\RkwMailer\Domain\Model\QueueRecipient $queueRecipient */
+        $queueRecipient = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('RKW\\RkwMailer\\Domain\\Model\\QueueRecipient');
+        $queueRecipient->setLanguageCode($GLOBALS['TSFE']->config['config']['language']);
+        $this->view->assign('queueRecipient', $queueRecipient);
+
+        // check if there is a recipient given
+        $frontendUser = null;
+        if (
+            ($queueMail = $this->queueMailRepository->findByUid($queueMailId))
+            && ($queueRecipient = $this->queueRecipientRepository->findByUid($queueRecipientId))
+        ) {
+
+            // get subscription from FE-User - or load everything of issue
+            $frontendUser =  $this->frontendUserRepository->findByIdentifier($queueRecipient->getFrontendUser());
+
+            // assign objects to view
+            $this->view->assignMultiple(
+                array(
+                    'queueRecipient'   => $queueRecipient,
+                    'queueMail'        => $queueMail,
+                )
+            );
+        }
+
+        // if frontendUser is given, we use it's subscriptions
+        if ($frontendUser) {
+            $pages = $this->pagesRepository->findAllByIssueAndSubscriptionAndSpecialTopic($issue, $frontendUser->getTxRkwnewsletterSubscription());
+        } else {
+            $pages = $this->pagesRepository->findAllByIssueAndSpecialTopic($issue);
+        }
 
         /** @var \TYPO3\CMS\Extbase\Persistence\QueryResultInterface $finalSpecialPages */
-        $finalSpecialPages = $this->pagesRepository->findAllByIssueAndSpecialTopic($issue, true);
-
-        // get all pages of issue
-        /** @var \TYPO3\CMS\Extbase\Persistence\QueryResultInterface $issuePages */
-        $issuePages = $this->pagesRepository->findAllByIssueAndSpecialTopic($issue);
-
-        // check if given pages belong to the given issue
-        /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
-        foreach ($issuePages as $page) {
-            if (in_array($page->getUid(), $pages)) {
-                $finalPages->attach($page);
-            }
-        }
+        $specialPages = $this->pagesRepository->findAllByIssueAndSpecialTopic($issue, true);
 
         $this->view->assignMultiple(
             array(
                 'issue'            => $issue,
-                'pages'            => $finalPages,
-                'specialPages'     => $finalSpecialPages,
+                'pages'            => $pages,
+                'specialPages'     => $specialPages,
                 'maxItemsPerTopic' => 9999,
-                'queueRecipient'   => $queueRecipient,
-                'queueMail'        => $queueMail,
             )
         );
     }

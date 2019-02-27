@@ -314,23 +314,36 @@
 			<!-- ##################### -->
 			<!-- Newsletter Templates -->
 			<!-- ##################### -->
-			<trans-unit id="partials_newsletter_main.headline">
+			<!-- Partials/Newsletter/*/Body.html -->
+			<trans-unit id="partials_newsletter_body.headline">
 				<source>Hello</source>
 				<target>Hallo</target>
 			</trans-unit>
-			<trans-unit id="partials_newsletter_main.introduction">
+			<trans-unit id="partials_newsletter_body.fallback">
+				<source>Hello</source>
+				<target>Hallo</target>
+			</trans-unit>
+			<trans-unit id="partials_newsletter_body.introduction">
 				<source>below you will find news about projects, publications and events of the RKW Competence Center. We hope you enjoy reading the current issue of our newsletter!</source>
 				<target>untenstehend finden Sie Neuigkeiten zu Projekten, Veröffentlichungen und Veranstaltungen des RKW Kompetenzzentrums. Wir wünschen Ihnen viel Spaß beim Lesen der aktuellen Ausgabe unseres Newsletters!</target>
 			</trans-unit>
-            <trans-unit id="partials_newsletter_main.topics">
-                <source>You have subscribed to the following topics</source>
-                <target>Sie haben folgende Themen abonniert</target>
-            </trans-unit>
-            <trans-unit id="partials_newsletter_main.topicChange">
-                <source>Change</source>
-                <target>ändern</target>
-            </trans-unit>
 
+
+			<!-- Partials/Newsletter/*/TopNews.html -->
+            <trans-unit id="partials_newsletter_topNews.headline">
+				<source>Our Top-News</source>
+				<target>Unsere Top-Meldungen</target>
+			</trans-unit>
+
+			<!-- Partials/Newsletter/*/Footer.html -->
+            <trans-unit id="partials_newsletter_footer.subscriptionText">
+				<source>Are you interested in further topics or would you like to unsubscribe? No problem!</source>
+				<target>Sie interessieren sich für weitere Themen oder möchten den Newsletter abbestellen? Kein Problem!</target>
+			</trans-unit>
+            <trans-unit id="partials_newsletter_footer.subscriptionLink">
+				<source>Click here to change your subscription.</source>
+				<target>Klicken Sie hier um Ihr Abonnement zu ändern.</target>
+			</trans-unit>
 
 
 			<!-- ##################### -->

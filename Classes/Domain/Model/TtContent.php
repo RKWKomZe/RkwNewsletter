@@ -98,6 +98,13 @@ class TtContent extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
 
     /**
+     * txRkwnewsletterIsEditorial
+     *
+     * @var bool
+     */
+    protected $txRkwnewsletterIsEditorial;
+
+    /**
      * __construct
      */
     public function __construct()
@@ -383,6 +390,27 @@ class TtContent extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setTxRkwnewsletterAuthors(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $txRkwnewsletterAuthors)
     {
         $this->txRkwnewsletterAuthors = $txRkwnewsletterAuthors;
+    }
+
+    /**
+     * Returns the uid
+     *
+     * @return bool $txRkwnewsletterIsEditorial
+     */
+    public function getTxRkwnewsletterIsEditorial()
+    {
+        return $this->txRkwnewsletterIsEditorial;
+    }
+
+    /**
+     * Sets the uid
+     *
+     * @param bool $uid
+     * @return void
+     */
+    public function setTxRkwnewsletterIsEditorial($txRkwnewsletterIsEditorial)
+    {
+        $this->txRkwnewsletterIsEditorial = $txRkwnewsletterIsEditorial;
     }
 
 
