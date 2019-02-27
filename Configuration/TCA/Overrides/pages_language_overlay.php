@@ -22,6 +22,7 @@ $tmpColsPagesOverlay = array(
             'cols' => '40',
             'rows' => '15',
             'wrap' => 'off',
+            'eval' => 'RKW\\RkwNewsletter\\Validation\\TCA\\NewsletterTeaserLengthEvaluation'
         ),
         'defaultExtras' => 'richtext[]:rte_transform[flag=rte_enabled|mode=ts_css]'
     ),

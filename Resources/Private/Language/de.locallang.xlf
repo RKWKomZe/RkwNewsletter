@@ -158,6 +158,27 @@
             </trans-unit>
 
 
+            <!-- ##################### -->
+			<!-- Validation -->
+			<!-- ##################### -->
+            <!-- newsletterTeaserLengthEvaluation -->
+			<trans-unit id="newsletterTeaserLengthEvaluation.header.tooShort">
+				<source>Teaser-Text</source>
+				<target>Teaser-Text zu kurz</target>
+			</trans-unit>
+			<trans-unit id="newsletterTeaserLengthEvaluation.message.tooShort">
+				<source>So that the recipients of the newsletter also know what your contribution is about, the teaser text should be at least %s characters long (currently: %s characters). However, your teaser text was still saved.</source>
+				<target>Damit die Empfänger des Newsletters auch wissen, worum es in Ihrem Beitrag geht, sollte der angegebene Teaser-Text mindestens %s Zeichen lang sein (aktuell: %s Zeichen). Ihr Teaser-Text wurde aber trotzdem gespeichert.</target>
+			</trans-unit>
+			<trans-unit id="newsletterTeaserLengthEvaluation.header.tooLong">
+				<source>Teaser-Text</source>
+				<target>Teaser-Text zu lang</target>
+			</trans-unit>
+			<trans-unit id="newsletterTeaserLengthEvaluation.message.tooLong">
+				<source>Your contribution will appear in the newsletter along with some others. So that the newsletter is not overloaded, your teaser text should not exceed the length of %s characters (currently: %s characters). However, your teaser text was still saved.</source>
+				<target>Ihr Beitrag erscheint neben einigen anderen im Newsletter. Damit der Newsletter nicht überfrachtet wird, sollte Ihr Teaser-Text die Länge von %s Zeichen nicht überschreiten (aktuell: %s Zeichen). Ihr Teaser-Text wurde aber trotzdem gespeichert.</target>
+			</trans-unit>
+
 
 
 			<!-- ##################### -->

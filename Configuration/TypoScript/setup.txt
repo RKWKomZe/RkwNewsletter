@@ -125,6 +125,9 @@ plugin.tx_rkwnewsletter {
 
         requiredFieldsSubscription = {$plugin.tx_rkwnewsletter.settings.requiredFieldsSubscription}
 
+        minTeaserLength = {$plugin.tx_rkwnewsletter.settings.minTeaserLength}
+        maxTeaserLength = {$plugin.tx_rkwnewsletter.settings.maxTeaserLength}
+
         pages {
             permissions {
                 stage1 {

@@ -29,8 +29,11 @@ if (!defined('TYPO3_MODE')) {
     )
 );
 
-
+// register command controller
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['extbase']['commandControllers'][] = 'RKW\\RkwNewsletter\\Controller\\NewsletterCommandController';
+
+// register TCA evaluation to be available in 'eval' of TCA
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tce']['formevals']['RKW\\RkwNewsletter\\Validation\\TCA\\NewsletterTeaserLengthEvaluation'] = '';
 
 // register the hooks
 // $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass'][$_EXTKEY] = 'RKW\\RkwNewsletter\\Hooks\\DeleteCollectionPageOfReleaseHook';

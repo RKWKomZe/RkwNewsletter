@@ -5,14 +5,13 @@ if (!defined ('TYPO3_MODE')) {
 
 // extend "pages" TCA
 // Following line do ask for reload on newsletter-change (for correct topic selection)
-$GLOBALS['TCA']['pages']['ctrl']['requestUpdate'] .= ',tx_rkwnewsletter_newsletter';
+$GLOBALS['TCA']['pages']['ctrl']['requestUpdate'] .= ',tx_rkwnewsletter_newsletter, tx_rkwnewsletter_topic';
 
 $tmpColsPages = array(
 
     'tx_rkwnewsletter_newsletter' => array(
-
-        'onChange' => 'reload',
         'exclude' => 0,
+        'onChange' => 'reload',
         'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:pages.tx_rkwnewsletter_newsletter',
         'config' => array(
             'type' => 'select',
@@ -30,6 +29,8 @@ $tmpColsPages = array(
         )
     ),
     'tx_rkwnewsletter_topic' => array(
+        'displayCond' => 'FIELD:tx_rkwnewsletter_newsletter:REQ:TRUE',
+        'onChange' => 'reload',
         'exclude' => 0,
         'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:pages.tx_rkwnewsletter_topic',
         'config' => array(
@@ -39,30 +40,42 @@ $tmpColsPages = array(
             'eval' => 'int',
             'foreign_table' => 'tx_rkwnewsletter_domain_model_topic',
             'foreign_table_where' => 'AND newsletter=###REC_FIELD_tx_rkwnewsletter_newsletter### AND tx_rkwnewsletter_domain_model_topic.deleted = 0 AND tx_rkwnewsletter_domain_model_topic.hidden = 0',
-            'minitems' => 0,
+            'minitems' => 1,
             'maxitems' => 1,
             'items' => array (
                 array('LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:pages.tx_rkwnewsletter_topic.please_choose',0),
             ),
         )
     ),
-    'tx_rkwnewsletter_exclude' => array(
+    /*'tx_rkwnewsletter_exclude' => array(
         'exclude' => 0,
         'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:pages.tx_rkwnewsletter_exclude',
         'config' => array(
             'type' => 'check',
         ),
-    ),
+    ),*/
     'tx_rkwnewsletter_teaser_heading' => array(
+        'displayCond' => array (
+            'AND' => array(
+                'FIELD:tx_rkwnewsletter_newsletter:REQ:TRUE',
+                'FIELD:tx_rkwnewsletter_topic:REQ:TRUE',
+            ),
+        ),
         'exclude' => 0,
         'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:pages.tx_rkwnewsletter_teaser_heading',
         'config' => array(
             'type' => 'input',
             'size' => 30,
-            'eval' => 'trim'
+            'eval' => 'trim,required'
         ),
     ),
     'tx_rkwnewsletter_teaser_text' => array(
+        'displayCond' => array (
+            'AND' => array(
+                'FIELD:tx_rkwnewsletter_newsletter:REQ:TRUE',
+                'FIELD:tx_rkwnewsletter_topic:REQ:TRUE',
+            ),
+        ),
         'exclude' => 0,
         'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:pages.tx_rkwnewsletter_teaser_text',
         'config' => array(
@@ -70,10 +83,17 @@ $tmpColsPages = array(
             'cols' => '40',
             'rows' => '15',
             'wrap' => 'off',
+            'eval' => 'RKW\\RkwNewsletter\\Validation\\TCA\\NewsletterTeaserLengthEvaluation,required'
         ),
         'defaultExtras' => 'richtext[]:rte_transform[flag=rte_enabled|mode=ts_css]'
     ),
     'tx_rkwnewsletter_teaser_image' => array(
+        'displayCond' => array (
+            'AND' => array(
+                'FIELD:tx_rkwnewsletter_newsletter:REQ:TRUE',
+                'FIELD:tx_rkwnewsletter_topic:REQ:TRUE',
+            ),
+        ),
         'exclude' => 0,
         'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:pages.tx_rkwnewsletter_teaser_image',
         'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
@@ -120,6 +140,12 @@ $tmpColsPages = array(
         ),
     ),
     'tx_rkwnewsletter_teaser_link' => array(
+        'displayCond' => array (
+            'AND' => array(
+                'FIELD:tx_rkwnewsletter_newsletter:REQ:TRUE',
+                'FIELD:tx_rkwnewsletter_topic:REQ:TRUE',
+            ),
+        ),
         'exclude' => 0,
         'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:pages.tx_rkwnewsletter_teaser_link',
         'config' => array(
@@ -153,6 +179,12 @@ $tmpColsPages = array(
         ),
     ),
     'tx_rkwnewsletter_include_tstamp' => array(
+        'displayCond' => array (
+            'AND' => array(
+                'FIELD:tx_rkwnewsletter_newsletter:REQ:TRUE',
+                'FIELD:tx_rkwnewsletter_topic:REQ:TRUE',
+            ),
+        ),
         'exclude' => 0,
         'l10n_mode' => 'mergeIfNotBlank',
         'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:pages.tx_rkwnewsletter_include_tstamp',
@@ -177,5 +209,5 @@ $tmpColsPages = array(
 );
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
     'pages',
-    '--div--;LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:pages.tx_rkwnewsletter;,tx_rkwnewsletter_newsletter,tx_rkwnewsletter_topic,tx_rkwnewsletter_exclude,tx_rkwnewsletter_teaser_heading,tx_rkwnewsletter_teaser_text,tx_rkwnewsletter_teaser_link,tx_rkwnewsletter_teaser_image,tx_rkwnewsletter_include_tstamp'
+    '--div--;LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:pages.tx_rkwnewsletter;,tx_rkwnewsletter_newsletter,tx_rkwnewsletter_topic,tx_rkwnewsletter_teaser_heading,tx_rkwnewsletter_teaser_text,tx_rkwnewsletter_teaser_link,tx_rkwnewsletter_teaser_image,tx_rkwnewsletter_include_tstamp'
 );
