@@ -48,6 +48,14 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
      */
     protected $approvalRepository;
 
+    /**
+     * pagesRepository
+     *
+     * @var \RKW\RkwNewsletter\Domain\Repository\PagesRepository
+     * @inject
+     */
+    protected $pagesRepository;
+
 
     /**
      * PersistenceManager
@@ -344,8 +352,7 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
             $this->setPagePermissions($approval->getPage(), 'stage1');
         }
 
-        $this->approvalRepository->update($approval);
-
+        $this->pagesRepository->update($approval->getPage());
     }
 
 
