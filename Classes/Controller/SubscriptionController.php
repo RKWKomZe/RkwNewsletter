@@ -314,7 +314,10 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
             $registration->register(
                 $frontendUser,
                 false,
-                $subscriptions,
+                [
+                    'subscriptions' => $subscriptions,
+                    'frontendUser' => $frontendUser
+                ],
                 'rkwNewsletter',
                 $this->request
             );
@@ -329,7 +332,7 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
             $this->redirect('message');
             //===
 
-            // Case 3: Fe-User is logged in
+        // Case 3: Fe-User is logged in
         } else {
             if (
                 ($this->getFrontendUser())
@@ -338,9 +341,10 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
 
                 // set FeUser and save
                 $frontendUser->setTxRkwnewsletterSubscription($subscriptions);
-                $hash = sha1($frontendUser->getEmail() . rand());
-                $frontendUser->setTxRkwnewsletterHash($hash);
-
+                if (! $frontendUser->getTxRkwnewsletterHash()) {
+                    $hash = sha1($frontendUser->getEmail() . rand());
+                    $frontendUser->setTxRkwnewsletterHash($hash);
+                }
                 $this->frontendUserRepository->update($frontendUser);
 
                 \RKW\RkwRegistration\Tools\Privacy::addPrivacyData($this->request, $this->getFrontendUser(), $subscriptions, 'new newsletter subscription');
@@ -537,7 +541,10 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
             $registration->register(
                 $frontendUser,
                 false,
-                $subscriptions,
+                [
+                    'subscriptions' => $subscriptions,
+                    'frontendUser' => $frontendUser
+                ],
                 'rkwNewsletter',
                 $this->request
             );
@@ -699,7 +706,7 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      * createSubscription - used by SignalSlot
      * Called via SignalSlot after successfully completed optIn
      *
-     * @param \RKW\RkwRegistration\Domain\Model\FrontendUser $feUser
+     * @param \RKW\RkwRegistration\Domain\Model\FrontendUser $frontendUserDatabase
      * @param \RKW\RkwRegistration\Domain\Model\Registration $registration
      * @return void
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
@@ -707,16 +714,32 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException
      */
-    public function saveSubscription(\RKW\RkwRegistration\Domain\Model\FrontendUser $frontendUser, \RKW\RkwRegistration\Domain\Model\Registration $registration)
+    public function saveSubscription(\RKW\RkwRegistration\Domain\Model\FrontendUser $frontendUserDatabase, \RKW\RkwRegistration\Domain\Model\Registration $registration)
     {
         if (
-            ($subscription = $registration->getData())
-            && ($subscription instanceof \TYPO3\CMS\Extbase\Persistence\ObjectStorage)
+            ($registerData = $registration->getData())
+            && ($subscriptions = $registerData['subscriptions'])
+            && ($subscriptions instanceof \TYPO3\CMS\Extbase\Persistence\ObjectStorage)
+            && ($frontendUserUnsecure = $registerData['frontendUser'])
+            && ($frontendUserUnsecure instanceof \RKW\RkwNewsletter\Domain\Model\FrontendUser)
+
         ) {
-            /** @var \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser */
-            if ($frontendUser = $this->frontendUserRepository->findByIdentifier($frontendUser->getUid())) {
-                $frontendUser->setTxRkwnewsletterSubscription($subscription);
-                $this->frontendUserRepository->update($frontendUser);
+            // override with newsletter based model!
+            /** @var \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUserDatabase */
+            if ($frontendUserDatabase = $this->frontendUserRepository->findByIdentifier($frontendUserDatabase->getUid())) {
+
+                // set subscription
+                $frontendUserDatabase->setTxRkwnewsletterSubscription($subscriptions);
+
+                // update fe-user data - no matter what
+                $frontendUserDatabase->setTxRkwregistrationGender($frontendUserUnsecure->getTxRkwregistrationGender());
+                $frontendUserDatabase->setTitle($frontendUserUnsecure->getTitle());
+                $frontendUserDatabase->setTxRkwregistrationTitle($frontendUserUnsecure->getTxRkwregistrationTitle());
+                $frontendUserDatabase->setFirstName($frontendUserUnsecure->getFirstName());
+                $frontendUserDatabase->setLastName($frontendUserUnsecure->getLastName());
+                $frontendUserDatabase->setCompany($frontendUserUnsecure->getCompany());
+
+                $this->frontendUserRepository->update($frontendUserDatabase);
             }
         }
     }

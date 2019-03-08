@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+    <pages>
+        <uid>1</uid>
+        <pid>0</pid>
+        <title>Subscription Newsletter</title>
+        <tx_rkwnewsletter_newsletter>0</tx_rkwnewsletter_newsletter>
+        <tx_rkwnewsletter_topic>0</tx_rkwnewsletter_topic>
+        <tx_rkwnewsletter_teaser_heading />
+        <tx_rkwnewsletter_teaser_text />
+        <tx_rkwnewsletter_teaser_image />
+        <tx_rkwnewsletter_teaser_link />
+        <tx_rkwbasics_teaser_text />
+        <tx_rkwbasics_information />
+        <doktype>1</doktype>
+        <perms_everybody>15</perms_everybody>
+    </pages>
+</dataset>
