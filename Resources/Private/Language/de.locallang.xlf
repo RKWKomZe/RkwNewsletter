@@ -103,18 +103,18 @@
 			</trans-unit>
             <trans-unit id="releaseController.error.emailIncorrect">
 				<source>Oh no! The given E-Mail address seems to be incorrect. Please check and try again.</source>
-				<target>Och nö! Die angegebene E-Mail-Adresse scheint nicht korrekt zu sein. Bitte prüfen Sie die Angabe und versuchen Sie es erneut.</target>
+				<target>Upps! Die angegebene E-Mail-Adresse scheint nicht korrekt zu sein. Bitte prüfen Sie die Angabe und versuchen Sie es erneut.</target>
 			</trans-unit>
             <trans-unit id="releaseController.error.unexpected">
                 <source>Oh no! An unexpected error occurred. Please contact your trusted administrator.</source>
-                <target>Och nö! Ein unerwarteter Fehler ist aufgetreten. Bitte wenden Sie sich an den Administrator Ihres Vertrauens.</target>
+                <target>Upps! Ein unerwarteter Fehler ist aufgetreten. Bitte wenden Sie sich an den Administrator Ihres Vertrauens.</target>
             </trans-unit>
             
             
             <!-- subscriptionController -->
             <trans-unit id="subscriptionController.message.optInCreated">
                <source>An e-mail has been send to you. Please click the link in the e-mail to confirm your request.</source>
-               <target>Fast geschafft! Eine E-Mail mit einem Bestätigungslink ist auf dem Weg zu Ihnen. Sollten Sie innerhalb der nächsten 2-3 Minuten keine E-Mail von uns erhalten, prüfen Sie Ihren Spam-Filter. Selbstverständlich steht Ihnen aber auch unser Support bei Problemen jederzeit gerne zur Verfügung.</target>
+               <target><![CDATA[Fast geschafft! Eine E-Mail mit einem Bestätigungslink ist auf dem Weg zu Ihnen. Sollten Sie innerhalb der nächsten 2-3 Minuten keine E-Mail von uns erhalten, prüfen Sie Ihren Spam-Filter. Selbstverständlich steht Ihnen aber auch unser <a href="mailto:service@rkw.de">Support</a> bei Problemen jederzeit gerne zur Verfügung.]]></target>
             </trans-unit>
             <trans-unit id="subscriptionController.message.subscriptionSaved">
                <source>Wohoo! The changes have been saved successfully.</source>
@@ -138,7 +138,7 @@
             </trans-unit>
             <trans-unit id="subscriptionController.error.unexpectedError">
                <source>Upps, unfortunately something went wrong. Please contact our support.</source>
-               <target>Upps, da ist leider etwas schief gelaufen. Bitte wenden Sie sich an unseren Support.</target>
+               <target><![CDATA[Upps, da ist leider etwas schief gelaufen. Bitte wenden Sie sich an unseren <a href="mailto:service@rkw.de">Support</a>.]]></target>
             </trans-unit>
             <trans-unit id="subscriptionController.error.acceptTerms">
 				<source>You have to accept our terms and conditions.</source>
