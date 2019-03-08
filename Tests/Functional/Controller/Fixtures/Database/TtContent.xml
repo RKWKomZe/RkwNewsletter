@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+    <tt_content>
+        <uid>1</uid>
+        <pid>1</pid>
+        <CType>list</CType>
+        <list_type>rkwnewsletter_subscription</list_type>
+        <pi_flexform />
+        <tx_rkwbasics_bodytext_mobile />
+    </tt_content>
+</dataset>
