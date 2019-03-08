@@ -20,6 +20,9 @@
 			<trans-unit id="tx_rkwnewsletter_domain_model_frontenduser.title">
 				<source>Title</source>
 			</trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_frontenduser.tx_rkwregistration_title.I.neutral">
+                <source>-- Please select --</source>
+            </trans-unit>			
 			<trans-unit id="tx_rkwnewsletter_domain_model_frontenduser.company">
 				<source>Company</source>
 			</trans-unit>
