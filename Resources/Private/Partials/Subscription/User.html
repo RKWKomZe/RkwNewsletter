@@ -11,16 +11,18 @@
     <f:form.select id="gender" property="txRkwregistrationGender" options="{99: '{f:translate(key:\"tx_rkwnewsletter_domain_model_frontenduser.tx_rkwregistration_gender.I.neutral\")}', 0: '{f:translate(key:\"tx_rkwnewsletter_domain_model_frontenduser.tx_rkwregistration_gender.I.man\")}', 1: '{f:translate(key:\"tx_rkwnewsletter_domain_model_frontenduser.tx_rkwregistration_gender.I.woman\")}'}" optionValueField="uid" optionLabelField="name" />
 </div>
 
-<div class="v320-1">
-    <label class="form-label" for="title">
-        <f:translate key="tx_rkwnewsletter_domain_model_frontenduser.title" />
-        <f:if condition="<rkwNewsletter:isMandatoryField fieldName='title' /> == 0">
-            <span class="optional">&nbsp;<f:translate key="partials_subscription_user.labelOptional" /></span>
-        </f:if>
-    </label>
-    <f:comment><f:form.textfield id="title" property="title" value="{frontendUser.title}"/></f:comment>
-    <f:form.select id="title" property="txRkwregistrationTitle" options="<rkwRegistration:titleList />" optionValueField="uid" optionLabelField="name" prependOptionValue="0" prependOptionLabel="{f:translate(key:'tx_rkwnewsletter_domain_model_frontenduser.tx_rkwregistration_title.I.neutral')}" />
-</div>
+<f:if condition="<rkwRegistration:titleList />">
+    <div class="v320-1">
+        <label class="form-label" for="title">
+            <f:translate key="tx_rkwnewsletter_domain_model_frontenduser.title" />
+            <f:if condition="<rkwNewsletter:isMandatoryField fieldName='title' /> == 0">
+                <span class="optional">&nbsp;<f:translate key="partials_subscription_user.labelOptional" /></span>
+            </f:if>
+        </label>
+        <f:comment><f:form.textfield id="title" property="title" value="{frontendUser.title}"/></f:comment>
+        <f:form.select id="title" property="txRkwregistrationTitle" options="<rkwRegistration:titleList />" optionValueField="uid" optionLabelField="name" prependOptionValue="0" prependOptionLabel="{f:translate(key:'tx_rkwnewsletter_domain_model_frontenduser.tx_rkwregistration_title.I.neutral')}" />
+    </div>
+</f:if>
 
 <div class="v320-1">
     <label class="form-label" for="firstname">
