@@ -81,6 +81,7 @@ class Release implements \TYPO3\CMS\Core\SingletonInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     public function sendInfoAndReminderMailsForReleases()
     {
@@ -97,6 +98,7 @@ class Release implements \TYPO3\CMS\Core\SingletonInterface
                 /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
                 foreach ($issue->getApprovals() as $approval) {
                     if ($approval->getAllowedTstampStage2() < 1) {
+                        $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Skipping info mail for release because of missing approvals: issue id=%s, newsletter-configuration id=%s.', $issue->getUid(), $issue->getNewsletter()->getUid()));
                         continue 2;
                         //===
                     }
@@ -110,7 +112,7 @@ class Release implements \TYPO3\CMS\Core\SingletonInterface
                 if ($issue->getInfoTstamp() < 1) {
                     $issue->setInfoTstamp(time());
 
-                    // Case 2: Reminder
+                // Case 2: Reminder
                 } else {
 
                     $issue->setReminderTstamp(time());
@@ -138,6 +140,7 @@ class Release implements \TYPO3\CMS\Core\SingletonInterface
      *
      * @param string $which Which type of settings will be loaded
      * @return array
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     protected function getSettings($which = ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS)
     {

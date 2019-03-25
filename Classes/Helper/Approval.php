@@ -116,6 +116,12 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
                 /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
                 foreach ($automaticApprovalList as $approval) {
 
+                    // Fix for immediate execution after issue creation
+                    if (!$approval->getIssue()) {
+                        continue;
+                        //===
+                    }
+
                     $approvalAdmins = [];
                     $stage = 1;
                     if ($approval->getAllowedTstampStage1() < 1) {
@@ -178,6 +184,12 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
             /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
             foreach ($automaticApprovalList as $approval) {
 
+                // Fix for immediate execution after issue creation
+                if (!$approval->getIssue()) {
+                    continue;
+                    //===
+                }
+
                 $stage = 1;
                 if ($approval->getAllowedTstampStage1() < 1) {
                     $approval->setAllowedTstampStage1(time());
@@ -228,6 +240,12 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
             /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
             foreach ($openApprovalList as $approval) {
 
+                // Fix for immediate execution after issue creation
+                if (!$approval->getIssue()) {
+                    continue;
+                    //===
+                }
+
                 // Case 1: infomail at stage 1
                 $approvalAdmins = [];
                 $stage = 1;
@@ -239,7 +257,7 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
 
                     if (count($approval->getTopic()->getApprovalStage1()) > 0) {
                         $approval->setSentInfoTstampStage1(time());
-                        $approvalAdmins = $approval->getTopic()->getApprovalStage1();
+                        $approvalAdmins = $approval->getTopic()->getApprovalStage1()->toArray();
                     }
 
                 // Case 2: reminder at stage 1
@@ -253,7 +271,7 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
                         $isReminder = true;
                         if (count($approval->getTopic()->getApprovalStage1()) > 0) {
                             $approval->setSentReminderTstampStage1(time());
-                            $approvalAdmins = $approval->getTopic()->getApprovalStage1();
+                            $approvalAdmins = $approval->getTopic()->getApprovalStage1()->toArray();
                         }
 
                     // Case 3: infomail at stage 2
@@ -268,7 +286,7 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
                             $stage = 2;
                             if (count($approval->getTopic()->getApprovalStage2()) > 0) {
                                 $approval->setSentInfoTstampStage2(time());
-                                $approvalAdmins = $approval->getTopic()->getApprovalStage2();
+                                $approvalAdmins = $approval->getTopic()->getApprovalStage2()->toArray();
                             }
 
                         // Case 4: reminder at stage 2
@@ -286,7 +304,7 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
                                 $isReminder = true;
                                 if (count($approval->getTopic()->getApprovalStage2()) > 0) {
                                     $approval->setSentReminderTstampStage2(time());
-                                    $approvalAdmins = $approval->getTopic()->getApprovalStage2();
+                                    $approvalAdmins = $approval->getTopic()->getApprovalStage2()->toArray();
                                 }
                             }
                         }
@@ -302,9 +320,10 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
 
                     } else {
 
+                        $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Sending info mail for approval: stage %s, topic "%s", issue id=%s, newsletter-configuration id=%s.', $stage, $approval->getTopic()->getName(), $approval->getIssue()->getUid(), $approval->getIssue()->getNewsletter()->getUid()));
+
                         // Update permissions
                         $this->updatePagePermissions($approval);
-                        $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Sending info mail for approval: stage %s, topic "%s", issue id=%s, newsletter-configuration id=%s.', $stage, $approval->getTopic()->getName(), $approval->getIssue()->getUid(), $approval->getIssue()->getNewsletter()->getUid()));
                     }
 
                     // Update
@@ -335,24 +354,27 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
     public function updatePagePermissions(\RKW\RkwNewsletter\Domain\Model\Approval $approval)
     {
 
+        // -> new page
+        $stage = 'stage1';
         if (
             $approval->getIssue()
             && $approval->getIssue()->getReleaseTstamp()
         ) {
             // -> after final sending
-            $this->setPagePermissions($approval->getPage(), 'sent');
+            $stage = 'sent';
         } else if ($approval->getAllowedTstampStage2()) {
             // -> allowed on stage 2
-            $this->setPagePermissions($approval->getPage(), 'release');
+            $stage = 'release';
         } else if ($approval->getAllowedTstampStage1()) {
             // -> allowed on stage 1
-            $this->setPagePermissions($approval->getPage(), 'stage2');
-        } else {
-            // -> new page
-            $this->setPagePermissions($approval->getPage(), 'stage1');
+            $stage = 'stage2';
         }
 
+        $this->setPagePermissions($approval->getPage(), $stage);
         $this->pagesRepository->update($approval->getPage());
+
+        $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Updated page permission: stage="%s", topic ="%s", issue id=%s, newsletter-configuration id=%s.', $stage, $approval->getTopic()->getName(), $approval->getIssue()->getUid(), $approval->getIssue()->getNewsletter()->getUid()));
+
     }
 
 

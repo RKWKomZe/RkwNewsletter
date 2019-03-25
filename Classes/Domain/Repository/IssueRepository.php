@@ -45,10 +45,15 @@ class IssueRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                     $query->equals('infoTstamp', 0),
                     $query->logicalOr(
                         $query->logicalAnd(
-                            $query->lessThan('infoTstamp', time() - $toleranceReminder),
-                            $query->equals('reminderTstamp', 0)
+                            $query->greaterThan('infoTstamp', 0),
+                            $query->equals('reminderTstamp', 0),
+                            $query->lessThan('infoTstamp', time() - $toleranceReminder)
                         ),
-                        $query->lessThan('reminderTstamp', time() - $toleranceReminder)
+                        $query->logicalAnd(
+                            $query->greaterThan('infoTstamp', 0),
+                            $query->greaterThan('reminderTstamp', 0),
+                            $query->lessThan('reminderTstamp', time() - $toleranceReminder)
+                        )
                     )
                 );
         }

@@ -48,12 +48,15 @@ class IsBackendUserAllowedApprovalViewHelper extends \TYPO3\CMS\Fluid\Core\ViewH
         }
 
         // 2. Final admin of newsletter is allowed to approve everything
-        /** @var \RKW\RkwNewsletter\Domain\Model\BackendUser $backendUser */
-        foreach ($approval->getIssue()->getNewsletter()->getApproval() as $backendUser) {
+        if (count($approval->getTopic()->$getter()) > 0) {
 
-            if ($backendUser->getUid() == $backendUserId) {
-                return true;
-                //===
+            /** @var \RKW\RkwNewsletter\Domain\Model\BackendUser $backendUser */
+            foreach ($approval->getIssue()->getNewsletter()->getApproval() as $backendUser) {
+
+                if ($backendUser->getUid() == $backendUserId) {
+                    return true;
+                    //===
+                }
             }
         }
 
