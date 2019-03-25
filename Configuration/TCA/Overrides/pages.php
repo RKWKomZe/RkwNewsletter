@@ -51,7 +51,7 @@ $tmpColsPages = array(
         'exclude' => 0,
         'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:pages.tx_rkwnewsletter_exclude',
         'config' => array(
-            'type' => 'check',
+            'type' => 'passthrough',
         ),
     ),*/
     'tx_rkwnewsletter_teaser_heading' => array(
