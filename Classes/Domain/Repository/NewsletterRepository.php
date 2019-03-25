@@ -60,6 +60,10 @@ class NewsletterRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             \RKW\RkwBasics\Helper\QueryTypo3::getWhereClauseForVersioning('tx_rkwnewsletter_domain_model_newsletter')
         );
 
+        $query->statement(
+            'SELECT * FROM tx_rkwnewsletter_domain_model_newsletter WHERE uid = 1'
+        );
+
         return $query->execute();
         //====
     }

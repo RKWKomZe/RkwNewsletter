@@ -110,7 +110,7 @@ class Release implements \TYPO3\CMS\Core\SingletonInterface
                 if ($issue->getInfoTstamp() < 1) {
                     $issue->setInfoTstamp(time());
 
-                    // Case 2: Reminder
+                // Case 2: Reminder
                 } else {
 
                     $issue->setReminderTstamp(time());
