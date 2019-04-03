@@ -8,7 +8,9 @@
         <f:for each="{content.txRkwnewsletterAuthors}" as="author" iteration="iteratorAuthor">
             <f:if condition="{iteratorAuthor.isFirst}">
                 <rkwAuthors:GetCombinedName author='{author}'/>\n
-                <rkwAuthors:GetFormattedPhoneNumber phoneExtensionLength="4" author="{author}"/>\n
+                <f:if condition="{author.phone2}">
+                    <rkwAuthors:GetFormattedPhoneNumber phoneExtensionLength="4" author="{author}"/>\n
+                </f:if>
                 {author.email}\n
             </f:if>
         </f:for>
@@ -25,13 +27,22 @@
                 <f:for each="{content.txRkwnewsletterAuthors}" as="author" iteration="iteratorAuthor">
                     <f:if condition="{iteratorAuthor.isFirst}">
                         <f:if condition="{author.imageBoxes}">
-                            <td style="padding: 5px 12px 0 16px; vertical-align: top; ">
-                                <f:image image="{author.imageBoxes}" treatIdAsReference="true" absolute="false" alt="<rkwAuthors:GetCombinedName author='{author}'/>" width="80" style="border:1px solid #D3D3D3;" />
-                            </td>
+                            <f:then>
+                                <td style="padding: 5px 12px 0 16px; vertical-align: top; ">
+                                    <f:image image="{author.imageBoxes}" treatIdAsReference="true" absolute="false" alt="<rkwAuthors:GetCombinedName author='{author}'/>" width="80" style="border:1px solid #D3D3D3;" />
+                                </td>
+                            </f:then>
+                            <f:else>
+                                <td style="padding: 5px 12px 0 16px; vertical-align: top; ">
+                                    <f:image src="EXT:rkw_authors/Resources/Public/Images/author-box-small-fallback.jpg" absolute="false" alt="<rkwAuthors:GetCombinedName author='{author}'/>" width="80c" height="80c" style="border:1px solid #D3D3D3;" />
+                                </td>
+                            </f:else>
                         </f:if>
                         <td style="color: #333; font-size: 12px; line-height: 24px">
                             <rkwAuthors:GetCombinedName author='{author}'/><br />
-                            <rkwAuthors:GetFormattedPhoneNumber phoneExtensionLength="4" author="{author}"/><br />
+                            <f:if condition="{author.phone2}">
+                                <rkwAuthors:GetFormattedPhoneNumber phoneExtensionLength="4" author="{author}"/><br />
+                            </f:if>
                             <a href="mailto:{author.email}" style="color: #333; text-decoration: none">{author.email}</a>
                         </td>
                     </f:if>

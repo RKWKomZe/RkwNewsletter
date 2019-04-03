@@ -208,6 +208,12 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
                                 /** @var \TYPO3\CMS\Extbase\Persistence\QueryResultInterface $issuePages */
                                 $pages = $this->pagesRepository->findAllByIssueAndSubscriptionAndSpecialTopic($issue, $frontendUser->getTxRkwnewsletterSubscription());
 
+                                /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
+                                $pagesOrderArray = array();
+                                foreach ($pages->toArray() as $page) {
+                                    $pagesOrderArray[] = $page->getUid();
+                                }
+
                                 // add to final list if there are some pages!
                                 if (count($pages) > 0) {
 
@@ -225,8 +231,11 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
                                                 'pages'            => $pages,
                                                 'specialPages'     => $specialPages,
                                                  // 'includeEditorials'    => (((count($pages->toArray()) + count($specialPages->toArray())) > 1) ? false : true),
-                                                'includeEditorials' => ((count($pages->toArray()) > 1) ? false : true),                                             'maxItemsPerTopic' => $itemsPerTopic,
+                                                'includeEditorials' => ((count($pages->toArray()) > 1) ? false : true),
+                                                'pagesOrder'       => $pagesOrderArray,
+                                                'maxItemsPerTopic' => $itemsPerTopic,
                                                 'pageTypeMore'     => $settings['settings']['webViewPageNum'],
+                                                'webView'          => false,
                                                 'settings'         => $settingsDefault,
                                                 'hash'             => $frontendUser->getTxRkwnewsletterHash(),
                                             ),

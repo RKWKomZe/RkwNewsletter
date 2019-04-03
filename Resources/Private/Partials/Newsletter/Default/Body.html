@@ -32,9 +32,9 @@
     <!-- Top-News -->
 
     <!-- Normal Contents -->
-    <f:render partial="Default/Items" section="Html" arguments="{pages: pages, issue: issue, queueMail: queueMail, queueRecipient: queueRecipient, maxItemsPerTopic: maxItemsPerTopic, pageTypeMore: pageTypeMore, includeEditorials: includeEditorials}" />
+    <f:render partial="Default/Items" section="Html" arguments="{pages: pages, issue: issue, queueMail: queueMail, queueRecipient: queueRecipient, maxItemsPerTopic: maxItemsPerTopic, pageTypeMore: pageTypeMore, pagesOrder: pagesOrder, webView: webView, includeEditorials: includeEditorials}" />
 
     <!-- Special Contents -->
-    <f:render partial="Default/Items" section="Html" arguments="{pages: specialPages, issue: issue, queueMail: queueMail, queueRecipient: queueRecipient, maxItemsPerTopic: maxItemsPerTopic, pageTypeMore: pageTypeMore, includeEditorials: '0'}" />
+    <f:render partial="Default/Items" section="Html" arguments="{pages: specialPages, issue: issue, queueMail: queueMail, queueRecipient: queueRecipient, maxItemsPerTopic: maxItemsPerTopic, pageTypeMore: pageTypeMore, webView: webView, includeEditorials: '0'}" />
 
 </f:section>

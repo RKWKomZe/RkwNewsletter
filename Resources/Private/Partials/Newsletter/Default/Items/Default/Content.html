@@ -31,13 +31,13 @@
             <td style="padding: 0 16px 0; line-height: 24px">
                 <f:if condition="{content.headerLink}">
                     <f:then>
-                        <a href="<rkwMailer:frontend.typolink parameter='{content.headerLink}' />" target="_blank" style="color: {page.txRkwnewsletterTopic.primaryColor}; font-size: 24px; font-weight: 400; text-decoration: none">
+                        <a href="<rkwMailer:frontend.typolink parameter='{content.headerLink}' />" target="_blank" id="item-{page.uid}-{itemIterator.cycle}" name="item-{page.uid}-{itemIterator.cycle}" style="color: {page.txRkwnewsletterTopic.primaryColor}; font-size: 24px; font-weight: 400; text-decoration: none">
                             {content.header}
                         </a>
                     </f:then>
                     <f:else>
                         <span style="color: {page.txRkwnewsletterTopic.primaryColor}; font-size: 24px; font-weight: 400; text-decoration: none">
-                            {content.header}
+                            {content.header}<a id="item-{page.uid}-{itemIterator.cycle}" name="item-{page.uid}-{itemIterator.cycle}"></a>
                         </span>
                     </f:else>
                 </f:if>

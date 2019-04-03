@@ -130,16 +130,20 @@ class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
      * @param bool $isSpecial
+     * @param array $pagesOrder
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
-    public function findAllByIssueAndSpecialTopic(\RKW\RkwNewsletter\Domain\Model\Issue $issue, $isSpecial = false)
+    public function findAllByIssueAndSpecialTopic(\RKW\RkwNewsletter\Domain\Model\Issue $issue, $isSpecial = false, $pagesOrder = [])
     {
 
         $settings = $this->getSettings();
         $ordering = 'tx_rkwnewsletter_domain_model_topic.sorting ASC';
         if ($settings['randomTopicOrder']) {
             $ordering = 'RAND()';
+        }
+        if ($pagesOrder) {
+            $ordering = 'field(pages.uid, ' . implode(',', $pagesOrder) .')';
         }
 
         $statement = 'SELECT DISTINCT 
@@ -179,18 +183,22 @@ class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
      * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage $subscriptions
+     * @param array $pagesOrder
      * @param bool $isSpecial
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
-    public function findAllByIssueAndSubscriptionAndSpecialTopic(\RKW\RkwNewsletter\Domain\Model\Issue $issue, \TYPO3\CMS\Extbase\Persistence\ObjectStorage $subscriptions, $isSpecial = false)
+    public function findAllByIssueAndSubscriptionAndSpecialTopic(\RKW\RkwNewsletter\Domain\Model\Issue $issue, \TYPO3\CMS\Extbase\Persistence\ObjectStorage $subscriptions, $isSpecial = false, $pagesOrder = array())
     {
 
         $settings = $this->getSettings();
         $ordering = 'tx_rkwnewsletter_domain_model_topic.sorting ASC';
         if ($settings['randomTopicOrder']) {
             $ordering = 'RAND()';
+        }
+        if ($pagesOrder) {
+            $ordering = 'field(pages.uid, ' . implode(',', $pagesOrder) .')';
         }
 
         $subscriptionsList = [];

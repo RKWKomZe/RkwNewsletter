@@ -254,6 +254,7 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      * @ignorevalidation $issue
      */
     public function testAction(\RKW\RkwNewsletter\Domain\Model\Issue $issue, $email, $title = null, $myTopicsOnly = 0)
