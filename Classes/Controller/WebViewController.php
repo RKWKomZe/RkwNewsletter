@@ -118,6 +118,7 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 'pages'            => $pages,
                 'specialPages'     => $specialPages,
                 'maxItemsPerTopic' => 9999,
+                'webView'          => true
             )
         );
     }

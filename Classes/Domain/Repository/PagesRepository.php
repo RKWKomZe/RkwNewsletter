@@ -143,7 +143,7 @@ class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             $ordering = 'RAND()';
         }
         if ($pagesOrder) {
-            $ordering = 'field(pages.uid, ' . implode(',', $pagesOrder) .')';
+            $ordering = 'field(pages.uid, ' . preg_replace('/[^0-9,]+/', '', implode(',', $pagesOrder)) .')';
         }
 
         $statement = 'SELECT DISTINCT 
@@ -198,7 +198,7 @@ class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             $ordering = 'RAND()';
         }
         if ($pagesOrder) {
-            $ordering = 'field(pages.uid, ' . implode(',', $pagesOrder) .')';
+            $ordering = 'field(pages.uid, ' . preg_replace('/[^0-9,]+/', '', implode(',', $pagesOrder)) .')';
         }
 
         $subscriptionsList = [];
