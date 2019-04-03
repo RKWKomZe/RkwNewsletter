@@ -334,6 +334,12 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
                 $itemsPerTopic = 999;
             }
 
+            /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
+            $pagesOrderArray = array();
+            foreach ($pages->toArray() as $page) {
+                $pagesOrderArray[] = $page->getUid();
+            }
+
             // send new user an email with token
             $mailService->setTo(
                 array(
@@ -351,8 +357,10 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
                         'specialPages'      => $specialPages,
                         // 'includeEditorials'    => (((count($pages->toArray()) + count($specialPages->toArray())) > 1) ? false : true),
                         'includeEditorials' => ((count($pages->toArray()) > 1) ? false : true),
+                        'pagesOrder'        => $pagesOrderArray,
                         'admin'             => $admin,
                         'pageTypeMore'      => $settings['settings']['webViewPageNum'],
+                        'webView'           => false,
                         'maxItemsPerTopic'  => $itemsPerTopic,
                         'settings'          => $settingsDefault,
                     ),

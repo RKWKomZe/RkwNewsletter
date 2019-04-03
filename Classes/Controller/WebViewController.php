@@ -64,11 +64,12 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * action show
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
+     * @param array $pagesOrder
      * @return void
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
-    public function showAction(\RKW\RkwNewsletter\Domain\Model\Issue $issue)
+    public function showAction(\RKW\RkwNewsletter\Domain\Model\Issue $issue, $pagesOrder = array ())
     {
 
         // check for queueMailId and queueRecipientId as params from redirection
@@ -103,9 +104,9 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
         // if frontendUser is given, we use it's subscriptions
         if ($frontendUser) {
-            $pages = $this->pagesRepository->findAllByIssueAndSubscriptionAndSpecialTopic($issue, $frontendUser->getTxRkwnewsletterSubscription());
+            $pages = $this->pagesRepository->findAllByIssueAndSubscriptionAndSpecialTopic($issue, $frontendUser->getTxRkwnewsletterSubscription(), false, $pagesOrder);
         } else {
-            $pages = $this->pagesRepository->findAllByIssueAndSpecialTopic($issue);
+            $pages = $this->pagesRepository->findAllByIssueAndSpecialTopic($issue, false, $pagesOrder);
         }
 
         /** @var \TYPO3\CMS\Extbase\Persistence\QueryResultInterface $finalSpecialPages */
