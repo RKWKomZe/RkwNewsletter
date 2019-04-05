@@ -130,11 +130,11 @@ class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
      * @param bool $isSpecial
-     * @param array $pagesOrder
+     * @param string $pagesOrder
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
-    public function findAllByIssueAndSpecialTopic(\RKW\RkwNewsletter\Domain\Model\Issue $issue, $isSpecial = false, $pagesOrder = [])
+    public function findAllByIssueAndSpecialTopic(\RKW\RkwNewsletter\Domain\Model\Issue $issue, $isSpecial = false, $pagesOrder = null)
     {
 
         $settings = $this->getSettings();
@@ -143,7 +143,7 @@ class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             $ordering = 'RAND()';
         }
         if ($pagesOrder) {
-            $ordering = 'field(pages.uid, ' . preg_replace('/[^0-9,]+/', '', implode(',', $pagesOrder)) .')';
+            $ordering = 'field(pages.uid, ' . preg_replace('/[^0-9,]+/', '', $pagesOrder) .')';
         }
 
         $statement = 'SELECT DISTINCT 
@@ -183,13 +183,13 @@ class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
      * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage $subscriptions
-     * @param array $pagesOrder
+     * @param string $pagesOrder
      * @param bool $isSpecial
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
-    public function findAllByIssueAndSubscriptionAndSpecialTopic(\RKW\RkwNewsletter\Domain\Model\Issue $issue, \TYPO3\CMS\Extbase\Persistence\ObjectStorage $subscriptions, $isSpecial = false, $pagesOrder = array())
+    public function findAllByIssueAndSubscriptionAndSpecialTopic(\RKW\RkwNewsletter\Domain\Model\Issue $issue, \TYPO3\CMS\Extbase\Persistence\ObjectStorage $subscriptions, $isSpecial = false, $pagesOrder = null)
     {
 
         $settings = $this->getSettings();
@@ -198,7 +198,7 @@ class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             $ordering = 'RAND()';
         }
         if ($pagesOrder) {
-            $ordering = 'field(pages.uid, ' . preg_replace('/[^0-9,]+/', '', implode(',', $pagesOrder)) .')';
+            $ordering = 'field(pages.uid, ' . preg_replace('/[^0-9,]+/', '', $pagesOrder) .')';
         }
 
         $subscriptionsList = [];

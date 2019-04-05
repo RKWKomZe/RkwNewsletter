@@ -9,7 +9,7 @@
             <rkwMailer:frontend.replaceLinksRedirect queueRecipient="{queueRecipient}" queueMail="{queueMail}" isPlaintext="true">
                 <f:if condition="<rkwMailer:cache.hasRenderCache queueMail='{queueMail}' isPlaintext='true' additionalIdentifier='{page.uid}-{webView}' />">
                     <f:then>
-                        <rkwMailer:cache.getRenderCache queueMail="{queueMail}" isPlaintext="true" additionalIdentifier="{page.uid}-{webView}" />
+                        <rkwMailer:cache.getRenderCache queueMail="{queueMail}" isPlaintext="true" additionalIdentifier="{page.uid}-{webView}" marker="{pagesOrder : pagesOrder}"/>
                     </f:then>
 
                     <f:else>
@@ -45,7 +45,7 @@
 
                 <f:if condition="<rkwMailer:cache.hasRenderCache queueMail='{queueMail}' additionalIdentifier='{page.uid}-{webView}' />">
                     <f:then>
-                        <rkwMailer:cache.getRenderCache queueMail="{queueMail}" additionalIdentifier="{page.uid}-{webView}" />
+                        <rkwMailer:cache.getRenderCache queueMail="{queueMail}" additionalIdentifier="{page.uid}-{webView}" marker="{pagesOrder : pagesOrder}"/>
                     </f:then>
                     <f:else>
                         <rkwMailer:cache.setRenderCache queueMail="{queueMail}" additionalIdentifier="{page.uid}-{webView}">

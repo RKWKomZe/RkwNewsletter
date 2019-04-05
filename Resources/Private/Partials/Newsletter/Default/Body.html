@@ -8,7 +8,7 @@
 \n\n
 <rkwMailer:frontend.translate key="partials_newsletter_body.introduction" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />
 \n\n
-<f:render partial="Default/Items" section="Plaintext" arguments="{pages: pages, issue: issue, queueMail: queueMail, queueRecipient: queueRecipient, maxItemsPerTopic: maxItemsPerTopic, pageTypeMore: pageTypeMore, includeEditorials: includeEditorials}" />
+<f:render partial="Default/Items" section="Plaintext" arguments="{pages: pages, issue: issue, queueMail: queueMail, queueRecipient: queueRecipient, maxItemsPerTopic: maxItemsPerTopic, pageTypeMore: pageTypeMore, pagesOrder: pagesOrder, includeEditorials: includeEditorials}" />
 <f:render partial="Default/Items" section="Plaintext" arguments="{pages: specialPages, issue: issue, queueMail: queueMail, queueRecipient: queueRecipient, maxItemsPerTopic: maxItemsPerTopic, pageTypeMore: pageTypeMore, includeEditorials: '0'}" />
 </rkwMailer:plaintextLineBreaks></f:section>
 

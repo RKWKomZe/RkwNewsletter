@@ -106,19 +106,19 @@
 				<target>Wohoo! Die Newsletter-Ausgabe wurde erfolgreich zum Versand freigegeben.</target>
 			</trans-unit>
             <trans-unit id="releaseController.error.emailIncorrect">
-				<source>Oh no! The given E-Mail address seems to be incorrect. Please check and try again.</source>
-				<target>Och nö! Die angegebene E-Mail-Adresse scheint nicht korrekt zu sein. Bitte prüfen Sie die Angabe und versuchen Sie es erneut.</target>
+				<source>Oh no! The given E-Mail-address "%s" seems to be incorrect. Please check and try again.</source>
+				<target>Upps! Die angegebene E-Mail-Adresse "%s" scheint nicht korrekt zu sein. Bitte prüfen Sie die Angabe und versuchen Sie es erneut.</target>
 			</trans-unit>
             <trans-unit id="releaseController.error.unexpected">
                 <source>Oh no! An unexpected error occurred. Please contact your trusted administrator.</source>
-                <target>Och nö! Ein unerwarteter Fehler ist aufgetreten. Bitte wenden Sie sich an den Administrator Ihres Vertrauens.</target>
+                <target>Upps! Ein unerwarteter Fehler ist aufgetreten. Bitte wenden Sie sich an den Administrator Ihres Vertrauens.</target>
             </trans-unit>
             
             
             <!-- subscriptionController -->
             <trans-unit id="subscriptionController.message.optInCreated">
                <source>An e-mail has been send to you. Please click the link in the e-mail to confirm your request.</source>
-               <target>Fast geschafft! Eine E-Mail mit einem Bestätigungslink ist auf dem Weg zu Ihnen. Sollten Sie innerhalb der nächsten 2-3 Minuten keine E-Mail von uns erhalten, prüfen Sie Ihren Spam-Filter. Selbstverständlich steht Ihnen aber auch unser Support bei Problemen jederzeit gerne zur Verfügung.</target>
+               <target><![CDATA[Fast geschafft! Eine E-Mail mit einem Bestätigungslink ist auf dem Weg zu Ihnen. Sollten Sie innerhalb der nächsten 2-3 Minuten keine E-Mail von uns erhalten, prüfen Sie Ihren Spam-Filter. Selbstverständlich steht Ihnen aber auch unser <a href="mailto:service@rkw.de">Support</a> bei Problemen jederzeit gerne zur Verfügung.]]></target>
             </trans-unit>
             <trans-unit id="subscriptionController.message.subscriptionSaved">
                <source>Wohoo! The changes have been saved successfully.</source>
@@ -142,7 +142,7 @@
             </trans-unit>
             <trans-unit id="subscriptionController.error.unexpectedError">
                <source>Upps, unfortunately something went wrong. Please contact our support.</source>
-               <target>Upps, da ist leider etwas schief gelaufen. Bitte wenden Sie sich an unseren Support.</target>
+               <target><![CDATA[Upps, da ist leider etwas schief gelaufen. Bitte wenden Sie sich an unseren <a href="mailto:service@rkw.de">Support</a>.]]></target>
             </trans-unit>
             <trans-unit id="subscriptionController.error.acceptTerms">
 				<source>You have to accept our terms and conditions.</source>
@@ -161,6 +161,27 @@
                 <target>Upps, es scheint als wären Sie mit einem anderen Nutzer eingeloggt als durch den verwendeten Link angegeben. Bitte loggen Sie sich aus, um den Link nutzen zu können.</target>
             </trans-unit>
 
+
+            <!-- ##################### -->
+			<!-- Validation -->
+			<!-- ##################### -->
+            <!-- newsletterTeaserLengthEvaluation -->
+			<trans-unit id="newsletterTeaserLengthEvaluation.header.tooShort">
+				<source>Teaser-Text</source>
+				<target>Teaser-Text zu kurz</target>
+			</trans-unit>
+			<trans-unit id="newsletterTeaserLengthEvaluation.message.tooShort">
+				<source>So that the recipients of the newsletter also know what your contribution is about, the teaser text should be at least %s characters long (currently: %s characters). However, your teaser text was still saved.</source>
+				<target>Damit die Empfänger des Newsletters auch wissen, worum es in Ihrem Beitrag geht, sollte der angegebene Teaser-Text mindestens %s Zeichen lang sein (aktuell: %s Zeichen). Ihr Teaser-Text wurde aber trotzdem gespeichert.</target>
+			</trans-unit>
+			<trans-unit id="newsletterTeaserLengthEvaluation.header.tooLong">
+				<source>Teaser-Text</source>
+				<target>Teaser-Text zu lang</target>
+			</trans-unit>
+			<trans-unit id="newsletterTeaserLengthEvaluation.message.tooLong">
+				<source>Your contribution will appear in the newsletter along with some others. So that the newsletter is not overloaded, your teaser text should not exceed the length of %s characters (currently: %s characters). However, your teaser text was still saved.</source>
+				<target>Ihr Beitrag erscheint neben einigen anderen im Newsletter. Damit der Newsletter nicht überfrachtet wird, sollte Ihr Teaser-Text die Länge von %s Zeichen nicht überschreiten (aktuell: %s Zeichen). Ihr Teaser-Text wurde aber trotzdem gespeichert.</target>
+			</trans-unit>
 
 
 

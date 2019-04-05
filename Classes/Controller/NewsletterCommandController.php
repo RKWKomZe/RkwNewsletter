@@ -232,7 +232,7 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
                                                 'specialPages'     => $specialPages,
                                                  // 'includeEditorials'    => (((count($pages->toArray()) + count($specialPages->toArray())) > 1) ? false : true),
                                                 'includeEditorials' => ((count($pages->toArray()) > 1) ? false : true),
-                                                'pagesOrder'       => $pagesOrderArray,
+                                                'pagesOrder'       => implode(',', $pagesOrderArray),
                                                 'maxItemsPerTopic' => $itemsPerTopic,
                                                 'pageTypeMore'     => $settings['settings']['webViewPageNum'],
                                                 'webView'          => false,
