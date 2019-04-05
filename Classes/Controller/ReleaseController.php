@@ -245,7 +245,7 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * action test
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
-     * @param string $email
+     * @param string $emails
      * @param string $title
      * @param int myTopicsOnly
      * @return void
@@ -257,18 +257,26 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      * @ignorevalidation $issue
      */
-    public function testAction(\RKW\RkwNewsletter\Domain\Model\Issue $issue, $email, $title = null, $myTopicsOnly = 0)
+    public function testAction(\RKW\RkwNewsletter\Domain\Model\Issue $issue, $emails, $title = null, $myTopicsOnly = 0)
     {
 
-        $validateEmail = $this->validatorHelper->email($email);
-        if ($validateEmail->hasErrors()) {
-            $this->addFlashMessage(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(
-                'releaseController.error.emailIncorrect',
-                'rkw_newsletter'
-            ), '', \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
+        $emailList = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $emails);
+        foreach ($emailList as $email) {
+            $validateEmail = $this->validatorHelper->email($email);
+            if ($validateEmail->hasErrors()) {
+                $this->addFlashMessage(
+                    \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(
+                        'releaseController.error.emailIncorrect',
+                        'rkw_newsletter',
+                        [$email]
+                    ),
+                    '',
+                    \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR
+                );
 
-            $this->forward("testList");
-            //===
+                $this->forward("testList");
+                //===
+            }
         }
 
         /** @var \RKW\RkwNewsletter\Domain\Model\BackendUser $backendUser */
@@ -286,7 +294,7 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             // $specialPages = $this->pagesRepository->findAllByIssueAndBackendUserAndSpecialTopic($issue, $backendUser, true);
         }
 
-        $this->getSignalSlotDispatcher()->dispatch(__CLASS__, self::SIGNAL_FOR_SENDING_MAIL_TEST, array($backendUser, $email, $issue, $pages, $specialPages, $title));
+        $this->getSignalSlotDispatcher()->dispatch(__CLASS__, self::SIGNAL_FOR_SENDING_MAIL_TEST, array($backendUser, $emailList, $issue, $pages, $specialPages, $title));
 
         $this->addFlashMessage(
             \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(

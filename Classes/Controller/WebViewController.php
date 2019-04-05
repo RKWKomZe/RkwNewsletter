@@ -64,18 +64,19 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * action show
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
-     * @param array $pagesOrder
+     * @param string $pagesOrder
      * @return void
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
-    public function showAction(\RKW\RkwNewsletter\Domain\Model\Issue $issue, $pagesOrder = array ())
+    public function showAction(\RKW\RkwNewsletter\Domain\Model\Issue $issue, $pagesOrder = '')
     {
 
         // check for queueMailId and queueRecipientId as params from redirection
         $rkwMailerParams = \TYPO3\CMS\Core\Utility\GeneralUtility::_GP('tx_rkwmailer');
         $queueMailId = intval($rkwMailerParams['mid']);
         $queueRecipientId = intval($rkwMailerParams['uid']);
+        $pagesOrder = preg_replace('/[^0-9,]+/', '', $pagesOrder);
 
         // set default recipient based on FE-language settings – just in case
         /** @var \RKW\RkwMailer\Domain\Model\QueueRecipient $queueRecipient */

@@ -85,7 +85,7 @@
 				<source>Wohoo! The newsletter issue has been successfully released for dispatch..</source>
 			</trans-unit>
             <trans-unit id="releaseController.error.emailIncorrect">
-				<source>Oh no! The given E-Mail address seems to be incorrect. Please check and try again.</source>
+				<source>Oh no! The given E-Mailaddress "%s" seems to be incorrect. Please check and try again.</source>
 			</trans-unit>
             <trans-unit id="releaseController.error.unexpected">
                 <source>Oh no! An unexpected error occurred. Please contact your trusted administrator.</source>

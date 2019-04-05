@@ -3,6 +3,7 @@
 namespace RKW\RkwNewsletter\Service;
 
 use \RKW\RkwBasics\Helper\Common;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 /*
@@ -301,7 +302,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
      * Send newsletter test mail to one backend user
      *
      * @param \RKW\RkwNewsletter\Domain\Model\BackendUser $admin
-     * @param string $email
+     * @param array $emailList
      * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
      * @param \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $pages
      * @param \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $specialPages
@@ -314,7 +315,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
      * @throws \TYPO3\CMS\Fluid\View\Exception\InvalidTemplateResourceException
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
-    public function sendTestMail(\RKW\RkwNewsletter\Domain\Model\BackendUser $admin, $email, \RKW\RkwNewsletter\Domain\Model\Issue $issue, \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $pages, \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $specialPages, $title = null)
+    public function sendTestMail(\RKW\RkwNewsletter\Domain\Model\BackendUser $admin, $emailList, \RKW\RkwNewsletter\Domain\Model\Issue $issue, \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $pages, \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $specialPages, $title = null)
     {
         // get settings
         $settings = $this->getSettings(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
@@ -340,37 +341,41 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
                 $pagesOrderArray[] = $page->getUid();
             }
 
-            // send new user an email with token
-            $mailService->setTo(
-                array(
-                    'salutation'   => 1,
-                    'firstName'    => 'Sabine',
-                    'lastName'     => 'Mustermann',
-                    'title'        => 'Prof. Dr. Dr.',
-                    'email'        => $email,
-                    'languageCode' => $admin->getLang(),
-                ),
-                array(
-                    'marker'  => array(
-                        'issue'             => $issue,
-                        'pages'             => $pages,
-                        'specialPages'      => $specialPages,
-                        // 'includeEditorials'    => (((count($pages->toArray()) + count($specialPages->toArray())) > 1) ? false : true),
-                        'includeEditorials' => ((count($pages->toArray()) > 1) ? false : true),
-                        'pagesOrder'        => $pagesOrderArray,
-                        'admin'             => $admin,
-                        'pageTypeMore'      => $settings['settings']['webViewPageNum'],
-                        'webView'           => false,
-                        'maxItemsPerTopic'  => $itemsPerTopic,
-                        'settings'          => $settingsDefault,
+            foreach ($emailList as $email) {
+
+                // send new user an email with token
+                $mailService->setTo(
+                    array(
+                        'salutation'   => 1,
+                        'firstName'    => 'Sabine',
+                        'lastName'     => 'Mustermann',
+                        'title'        => 'Prof. Dr. Dr.',
+                        'email'        => $email,
+                        'languageCode' => $admin->getLang(),
                     ),
-                    'subject' => \RKW\RkwMailer\Helper\FrontendLocalization::translate(
-                        'rkwMailService.subject.testMail',
-                        'rkw_newsletter',
-                        array('subject' => ($title ? $title : $issue->getTitle())),
-                        $admin->getLang()
-                    ),
-                ));
+                    array(
+                        'marker'  => array(
+                            'issue'             => $issue,
+                            'pages'             => $pages,
+                            'specialPages'      => $specialPages,
+                            // 'includeEditorials'    => (((count($pages->toArray()) + count($specialPages->toArray())) > 1) ? false : true),
+                            'includeEditorials' => ((count($pages->toArray()) > 1) ? false : true),
+                            'pagesOrder'        => implode(',', $pagesOrderArray),
+                            'admin'             => $admin,
+                            'pageTypeMore'      => $settings['settings']['webViewPageNum'],
+                            'webView'           => false,
+                            'maxItemsPerTopic'  => $itemsPerTopic,
+                            'settings'          => $settingsDefault,
+                        ),
+                        'subject' => \RKW\RkwMailer\Helper\FrontendLocalization::translate(
+                            'rkwMailService.subject.testMail',
+                            'rkw_newsletter',
+                            array('subject' => ($title ? $title : $issue->getTitle())),
+                            $admin->getLang()
+                        ),
+                    )
+                );
+            }
 
             $mailService->getQueueMail()->setSettingsPid($issue->getNewsletter()->getSettingsPage()->getUid());
             $mailService->getQueueMail()->setSubject(
