@@ -331,7 +331,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
 
             // if there is only one topic-page included, show all contents
             $itemsPerTopic = ($settings['settings']['maxItemsPerTopic'] ? intval($settings['settings']['maxItemsPerTopic']) : 5);
-            if (count($pages) == 1) {
+            if (count($pages->toArray()) == 1) {
                 $itemsPerTopic = 999;
             }
 
@@ -358,20 +358,13 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
                             'issue'             => $issue,
                             'pages'             => $pages,
                             'specialPages'      => $specialPages,
-                            // 'includeEditorials'    => (((count($pages->toArray()) + count($specialPages->toArray())) > 1) ? false : true),
-                            'includeEditorials' => ((count($pages->toArray()) > 1) ? false : true),
                             'pagesOrder'        => implode(',', $pagesOrderArray),
                             'admin'             => $admin,
-                            'pageTypeMore'      => $settings['settings']['webViewPageNum'],
+                            'includeEditorials' => ((count($pages->toArray()) > 1) ? false : true),
                             'webView'           => false,
                             'maxItemsPerTopic'  => $itemsPerTopic,
-                            'settings'          => $settingsDefault,
-                        ),
-                        'subject' => \RKW\RkwMailer\Helper\FrontendLocalization::translate(
-                            'rkwMailService.subject.testMail',
-                            'rkw_newsletter',
-                            array('subject' => ($title ? $title : $issue->getTitle())),
-                            $admin->getLang()
+                            'pageTypeMore'      => $settings['settings']['webViewPageNum'],
+                            'subscriptionPid'   => $settings['settings']['subscriptionPid'],
                         ),
                     )
                 );

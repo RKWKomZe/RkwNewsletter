@@ -163,7 +163,7 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
             $settings = $this->getSettings(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
             $settingsDefault = $this->getSettings();
 
-            // if there is only one topic-page included, show all contents
+                // if there is only one topic-page included, show all contents
             $itemsPerTopic = ($settings['settings']['maxItemsPerTopic'] ? intval($settings['settings']['maxItemsPerTopic']) : 5);
 
             if (count($issues)) {
@@ -218,7 +218,7 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
                                 if (count($pages) > 0) {
 
                                     // override itemsPerTopic
-                                    if (count($pages) == 1) {
+                                    if (count($pages->toArray()) == 1) {
                                         $itemsPerTopic = 9999;
                                     }
 
@@ -227,17 +227,16 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
                                         $frontendUser,
                                         array(
                                             'marker'  => array(
-                                                'issue'            => $issue,
-                                                'pages'            => $pages,
-                                                'specialPages'     => $specialPages,
-                                                 // 'includeEditorials'    => (((count($pages->toArray()) + count($specialPages->toArray())) > 1) ? false : true),
+                                                'issue'             => $issue,
+                                                'pages'             => $pages,
+                                                'specialPages'      => $specialPages,
+                                                'pagesOrder'        => implode(',', $pagesOrderArray),
                                                 'includeEditorials' => ((count($pages->toArray()) > 1) ? false : true),
-                                                'pagesOrder'       => implode(',', $pagesOrderArray),
-                                                'maxItemsPerTopic' => $itemsPerTopic,
-                                                'pageTypeMore'     => $settings['settings']['webViewPageNum'],
-                                                'webView'          => false,
-                                                'settings'         => $settingsDefault,
-                                                'hash'             => $frontendUser->getTxRkwnewsletterHash(),
+                                                'webView'           => false,
+                                                'maxItemsPerTopic'  => $itemsPerTopic,
+                                                'pageTypeMore'      => $settings['settings']['webViewPageNum'],
+                                                'subscriptionPid'   => $settings['settings']['subscriptionPid'],
+                                                'hash'              => $frontendUser->getTxRkwnewsletterHash()
                                             ),
                                             'subject' => $issue->getTitle(),
                                         ),

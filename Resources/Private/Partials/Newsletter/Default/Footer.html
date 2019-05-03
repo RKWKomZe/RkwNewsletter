@@ -7,7 +7,7 @@
 ----------------------------------------------------------------------------------------------------------------------------------
 <f:if condition="{hash}">
 <rkwMailer:frontend.translate key="partials_newsletter_footer.subscriptionText" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />
-<rkwMailer:frontend.translate key="partials_newsletter_footer.subscriptionLink" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />: <rkwMailer:frontend.link action="edit" controller="Subscription" extensionName="rkwNewsletter" pluginName="Subscription" pageUid="{settings.subscriptionPid}" absolute="true" queueMail="{queueMail}" queueRecipient="{queueRecipient}" arguments="{hash: hash}" noCacheHash="true" />
+<rkwMailer:frontend.translate key="partials_newsletter_footer.subscriptionLink" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />: <rkwMailer:frontend.link action="edit" controller="Subscription" extensionName="rkwNewsletter" pluginName="Subscription" pageUid="{subscriptionPid}" absolute="true" queueMail="{queueMail}" queueRecipient="{queueRecipient}" arguments="{hash: hash}" noCacheHash="true" />
 
 </f:if>
 RKW Rationalisierungs- und Innovationszentrum der Deutschen Wirtschaft e.V.
@@ -36,7 +36,7 @@ www.rkw-kompetenzzentrum.de
 			<td style="padding: 0 16px 32px 16px">
 				<p style="font-family: 'Arial', sans-serif; font-size: 14px; line-height: 20px; font-weight:700">
 					<rkwMailer:frontend.translate key="partials_newsletter_footer.subscriptionText" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />
-					<a style="color:#E64415;" href="<rkwMailer:frontend.link action='edit' controller='Subscription' extensionName='rkwNewsletter' pluginName='Subscription' pageUid='{settings.subscriptionPid}' absolute='true' queueMail='{queueMail}' queueRecipient='{queueRecipient}' arguments='{hash: hash}' noCacheHash='true' />" target="_blank"><rkwMailer:frontend.translate key="partials_newsletter_footer.subscriptionLink" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" /></a>
+					<a style="color:#E64415;" href="<rkwMailer:frontend.link action='edit' controller='Subscription' extensionName='rkwNewsletter' pluginName='Subscription' pageUid='{subscriptionPid}' absolute='true' queueMail='{queueMail}' queueRecipient='{queueRecipient}' arguments='{hash: hash}' noCacheHash='true' />" target="_blank"><rkwMailer:frontend.translate key="partials_newsletter_footer.subscriptionLink" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" /></a>
 				</p>
 			</td>
 		</tr>
