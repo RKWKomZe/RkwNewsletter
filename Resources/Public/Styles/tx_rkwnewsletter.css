@@ -20,6 +20,9 @@ table.tx-rkwnewsletter-list td {
 	padding: 8px;
 	border: 0;
 }
+table.tx-rkwnewsletter-list input {
+    width:350px;
+}
 
 table.tx-rkwnewsletter-list table.tx-rkwnewsletter-list__inner {
     width:100%;

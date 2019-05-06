@@ -105,6 +105,14 @@
 				<source>Wohoo! The newsletter issue has been successfully released for dispatch..</source>
 				<target>Wohoo! Die Newsletter-Ausgabe wurde erfolgreich zum Versand freigegeben.</target>
 			</trans-unit>
+            <trans-unit id="releaseController.warning.checkTitle">
+                <source>The subject of the newsletter should ideally be between 40 and 60 characters long and motivate the user to read the newsletter (call-to-action). Please check the subject again before sending the newsletter.</source>
+                <target>Der Betreff des Newsletters sollte im Idealfall zwischen 40 und 60 Zeichen lang sein und den Nutzer dazu motivieren, den Newsletter zu lesen (Call-To-Action). Bitte prüfen Sie den gesetzten Betreff vor dem Versand noch einmal.</target>
+            </trans-unit>
+            <trans-unit id="releaseController.error.selectIssue">
+                <source>Please first select a newsletter issue that you would like to send.</source>
+                <target>Bitte wählen Sie zunächst eine Newsletterausgabe aus, deren Versand Sie starten möchten.</target>
+            </trans-unit>
             <trans-unit id="releaseController.error.emailIncorrect">
 				<source>Oh no! The given E-Mail-address "%s" seems to be incorrect. Please check and try again.</source>
 				<target>Upps! Die angegebene E-Mail-Adresse "%s" scheint nicht korrekt zu sein. Bitte prüfen Sie die Angabe und versuchen Sie es erneut.</target>
@@ -113,7 +121,8 @@
                 <source>Oh no! An unexpected error occurred. Please contact your trusted administrator.</source>
                 <target>Upps! Ein unerwarteter Fehler ist aufgetreten. Bitte wenden Sie sich an den Administrator Ihres Vertrauens.</target>
             </trans-unit>
-            
+
+
             
             <!-- subscriptionController -->
             <trans-unit id="subscriptionController.message.optInCreated">
@@ -283,8 +292,8 @@
 				<target>Hier finden Sie alle Newsletterausgaben, für die Sie als verantwortlicher Redakteur eingetragen sind. Sie können hier einen Testversand an Ihre E-Mailadresse anstoßen. Dabei können Sie entscheiden, ob der Testversand alle Themen berücksichtigen soll oder nur die Themen, für die Sie als Redakteur eingetragen sind.</target>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_testList.title">
-				<source>Title</source>
-				<target>Titel</target>
+				<source>Subject</source>
+				<target>Betreff</target>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_testList.email">
 				<source>E-Mail</source>
@@ -307,16 +316,16 @@
 
             <!-- Templates/Backend/Release/sendList.html -->
 			<trans-unit id="templates_backend_release_sendList">
-				<source>Dispatching</source>
-				<target>Versand</target>
+				<source>Dispatching (Step 1/2)</source>
+				<target>Versand (Schritt 1/2)</target>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_sendList.description">
 				<source>Here you will find all newsletter issues which you can start as responsible editor. Please note that the dispatch is staggered.</source>
-				<target>Hier finden Sie alle Newsletterausgaben, deren Versand Sie als verantwortlicher Redakteur starten können. Bitte beachten Sie, dass der Versand gestaffelt erfolgt.</target>
+				<target>Hier finden Sie alle Newsletterausgaben, deren Versand Sie als verantwortlicher Redakteur starten können.</target>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_sendList.title">
-				<source>Title</source>
-				<target>Titel</target>
+				<source>Subject</source>
+				<target>Betreff</target>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_sendList.subscriptions">
 				<source>Subscription</source>
@@ -334,6 +343,43 @@
 				<source>Go!</source>
 				<target>Los!</target>
 			</trans-unit>
+
+
+
+            <!-- Templates/Backend/Release/sendConfirm.html -->
+			<trans-unit id="templates_backend_release_sendConfirm">
+				<source>Confirmation for Dispatching (Step 2/2)</source>
+				<target>Bestätigung des Versands (Schritt 2/2)</target>
+			</trans-unit>
+			<trans-unit id="templates_backend_release_sendConfirm.description">
+				<source>Please confirm below the dispatch of the selected newsletter. Please also check the subject of the newsletter and adjust it if necessary. Please note that the dispatch is staggered, i.e. the recipients may receive the newsletter at different times.</source>
+				<target>Bitte bestätigen Sie untenstehend den Versand des ausgewählten Newsletters. Bitte prüfen Sie auch den Betreff des Newsletters und passen Sie diesen ggf. noch an. Bitte beachten Sie, dass der Versand gestaffelt erfolgt; die Empfänger den Newsletter also gegebenenfalls zeitlich versetzt erhalten.</target>
+			</trans-unit>
+			<trans-unit id="templates_backend_release_sendConfirm.title">
+				<source>Subject</source>
+				<target>Betreff</target>
+			</trans-unit>
+			<trans-unit id="templates_backend_release_sendConfirm.subscriptions">
+				<source>Subscription</source>
+				<target>Abonnenten</target>
+			</trans-unit>
+			<trans-unit id="templates_backend_release_sendConfirm.subscriptionsAll">
+				<source>All</source>
+				<target>Gesamt</target>
+			</trans-unit>
+			<trans-unit id="templates_backend_release_sendConfirm.subscriptionsAmong">
+				<source>among them</source>
+				<target>darunter</target>
+			</trans-unit>
+			<trans-unit id="templates_backend_release_sendConfirm.go">
+				<source>I am sure: Go!</source>
+				<target>Ich bin ganz sicher: Los!</target>
+			</trans-unit>
+			<trans-unit id="templates_backend_release_sendConfirm.cancel">
+				<source>Cancel</source>
+				<target>Abbrechen</target>
+			</trans-unit>
+
 
 
 			<!-- ##################### -->

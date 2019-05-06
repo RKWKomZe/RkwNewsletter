@@ -63,6 +63,7 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     /**
      * action show
      *
+     * @ignorevalidation $issue
      * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
      * @param string $pagesOrder
      * @return void

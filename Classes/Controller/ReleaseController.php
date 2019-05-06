@@ -138,12 +138,12 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $issuesOpenApprovalStage2List = $this->issueRepository->findAllToApproveOnStage2ByBackendUser(intval($GLOBALS['BE_USER']->user['uid']));
 
         $this->view->assignMultiple(
-            array(
+            [
                 'issuesOpenApprovalStage1List' => $issuesOpenApprovalStage1List,
                 'issuesOpenApprovalStage2List' => $issuesOpenApprovalStage2List,
                 'backendUserId'                => intval($GLOBALS['BE_USER']->user['uid']),
                 'backendUserName'              => $GLOBALS['BE_USER']->user['realName'],
-            )
+            ]
         );
     }
 
@@ -232,11 +232,11 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
         $issues = $this->issueRepository->findAllToApproveOrReleaseByBackendUser(intval($GLOBALS['BE_USER']->user['uid']));
         $this->view->assignMultiple(
-            array(
+           [
                 'settings'    => $this->settings,
                 'issues'      => $issues,
                 'backendUser' => $backendUser,
-            )
+           ]
         );
     }
 
@@ -312,25 +312,92 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     /**
      * action sendList
      *
+     * @param \RKW\RkwNewsletter\Domain\Model\Issue $confirmIssue
      * @return void
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      */
-    public function sendListAction()
+    public function sendListAction($confirmIssue = null)
     {
 
         $issues = $this->issueRepository->findAllToSendByBackendUser(intval($GLOBALS['BE_USER']->user['uid']));
         $this->view->assignMultiple(
-            array(
+            [
                 'issues'          => $issues,
+                'confirmIssue'    => $confirmIssue,
                 'backendUserId'   => intval($GLOBALS['BE_USER']->user['uid']),
                 'backendUserName' => $GLOBALS['BE_USER']->user['realName'],
-            )
+            ]
         );
+    }
+
+    /**
+     * action sendConfirm
+     *
+     * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
+     * @param string $title
+     * @return void
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @ignorevalidation $issue
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
+     */
+    public function sendConfirmAction(\RKW\RkwNewsletter\Domain\Model\Issue $issue = null, $title = null)
+    {
+
+        // check for issue
+        if (! $issue) {
+
+            $this->addFlashMessage(
+                \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(
+                    'releaseController.error.selectIssue',
+                    'rkw_newsletter'
+                ),
+                '',
+                \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR
+            );
+
+            $this->redirect('sendList');
+            //===
+        }
+
+        // check title
+        if (
+            ($title == $issue->getTitle())
+            || (
+                (strlen($title ) < 40)
+                || (strlen($title ) > 60)
+            )
+        ) {
+
+            $this->addFlashMessage(
+                \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(
+                    'releaseController.warning.checkTitle',
+                    'rkw_newsletter'
+                ),
+                '',
+                \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING
+            );
+        }
+
+        // set title
+        $issue->setTitle($title);
+        $this->issueRepository->update($issue);
+
+
+        $this->view->assignMultiple(
+            [
+                'issue' => $issue,
+            ]
+        );
+
     }
 
 
     /**
-     * action test
+     * action send
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
      * @param string $title
