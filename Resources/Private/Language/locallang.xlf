@@ -84,6 +84,12 @@
 			<trans-unit id="releaseController.message.sendingStarted">
 				<source>Wohoo! The newsletter issue has been successfully released for dispatch..</source>
 			</trans-unit>
+            <trans-unit id="releaseController.warning.checkTitle">
+                <source>The subject of the newsletter should ideally be between 40 and 60 characters long and motivate the user to read the newsletter (call-to-action). Please check the subject again before sending the newsletter.</source>
+            </trans-unit>
+            <trans-unit id="releaseController.error.selectIssue">
+                <source>Please first select a newsletter issue that you would like to send.</source>
+            </trans-unit>
             <trans-unit id="releaseController.error.emailIncorrect">
 				<source>Oh no! The given E-Mailaddress "%s" seems to be incorrect. Please check and try again.</source>
 			</trans-unit>
@@ -224,7 +230,7 @@
 				<source>Here you will find all newsletter issues for which you are registered as the responsible editor. Here you can send a test to your e-mail address. You can decide whether the test mailing should cover all topics or only the topics for which you are registered as an editor.</source>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_testList.title">
-				<source>Title</source>
+				<source>Subject</source>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_testList.email">
 				<source>E-Mail</source>
@@ -243,13 +249,13 @@
 
             <!-- Templates/Backend/Release/sendList.html -->
 			<trans-unit id="templates_backend_release_sendList">
-				<source>Dispatching</source>
+				<source>Dispatching (Step 1/2)</source>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_sendList.description">
-				<source>Here you will find all newsletter issues which you can start as responsible editor. Please note that the dispatch is staggered.</source>
+				<source>Here you will find all newsletter issues which you can start as responsible editor.</source>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_sendList.title">
-				<source>Title</source>
+				<source>Subject</source>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_sendList.subscriptions">
 				<source>Subscription</source>
@@ -262,6 +268,33 @@
 			</trans-unit>
 			<trans-unit id="templates_backend_release_sendList.go">
 				<source>Go!</source>
+			</trans-unit>
+
+
+            <!-- Templates/Backend/Release/sendConfirm.html -->
+			<trans-unit id="templates_backend_release_sendConfirm">
+				<source>Confirmation for Dispatching (Step 2/2)</source>
+		    </trans-unit>
+			<trans-unit id="templates_backend_release_sendConfirm.description">
+				<source>Please confirm below the dispatch of the selected newsletter. Please also check the subject of the newsletter and adjust it if necessary. Please note that the dispatch is staggered, i.e. the recipients may receive the newsletter at different times.</source>
+			</trans-unit>
+			<trans-unit id="templates_backend_release_sendConfirm.title">
+				<source>Subject</source>
+			</trans-unit>
+			<trans-unit id="templates_backend_release_sendConfirm.subscriptions">
+				<source>Subscription</source>
+			</trans-unit>
+			<trans-unit id="templates_backend_release_sendConfirm.subscriptionsAll">
+				<source>All</source>
+			</trans-unit>
+			<trans-unit id="templates_backend_release_sendConfirm.subscriptionsAmong">
+				<source>among them</source>
+			</trans-unit>
+			<trans-unit id="templates_backend_release_sendConfirm.go">
+				<source>I am sure: Go!</source>
+			</trans-unit>
+			<trans-unit id="templates_backend_release_sendConfirm.cancel">
+				<source>Cancel</source>
 			</trans-unit>
 
 

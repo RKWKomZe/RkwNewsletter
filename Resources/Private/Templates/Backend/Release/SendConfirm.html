@@ -1,0 +1,63 @@
+{namespace rkwNewsletter=RKW\RkwNewsletter\ViewHelpers}
+<f:layout name="Default" />
+
+This Template is responsible for creating a table of domain objects.
+
+If you modify this template, do not forget to change the overwrite settings
+in /Configuration/ExtensionBuilder/settings.yaml:
+  Resources:
+    Private:
+      Templates:
+        List.html: keep
+
+Otherwise your changes will be overwritten the next time you save the extension in the extension builder
+
+<f:section name="content">
+	<h1>
+		<f:translate key="templates_backend_release_sendConfirm" />
+	</h1>
+    
+    <p class="tx-rkwnewsletter-description"><f:translate key="templates_backend_release_sendConfirm.description" /></p>
+
+	<f:flashMessages />
+
+    <table class="tx-rkwnewsletter-list">
+        <tr>
+            <th>
+                <f:translate key="templates_backend_release_sendConfirm.title" />
+            </th>
+            <th>
+                <f:translate key="templates_backend_release_sendConfirm.subscriptions" />
+            </th>
+            <th>
+                <f:translate key="templates_backend_release_sendConfirm.action"  />
+            </th>
+        </tr>
+
+        <f:form action="send" name="issue" object="{issue}" >
+            <tr>
+                <td><f:form.textfield name="title" value="{issue.title}" /></td>
+                <td>
+                    <strong><f:translate key="templates_backend_release_sendConfirm.subscriptionsAll" />: <rkwNewsletter:getNumberOfSubscriptions issue="{issue}" /></strong>, <f:translate key="templates_backend_release_sendConfirm.subscriptionsAmong" />:
+                    <f:for each="{issue.newsletter.topic}" as="topic">
+                        <f:if condition="{topic.isSpecial}">
+                            <f:else>
+                                <rkwNewsletter:getNumberOfSubscriptions issue="{issue}" topic="{topic}"/> x {topic.name} /
+                            </f:else>
+                        </f:if>
+                    </f:for>
+                </td>
+                <td>
+                    <f:link.action action="sendList" arguments="{issue : issue}">
+                        <f:translate key="templates_backend_release_sendConfirm.cancel"  />
+                    </f:link.action>
+                    <f:form.button type="submit" >
+                        <f:translate key="templates_backend_release_sendConfirm.go"  />
+                    </f:form.button>
+                </td>
+            </tr>
+        </f:form>
+    </table>
+
+
+</f:section>
