@@ -142,6 +142,7 @@ CREATE TABLE tx_rkwnewsletter_domain_model_issue (
 # Table structure for table 'fe_users'
 #
 CREATE TABLE fe_users (
+  tx_rkwnewsletter_priority tinyint(4) DEFAULT '0' NOT NULL,
   tx_rkwnewsletter_subscription varchar(255) DEFAULT '' NOT NULL,
   tx_rkwnewsletter_hash varchar(255) DEFAULT '' NOT NULL,
 );
@@ -179,7 +180,7 @@ CREATE TABLE pages_language_overlay (
 CREATE TABLE tt_content (
 
 	tx_rkwnewsletter_authors varchar(255) DEFAULT '' NOT NULL,
-	tx_rkwnewsletter_is_editorial tinyint DEFAULT '0' NOT NULL,
+	tx_rkwnewsletter_is_editorial tinyint(4) DEFAULT '0' NOT NULL,
 
 );
 

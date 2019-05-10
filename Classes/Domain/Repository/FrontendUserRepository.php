@@ -71,6 +71,10 @@ class FrontendUserRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             )
         );
 
+        $query->setOrderings(
+            ['txRkwnewsletterPriority' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING]
+        );
+
         return $query->execute();
         //====
     }
