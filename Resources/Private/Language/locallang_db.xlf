@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
-	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2014-08-01T14:10:48Z" product-name="rkw_energyfounder">
+	<file source-language="en" datatype="plaintext" original="messages" date="2015-04-09T13:46:25Z" product-name="rkw_newsletter">
 		<header/>
 		<body>
 
@@ -217,7 +217,7 @@
 			</trans-unit>
 			<trans-unit id="tx_rkwnewsletter_domain_model_issue.sent_tstamp">
 				<source>Issue Sent</source>
-			</trans-unit>
+            </trans-unit>
 
 
             <!-- ##################################################### -->
@@ -242,13 +242,13 @@
 				<source>Exclude From Sendings</source>
 			</trans-unit>
 			<trans-unit id="pages.tx_rkwnewsletter_teaser_heading">
-				<source>Teaser-Headline</source>
+				<source>Teaser-Headline (optional)</source>
 			</trans-unit>
             <trans-unit id="pages.tx_rkwnewsletter_teaser_image">
                 <source>Teaser-Image (optional)</source>
             </trans-unit>
 			<trans-unit id="pages.tx_rkwnewsletter_teaser_text">
-				<source>Teaser-Text</source>
+				<source>Teaser-Text (optional)</source>
 			</trans-unit>
 			<trans-unit id="pages.tx_rkwnewsletter_teaser_link">
 				<source>Link (optional)</source>
@@ -275,6 +275,9 @@
             <!-- ##################################################### -->
 			<trans-unit id="fe_user.tx_rkwnewsletter_domain_model_subscription">
                 <source>Topics</source>
+            </trans-unit>
+			<trans-unit id="fe_user.tx_rkwnewsletter_priority">
+                <source>Priority</source>
             </trans-unit>
 		</body>
 	</file>

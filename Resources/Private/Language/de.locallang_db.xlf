@@ -366,6 +366,10 @@
                 <source>Topics</source>
                 <target>Themen</target>
             </trans-unit>
+			<trans-unit id="fe_user.tx_rkwnewsletter_priority">
+                <source>Priority</source>
+                <target>Prioritär anschreiben</target>
+            </trans-unit>
 		</body>
 	</file>
 </xliff>
