@@ -50,6 +50,13 @@ plugin.tx_rkwnewsletter {
         # cat=plugin.tx_rkwnewsletter//a; type=string; label=Required fields for subscription
         requiredFieldsSubscription = txRkwregistrationGender, firstName, lastName
 
+        # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Maximum teaser length
+        minTeaserLength = 500
+
+        # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Minimum teaser length
+        maxTeaserLength = 900
+
+
         pages {
             # permissions for pages elements
             permissions {

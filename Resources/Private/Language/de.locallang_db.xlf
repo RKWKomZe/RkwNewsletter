@@ -320,16 +320,16 @@
 				<target state="translated">Vom Versand ausschließen</target>
 			</trans-unit>
 			<trans-unit id="pages.tx_rkwnewsletter_teaser_heading">
-				<source>Teaser-Headline (optional)</source>
-				<target state="translated">Teaser-Überschrift (optional)</target>
+				<source>Teaser-Headline</source>
+				<target state="translated">Teaser-Überschrift</target>
 			</trans-unit>
             <trans-unit id="pages.tx_rkwnewsletter_teaser_image">
                 <source>Teaser-Image (optional)</source>
                 <target state="translated">Teaser-Image (optional)</target>
             </trans-unit>
 			<trans-unit id="pages.tx_rkwnewsletter_teaser_text">
-				<source>Teaser-Text (optional)</source>
-				<target state="translated">Teaser-Text (optional)</target>
+				<source>Teaser-Text</source>
+				<target state="translated">Teaser-Text</target>
 			</trans-unit>
 			<trans-unit id="pages.tx_rkwnewsletter_teaser_link">
 				<source>Link (optional)</source>

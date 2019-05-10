@@ -127,6 +127,9 @@ plugin.tx_rkwnewsletter {
 
         requiredFieldsSubscription = {$plugin.tx_rkwnewsletter.settings.requiredFieldsSubscription}
 
+        minTeaserLength = {$plugin.tx_rkwnewsletter.settings.minTeaserLength}
+        maxTeaserLength = {$plugin.tx_rkwnewsletter.settings.maxTeaserLength}
+
         pages {
             permissions {
                 stage1 {
@@ -251,7 +254,6 @@ txRkwNewsletterWebView {
         config.htmlTag_setParams = xmlns="http://www.w3.org/1999/xhtml" style="background: #ffffff;"
         metaCharset = utf-8
         noPageTitle = 1
-        prefixLocalAnchors = all
     }
 
     headerData {

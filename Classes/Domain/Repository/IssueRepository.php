@@ -199,8 +199,8 @@ class IssueRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query->matching(
             $query->logicalAnd(
                 $query->equals('status', 3),
-                $query->equals('sentTstamp', 0),
-                $query->logicalNot($query->equals('recipients', ''))
+                $query->equals('sentTstamp', 0)
+                // $query->logicalNot($query->equals('recipients', ''))
             )
         );
 
