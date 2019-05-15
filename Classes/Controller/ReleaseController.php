@@ -246,6 +246,7 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
      * @param string $emails
+     * @param \RKW\RkwNewsletter\Domain\Model\Topic $topic
      * @param string $title
      * @param int myTopicsOnly
      * @return void
@@ -257,7 +258,7 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      * @ignorevalidation $issue
      */
-    public function testAction(\RKW\RkwNewsletter\Domain\Model\Issue $issue, $emails, $title = null, $myTopicsOnly = 0)
+    public function testAction(\RKW\RkwNewsletter\Domain\Model\Issue $issue, $emails, \RKW\RkwNewsletter\Domain\Model\Topic $topic = null, $title = null)
     {
 
         $emailList = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $emails);
@@ -289,8 +290,8 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $specialPages = $this->pagesRepository->findAllByIssueAndSpecialTopic($issue, true);
 
         // if user wants his topics only, we need only their pages!
-        if ($myTopicsOnly) {
-            $pages = $this->pagesRepository->findAllByIssueAndBackendUserAndSpecialTopic($issue, $backendUser);
+        if ($topic) {
+            $pages = $this->pagesRepository->findAllByIssueAndTopic($issue, $topic);
             // $specialPages = $this->pagesRepository->findAllByIssueAndBackendUserAndSpecialTopic($issue, $backendUser, true);
         }
 

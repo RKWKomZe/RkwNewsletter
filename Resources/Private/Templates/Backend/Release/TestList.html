@@ -43,12 +43,10 @@ Otherwise your changes will be overwritten the next time you save the extension 
                         <td><f:form.textfield name="title" value="{issue.title}" /></td>
                         <td><f:form.textfield name="emails" value="{backendUser.email}" /></td>
                         <td>
-                            <f:form.button type="submit" name="myTopicsOnly" value="1">
-                                <f:translate key="templates_backend_release_testList.go"  />
-                            </f:form.button>
+                            <f:form.select additionalAttributes="{onchange : 'this.form.submit()'}" name="topic" options="{issue.newsletter.topic}" optionValueField="uid" optionLabelField="name" prependOptionValue="0" prependOptionLabel="{f:translate(key:'templates_backend_release_testList.pleaseSelect')}" />
                         </td>
                         <td>
-                            <f:form.button type="submit" name="myTopicsOnly" value="0">
+                            <f:form.button type="submit">
                                 <f:translate key="templates_backend_release_testList.go"  />
                             </f:form.button>
                         </td>
