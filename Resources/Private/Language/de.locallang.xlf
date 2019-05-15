@@ -300,8 +300,8 @@
 				<target>E-Mail</target>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_testList.deliveryMyTopics">
-				<source>Test delivery my topics</source>
-				<target>Testversand meine Themen</target>
+				<source>Test delivery single topics</source>
+				<target>Testversand einzelne Themen</target>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_testList.deliveryAllTopics">
 				<source>Test delivery all topics</source>
@@ -311,7 +311,10 @@
 				<source>Go!</source>
 				<target>Los!</target>
 			</trans-unit>
-
+			<trans-unit id="templates_backend_release_testList.pleaseSelect">
+				<source>Please select</source>
+				<target>Bitte wählen</target>
+			</trans-unit>
 
 
             <!-- Templates/Backend/Release/sendList.html -->

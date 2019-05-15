@@ -68,6 +68,52 @@ class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
 
     /**
+     *  findAllByIssueAndSpecialTopic
+     *
+     * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
+     * @param \RKW\RkwNewsletter\Domain\Model\Topic $topic
+     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
+     */
+    public function findAllByIssueAndTopic(\RKW\RkwNewsletter\Domain\Model\Issue $issue, \RKW\RkwNewsletter\Domain\Model\Topic $topic)
+    {
+
+        $statement = 'SELECT DISTINCT 
+            pages.*
+            FROM pages 
+            LEFT JOIN tx_rkwnewsletter_domain_model_topic 
+                ON 
+                    pages.tx_rkwnewsletter_topic = tx_rkwnewsletter_domain_model_topic.uid 
+            WHERE 
+                (
+                    pages.tx_rkwnewsletter_issue = ' . intval($issue->getUid()) . '
+                    AND pages.tx_rkwnewsletter_topic = ' . intval($topic->getUid()) . '
+                ) 
+                AND (
+                    SELECT COUNT(tt_content.uid) 
+                    FROM tt_content 
+                    WHERE 
+                        tt_content.pid = pages.uid
+                        ' . QueryTypo3::getWhereClauseForEnableFields('tt_content') . '
+                ) >= 1 
+                '. QueryTypo3::getWhereClauseForEnableFields('pages') . '
+                AND 
+                (
+                    1 = 1 ' . QueryTypo3::getWhereClauseForEnableFields('tx_rkwnewsletter_domain_model_topic') . '
+                )
+            LIMIT 1
+        ';
+
+        /** @var \TYPO3\CMS\Extbase\Persistence\QueryInterface $query */
+        $query = $this->createQuery();
+        $query->statement($statement);
+
+        return $query->execute();
+        //===
+    }
+
+
+    /**
      *  findAllByIssueAndBackendUserAndSpecialTopic
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
@@ -76,7 +122,7 @@ class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
-     */
+
     public function findAllByIssueAndBackendUserAndSpecialTopic(\RKW\RkwNewsletter\Domain\Model\Issue $issue, \RKW\RkwNewsletter\Domain\Model\BackendUser $backendUser, $isSpecial = false)
     {
 
@@ -117,13 +163,14 @@ class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         ';
 
 
-        /** @var \TYPO3\CMS\Extbase\Persistence\QueryInterface $query */
+        /** @var \TYPO3\CMS\Extbase\Persistence\QueryInterface $query
         $query = $this->createQuery();
         $query->statement($statement);
 
         return $query->execute();
         //===
     }
+     */
 
     /**
      *  findAllByIssueAndSpecialTopic
@@ -177,6 +224,8 @@ class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $query->execute();
         //===
     }
+
+
 
     /**
      *  findAllByIssueAndSubscriptionAndSpecialTopic

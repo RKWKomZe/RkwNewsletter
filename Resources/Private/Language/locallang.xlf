@@ -236,13 +236,16 @@
 				<source>E-Mail</source>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_testList.deliveryMyTopics">
-				<source>Test delivery my topics</source>
+				<source>Test delivery single topics</source>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_testList.deliveryAllTopics">
 				<source>Test delivery all topics</source>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_testList.go">
 				<source>Go!</source>
+			</trans-unit>
+			<trans-unit id="templates_backend_release_testList.pleaseSelect">
+				<source>Please select</source>
 			</trans-unit>
 
 
