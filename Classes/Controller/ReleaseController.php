@@ -410,6 +410,7 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      * @ignorevalidation $issue
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
+     * @throws \Exception
      */
     public function sendAction(\RKW\RkwNewsletter\Domain\Model\Issue $issue, $title = null)
     {
