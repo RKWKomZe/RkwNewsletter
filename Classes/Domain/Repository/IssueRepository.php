@@ -13,7 +13,6 @@ namespace RKW\RkwNewsletter\Domain\Repository;
  *
  * The TYPO3 project - inspiring people to share!
  */
-use RKW\RkwBasics\Helper\QueryTypo3;
 
 /**
  * IssueRepository
