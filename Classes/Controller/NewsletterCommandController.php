@@ -78,6 +78,7 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
      */
     protected $logger;
 
+
     /**
      * Debug switch
      *
