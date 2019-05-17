@@ -214,7 +214,7 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
 
                                     // check if hash-value exists - may be relevant for imports via MySQL
                                     if (!$frontendUser->getTxRkwnewsletterHash()) {
-                                        $hash = sha1($frontendUser->getEmail() . rand());
+                                        $hash = sha1($frontendUser->getUid() . $frontendUser->getEmail() . rand());
                                         $frontendUser->setTxRkwnewsletterHash($hash);
                                         $this->frontendUserRepository->update($frontendUser);
 
