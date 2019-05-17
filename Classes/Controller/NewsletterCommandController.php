@@ -78,6 +78,13 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
      */
     protected $logger;
 
+    /**
+     * Debug switch
+     *
+     * @const string
+     */
+    const DEBUG_TIME = false;
+
 
     /**
      * function processIssuesCommand
@@ -159,6 +166,8 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
 
         try {
 
+            self::debugTime(__LINE__, __METHOD__);
+
             $issues = $this->issueRepository->findAllToSend($newsletterLimit);
             $settings = $this->getSettings(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
             $settingsDefault = $this->getSettings();
@@ -170,6 +179,7 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
 
                 /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
                 foreach ($issues as $issue) {
+                    self::debugTime(__LINE__, __METHOD__);
 
                     // get newsletter
                     $newsletter = $issue->getNewsletter();
@@ -180,6 +190,8 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
 
                     // if queueMail exists...
                     if ($queueMail = $issue->getQueueMail()) {
+
+                        self::debugTime(__LINE__, __METHOD__);
 
                         // load queueMail into MailService
                         $mailService->setQueueMail($issue->getQueueMail());
@@ -193,59 +205,73 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
 
                             /** @var \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser */
                             $cnt = 0;
-                            foreach ($issue->getRecipients()->toArray() as $frontendUser) {
+                            foreach ($issue->getRecipients() as $frontendUserUid) {
 
-                                // check if hash-value exists - may be relevant for imports via MySQL
-                                if (!$frontendUser->getTxRkwnewsletterHash()) {
-                                    $hash = sha1($frontendUser->getEmail() . rand());
-                                    $frontendUser->setTxRkwnewsletterHash($hash);
-                                    $this->frontendUserRepository->update($frontendUser);
+                                // load frontendUser
+                                if ($frontendUser = $this->frontendUserRepository->findByUid($frontendUserUid)) {
 
-                                    $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Set new newsletter-hash for frontendUser with uid=%s.', $frontendUser->getUid()));
-                                }
+                                    self::debugTime(__LINE__, __METHOD__);
 
-                                // get all pages of user by his subscriptions
-                                /** @var \TYPO3\CMS\Extbase\Persistence\QueryResultInterface $issuePages */
-                                $pages = $this->pagesRepository->findAllByIssueAndSubscriptionAndSpecialTopic($issue, $frontendUser->getTxRkwnewsletterSubscription());
+                                    // check if hash-value exists - may be relevant for imports via MySQL
+                                    if (!$frontendUser->getTxRkwnewsletterHash()) {
+                                        $hash = sha1($frontendUser->getUid() . $frontendUser->getEmail() . rand());
+                                        $frontendUser->setTxRkwnewsletterHash($hash);
+                                        $this->frontendUserRepository->update($frontendUser);
 
-                                /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
-                                $pagesOrderArray = array();
-                                foreach ($pages->toArray() as $page) {
-                                    $pagesOrderArray[] = $page->getUid();
-                                }
-
-                                // add to final list if there are some pages!
-                                if (count($pages) > 0) {
-
-                                    // override itemsPerTopic
-                                    if (count($pages->toArray()) == 1) {
-                                        $itemsPerTopic = 9999;
+                                        $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Set new newsletter-hash for frontendUser with uid=%s.', $frontendUser->getUid()));
                                     }
 
-                                    // add it to final list
-                                    $mailService->setTo(
-                                        $frontendUser,
-                                        array(
-                                            'marker'  => array(
-                                                'issue'             => $issue,
-                                                'pages'             => $pages,
-                                                'specialPages'      => $specialPages,
-                                                'pagesOrder'        => implode(',', $pagesOrderArray),
-                                                'includeEditorials' => ((count($pages->toArray()) > 1) ? false : true),
-                                                'webView'           => false,
-                                                'maxItemsPerTopic'  => $itemsPerTopic,
-                                                'pageTypeMore'      => $settings['settings']['webViewPageNum'],
-                                                'subscriptionPid'   => $settings['settings']['subscriptionPid'],
-                                                'hash'              => $frontendUser->getTxRkwnewsletterHash()
-                                            ),
-                                            'subject' => $issue->getTitle(),
-                                        ),
-                                        true
-                                    );
+                                    self::debugTime(__LINE__, __METHOD__);
 
-                                    //  remove recipient from temporary list!
-                                    $issue->removeRecipients($frontendUser);
-                                    $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Prepared newsletter-mails for recipient with uid=%s for issue with uid=%s of newsletter-configuration with id=%s.', $frontendUser->getUid(), $issue->getUid(), $newsletter->getUid()));
+                                    // get all pages of user by his subscriptions
+                                    /** @var \TYPO3\CMS\Extbase\Persistence\QueryResultInterface $issuePages */
+                                    $pages = $this->pagesRepository->findAllByIssueAndSubscriptionAndSpecialTopic($issue, $frontendUser->getTxRkwnewsletterSubscription());
+
+                                    /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
+                                    $pagesOrderArray = array();
+                                    foreach ($pages->toArray() as $page) {
+                                        $pagesOrderArray[] = $page->getUid();
+                                    }
+
+                                    self::debugTime(__LINE__, __METHOD__);
+
+                                    // add to final list if there are some pages!
+                                    if (count($pages) > 0) {
+
+                                        // override itemsPerTopic
+                                        if (count($pages->toArray()) == 1) {
+                                            $itemsPerTopic = 9999;
+                                        }
+
+                                        // add it to final list
+                                        $mailService->setTo(
+                                            $frontendUser,
+                                            array(
+                                                'marker'  => array(
+                                                    'issue'             => $issue,
+                                                    'pages'             => $pages,
+                                                    'specialPages'      => $specialPages,
+                                                    'pagesOrder'        => implode(',', $pagesOrderArray),
+                                                    'includeEditorials' => ((count($pages->toArray()) > 1) ? false : true),
+                                                    'webView'           => false,
+                                                    'maxItemsPerTopic'  => $itemsPerTopic,
+                                                    'pageTypeMore'      => $settings['settings']['webViewPageNum'],
+                                                    'subscriptionPid'   => $settings['settings']['subscriptionPid'],
+                                                    'hash'              => $frontendUser->getTxRkwnewsletterHash()
+                                                ),
+                                                'subject' => $issue->getTitle(),
+                                            ),
+                                            true
+                                        );
+
+                                        self::debugTime(__LINE__, __METHOD__);
+
+                                        //  remove recipient from temporary list!
+                                        $issue->removeRecipients($frontendUser);
+                                        $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Prepared newsletter-mails for recipient with uid=%s for issue with uid=%s of newsletter-configuration with id=%s.', $frontendUser->getUid(), $issue->getUid(), $newsletter->getUid()));
+                                    }
+                                } else {
+                                    $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::WARNING, sprintf('Recipient with uid=%s for issue with uid=%s of newsletter-configuration with id=%s could not be found.', $frontendUserUid, $issue->getUid(), $newsletter->getUid()));
                                 }
 
                                 $cnt++;
@@ -255,11 +281,15 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
                                 }
                             }
 
+                            self::debugTime(__LINE__, __METHOD__);
+
                             // if sending has already been started, this only adds the new users
                             $mailService->send();
                             $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Prepared newsletter-mails for %s recipients for issue with id=%s of newsletter-configuration with id=%s.', $cnt, $issue->getUid(), $newsletter->getUid()));
 
                         } else {
+
+                            self::debugTime(__LINE__, __METHOD__);
 
                             // newsletter has been completely submitted to rkw_mailer
                             $issue->setSentTstamp(time());
@@ -277,8 +307,10 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
                             $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Finished preparing newsletter-mail for issue with id=%s of newsletter-configuration with id=%s.', $issue->getUid(), $newsletter->getUid()));
                         }
 
-                        // if queueMail does not exist we have to build it first!
+                    // if queueMail does not exist we have to build it first!
                     } else {
+
+                        self::debugTime(__LINE__, __METHOD__);
 
                         // set properties for queueMail
                         /** @var \RKW\RkwMailer\Domain\Model\QueueMail $queueMail */
@@ -305,6 +337,8 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
                     }
 
                     $this->issueRepository->update($issue);
+
+                    self::debugTime(__LINE__, __METHOD__);
                 }
 
             } else {
@@ -340,6 +374,7 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
      *
      * @param string $which Which type of settings will be loaded
      * @return array
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     protected function getSettings($which = ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS)
     {
@@ -369,4 +404,22 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
         $GLOBALS['TYPO3_DB']->explainOutput = false;
         $GLOBALS['TYPO3_DB']->debugOutput = false;
     }
+
+
+    /**
+     * Does debugging of runtime
+     *
+     * @param integer $line
+     * @param string  $function
+     */
+    private static function debugTime($line, $function)
+    {
+
+        if (self::DEBUG_TIME) {
+
+            $path = PATH_site . '/typo3temp/tx_rkwnewsletter_runtime.txt';
+            file_put_contents($path, microtime() . ' ' . $line . ' ' . $function . "\n", FILE_APPEND);
+        }
+    }
+
 }

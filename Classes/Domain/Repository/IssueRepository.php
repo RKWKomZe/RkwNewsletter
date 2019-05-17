@@ -194,8 +194,8 @@ class IssueRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     public function findAllToSend($limit = 5)
     {
-        $query = $this->createQuery();
 
+        $query = $this->createQuery();
         $query->matching(
             $query->logicalAnd(
                 $query->equals('status', 3),

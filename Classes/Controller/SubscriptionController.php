@@ -342,7 +342,7 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
                 // set FeUser and save
                 $frontendUser->setTxRkwnewsletterSubscription($subscriptions);
                 if (! $frontendUser->getTxRkwnewsletterHash()) {
-                    $hash = sha1($frontendUser->getEmail() . rand());
+                    $hash = sha1($frontendUser->getUid() . $frontendUser->getEmail() . rand());
                     $frontendUser->setTxRkwnewsletterHash($hash);
                 }
                 $this->frontendUserRepository->update($frontendUser);
@@ -656,7 +656,7 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
             ) {
                 /** @var \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser */
                 if (!$frontendUser->getTxRkwnewsletterHash()) {
-                    $hash = sha1($frontendUser->getEmail() . rand());
+                    $hash = sha1($frontendUser->getUid() . $frontendUser->getEmail() . rand());
                     $frontendUser->setTxRkwnewsletterHash($hash);
                     $this->frontendUserRepository->update($frontendUser);
 
