@@ -176,7 +176,6 @@ $GLOBALS['TCA']['tx_rkwnewsletter_domain_model_issue'] = array(
         'recipients' => array(
             'config' => array(
                 'type' => 'passthrough',
-                'foreign_table' => 'fe_users',
             ),
         ),
         'queue_mail' => array(

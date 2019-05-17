@@ -64,7 +64,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * recipients
      *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\FrontendUser>
+     * @var string
      */
     protected $recipients;
 
@@ -129,7 +129,6 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->pages = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
         $this->approvals = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
-        $this->recipients = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
 
     }
 
@@ -298,50 +297,76 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Adds a recipient to the release
      *
-     * @param \RKW\RkwNewsletter\Domain\Model\FrontendUser $recipient
+     * @param int|\TYPO3\CMS\Extbase\DomainObject\AbstractEntity $recipientId
      * @return void
+     * @throws \Exception
      * @api
      */
-    public function addRecipients(\RKW\RkwNewsletter\Domain\Model\FrontendUser $recipient)
+    public function addRecipients($recipient)
     {
-        $this->recipients->attach($recipient);
+        if ($recipient instanceOf \TYPO3\CMS\Extbase\DomainObject\AbstractEntity) {
+            $recipientId = $recipient->getUid();
+        } else if(is_int($recipient)) {
+            $recipientId = $recipient;
+        } else {
+            throw new \Exception('Wrong type given');
+            //====
+        }
+
+        $recipients = $this->getRecipients();
+        $recipients[] = $recipientId;
+        $this->setRecipients($recipients);
     }
 
     /**
      * Removes a recipient from the release
      *
-     * @param \RKW\RkwNewsletter\Domain\Model\FrontendUser $recipient
+     * @param int|\TYPO3\CMS\Extbase\DomainObject\AbstractEntity $recipient
      * @return void
+     * @throws \Exception
      * @api
      */
-    public function removeRecipients(\RKW\RkwNewsletter\Domain\Model\FrontendUser $recipient)
+    public function removeRecipients($recipient)
     {
-        $this->recipients->detach($recipient);
+        if ($recipient instanceOf \TYPO3\CMS\Extbase\DomainObject\AbstractEntity) {
+            $recipientId = $recipient->getUid();
+        } else if(is_int($recipient)) {
+            $recipientId = $recipient;
+        } else {
+            throw new \Exception('Wrong type given');
+            //====
+        }
+
+        $recipients = $this->getRecipients();
+        if (false !== $key = array_search($recipientId, $recipients)) {
+            array_splice($recipients, $key, 1);
+            $this->setRecipients($recipients);
+        }
     }
 
     /**
      * Returns the recipient. Keep in mind that the property is called "recipients"
      * although it can hold several pages.
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\FrontendUser>
+     * @return array
      * @api
      */
     public function getRecipients()
     {
-        return $this->recipients;
+        return explode(',', $this->recipients);
     }
 
     /**
      * Sets the recipient. Keep in mind that the property is called "pages"
      * although it can hold several pages.
      *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\FrontendUser> $recipient
+     * @param array $recipients
      * @return void
      * @api
      */
-    public function setRecipients(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $recipients)
+    public function setRecipients($recipients = [])
     {
-        $this->recipients = $recipients;
+        $this->recipients = implode(',', $recipients);
     }
 
     /**
