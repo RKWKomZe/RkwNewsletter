@@ -14,6 +14,8 @@ namespace RKW\RkwNewsletter\Domain\Model;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * Issue
  *
@@ -353,7 +355,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function getRecipients()
     {
-        return explode(',', $this->recipients);
+        return GeneralUtility::trimExplode(',', $this->recipients, true);
     }
 
     /**

@@ -78,12 +78,13 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
      */
     protected $logger;
 
+
     /**
      * Debug switch
      *
      * @const string
      */
-    const DEBUG_TIME = false;
+    const DEBUG_TIME = true;
 
 
     /**
@@ -207,6 +208,8 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
                             $cnt = 0;
                             foreach ($issue->getRecipients() as $frontendUserUid) {
 
+                                self::debugTime(__LINE__, __METHOD__);
+
                                 // load frontendUser
                                 if ($frontendUser = $this->frontendUserRepository->findByUid($frontendUserUid)) {
 
@@ -271,6 +274,9 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
                                         $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Prepared newsletter-mails for recipient with uid=%s for issue with uid=%s of newsletter-configuration with id=%s.', $frontendUser->getUid(), $issue->getUid(), $newsletter->getUid()));
                                     }
                                 } else {
+
+                                    //  remove recipient from temporary list!
+                                    $issue->removeRecipients($frontendUser);
                                     $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::WARNING, sprintf('Recipient with uid=%s for issue with uid=%s of newsletter-configuration with id=%s could not be found.', $frontendUserUid, $issue->getUid(), $newsletter->getUid()));
                                 }
 
