@@ -84,7 +84,7 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
      *
      * @const string
      */
-    const DEBUG_TIME = true;
+    const DEBUG_TIME = false;
 
 
     /**
