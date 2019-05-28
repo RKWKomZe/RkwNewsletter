@@ -230,7 +230,7 @@
 				<source>Here you will find all newsletter issues for which you are registered as the responsible editor. Here you can send a test to your e-mail address. You can decide whether the test mailing should cover all topics or only the topics for which you are registered as an editor.</source>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_testList.title">
-				<source>Subject</source>
+				<source>Subject (is prepended to automatically set subject)</source>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_testList.email">
 				<source>E-Mail</source>
@@ -258,7 +258,7 @@
 				<source>Here you will find all newsletter issues which you can start as responsible editor.</source>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_sendList.title">
-				<source>Subject</source>
+				<source>Subject (is prepended to automatically set subject)</source>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_sendList.subscriptions">
 				<source>Subscription</source>
@@ -282,7 +282,7 @@
 				<source>Please confirm below the dispatch of the selected newsletter. Please also check the subject of the newsletter and adjust it if necessary. Please note that the dispatch is staggered, i.e. the recipients may receive the newsletter at different times.</source>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_sendConfirm.title">
-				<source>Subject</source>
+				<source>Subject (is prepended to automatically set subject)</source>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_sendConfirm.subscriptions">
 				<source>Subscription</source>

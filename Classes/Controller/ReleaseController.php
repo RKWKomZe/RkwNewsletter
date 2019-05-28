@@ -364,6 +364,7 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             //===
         }
 
+        /*
         // check title
         if (
             ($title == $issue->getTitle())
@@ -381,7 +382,7 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 '',
                 \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING
             );
-        }
+        }*/
 
         // set title
         $issue->setTitle($title);

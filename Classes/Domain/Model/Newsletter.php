@@ -306,7 +306,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param string $replyName
      * @return void
-     */
+    */
     public function setReplyName($replyName)
     {
         $this->replyName = $replyName;

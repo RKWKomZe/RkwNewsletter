@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+    <pages>
+        <uid>1</uid>
+        <pid>0</pid>
+        <title>Rootpage</title>
+        <tx_rkwbasics_teaser_text />
+        <tx_rkwbasics_information />
+        <tx_rkwnewsletter_teaser_text />
+    </pages>
+    <pages>
+        <uid>2</uid>
+        <pid>1</pid>
+        <title>Test 2</title>
+        <tx_rkwbasics_teaser_text />
+        <tx_rkwbasics_information />
+        <tx_rkwnewsletter_teaser_text />
+    </pages>
+    <pages>
+        <uid>3</uid>
+        <pid>1</pid>
+        <title>Test 3</title>
+        <tx_rkwbasics_teaser_text />
+        <tx_rkwbasics_information />
+        <tx_rkwnewsletter_teaser_text />
+    </pages>
+    <pages>
+        <uid>4</uid>
+        <pid>1</pid>
+        <title>Test 4</title>
+        <tx_rkwbasics_teaser_text />
+        <tx_rkwbasics_information />
+        <tx_rkwnewsletter_teaser_text />
+    </pages>
+    <pages>
+        <uid>5</uid>
+        <pid>1</pid>
+        <title>Test 5</title>
+        <tx_rkwbasics_teaser_text />
+        <tx_rkwbasics_information />
+        <tx_rkwnewsletter_teaser_text />
+    </pages>
+    <pages>
+        <uid>6</uid>
+        <pid>1</pid>
+        <title>Test 6</title>
+        <tx_rkwbasics_teaser_text />
+        <tx_rkwbasics_information />
+        <tx_rkwnewsletter_teaser_text />
+    </pages>
+</dataset>

@@ -1,0 +1,19 @@
+plugin.tx_rkwnewsletter {
+
+
+    persistence {
+        # cat=plugin.tx_rkwnewsletter//a; type=string; label=Default storage PID
+        storagePid = 999
+    }
+
+    settings {
+
+   }
+}
+
+module.tx_rkwnewsletter {
+
+    persistence < plugin.tx_rkwnewsletter.persistence
+    settings < plugin.tx_rkwnewsletter.settings
+
+}

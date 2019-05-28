@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+
+    <!-- page 1 -->
+    <tt_content>
+        <uid>1</uid>
+        <pid>1</pid>
+        <sys_language_uid>0</sys_language_uid>
+        <header>Überschrift</header>
+        <header_link>3235 - - "Zum Projekt \"INQA-Check Vielfaltsbewusster Betrieb\""</header_link>
+        <subheader />
+        <bodytext><![CDATA[„Bei Vielfalt im Betrieb geht es nicht darum, eine Quote zu erfüllen“, sagt Carsten Schulz, der die Beratungsabteilung innerhalb der <link https://www.gis-ag.com/ _blank external-link "zur Website der GIS AG">GIS Gesellschaft für InformationsSysteme AG</link> leitet. Der Mann weiß, wovon er spricht. Bereits bei seinem vorherigen Arbeitgeber war das Thema Diversity ein ständiger Begleiter – oder eben Vielfalt, die für Schulz eindeutig bessere Wortwahl. Denn das Wort Diversity sei bei ihm ein wenig verbrannt.]]></bodytext>
+        <sorting>32</sorting>
+        <tx_rkwnewsletter_authors />
+        <tx_rkwnewsletter_is_editorial>0</tx_rkwnewsletter_is_editorial>
+        <tx_rkwbasics_bodytext_mobile />
+    </tt_content>
+
+
+    <!-- page 2 -->
+    <tt_content>
+        <uid>2</uid>
+        <pid>2</pid>
+        <sys_language_uid>0</sys_language_uid>
+        <header>Überschrift</header>
+        <header_link>3235 - - "Zum Projekt \"INQA-Check Vielfaltsbewusster Betrieb\""</header_link>
+        <subheader />
+        <bodytext><![CDATA[„Bei Vielfalt im Betrieb geht es nicht darum, eine Quote zu erfüllen“, sagt Carsten Schulz, der die Beratungsabteilung innerhalb der <link https://www.gis-ag.com/ _blank external-link "zur Website der GIS AG">GIS Gesellschaft für InformationsSysteme AG</link> leitet. Der Mann weiß, wovon er spricht. Bereits bei seinem vorherigen Arbeitgeber war das Thema Diversity ein ständiger Begleiter – oder eben Vielfalt, die für Schulz eindeutig bessere Wortwahl. Denn das Wort Diversity sei bei ihm ein wenig verbrannt.]]></bodytext>
+        <sorting>32</sorting>
+        <tx_rkwnewsletter_authors />
+        <tx_rkwnewsletter_is_editorial>0</tx_rkwnewsletter_is_editorial>
+        <tx_rkwbasics_bodytext_mobile />
+    </tt_content>
+
+    <tt_content>
+        <uid>3</uid>
+        <pid>2</pid>
+        <sys_language_uid>1</sys_language_uid>
+        <header>Überschrift 2</header>
+        <header_link>3235 - - "Zum Projekt \"INQA-Check Vielfaltsbewusster Betrieb\""</header_link>
+        <subheader />
+        <bodytext><![CDATA[„Bei Vielfalt im Betrieb geht es nicht darum, eine Quote zu erfüllen“, sagt Carsten Schulz, der die Beratungsabteilung innerhalb der <link https://www.gis-ag.com/ _blank external-link "zur Website der GIS AG">GIS Gesellschaft für InformationsSysteme AG</link> leitet. Der Mann weiß, wovon er spricht. Bereits bei seinem vorherigen Arbeitgeber war das Thema Diversity ein ständiger Begleiter – oder eben Vielfalt, die für Schulz eindeutig bessere Wortwahl. Denn das Wort Diversity sei bei ihm ein wenig verbrannt.]]></bodytext>
+        <sorting>64</sorting>
+        <tx_rkwnewsletter_authors />
+        <tx_rkwnewsletter_is_editorial>0</tx_rkwnewsletter_is_editorial>
+        <tx_rkwbasics_bodytext_mobile />
+    </tt_content>
+
+
+    <!-- page 3 -->
+    <tt_content>
+        <uid>4</uid>
+        <pid>3</pid>
+        <sys_language_uid>0</sys_language_uid>
+        <header>Überschrift</header>
+        <header_link>3235 - - "Zum Projekt \"INQA-Check Vielfaltsbewusster Betrieb\""</header_link>
+        <subheader />
+        <bodytext><![CDATA[„Bei Vielfalt im Betrieb geht es nicht darum, eine Quote zu erfüllen“, sagt Carsten Schulz, der die Beratungsabteilung innerhalb der <link https://www.gis-ag.com/ _blank external-link "zur Website der GIS AG">GIS Gesellschaft für InformationsSysteme AG</link> leitet. Der Mann weiß, wovon er spricht. Bereits bei seinem vorherigen Arbeitgeber war das Thema Diversity ein ständiger Begleiter – oder eben Vielfalt, die für Schulz eindeutig bessere Wortwahl. Denn das Wort Diversity sei bei ihm ein wenig verbrannt.]]></bodytext>
+        <sorting>32</sorting>
+        <tx_rkwnewsletter_authors />
+        <tx_rkwnewsletter_is_editorial>1</tx_rkwnewsletter_is_editorial>
+        <tx_rkwbasics_bodytext_mobile />
+    </tt_content>
+
+    <tt_content>
+        <uid>5</uid>
+        <pid>3</pid>
+        <sys_language_uid>0</sys_language_uid>
+        <header>Überschrift 2</header>
+        <header_link>3235 - - "Zum Projekt \"INQA-Check Vielfaltsbewusster Betrieb\""</header_link>
+        <subheader />
+        <bodytext><![CDATA[„Bei Vielfalt im Betrieb geht es nicht darum, eine Quote zu erfüllen“, sagt Carsten Schulz, der die Beratungsabteilung innerhalb der <link https://www.gis-ag.com/ _blank external-link "zur Website der GIS AG">GIS Gesellschaft für InformationsSysteme AG</link> leitet. Der Mann weiß, wovon er spricht. Bereits bei seinem vorherigen Arbeitgeber war das Thema Diversity ein ständiger Begleiter – oder eben Vielfalt, die für Schulz eindeutig bessere Wortwahl. Denn das Wort Diversity sei bei ihm ein wenig verbrannt.]]></bodytext>
+        <sorting>64</sorting>
+        <tx_rkwnewsletter_authors />
+        <tx_rkwnewsletter_is_editorial>0</tx_rkwnewsletter_is_editorial>
+        <tx_rkwbasics_bodytext_mobile />
+    </tt_content>
+
+    <!-- page 4 -->
+    <tt_content>
+        <uid>6</uid>
+        <pid>4</pid>
+        <sys_language_uid>0</sys_language_uid>
+        <header />
+        <header_link>3235 - - "Zum Projekt \"INQA-Check Vielfaltsbewusster Betrieb\""</header_link>
+        <subheader />
+        <bodytext><![CDATA[„Bei Vielfalt im Betrieb geht es nicht darum, eine Quote zu erfüllen“, sagt Carsten Schulz, der die Beratungsabteilung innerhalb der <link https://www.gis-ag.com/ _blank external-link "zur Website der GIS AG">GIS Gesellschaft für InformationsSysteme AG</link> leitet. Der Mann weiß, wovon er spricht. Bereits bei seinem vorherigen Arbeitgeber war das Thema Diversity ein ständiger Begleiter – oder eben Vielfalt, die für Schulz eindeutig bessere Wortwahl. Denn das Wort Diversity sei bei ihm ein wenig verbrannt.]]></bodytext>
+        <sorting>32</sorting>
+        <tx_rkwnewsletter_authors />
+        <tx_rkwnewsletter_is_editorial>0</tx_rkwnewsletter_is_editorial>
+        <tx_rkwbasics_bodytext_mobile />
+    </tt_content>
+
+    <tt_content>
+        <uid>7</uid>
+        <pid>4</pid>
+        <sys_language_uid>0</sys_language_uid>
+        <header>Überschrift 2</header>
+        <header_link>3235 - - "Zum Projekt \"INQA-Check Vielfaltsbewusster Betrieb\""</header_link>
+        <subheader />
+        <bodytext><![CDATA[„Bei Vielfalt im Betrieb geht es nicht darum, eine Quote zu erfüllen“, sagt Carsten Schulz, der die Beratungsabteilung innerhalb der <link https://www.gis-ag.com/ _blank external-link "zur Website der GIS AG">GIS Gesellschaft für InformationsSysteme AG</link> leitet. Der Mann weiß, wovon er spricht. Bereits bei seinem vorherigen Arbeitgeber war das Thema Diversity ein ständiger Begleiter – oder eben Vielfalt, die für Schulz eindeutig bessere Wortwahl. Denn das Wort Diversity sei bei ihm ein wenig verbrannt.]]></bodytext>
+        <sorting>64</sorting>
+        <tx_rkwnewsletter_authors />
+        <tx_rkwnewsletter_is_editorial>0</tx_rkwnewsletter_is_editorial>
+        <tx_rkwbasics_bodytext_mobile />
+    </tt_content>
+
+    <!-- page 5 -->
+    <tt_content>
+        <uid>8</uid>
+        <pid>5</pid>
+        <sys_language_uid>0</sys_language_uid>
+        <header />
+        <header_link>3235 - - "Zum Projekt \"INQA-Check Vielfaltsbewusster Betrieb\""</header_link>
+        <subheader />
+        <bodytext><![CDATA[„Bei Vielfalt im Betrieb geht es nicht darum, eine Quote zu erfüllen“, sagt Carsten Schulz, der die Beratungsabteilung innerhalb der <link https://www.gis-ag.com/ _blank external-link "zur Website der GIS AG">GIS Gesellschaft für InformationsSysteme AG</link> leitet. Der Mann weiß, wovon er spricht. Bereits bei seinem vorherigen Arbeitgeber war das Thema Diversity ein ständiger Begleiter – oder eben Vielfalt, die für Schulz eindeutig bessere Wortwahl. Denn das Wort Diversity sei bei ihm ein wenig verbrannt.]]></bodytext>
+        <sorting>32</sorting>
+        <tx_rkwnewsletter_authors />
+        <tx_rkwnewsletter_is_editorial>0</tx_rkwnewsletter_is_editorial>
+        <tx_rkwbasics_bodytext_mobile />
+    </tt_content>
+
+    <tt_content>
+        <uid>9</uid>
+        <pid>5</pid>
+        <sys_language_uid>0</sys_language_uid>
+        <header />
+        <header_link>3235 - - "Zum Projekt \"INQA-Check Vielfaltsbewusster Betrieb\""</header_link>
+        <subheader />
+        <bodytext><![CDATA[„Bei Vielfalt im Betrieb geht es nicht darum, eine Quote zu erfüllen“, sagt Carsten Schulz, der die Beratungsabteilung innerhalb der <link https://www.gis-ag.com/ _blank external-link "zur Website der GIS AG">GIS Gesellschaft für InformationsSysteme AG</link> leitet. Der Mann weiß, wovon er spricht. Bereits bei seinem vorherigen Arbeitgeber war das Thema Diversity ein ständiger Begleiter – oder eben Vielfalt, die für Schulz eindeutig bessere Wortwahl. Denn das Wort Diversity sei bei ihm ein wenig verbrannt.]]></bodytext>
+        <sorting>64</sorting>
+        <tx_rkwnewsletter_authors />
+        <tx_rkwnewsletter_is_editorial>0</tx_rkwnewsletter_is_editorial>
+        <tx_rkwbasics_bodytext_mobile />
+    </tt_content>
+
+
+    <!-- page 6 -->
+    <tt_content>
+        <uid>10</uid>
+        <pid>6</pid>
+        <sys_language_uid>0</sys_language_uid>
+        <header>Überschrift 1</header>
+        <header_link>3235 - - "Zum Projekt \"INQA-Check Vielfaltsbewusster Betrieb\""</header_link>
+        <subheader />
+        <bodytext><![CDATA[„Bei Vielfalt im Betrieb geht es nicht darum, eine Quote zu erfüllen“, sagt Carsten Schulz, der die Beratungsabteilung innerhalb der <link https://www.gis-ag.com/ _blank external-link "zur Website der GIS AG">GIS Gesellschaft für InformationsSysteme AG</link> leitet. Der Mann weiß, wovon er spricht. Bereits bei seinem vorherigen Arbeitgeber war das Thema Diversity ein ständiger Begleiter – oder eben Vielfalt, die für Schulz eindeutig bessere Wortwahl. Denn das Wort Diversity sei bei ihm ein wenig verbrannt.]]></bodytext>
+        <sorting>64</sorting>
+        <tx_rkwnewsletter_authors />
+        <tx_rkwnewsletter_is_editorial>0</tx_rkwnewsletter_is_editorial>
+        <tx_rkwbasics_bodytext_mobile />
+    </tt_content>
+
+    <tt_content>
+        <uid>11</uid>
+        <pid>6</pid>
+        <sys_language_uid>0</sys_language_uid>
+        <header>Überschrift 2</header>
+        <header_link>3235 - - "Zum Projekt \"INQA-Check Vielfaltsbewusster Betrieb\""</header_link>
+        <subheader />
+        <bodytext><![CDATA[„Bei Vielfalt im Betrieb geht es nicht darum, eine Quote zu erfüllen“, sagt Carsten Schulz, der die Beratungsabteilung innerhalb der <link https://www.gis-ag.com/ _blank external-link "zur Website der GIS AG">GIS Gesellschaft für InformationsSysteme AG</link> leitet. Der Mann weiß, wovon er spricht. Bereits bei seinem vorherigen Arbeitgeber war das Thema Diversity ein ständiger Begleiter – oder eben Vielfalt, die für Schulz eindeutig bessere Wortwahl. Denn das Wort Diversity sei bei ihm ein wenig verbrannt.]]></bodytext>
+        <sorting>32</sorting>
+        <tx_rkwnewsletter_authors />
+        <tx_rkwnewsletter_is_editorial>0</tx_rkwnewsletter_is_editorial>
+        <tx_rkwbasics_bodytext_mobile />
+    </tt_content>
+
+</dataset>

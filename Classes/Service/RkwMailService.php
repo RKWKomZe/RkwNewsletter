@@ -326,13 +326,18 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
             && ($issue->getNewsletter()->getTemplate())
         ) {
 
+            /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
+            $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Object\ObjectManager');
+
             /** @var \RKW\RkwMailer\Service\MailService $mailService */
-            $mailService = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('RKW\\RkwMailer\\Service\\MailService');
+            $mailService = $objectManager->get('RKW\\RkwMailer\\Service\\MailService');
 
             // if there is only one topic-page included, show all contents
             $itemsPerTopic = ($settings['settings']['maxItemsPerTopic'] ? intval($settings['settings']['maxItemsPerTopic']) : 5);
+            $includeTutorials = false;
             if (count($pages->toArray()) == 1) {
                 $itemsPerTopic = 999;
+                $includeTutorials = true;
             }
 
             /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
@@ -360,7 +365,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
                             'specialPages'      => $specialPages,
                             'pagesOrder'        => implode(',', $pagesOrderArray),
                             'admin'             => $admin,
-                            'includeEditorials' => ((count($pages->toArray()) > 1) ? false : true),
+                            'includeEditorials' => $includeTutorials,
                             'webView'           => false,
                             'maxItemsPerTopic'  => $itemsPerTopic,
                             'pageTypeMore'      => $settings['settings']['webViewPageNum'],
@@ -370,20 +375,44 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
                 );
             }
 
+            // get first content element of first page with header for subject
+            /** @var \RKW\RkwNewsletter\Domain\Repository\TtContentRepository $ttContentRepository */
+            $ttContentRepository = $objectManager->get('RKW\\RkwNewsletter\\Domain\\Repository\\TtContentRepository');
+
+            $language = $issue->getNewsletter()->getSysLanguageUid();
+
+            /** @var \RKW\RkwNewsletter\Domain\Model\TtContent $firstContentElement */
+            $firstContentElement = $ttContentRepository->findFirstWithHeaderByPid($pages->getFirst()->getUid(), $language, $includeTutorials);
+
             $mailService->getQueueMail()->setSettingsPid($issue->getNewsletter()->getSettingsPage()->getUid());
             $mailService->getQueueMail()->setSubject(
                 \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(
                     'rkwMailService.subject.testMail',
                     'rkw_newsletter',
-                    array('subject' => ($title ? $title : $issue->getTitle()))
+                    array('subject' => ($title ? $title : $issue->getTitle()) . ' – '. $firstContentElement->getHeader())
                 )
             );
+
             $mailService->getQueueMail()->addLayoutPaths($settings['view']['newsletter']['layoutRootPaths']);
             $mailService->getQueueMail()->addTemplatePaths($settings['view']['newsletter']['templateRootPaths']);
             $mailService->getQueueMail()->addPartialPaths($settings['view']['newsletter']['partialRootPaths']);
 
             $mailService->getQueueMail()->setPlaintextTemplate($issue->getNewsletter()->getTemplate());
             $mailService->getQueueMail()->setHtmlTemplate($issue->getNewsletter()->getTemplate());
+
+            // set mail params
+            if ($issue->getNewsletter()->getReturnPath()) {
+                $mailService->getQueueMail()->setReturnPath($issue->getNewsletter()->getReturnPath());
+            }
+            if ($issue->getNewsletter()->getReplyMail()) {
+                $mailService->getQueueMail()->setReplyAddress($issue->getNewsletter()->getReplyMail());
+            }
+            if ($issue->getNewsletter()->getSenderMail()) {
+                $mailService->getQueueMail()->setFromAddress($issue->getNewsletter()->getSenderMail());
+            }
+            if ($issue->getNewsletter()->getSenderName()) {
+                $mailService->getQueueMail()->setFromName($issue->getNewsletter()->getSenderName());
+            }
 
             if (count($mailService->getTo())) {
                 $mailService->send();
