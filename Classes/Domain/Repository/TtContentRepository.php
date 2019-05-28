@@ -44,6 +44,7 @@ class TtContentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @param int $limit
      * @param bool $includeEditorials
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     * @toDo: Write testing
      */
     public function findAllByPidAndLanguageUid($pid, $languageUid = 0, $limit = 0, $includeEditorials = false)
     {
@@ -52,7 +53,6 @@ class TtContentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $constraints = [
             $query->equals('pid', $pid),
             $query->equals('sysLanguageUid', $languageUid),
-            $query->equals('sysLanguageUid', $languageUid)
         ];
 
         if (! $includeEditorials) {
@@ -70,6 +70,38 @@ class TtContentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $query->execute();
         //====
     }
+
+
+    /**
+     * findFirstWithHeaderByPidAndLanguageUid
+     *
+     * @param int $pid
+     * @param int $languageUid
+     * @param bool $includeEditorials
+     * @return \RKW\RkwNewsletter\Domain\Model\TtContent
+     */
+    public function findFirstWithHeaderByPid($pid, $languageUid = 0, $includeEditorials = false)
+    {
+
+        $query = $this->createQuery();
+        $constraints = [
+            $query->equals('pid', intval($pid)),
+            $query->logicalNot($query->equals('header', '')),
+            $query->equals('sysLanguageUid', intval($languageUid))
+        ];
+
+        if (! $includeEditorials) {
+            $constraints[] = $query->equals('txRkwnewsletterIsEditorial', 0);
+        }
+
+        $query->matching(
+            $query->logicalAnd($constraints)
+        );
+
+        return $query->execute()->getFirst();
+        //====
+    }
+
 
 
     /**

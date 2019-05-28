@@ -292,8 +292,8 @@
 				<target>Hier finden Sie alle Newsletterausgaben, für die Sie als verantwortlicher Redakteur eingetragen sind. Sie können hier einen Testversand an Ihre E-Mailadresse anstoßen. Dabei können Sie entscheiden, ob der Testversand alle Themen berücksichtigen soll oder nur die Themen, für die Sie als Redakteur eingetragen sind.</target>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_testList.title">
-				<source>Subject</source>
-				<target>Betreff</target>
+				<source>Subject (is prepended to automatically set subject)</source>
+				<target>Betreff (wird dem automatisch generierten Betreff vorangestellt)</target>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_testList.email">
 				<source>E-Mail</source>
@@ -327,8 +327,8 @@
 				<target>Hier finden Sie alle Newsletterausgaben, deren Versand Sie als verantwortlicher Redakteur starten können.</target>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_sendList.title">
-				<source>Subject</source>
-				<target>Betreff</target>
+				<source>Subject (is prepended to automatically set subject)</source>
+				<target>Betreff (wird dem automatisch generierten Betreff vorangestellt)</target>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_sendList.subscriptions">
 				<source>Subscription</source>
@@ -359,8 +359,8 @@
 				<target>Bitte bestätigen Sie untenstehend den Versand des ausgewählten Newsletters. Bitte prüfen Sie auch den Betreff des Newsletters und passen Sie diesen ggf. noch an. Bitte beachten Sie, dass der Versand gestaffelt erfolgt; die Empfänger den Newsletter also gegebenenfalls zeitlich versetzt erhalten.</target>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_sendConfirm.title">
-				<source>Subject</source>
-				<target>Betreff</target>
+				<source>Subject (is prepended to automatically set subject)</source>
+				<target>Betreff (wird dem automatisch generierten Betreff vorangestellt)</target>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_sendConfirm.subscriptions">
 				<source>Subscription</source>

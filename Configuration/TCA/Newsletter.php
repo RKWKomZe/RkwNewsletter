@@ -22,14 +22,14 @@ $GLOBALS['TCA']['tx_rkwnewsletter_domain_model_newsletter'] = array(
 			'starttime' => 'starttime',
 			'endtime' => 'endtime',
 		),
-		'searchFields' => 'name, issue_title, sender_name, sender_mail, reply_name, reply_mail, return_path, priority, template, settings_page, format, rythm, approval, type, usergroup, topic, recently_sent,',
+		'searchFields' => 'name, issue_title, sender_name, sender_mail, reply_mail, return_path, priority, template, settings_page, format, rythm, approval, type, usergroup, topic, recently_sent,',
 		'iconfile' => 'EXT:rkw_newsletter/Resources/Public/Icons/tx_rkwnewsletter_domain_model_newsletter.gif'
 	),
 	'interface' => array(
-		'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, issue_title, sender_name, sender_mail, reply_name, reply_mail, return_path, template, settings_page, rythm, approval, type, usergroup, topic, last_sent_tstamp, last_issue_tstamp, issue',
+		'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, issue_title, sender_name, sender_mail, reply_mail, return_path, template, settings_page, rythm, approval, type, usergroup, topic, last_sent_tstamp, last_issue_tstamp, issue',
 	),
 	'types' => array(
-		'1' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, name, issue_title, sender_name, sender_mail, reply_name, reply_mail, return_path, template, settings_page, encoding, charset, rythm, approval, type, usergroup, topic, last_sent_tstamp, last_issue_tstamp, issue, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, hidden;;1, starttime, endtime'),
+		'1' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, name, issue_title, sender_name, sender_mail, reply_mail, return_path, template, settings_page, encoding, charset, rythm, approval, type, usergroup, topic, last_sent_tstamp, last_issue_tstamp, issue, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, hidden;;1, starttime, endtime'),
 	),
 	'palettes' => array(
 		'1' => array('showitem' => ''),
@@ -132,7 +132,7 @@ $GLOBALS['TCA']['tx_rkwnewsletter_domain_model_newsletter'] = array(
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
-				'eval' => 'trim, required'
+				'eval' => 'trim'
 			),
 		),
 		'sender_mail' => array(
@@ -141,7 +141,7 @@ $GLOBALS['TCA']['tx_rkwnewsletter_domain_model_newsletter'] = array(
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,
-				'eval' => 'trim, required'
+				'eval' => 'trim'
 			),
 		),
 		'reply_name' => array(

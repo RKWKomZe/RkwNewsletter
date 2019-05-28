@@ -65,6 +65,15 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
 
 
     /**
+     * ttContentRepository
+     *
+     * @var \RKW\RkwNewsletter\Domain\Repository\TtContentRepository
+     * @inject
+     */
+    protected $ttContentRepository;
+
+
+    /**
      * queueMailRepository
      *
      * @var \RKW\RkwMailer\Domain\Repository\QueueMailRepository
@@ -208,6 +217,11 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
                             $cnt = 0;
                             foreach ($issue->getRecipients() as $frontendUserUid) {
 
+                                if (! $frontendUserUid) {
+                                    continue;
+                                    //===
+                                }
+
                                 // load frontendUser
                                 if ($frontendUser = $this->frontendUserRepository->findByUid($frontendUserUid)) {
 
@@ -240,9 +254,17 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
                                     if (count($pages) > 0) {
 
                                         // override itemsPerTopic
+                                        $includeTutorials = false;
                                         if (count($pages->toArray()) == 1) {
                                             $itemsPerTopic = 9999;
+                                            $includeTutorials = true;
                                         }
+
+                                        // get first content element of first page with header for subject
+                                        $language = $issue->getNewsletter()->getSysLanguageUid();
+
+                                        /** @var \RKW\RkwNewsletter\Domain\Model\TtContent $firstContentElement */
+                                        $firstContentElement = $this->ttContentRepository->findFirstWithHeaderByPid($pages->getFirst()->getUid(), $language, $includeTutorials);
 
                                         // add it to final list
                                         $mailService->setTo(
@@ -253,14 +275,14 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
                                                     'pages'             => $pages,
                                                     'specialPages'      => $specialPages,
                                                     'pagesOrder'        => implode(',', $pagesOrderArray),
-                                                    'includeEditorials' => ((count($pages->toArray()) > 1) ? false : true),
+                                                    'includeEditorials' => $includeTutorials,
                                                     'webView'           => false,
                                                     'maxItemsPerTopic'  => $itemsPerTopic,
                                                     'pageTypeMore'      => $settings['settings']['webViewPageNum'],
                                                     'subscriptionPid'   => $settings['settings']['subscriptionPid'],
                                                     'hash'              => $frontendUser->getTxRkwnewsletterHash()
                                                 ),
-                                                'subject' => $issue->getTitle(),
+                                                'subject' => $issue->getTitle() . ' – '. $firstContentElement->getHeader(),
                                             ),
                                             true
                                         );
@@ -330,6 +352,20 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
 
                         $queueMail->setPlaintextTemplate($issue->getNewsletter()->getTemplate());
                         $queueMail->setHtmlTemplate($issue->getNewsletter()->getTemplate());
+
+                        // set mail params
+                        if ($issue->getNewsletter()->getReturnPath()) {
+                            $queueMail->setReturnPath($issue->getNewsletter()->getReturnPath());
+                        }
+                        if ($issue->getNewsletter()->getReplyMail()) {
+                            $queueMail->setReplyAddress($issue->getNewsletter()->getReplyMail());
+                        }
+                        if ($issue->getNewsletter()->getSenderMail()) {
+                            $queueMail->setFromAddress($issue->getNewsletter()->getSenderMail());
+                        }
+                        if ($issue->getNewsletter()->getSenderName()) {
+                            $queueMail->setFromName($issue->getNewsletter()->getSenderName());
+                        }
 
                         $this->queueMailRepository->update($queueMail);
                         $issue->setQueueMail($queueMail);
