@@ -418,7 +418,10 @@
                 <source>Save changes</source>
             </trans-unit>
             <trans-unit id="templates_subscription_edit.topics">
-                <source>Which topics would you like to subscribe to?</source>
+                <source>Which topics would you like to subscribe to or unsubscribe from?</source>
+            </trans-unit>
+            <trans-unit id="templates_subscription_edit.delete">
+                <source>To cancel your newsletter subscription completely, simply deactivate all topics.</source>
             </trans-unit>
 
 
