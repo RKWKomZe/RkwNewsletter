@@ -543,9 +543,14 @@
                 <target>Änderungen speichern</target>
             </trans-unit>
             <trans-unit id="templates_subscription_edit.topics">
-                <source>Which topics would you like to subscribe to?</source>
-                <target>Welche Themen möchten Sie abonnieren?</target>
+                <source>Which topics would you like to subscribe to or unsubscribe from?</source>
+                <target>Welche Themen möchten Sie abonnieren oder abbestellen?</target>
             </trans-unit>
+            <trans-unit id="templates_subscription_edit.delete">
+                <source>To cancel your newsletter subscription completely, simply deactivate all topics.</source>
+                <target>Um Ihr Newsletter-Abo komplett zu beenden, deaktivieren Sie einfach alle Themen.</target>
+            </trans-unit>
+
 
 
 			<!-- Templates/Subscription/Message.html -->
