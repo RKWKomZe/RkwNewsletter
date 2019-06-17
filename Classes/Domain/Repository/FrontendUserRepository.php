@@ -27,6 +27,23 @@ class FrontendUserRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
 
     /**
+     * initializeObject
+     *
+     * @return void
+     */
+    public function initializeObject()
+    {
+
+        /** @var $querySettings \TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings */
+        $querySettings = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\Typo3QuerySettings');
+
+        // don't add the pid constraint and enable fields
+        $querySettings->setRespectStoragePage(false);
+        $this->setDefaultQuerySettings($querySettings);
+    }
+
+
+    /**
      * findOneByTxRkwnewsletterHash
      *
      * @var string $hash
@@ -35,8 +52,6 @@ class FrontendUserRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     public function findOneByTxRkwnewsletterHash($hash)
     {
         $query = $this->createQuery();
-
-        $query->getQuerySettings()->setRespectStoragePage(false);
         $query->matching(
             $query->equals('TxRkwnewsletterHash', $hash)
         );
@@ -63,7 +78,6 @@ class FrontendUserRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             $constraint = $query->contains('txRkwnewsletterSubscription', $topic);
         }
 
-        $query->getQuerySettings()->setRespectStoragePage(false);
         $query->matching(
             $query->logicalAnd(
                 $query->greaterThan('txRkwnewsletterSubscription', 0),
