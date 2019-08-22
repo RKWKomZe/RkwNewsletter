@@ -340,6 +340,16 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
 
                         self::debugTime(__LINE__, __METHOD__);
 
+                        // add all relevant recipients to the list of recipients of the issue
+                        $subscribers = $this->frontendUserRepository->findAllSubscribersByIssue($issue);
+
+                        /** @var \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser */
+                        foreach ($subscribers as $frontendUser) {
+                            $issue->addRecipients($frontendUser);
+                        }
+
+                        self::debugTime(__LINE__, __METHOD__);
+
                         // set properties for queueMail
                         /** @var \RKW\RkwMailer\Domain\Model\QueueMail $queueMail */
                         $queueMail = $mailService->getQueueMail();
