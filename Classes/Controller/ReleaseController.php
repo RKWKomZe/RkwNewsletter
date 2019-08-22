@@ -416,16 +416,6 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     public function sendAction(\RKW\RkwNewsletter\Domain\Model\Issue $issue, $title = null)
     {
 
-        // now get all recipients and add them to the current issue
-        $subscribers = $this->frontendUserRepository->findAllSubscribersByIssue($issue);
-
-        /** @var \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser */
-        foreach ($subscribers as $frontendUser) {
-
-            // add to issue
-            $issue->addRecipients($frontendUser);
-        }
-
         // set final title and mark as sending
         $issue->setTitle($title);
         $issue->setStatus(3);
