@@ -27,7 +27,7 @@ $GLOBALS['TCA']['tx_rkwnewsletter_domain_model_topic'] = array(
 		'showRecordFieldList' => 'hidden, name, approval_stage1, approval_stage2, container_page, primary_color, primary_color_editorial, secondary_color, secondary_color_editorial, is_special',
 	),
 	'types' => array(
-		'1' => array('showitem' => 'name, approval_stage1, approval_stage2, container_page, primary_color, primary_color_editorial, secondary_color, secondary_color_editorial, is_special, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, hidden;;1, starttime, endtime'),
+		'1' => array('showitem' => 'name, approval_stage1, approval_stage2, container_page, primary_color, primary_color_editorial, secondary_color, secondary_color_editorial, is_special, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, hidden,--palette--;;1, starttime, endtime'),
 	),
 	'palettes' => array(
 		'1' => array('showitem' => ''),
@@ -97,6 +97,7 @@ $GLOBALS['TCA']['tx_rkwnewsletter_domain_model_topic'] = array(
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_topic.approval_stage1',
 			'config' => array(
 				'type' => 'select',
+                'renderType' => 'selectMultipleSideBySide',
 				'size' => 8,
 				'eval' => 'int',
 				'minitems' => 1,
@@ -110,6 +111,7 @@ $GLOBALS['TCA']['tx_rkwnewsletter_domain_model_topic'] = array(
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_topic.approval_stage2',
 			'config' => array(
 				'type' => 'select',
+                'renderType' => 'selectMultipleSideBySide',
 				'size' => 8,
 				'eval' => 'int',
 				'minitems' => 0,
@@ -131,12 +133,9 @@ $GLOBALS['TCA']['tx_rkwnewsletter_domain_model_topic'] = array(
                     'link' => array(
                         'type' => 'popup',
                         'title' => 'LLL:EXT:cms/locallang_ttc.xlf:header_link_formlabel',
-                        'icon' => 'link_popup.gif',
+                        'icon' => 'EXT:backend/Resources/Public/Images/FormFieldWizard/wizard_link.gif',
                         'module' => array(
-                            'name' => 'wizard_element_browser',
-                            'urlParameters' => array(
-                                'mode' => 'wizard',
-                            )
+                            'name' => 'wizard_link',
                         ),
                         'JSopenParams' => 'height=400,width=550,status=0,menubar=0,scrollbars=1',
                         'params' => Array(

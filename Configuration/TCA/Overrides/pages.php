@@ -157,12 +157,9 @@ $tmpColsPages = array(
                 'link' => array(
                     'type' => 'popup',
                     'title' => 'LLL:EXT:cms/locallang_ttc.xlf:header_link_formlabel',
-                    'icon' => 'link_popup.gif',
+                    'icon' => 'EXT:backend/Resources/Public/Images/FormFieldWizard/wizard_link.gif',
                     'module' => array(
-                        'name' => 'wizard_element_browser',
-                        'urlParameters' => array(
-                            'mode' => 'wizard',
-                        )
+                        'name' => 'wizard_link',
                     ),
                     'JSopenParams' => 'height=400,width=550,status=0,menubar=0,scrollbars=1',
                     'params' => Array(
@@ -205,7 +202,7 @@ $tmpColsPages = array(
 
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns(
-    'pages', $tmpColsPages, 1
+    'pages', $tmpColsPages
 );
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
     'pages',

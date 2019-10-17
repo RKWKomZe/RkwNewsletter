@@ -29,7 +29,7 @@ $GLOBALS['TCA']['tx_rkwnewsletter_domain_model_newsletter'] = array(
 		'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, issue_title, sender_name, sender_mail, reply_mail, return_path, template, settings_page, rythm, approval, type, usergroup, topic, last_sent_tstamp, last_issue_tstamp, issue',
 	),
 	'types' => array(
-		'1' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, name, issue_title, sender_name, sender_mail, reply_mail, return_path, template, settings_page, encoding, charset, rythm, approval, type, usergroup, topic, last_sent_tstamp, last_issue_tstamp, issue, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, hidden;;1, starttime, endtime'),
+		'1' => array('showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, name, issue_title, sender_name, sender_mail, reply_mail, return_path, template, settings_page, encoding, charset, rythm, approval, type, usergroup, topic, last_sent_tstamp, last_issue_tstamp, issue, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, hidden,--palette--;;1, starttime, endtime'),
 	),
 	'palettes' => array(
 		'1' => array('showitem' => ''),
@@ -41,6 +41,7 @@ $GLOBALS['TCA']['tx_rkwnewsletter_domain_model_newsletter'] = array(
 			'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.language',
 			'config' => array(
 				'type' => 'select',
+                'renderType' => 'selectSingle',
 				'foreign_table' => 'sys_language',
 				'foreign_table_where' => 'ORDER BY sys_language.title',
 				'default' => 0,
@@ -56,6 +57,7 @@ $GLOBALS['TCA']['tx_rkwnewsletter_domain_model_newsletter'] = array(
 			'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.l18n_parent',
 			'config' => array(
 				'type' => 'select',
+                'renderType' => 'selectSingle',
 				'items' => array(
 					array('', 0),
 				),
@@ -176,6 +178,7 @@ $GLOBALS['TCA']['tx_rkwnewsletter_domain_model_newsletter'] = array(
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.priority',
 			'config' => array(
 				'type' => 'select',
+                'renderType' => 'selectSingle',
 				'items' => array(
 					array('LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.priority.normal', '2'),
 					array('LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.priority.high', '3'),
@@ -209,12 +212,9 @@ $GLOBALS['TCA']['tx_rkwnewsletter_domain_model_newsletter'] = array(
                     'link' => array(
                         'type' => 'popup',
                         'title' => 'LLL:EXT:cms/locallang_ttc.xlf:header_link_formlabel',
-                        'icon' => 'link_popup.gif',
+                        'icon' => 'EXT:backend/Resources/Public/Images/FormFieldWizard/wizard_link.gif',
                         'module' => array(
-                            'name' => 'wizard_element_browser',
-                            'urlParameters' => array(
-                                'mode' => 'wizard',
-                            )
+                            'name' => 'wizard_link',
                         ),
                         'JSopenParams' => 'height=400,width=550,status=0,menubar=0,scrollbars=1',
                         'params' => Array(
@@ -235,6 +235,7 @@ $GLOBALS['TCA']['tx_rkwnewsletter_domain_model_newsletter'] = array(
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.format',
 			'config' => array(
 				'type' => 'select',
+                'renderType' => 'selectSingle',
 				'items' => array(
 					array('Plaintext', '1'),
 					array('HTML', '2'),
@@ -251,6 +252,7 @@ $GLOBALS['TCA']['tx_rkwnewsletter_domain_model_newsletter'] = array(
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.rythm',
 			'config' => array(
 				'type' => 'select',
+                'renderType' => 'selectSingle',
 				'items' => array(
 					array('LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.rythm.weekly', 1),
 					array('LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.rythm.monthly', 2),
@@ -268,6 +270,7 @@ $GLOBALS['TCA']['tx_rkwnewsletter_domain_model_newsletter'] = array(
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.approval',
 			'config' => array(
 				'type' => 'select',
+                'renderType' => 'selectMultipleSideBySide',
 				'size' => 8,
 				'eval' => 'int',
 				'default' => '',
@@ -282,6 +285,7 @@ $GLOBALS['TCA']['tx_rkwnewsletter_domain_model_newsletter'] = array(
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.usergroup',
 			'config' => array(
 				'type' => 'select',
+                'renderType' => 'selectMultipleSideBySide',
 				'size' => 8,
 				'eval' => 'int',
 				'minitems' => 0,
