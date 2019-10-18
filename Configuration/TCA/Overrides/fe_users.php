@@ -10,6 +10,7 @@ $tmpColsUser = array(
         'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:fe_user.tx_rkwnewsletter_domain_model_subscription',
         'config' => array(
             'type' => 'select',
+            'renderType' => 'selectMultipleSideBySide',
             'size' => 8,
             'eval' => 'int',
             'minitems' => 0,

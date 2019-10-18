@@ -38,12 +38,9 @@ $tmpColsPagesOverlay = array(
                 'link' => array(
                     'type' => 'popup',
                     'title' => 'LLL:EXT:cms/locallang_ttc.xlf:header_link_formlabel',
-                    'icon' => 'link_popup.gif',
+                    'icon' => 'EXT:backend/Resources/Public/Images/FormFieldWizard/wizard_link.gif',
                     'module' => array(
-                        'name' => 'wizard_element_browser',
-                        'urlParameters' => array(
-                            'mode' => 'wizard',
-                        )
+                        'name' => 'wizard_link',
                     ),
                     'JSopenParams' => 'height=400,width=550,status=0,menubar=0,scrollbars=1',
                     'params' => Array(
@@ -63,7 +60,7 @@ $tmpColsPagesOverlay = array(
 
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns(
-    'pages_language_overlay', $tmpColsPagesOverlay, 1
+    'pages_language_overlay', $tmpColsPagesOverlay
 );
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
     'pages_language_overlay',

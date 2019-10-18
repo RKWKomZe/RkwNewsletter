@@ -43,6 +43,7 @@ $GLOBALS['TCA']['tx_rkwnewsletter_domain_model_issue'] = array(
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_issue.status',
 			'config' => array(
 				'type' => 'select',
+                'renderType' => 'selectSingle',
 				'items' => array(
 					array('LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_issue.status.issue', '0'),
 					array('LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_issue.status.approval', '1'),
