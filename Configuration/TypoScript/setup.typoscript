@@ -309,7 +309,7 @@ txRkwNewsletterWebView {
 
 
 
-
+/*
 #
 # AJAX Page Prototype
 #
@@ -333,6 +333,6 @@ AJAX_Plugintyp < lib.AJAXPrototype
 AJAX_Plugintyp {
 	typeNum = 89657201
 	10 < tt_content.list.20.rkwnewsletter_rkwmanagement
-
 }
 
+*/
