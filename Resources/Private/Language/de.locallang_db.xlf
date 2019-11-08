@@ -177,7 +177,7 @@
             <!-- ##################################################### -->
 			<trans-unit id="tx_rkwnewsletter_domain_model_approval">
 				<source>RKW Newsletter: Approval</source>
-				<target state="translated">RKW Newsletter: Freigabem</target>
+				<target state="translated">RKW Newsletter: Freigaben</target>
 			</trans-unit>
 			<trans-unit id="tx_rkwnewsletter_domain_model_approval.topic">
 				<source>Topic</source>
@@ -225,6 +225,7 @@
             <!-- ##################################################### -->
 			<trans-unit id="tx_rkwnewsletter_domain_model_issue">
 				<source>RKW Newsletter: Issue</source>
+				<target>RKW Newsletter: Ausgabe</target>
 			</trans-unit>
 			<trans-unit id="tx_rkwnewsletter_domain_model_issue.title">
 				<source>Title</source>

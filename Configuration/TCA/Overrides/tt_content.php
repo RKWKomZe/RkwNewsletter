@@ -1,7 +1,4 @@
 <?php
-if (!defined ('TYPO3_MODE')) {
-	die ('Access denied.');
-}
 
 $tmpCols = [
     'tx_rkwnewsletter_is_editorial' => [
