@@ -182,7 +182,7 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
             $settings = $this->getSettings(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
             $settingsDefault = $this->getSettings();
 
-                // if there is only one topic-page included, show all contents
+            // if there is only one topic-page included, show all contents
             $itemsPerTopic = ($settings['settings']['maxItemsPerTopic'] ? intval($settings['settings']['maxItemsPerTopic']) : 5);
 
             if (count($issues)) {
