@@ -401,7 +401,9 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
                 \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(
                     'rkwMailService.subject.testMail',
                     'rkw_newsletter',
-                    array('subject' => ($title ? $title : $issue->getTitle()) . ' – '. $firstContentElement->getHeader())
+                    [
+                        'subject' => ($title ? $title : $issue->getTitle()) . ($firstContentElement ? (' – '. $firstContentElement->getHeader()) : '')
+                    ]
                 )
             );
 
