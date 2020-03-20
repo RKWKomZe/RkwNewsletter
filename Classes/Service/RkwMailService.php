@@ -340,6 +340,12 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
                 $includeTutorials = true;
             }
 
+            // include topNews?
+            $includeTopNews = false;
+            if ((count($pages->toArray()) > 1) && count($specialPages->toArray()) < 1) {
+                $includeTopNews = true;
+            }
+
             /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
             $pagesOrderArray = array();
             foreach ($pages->toArray() as $page) {
@@ -366,6 +372,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
                             'pagesOrder'        => implode(',', $pagesOrderArray),
                             'admin'             => $admin,
                             'includeEditorials' => $includeTutorials,
+                            'includeTopNews'    => $includeTopNews,
                             'webView'           => false,
                             'maxItemsPerTopic'  => $itemsPerTopic,
                             'pageTypeMore'      => $settings['settings']['webViewPageNum'],

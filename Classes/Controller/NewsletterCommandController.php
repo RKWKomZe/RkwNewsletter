@@ -264,6 +264,12 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
                                             $includeTutorials = true;
                                         }
 
+                                        // include topNews?
+                                        $includeTopNews = false;
+                                        if ((count($pages->toArray()) > 1) && count($specialPages->toArray()) < 1) {
+                                            $includeTopNews = true;
+                                        }
+
                                         // get first content element of first page with header for subject
                                         $language = $issue->getNewsletter()->getSysLanguageUid();
 
@@ -284,6 +290,7 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
                                                     'specialPages'      => $specialPages,
                                                     'pagesOrder'        => implode(',', $pagesOrderArray),
                                                     'includeEditorials' => $includeTutorials,
+                                                    'includeTopNews'    => $includeTopNews,
                                                     'webView'           => false,
                                                     'maxItemsPerTopic'  => $itemsPerTopic,
                                                     'pageTypeMore'      => $settings['settings']['webViewPageNum'],
