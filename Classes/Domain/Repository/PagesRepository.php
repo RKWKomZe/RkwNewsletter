@@ -222,23 +222,21 @@ class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query->statement($statement);
 
         return $query->execute();
-        //===
     }
 
 
 
     /**
-     *  findAllByIssueAndSubscriptionAndSpecialTopic
+     *  findAllByIssueAndSubscription
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
      * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage $subscriptions
      * @param string $pagesOrder
-     * @param bool $isSpecial
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
-    public function findAllByIssueAndSubscriptionAndSpecialTopic(\RKW\RkwNewsletter\Domain\Model\Issue $issue, \TYPO3\CMS\Extbase\Persistence\ObjectStorage $subscriptions, $isSpecial = false, $pagesOrder = null)
+    public function findAllByIssueAndSubscription(\RKW\RkwNewsletter\Domain\Model\Issue $issue, \TYPO3\CMS\Extbase\Persistence\ObjectStorage $subscriptions, $pagesOrder = null)
     {
 
         $settings = $this->getSettings();
@@ -268,7 +266,7 @@ class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                         pages.tx_rkwnewsletter_issue = ' . intval($issue->getUid()) . '
                         AND pages.tx_rkwnewsletter_topic IN (' . $subscriptionsString . ')
                     ) 
-                    AND tx_rkwnewsletter_domain_model_topic.is_special = ' . intval($isSpecial) . '
+                    AND tx_rkwnewsletter_domain_model_topic.is_special = 0
                 ) 
                 AND (
                     SELECT COUNT(tt_content.uid) 
@@ -290,7 +288,6 @@ class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query->statement($statement);
 
         return $query->execute();
-        //===
     }
 
 
@@ -304,6 +301,5 @@ class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     public function getSettings($which = ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS)
     {
         return Common::getTyposcriptConfiguration('Rkwnewsletter', $which);
-        //===
     }
 }
