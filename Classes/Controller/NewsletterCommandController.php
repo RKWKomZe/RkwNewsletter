@@ -221,7 +221,6 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
                             
                                 if (! $frontendUserUid) {
                                     continue;
-                                    //===
                                 }
 
                                 // load frontendUser
@@ -241,8 +240,8 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
                                     self::debugTime(__LINE__, __METHOD__);
 
                                     // get all pages of user by his subscriptions
-                                    /** @var \TYPO3\CMS\Extbase\Persistence\QueryResultInterface $issuePages */
-                                    $pages = $this->pagesRepository->findAllByIssueAndSubscriptionAndSpecialTopic($issue, $frontendUser->getTxRkwnewsletterSubscription());
+                                    /** @var \TYPO3\CMS\Extbase\Persistence\QueryResultInterface $pages */
+                                    $pages = $this->pagesRepository->findAllByIssueAndSubscription($issue, $frontendUser->getTxRkwnewsletterSubscription());
 
                                     /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
                                     $pagesOrderArray = array();
@@ -253,11 +252,14 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
                                     self::debugTime(__LINE__, __METHOD__);
 
                                     // add to final list if there are some pages!
-                                    if (count($pages) > 0) {
+                                    if (
+                                        (count($pages->toArray()) > 0)
+                                        || (count($specialPages->toArray()) > 0)
+                                    ) {
 
                                         // override itemsPerTopic
                                         $includeTutorials = false;
-                                        if (count($pages->toArray()) == 1) {
+                                        if ((count($pages->toArray()) + count($specialPages->toArray())) == 1) {
                                             $itemsPerTopic = 9999;
                                             $includeTutorials = true;
                                         }
@@ -266,7 +268,11 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
                                         $language = $issue->getNewsletter()->getSysLanguageUid();
 
                                         /** @var \RKW\RkwNewsletter\Domain\Model\TtContent $firstContentElement */
-                                        $firstContentElement = $this->ttContentRepository->findFirstWithHeaderByPid($pages->getFirst()->getUid(), $language, $includeTutorials);
+                                        if (count($specialPages->toArray())) {
+                                            $firstContentElement = $this->ttContentRepository->findFirstWithHeaderByPid($pages->getFirst()->getUid(), $language, $includeTutorials);
+                                        } else if (count($pages->toArray())) {
+                                            $firstContentElement = $this->ttContentRepository->findFirstWithHeaderByPid($pages->getFirst()->getUid(), $language, $includeTutorials);
+                                        }
 
                                         // add it to final list
                                         $mailService->setTo(
@@ -284,7 +290,7 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
                                                     'subscriptionPid'   => $settings['settings']['subscriptionPid'],
                                                     'hash'              => $frontendUser->getTxRkwnewsletterHash()
                                                 ),
-                                                'subject' => $issue->getTitle() . ' – '. $firstContentElement->getHeader(),
+                                                'subject' => ($firstContentElement ? ($issue->getTitle() . ' – '. $firstContentElement->getHeader()) : $issue->getTitle()),
                                             ),
                                             true
                                         );
@@ -305,7 +311,6 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
                                 $cnt++;
                                 if ($cnt >= $recipientsPerNewsletterLimit) {
                                     break;
-                                    //===
                                 }
                             }
 

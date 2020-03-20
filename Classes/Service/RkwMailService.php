@@ -335,8 +335,8 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
             // if there is only one topic-page included, show all contents
             $itemsPerTopic = ($settings['settings']['maxItemsPerTopic'] ? intval($settings['settings']['maxItemsPerTopic']) : 5);
             $includeTutorials = false;
-            if (count($pages->toArray()) == 1) {
-                $itemsPerTopic = 999;
+            if ((count($pages->toArray()) + count($specialPages->toArray())) == 1) {
+                $itemsPerTopic = 9999;
                 $includeTutorials = true;
             }
 
@@ -431,7 +431,6 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
     protected function getSettings($which = ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS)
     {
         return Common::getTyposcriptConfiguration('Rkwnewsletter', $which);
-        //===
     }
 
 
@@ -443,7 +442,6 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
     protected function getLogger()
     {
         return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Log\\LogManager')->getLogger(__CLASS__);
-        //===
     }
 
 
