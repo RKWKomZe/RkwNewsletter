@@ -382,7 +382,12 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
             $language = $issue->getNewsletter()->getSysLanguageUid();
 
             /** @var \RKW\RkwNewsletter\Domain\Model\TtContent $firstContentElement */
-            $firstContentElement = $ttContentRepository->findFirstWithHeaderByPid($pages->getFirst()->getUid(), $language, $includeTutorials);
+            if (count($specialPages->toArray())) {
+                $firstContentElement = $ttContentRepository->findFirstWithHeaderByPid($specialPages->getFirst()->getUid(), $language, $includeTutorials);
+            } else if (count($pages->toArray())) {
+                $firstContentElement = $ttContentRepository->findFirstWithHeaderByPid($pages->getFirst()->getUid(), $language, $includeTutorials);
+            }
+
 
             $mailService->getQueueMail()->setSettingsPid($issue->getNewsletter()->getSettingsPage()->getUid());
             $mailService->getQueueMail()->setSubject(

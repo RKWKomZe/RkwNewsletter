@@ -269,7 +269,7 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
 
                                         /** @var \RKW\RkwNewsletter\Domain\Model\TtContent $firstContentElement */
                                         if (count($specialPages->toArray())) {
-                                            $firstContentElement = $this->ttContentRepository->findFirstWithHeaderByPid($pages->getFirst()->getUid(), $language, $includeTutorials);
+                                            $firstContentElement = $this->ttContentRepository->findFirstWithHeaderByPid($specialPages->getFirst()->getUid(), $language, $includeTutorials);
                                         } else if (count($pages->toArray())) {
                                             $firstContentElement = $this->ttContentRepository->findFirstWithHeaderByPid($pages->getFirst()->getUid(), $language, $includeTutorials);
                                         }
