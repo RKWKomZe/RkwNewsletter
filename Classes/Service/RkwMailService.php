@@ -335,9 +335,15 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
             // if there is only one topic-page included, show all contents
             $itemsPerTopic = ($settings['settings']['maxItemsPerTopic'] ? intval($settings['settings']['maxItemsPerTopic']) : 5);
             $includeTutorials = false;
-            if (count($pages->toArray()) == 1) {
-                $itemsPerTopic = 999;
+            if ((count($pages->toArray()) + count($specialPages->toArray())) == 1) {
+                $itemsPerTopic = 9999;
                 $includeTutorials = true;
+            }
+
+            // include topNews?
+            $includeTopNews = false;
+            if ((count($pages->toArray()) > 1) && count($specialPages->toArray()) < 1) {
+                $includeTopNews = true;
             }
 
             /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
@@ -366,6 +372,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
                             'pagesOrder'        => implode(',', $pagesOrderArray),
                             'admin'             => $admin,
                             'includeEditorials' => $includeTutorials,
+                            'includeTopNews'    => $includeTopNews,
                             'webView'           => false,
                             'maxItemsPerTopic'  => $itemsPerTopic,
                             'pageTypeMore'      => $settings['settings']['webViewPageNum'],
@@ -382,14 +389,21 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
             $language = $issue->getNewsletter()->getSysLanguageUid();
 
             /** @var \RKW\RkwNewsletter\Domain\Model\TtContent $firstContentElement */
-            $firstContentElement = $ttContentRepository->findFirstWithHeaderByPid($pages->getFirst()->getUid(), $language, $includeTutorials);
+            if (count($specialPages->toArray())) {
+                $firstContentElement = $ttContentRepository->findFirstWithHeaderByPid($specialPages->getFirst()->getUid(), $language, $includeTutorials);
+            } else if (count($pages->toArray())) {
+                $firstContentElement = $ttContentRepository->findFirstWithHeaderByPid($pages->getFirst()->getUid(), $language, $includeTutorials);
+            }
+
 
             $mailService->getQueueMail()->setSettingsPid($issue->getNewsletter()->getSettingsPage()->getUid());
             $mailService->getQueueMail()->setSubject(
                 \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(
                     'rkwMailService.subject.testMail',
                     'rkw_newsletter',
-                    array('subject' => ($title ? $title : $issue->getTitle()) . ' – '. $firstContentElement->getHeader())
+                    [
+                        'subject' => ($title ? $title : $issue->getTitle()) . ($firstContentElement ? (' – '. $firstContentElement->getHeader()) : '')
+                    ]
                 )
             );
 
@@ -431,7 +445,6 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
     protected function getSettings($which = ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS)
     {
         return Common::getTyposcriptConfiguration('Rkwnewsletter', $which);
-        //===
     }
 
 
@@ -443,7 +456,6 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
     protected function getLogger()
     {
         return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Log\\LogManager')->getLogger(__CLASS__);
-        //===
     }
 
 
