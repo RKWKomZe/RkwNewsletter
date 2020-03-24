@@ -97,6 +97,14 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $priority;
 
+    
+    /**
+     * type
+     *
+     * @var integer
+     */
+    protected $type;
+
     /**
      * template
      *
@@ -404,6 +412,29 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setPriority($priority)
     {
         $this->priority = $priority;
+    }
+
+
+
+    /**
+     * Returns the type
+     *
+     * @return integer $type
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Sets the type
+     *
+     * @param integer $type
+     * @return void
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
     }
 
     /**

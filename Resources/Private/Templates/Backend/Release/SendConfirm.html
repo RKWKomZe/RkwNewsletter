@@ -38,14 +38,19 @@ Otherwise your changes will be overwritten the next time you save the extension 
             <tr>
                 <td><f:form.textfield name="title" value="{issue.title}" /></td>
                 <td>
-                    <strong><f:translate key="templates_backend_release_sendConfirm.subscriptionsAll" />: <rkwNewsletter:getNumberOfSubscriptions issue="{issue}" /></strong>, <f:translate key="templates_backend_release_sendConfirm.subscriptionsAmong" />:
-                    <f:for each="{issue.newsletter.topic}" as="topic">
-                        <f:if condition="{topic.isSpecial}">
-                            <f:else>
-                                <rkwNewsletter:getNumberOfSubscriptions issue="{issue}" topic="{topic}"/> x {topic.name} /
-                            </f:else>
-                        </f:if>
-                    </f:for>
+                    <strong><f:translate key="templates_backend_release_sendConfirm.subscriptionsAll" />: <rkwNewsletter:getNumberOfSubscriptions issue="{issue}" /></strong>
+                    <f:if condition="{issue.newsletter.type} == 1">
+                        <f:else>
+                            , <f:translate key="templates_backend_release_sendConfirm.subscriptionsAmong" />:
+                            <f:for each="{issue.newsletter.topic}" as="topic">
+                                <f:if condition="{topic.isSpecial}">
+                                    <f:else>
+                                        <rkwNewsletter:getNumberOfSubscriptions issue="{issue}" topic="{topic}"/> x {topic.name} /
+                                    </f:else>
+                                </f:if>
+                            </f:for>
+                        </f:else>
+                    </f:if>
                 </td>
                 <td>
                     <f:link.action action="sendList" arguments="{issue : issue}">
