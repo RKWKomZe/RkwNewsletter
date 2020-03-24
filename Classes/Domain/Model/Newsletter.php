@@ -40,6 +40,14 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $name;
 
+
+    /**
+     * introduction
+     *
+     * @var string
+     */
+    protected $introduction;
+
     /**
      * issueTitle
      *
@@ -226,6 +234,29 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+
+    /**
+     * Returns the introduction
+     *
+     * @return string $introduction
+     */
+    public function getIntroduction()
+    {
+        return $this->introduction;
+    }
+
+
+    /**
+     * Sets the introduction
+     *
+     * @param string $introduction
+     * @return void
+     */
+    public function setIntroduction($introduction)
+    {
+        $this->introduction = $introduction;
     }
 
     /**

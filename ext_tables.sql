@@ -7,6 +7,7 @@ CREATE TABLE tx_rkwnewsletter_domain_model_newsletter (
 	pid int(11) DEFAULT '0' NOT NULL,
 
 	name varchar(255) DEFAULT '' NOT NULL,
+	introduction text NOT NULL,
 	issue_title varchar(255) DEFAULT '' NOT NULL,
 	sender_name varchar(255) DEFAULT '' NOT NULL,
 	sender_mail varchar(255) DEFAULT '' NOT NULL,

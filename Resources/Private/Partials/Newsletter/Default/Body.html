@@ -6,7 +6,14 @@
 
 <rkwMailer:recipientSalutation queueRecipient="{queueRecipient}" prependText="<rkwMailer:frontend.translate key='partials_newsletter_body.headline' languageKey='{queueRecipient.languageCode}' extensionName='rkwNewsletter' /> " appendText="," />
 \n\n
+<f:if condition="{newsletter.introduction}">
+    <f:then>
+{newsletter.introduction}
+    </f:then>
+    <f:else>
 <rkwMailer:frontend.translate key="partials_newsletter_body.introduction" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />
+    </f:else>
+</f:if>
 \n\n
 <f:render partial="Default/Items" section="Plaintext" arguments="{pages: pages, issue: issue, queueMail: queueMail, queueRecipient: queueRecipient, maxItemsPerTopic: maxItemsPerTopic, pageTypeMore: pageTypeMore, pagesOrder: pagesOrder, includeEditorials: includeEditorials}" />
 <f:render partial="Default/Items" section="Plaintext" arguments="{pages: specialPages, issue: issue, queueMail: queueMail, queueRecipient: queueRecipient, maxItemsPerTopic: maxItemsPerTopic, pageTypeMore: pageTypeMore, includeEditorials: '0'}" />
@@ -24,7 +31,14 @@
                 <rkwMailer:recipientSalutation queueRecipient="{queueRecipient}" prependText="<rkwMailer:frontend.translate key='partials_newsletter_body.headline' languageKey='{queueRecipient.languageCode}' extensionName='rkwNewsletter' /> " appendText="," />
             </p>
             <p style="margin: 24px 0 0; line-height: 20px">
-                <rkwMailer:frontend.translate key="partials_newsletter_body.introduction" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />
+                <f:if condition="{newsletter.introduction}">
+                    <f:then>
+                        {newsletter.introduction}
+                    </f:then>
+                    <f:else>
+                        <rkwMailer:frontend.translate key="partials_newsletter_body.introduction" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />
+                    </f:else>
+                </f:if>
             </p>
         </td>
     </tr>

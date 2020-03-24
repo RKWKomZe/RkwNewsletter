@@ -113,6 +113,17 @@ return [
 				'eval' => 'trim, required',
 			],
 		],
+        'introduction' => [
+            'exclude' => 0,
+            'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.introduction',
+            'config' => [
+                'type' => 'text',
+                'cols' => '40',
+                'rows' => '15',
+                'eval' => 'trim',
+            ],
+        ],
+
 		'issue_title' => [
 			'exclude' => false,
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.issue_title',
