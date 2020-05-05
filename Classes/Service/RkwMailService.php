@@ -43,7 +43,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
      * @throws \RKW\RkwMailer\Service\MailException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
-     * @throws \TYPO3\CMS\Fluid\View\Exception\InvalidTemplateResourceException
+     * @throws \TYPO3Fluid\Fluid\View\Exception\InvalidTemplateResourceException
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     public function sendMailAdminApproval($admins, \RKW\RkwNewsletter\Domain\Model\Approval $approval, $stage = 1, $isReminder = false)
@@ -114,7 +114,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
      * @throws \RKW\RkwMailer\Service\MailException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
-     * @throws \TYPO3\CMS\Fluid\View\Exception\InvalidTemplateResourceException
+     * @throws \TYPO3Fluid\Fluid\View\Exception\InvalidTemplateResourceException
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     public function sendMailAdminApprovalAutomatic($admins, \RKW\RkwNewsletter\Domain\Model\Approval $approval, $stage = 1)
@@ -184,7 +184,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
      * @throws \RKW\RkwMailer\Service\MailException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
-     * @throws \TYPO3\CMS\Fluid\View\Exception\InvalidTemplateResourceException
+     * @throws \TYPO3Fluid\Fluid\View\Exception\InvalidTemplateResourceException
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     public function sendMailAdminRelease($admins, \RKW\RkwNewsletter\Domain\Model\Issue $issue, $isReminder = false)
@@ -253,7 +253,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
      * @throws \RKW\RkwMailer\Service\MailException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
-     * @throws \TYPO3\CMS\Fluid\View\Exception\InvalidTemplateResourceException
+     * @throws \TYPO3Fluid\Fluid\View\Exception\InvalidTemplateResourceException
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     public function sendOptInRequest(\RKW\RkwRegistration\Domain\Model\FrontendUser $frontendUser, \RKW\RkwRegistration\Domain\Model\Registration $registration = null)
@@ -312,7 +312,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
      * @throws \RKW\RkwMailer\Service\MailException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
-     * @throws \TYPO3\CMS\Fluid\View\Exception\InvalidTemplateResourceException
+     * @throws \TYPO3Fluid\Fluid\View\Exception\InvalidTemplateResourceException
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     public function sendTestMail(\RKW\RkwNewsletter\Domain\Model\BackendUser $admin, $emailList, \RKW\RkwNewsletter\Domain\Model\Issue $issue, \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $pages, \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $specialPages, $title = null)
