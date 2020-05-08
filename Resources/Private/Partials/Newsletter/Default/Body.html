@@ -6,9 +6,9 @@
 
 <rkwMailer:recipientSalutation queueRecipient="{queueRecipient}" prependText="<rkwMailer:frontend.translate key='partials_newsletter_body.headline' languageKey='{queueRecipient.languageCode}' extensionName='rkwNewsletter' /> " appendText="," />
 \n\n
-<f:if condition="{newsletter.introduction}">
+<f:if condition="{issue.newsletter.introduction}">
     <f:then>
-{newsletter.introduction}
+{issue.newsletter.introduction}
     </f:then>
     <f:else>
 <rkwMailer:frontend.translate key="partials_newsletter_body.introduction" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />
@@ -31,9 +31,9 @@
                 <rkwMailer:recipientSalutation queueRecipient="{queueRecipient}" prependText="<rkwMailer:frontend.translate key='partials_newsletter_body.headline' languageKey='{queueRecipient.languageCode}' extensionName='rkwNewsletter' /> " appendText="," />
             </p>
             <p style="margin: 24px 0 0; line-height: 20px">
-                <f:if condition="{newsletter.introduction}">
+                <f:if condition="{issue.newsletter.introduction}">
                     <f:then>
-                        {newsletter.introduction}
+                        {issue.newsletter.introduction}
                     </f:then>
                     <f:else>
                         <rkwMailer:frontend.translate key="partials_newsletter_body.introduction" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />
