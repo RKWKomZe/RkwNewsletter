@@ -105,7 +105,10 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
 
         // if frontendUser is given, we use it's subscriptions
-        if ($frontendUser) {
+        if (
+            ($frontendUser)
+            && ($issue->getNewsletter()->getType() != 1)
+        ){
             $pages = $this->pagesRepository->findAllByIssueAndSubscription($issue, $frontendUser->getTxRkwnewsletterSubscription(), $pagesOrder);
         } else {
             $pages = $this->pagesRepository->findAllByIssueAndSpecialTopic($issue, false, $pagesOrder);

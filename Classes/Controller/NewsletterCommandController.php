@@ -241,7 +241,12 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
 
                                     // get all pages of user by his subscriptions
                                     /** @var \TYPO3\CMS\Extbase\Persistence\QueryResultInterface $pages */
-                                    $pages = $this->pagesRepository->findAllByIssueAndSubscription($issue, $frontendUser->getTxRkwnewsletterSubscription());
+                                    if ($newsletter->getType() == 1) {
+                                        $pages = $this->pagesRepository->findAllByIssueAndSpecialTopic($issue, false);
+                                    } else {
+                                        $pages = $this->pagesRepository->findAllByIssueAndSubscription($issue, $frontendUser->getTxRkwnewsletterSubscription());
+                                    }
+
 
                                     /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
                                     $pagesOrderArray = array();
@@ -353,7 +358,11 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
                         self::debugTime(__LINE__, __METHOD__);
 
                         // add all relevant recipients to the list of recipients of the issue
-                        $subscribers = $this->frontendUserRepository->findAllSubscribersByIssue($issue);
+                        if ($newsletter->getType() == 1) {
+                            $subscribers = $this->frontendUserRepository->findAllSubscribers();
+                        } else {
+                            $subscribers = $this->frontendUserRepository->findAllSubscribersByIssue($issue);
+                        }
 
                         /** @var \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser */
                         foreach ($subscribers as $frontendUser) {

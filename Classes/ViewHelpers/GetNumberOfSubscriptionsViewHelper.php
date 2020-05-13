@@ -15,7 +15,7 @@ namespace RKW\RkwNewsletter\ViewHelpers;
  */
 
 /**
- * GetNewsletterContentsViewHelper
+ * GetNumberOfSubscriptionsViewHelper
  *
  * @author Maximilian Fäßler <maximilian@faesslerweb.de>
  * @author Steffen Kroggel <developer@steffenkroggel.de>
@@ -42,7 +42,10 @@ class GetNumberOfSubscriptionsViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelpe
         /** @var \RKW\RkwNewsletter\Domain\Repository\FrontendUserRepository $frontendUserRepository */
         $frontendUserRepository = $objectManager->get('RKW\\RkwNewsletter\\Domain\\Repository\\FrontendUserRepository');
 
+        if ($issue->getNewsletter()->getType() == 1) {
+            return $frontendUserRepository->findAllSubscribers()->count();
+        }
+
         return $frontendUserRepository->findAllSubscribersByIssue($issue, $topic)->count();
-        //===
     }
 }
