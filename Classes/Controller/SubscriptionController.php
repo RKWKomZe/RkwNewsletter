@@ -218,7 +218,7 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
 
         $this->view->assignMultiple(
             array(
-                'newsletterList' => $this->newsletterRepository->findAll(),
+                'newsletterList' => $this->newsletterRepository->findAllByType(),
                 'topicList'      => $this->buildCleanedTopicList($topics),
                 'frontendUser'   => $frontendUser,
                 'terms'          => (bool)$terms,
@@ -241,8 +241,10 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      * @return void
      */
     public function createAction(\RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser, $topics = array(), $terms = null, $privacy = null)
@@ -412,7 +414,7 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
 
         $this->view->assignMultiple(
             array(
-                'newsletterList' => $this->newsletterRepository->findAll(),
+                'newsletterList' => $this->newsletterRepository->findAllByType(),
                 'topicList'      => $this->buildCleanedTopicList($topics),
                 'privacy'        => (bool)$privacy,
                 'frontendUser'   => $frontendUser,

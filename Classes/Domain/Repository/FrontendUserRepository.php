@@ -57,7 +57,6 @@ class FrontendUserRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         );
 
         return $query->execute()->getFirst();
-        //====
     }
 
 
@@ -90,7 +89,29 @@ class FrontendUserRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         );
 
         return $query->execute();
-        //====
     }
+
+
+    /**
+     * findAllSubscribers
+     *
+     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface|array
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     */
+    public function findAllSubscribers()
+    {
+
+        $query = $this->createQuery();
+        $query->matching(
+            $query->greaterThan('txRkwnewsletterSubscription', 0)
+        );
+
+        $query->setOrderings(
+            ['txRkwnewsletterPriority' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING]
+        );
+
+        return $query->execute();
+    }
+
 
 }

@@ -14,6 +14,9 @@
 			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.name">
 				<source>Name configuration</source>
 			</trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_newsletter.introduction">
+                <source>Introduction</source>
+            </trans-unit>
 			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.issue_title">
 				<source>Issue Title (e.g. "RKW Newsletter {M}/{Y}" will dynamically insert month and year)</source>
 			</trans-unit>
@@ -44,6 +47,12 @@
 			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.priority.low">
 				<source>Low</source>
 			</trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_newsletter.type">
+                <source>Type</source>
+            </trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_newsletter.type.special">
+                <source>Special-Newsletter (send to all)</source>
+            </trans-unit>
 			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.template">
 				<source>Template</source>
 			</trans-unit>
@@ -70,9 +79,6 @@
 			</trans-unit>
 			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.approval">
 				<source>Final Approval for Sending</source>
-			</trans-unit>
-			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.type">
-				<source>Type</source>
 			</trans-unit>
 			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.usergroup">
 				<source>FE-User Groups</source>
