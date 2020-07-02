@@ -166,12 +166,13 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
      *
      * @param int $newsletterLimit
      * @param int $recipientsPerNewsletterLimit
+     * @param float $sleep how many seconds the script should sleep after each run
      * @return void
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      */
-    public function buildNewslettersCommand($newsletterLimit = 5, $recipientsPerNewsletterLimit = 10)
+    public function buildNewslettersCommand($newsletterLimit = 5, $recipientsPerNewsletterLimit = 10, $sleep = 60.0)
     {
 
         try {
@@ -226,87 +227,102 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
                                 // load frontendUser
                                 if ($frontendUser = $this->frontendUserRepository->findByUid($frontendUserUid)) {
 
-                                    self::debugTime(__LINE__, __METHOD__);
-
-                                    // check if hash-value exists - may be relevant for imports via MySQL
-                                    if (!$frontendUser->getTxRkwnewsletterHash()) {
-                                        $hash = sha1($frontendUser->getUid() . $frontendUser->getEmail() . rand());
-                                        $frontendUser->setTxRkwnewsletterHash($hash);
-                                        $this->frontendUserRepository->update($frontendUser);
-
-                                        $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Set new newsletter-hash for frontendUser with uid=%s.', $frontendUser->getUid()));
-                                    }
-
-                                    self::debugTime(__LINE__, __METHOD__);
-
-                                    // get all pages of user by his subscriptions
-                                    /** @var \TYPO3\CMS\Extbase\Persistence\QueryResultInterface $pages */
-                                    $pages = $this->pagesRepository->findAllByIssueAndSubscription($issue, $frontendUser->getTxRkwnewsletterSubscription());
-
-                                    /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
-                                    $pagesOrderArray = array();
-                                    foreach ($pages->toArray() as $page) {
-                                        $pagesOrderArray[] = $page->getUid();
-                                    }
-
-                                    self::debugTime(__LINE__, __METHOD__);
-
-                                    // add to final list if there are some pages!
-                                    if (
-                                        (count($pages->toArray()) > 0)
-                                        || (count($specialPages->toArray()) > 0)
-                                    ) {
-
-                                        // override itemsPerTopic
-                                        $includeTutorials = false;
-                                        if ((count($pages->toArray()) + count($specialPages->toArray())) == 1) {
-                                            $itemsPerTopic = 9999;
-                                            $includeTutorials = true;
-                                        }
-
-                                        // include topNews?
-                                        $includeTopNews = false;
-                                        if ((count($pages->toArray()) > 1) && count($specialPages->toArray()) < 1) {
-                                            $includeTopNews = true;
-                                        }
-
-                                        // get first content element of first page with header for subject
-                                        $language = $issue->getNewsletter()->getSysLanguageUid();
-
-                                        /** @var \RKW\RkwNewsletter\Domain\Model\TtContent $firstContentElement */
-                                        if (count($specialPages->toArray())) {
-                                            $firstContentElement = $this->ttContentRepository->findFirstWithHeaderByPid($specialPages->getFirst()->getUid(), $language, $includeTutorials);
-                                        } else if (count($pages->toArray())) {
-                                            $firstContentElement = $this->ttContentRepository->findFirstWithHeaderByPid($pages->getFirst()->getUid(), $language, $includeTutorials);
-                                        }
-
-                                        // add it to final list
-                                        $mailService->setTo(
-                                            $frontendUser,
-                                            array(
-                                                'marker'  => array(
-                                                    'issue'             => $issue,
-                                                    'pages'             => $pages,
-                                                    'specialPages'      => $specialPages,
-                                                    'pagesOrder'        => implode(',', $pagesOrderArray),
-                                                    'includeEditorials' => $includeTutorials,
-                                                    'includeTopNews'    => $includeTopNews,
-                                                    'webView'           => false,
-                                                    'maxItemsPerTopic'  => $itemsPerTopic,
-                                                    'pageTypeMore'      => $settings['settings']['webViewPageNum'],
-                                                    'subscriptionPid'   => $settings['settings']['subscriptionPid'],
-                                                    'hash'              => $frontendUser->getTxRkwnewsletterHash()
-                                                ),
-                                                'subject' => ($firstContentElement ? ($issue->getTitle() . ' – '. $firstContentElement->getHeader()) : $issue->getTitle()),
-                                            ),
-                                            true
-                                        );
+                                    if (!$mailService->hasQueueRecipient($frontendUser->getEmail())) {
 
                                         self::debugTime(__LINE__, __METHOD__);
 
+                                        // check if hash-value exists - may be relevant for imports via MySQL
+                                        if (!$frontendUser->getTxRkwnewsletterHash()) {
+                                            $hash = sha1($frontendUser->getUid() . $frontendUser->getEmail() . rand());
+                                            $frontendUser->setTxRkwnewsletterHash($hash);
+                                            $this->frontendUserRepository->update($frontendUser);
+
+                                            $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Set new newsletter-hash for frontendUser with uid=%s.', $frontendUser->getUid()));
+                                        }
+
+                                        self::debugTime(__LINE__, __METHOD__);
+
+                                        // get all pages of user by his subscriptions
+                                        /** @var \TYPO3\CMS\Extbase\Persistence\QueryResultInterface $pages */
+                                        if ($newsletter->getType() == 1) {
+                                            $pages = $this->pagesRepository->findAllByIssueAndSpecialTopic($issue, false);
+                                        } else {
+                                            $pages = $this->pagesRepository->findAllByIssueAndSubscription($issue, $frontendUser->getTxRkwnewsletterSubscription());
+                                        }
+
+
+                                        /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
+                                        $pagesOrderArray = array();
+                                        foreach ($pages->toArray() as $page) {
+                                            $pagesOrderArray[] = $page->getUid();
+                                        }
+
+                                        self::debugTime(__LINE__, __METHOD__);
+
+                                        // add to final list if there are some pages!
+                                        if (
+                                            (count($pages->toArray()) > 0)
+                                            || (count($specialPages->toArray()) > 0)
+                                        ) {
+
+                                            // override itemsPerTopic
+                                            $includeTutorials = false;
+                                            if ((count($pages->toArray()) + count($specialPages->toArray())) == 1) {
+                                                $itemsPerTopic = 9999;
+                                                $includeTutorials = true;
+                                            }
+
+                                            // include topNews?
+                                            $includeTopNews = false;
+                                            if ((count($pages->toArray()) > 1) && count($specialPages->toArray()) < 1) {
+                                                $includeTopNews = true;
+                                            }
+
+                                            // get first content element of first page with header for subject
+                                            $language = $issue->getNewsletter()->getSysLanguageUid();
+
+                                            /** @var \RKW\RkwNewsletter\Domain\Model\TtContent $firstContentElement */
+                                            if (count($specialPages->toArray())) {
+                                                $firstContentElement = $this->ttContentRepository->findFirstWithHeaderByPid($specialPages->getFirst()->getUid(), $language, $includeTutorials);
+                                            } else {
+                                                if (count($pages->toArray())) {
+                                                    $firstContentElement = $this->ttContentRepository->findFirstWithHeaderByPid($pages->getFirst()->getUid(), $language, $includeTutorials);
+                                                }
+                                            }
+
+                                            // add it to final list
+                                            $mailService->setTo(
+                                                $frontendUser,
+                                                array(
+                                                    'marker'  => array(
+                                                        'issue'             => $issue,
+                                                        'pages'             => $pages,
+                                                        'specialPages'      => $specialPages,
+                                                        'pagesOrder'        => implode(',', $pagesOrderArray),
+                                                        'includeEditorials' => $includeTutorials,
+                                                        'includeTopNews'    => $includeTopNews,
+                                                        'webView'           => false,
+                                                        'maxItemsPerTopic'  => $itemsPerTopic,
+                                                        'pageTypeMore'      => $settings['settings']['webViewPageNum'],
+                                                        'subscriptionPid'   => $settings['settings']['subscriptionPid'],
+                                                        'hash'              => $frontendUser->getTxRkwnewsletterHash()
+                                                    ),
+                                                    'subject' => ($firstContentElement ? ($issue->getTitle() . ' – ' . $firstContentElement->getHeader()) : $issue->getTitle()),
+                                                ),
+                                                true
+                                            );
+
+                                            self::debugTime(__LINE__, __METHOD__);
+
+                                            //  remove recipient from temporary list!
+                                            $issue->removeRecipients($frontendUser);
+                                            $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Prepared newsletter-mails for recipient with uid=%s for issue with uid=%s of newsletter-configuration with id=%s.', $frontendUser->getUid(), $issue->getUid(), $newsletter->getUid()));
+                                        }
+
+                                    } else {
                                         //  remove recipient from temporary list!
                                         $issue->removeRecipients($frontendUser);
-                                        $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Prepared newsletter-mails for recipient with uid=%s for issue with uid=%s of newsletter-configuration with id=%s.', $frontendUser->getUid(), $issue->getUid(), $newsletter->getUid()));
+                                        $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::WARNING, sprintf('Recipient with uid=%s for issue with uid=%s of newsletter-configuration with id=%s has already been added as recipient.', $frontendUserUid, $issue->getUid(), $newsletter->getUid()));
                                     }
                                 } else {
 
@@ -326,6 +342,7 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
                             // if sending has already been started, this only adds the new users
                             $mailService->send();
                             $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Prepared newsletter-mails for %s recipients for issue with id=%s of newsletter-configuration with id=%s.', $cnt, $issue->getUid(), $newsletter->getUid()));
+                            usleep(intval($sleep * 1000000));
 
                         } else {
 
@@ -353,7 +370,11 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
                         self::debugTime(__LINE__, __METHOD__);
 
                         // add all relevant recipients to the list of recipients of the issue
-                        $subscribers = $this->frontendUserRepository->findAllSubscribersByIssue($issue);
+                        if ($newsletter->getType() == 1) {
+                            $subscribers = $this->frontendUserRepository->findAllSubscribers();
+                        } else {
+                            $subscribers = $this->frontendUserRepository->findAllSubscribersByIssue($issue);
+                        }
 
                         /** @var \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser */
                         foreach ($subscribers as $frontendUser) {
