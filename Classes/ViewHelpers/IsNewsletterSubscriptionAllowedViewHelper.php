@@ -37,12 +37,10 @@ class IsNewsletterSubscriptionAllowedViewHelper extends \TYPO3\CMS\Fluid\Core\Vi
         // if newsletter has no restrictions
         if (!$newsletter->getUsergroup()->toArray()) {
             return true;
-            //===
         }
 
         // check access for logged-in users
         if ($frontendUser) {
-
 
             /** @var \TYPO3\CMS\Extbase\Domain\Model\FrontendUserGroup $usergroup */
             foreach ($frontendUser->getUsergroup()->toArray() as $userGroup) {
@@ -52,13 +50,11 @@ class IsNewsletterSubscriptionAllowedViewHelper extends \TYPO3\CMS\Fluid\Core\Vi
 
                     if ($userGroup->getUid() === $newsletterGroup->getUid()) {
                         return true;
-                        //===
                     }
                 }
             }
         }
 
         return false;
-        //===
     }
 }

@@ -41,13 +41,10 @@ class IsTopicSubscribedViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\Abstr
 
                 if ($userTopic->getUid() == $topic->getUid()) {
                     return true;
-                    //===
-
                 }
             }
         }
 
         return false;
-        //===
     }
 }

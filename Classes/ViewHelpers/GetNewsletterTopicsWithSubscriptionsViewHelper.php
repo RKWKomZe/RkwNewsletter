@@ -29,7 +29,7 @@ class GetNewsletterTopicsWithSubscriptionsViewHelper extends \TYPO3\CMS\Fluid\Co
      * Gets all topics of the issue with information about the subscriptions
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
-     * @param mixed $pages
+     * @param \Traversable $pages
      * @return array
      */
     public function render(\RKW\RkwNewsletter\Domain\Model\Issue $issue, $pages)
@@ -64,6 +64,5 @@ class GetNewsletterTopicsWithSubscriptionsViewHelper extends \TYPO3\CMS\Fluid\Co
         }
 
         return $finalTopics;
-        //===
     }
 }

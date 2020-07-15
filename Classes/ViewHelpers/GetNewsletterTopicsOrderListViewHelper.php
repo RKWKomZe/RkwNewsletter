@@ -28,8 +28,7 @@ class GetNewsletterTopicsOrderListViewHelper extends \TYPO3\CMS\Fluid\Core\ViewH
     /**
      * Gets current order of topics
      *
-     * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
-     * @param mixed $pages
+     * @param \Traversable $pages
      * @return array
      */
     public function render($pages)
@@ -42,6 +41,5 @@ class GetNewsletterTopicsOrderListViewHelper extends \TYPO3\CMS\Fluid\Core\ViewH
         }
 
         return implode(',', $order);
-        //===
     }
 }
