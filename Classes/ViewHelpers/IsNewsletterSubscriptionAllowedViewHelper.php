@@ -28,7 +28,7 @@ class IsNewsletterSubscriptionAllowedViewHelper extends \TYPO3\CMS\Fluid\Core\Vi
     /**
      * checks whether a user must be logged in to see a newsletter (group restriction / logged in)
      *
-     * @param \RKW\RkwNewsletter\Domain\Model\FrontendUser|null $frontendUser
+     * @param mixed $frontendUser
      * @param \RKW\RkwNewsletter\Domain\Model\Newsletter $newsletter
      * @return boolean
      */
