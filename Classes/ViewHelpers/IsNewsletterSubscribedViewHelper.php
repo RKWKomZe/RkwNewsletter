@@ -28,7 +28,7 @@ class IsNewsletterSubscribedViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\
     /**
      * checks is user has subscribed to a topic
      *
-     * @param \RKW\RkwNewsletter\Domain\Model\FrontendUser|null $frontendUser
+     * @param mixed $frontendUser
      * @param \RKW\RkwNewsletter\Domain\Model\Newsletter $newsletter
      * @return boolean
      */
