@@ -29,7 +29,7 @@ class GetNewsletterTopicsOrderListViewHelper extends \TYPO3\CMS\Fluid\Core\ViewH
      * Gets current order of topics
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
-     * @param \TYPO3\CMS\Extbase\Persistence\QueryResultInterface|array $pages
+     * @param mixed $pages
      * @return array
      */
     public function render($pages)
