@@ -238,26 +238,31 @@ class Issue implements \TYPO3\CMS\Core\SingletonInterface
                                         $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Added tt-content-element with id=%s and SysLanguageUid=%s to container-page with uid=%s for newsletter with id=%s.', $ttContentElement->getUid(), $ttContentElement->getSysLanguageUid(), $containerPage->getUid(), $newsletter->getUid()));
 
                                         // 3.4 set image
-                                        /** @var \RKW\RkwBasics\Domain\Model\FileReference $image */
-                                        $image = $page->getTxRkwnewsletterTeaserImage() ? $page->getTxRkwnewsletterTeaserImage() : ($page->getTxRkwbasicsTeaserImage() ? $page->getTxRkwbasicsTeaserImage() : null);
-                                        $fileReference = null;
-                                        if ($image) {
-                                            /** @var \RKW\RkwBasics\Domain\Model\FileReference $fileReference */
-                                            $fileReference = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('RKW\\RkwBasics\\Domain\\Model\\FileReference');
-                                            $fileReference->setOriginalResource($image->getOriginalResource());
-                                            $fileReference->setTablenames('tt_content');
-                                            $fileReference->setTableLocal('sys_file');
-                                            $fileReference->setFile($image->getFile());
-                                            $fileReference->setUidForeign($ttContentElement->getUid());
+                                        try {
+                                            /** @var \RKW\RkwBasics\Domain\Model\FileReference $image */
+                                            $image = $page->getTxRkwnewsletterTeaserImage() ? $page->getTxRkwnewsletterTeaserImage() : ($page->getTxRkwbasicsTeaserImage() ? $page->getTxRkwbasicsTeaserImage() : null);
+                                            $fileReference = null;
+                                            if ($image) {
+                                                /** @var \RKW\RkwBasics\Domain\Model\FileReference $fileReference */
+                                                $fileReference = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('RKW\\RkwBasics\\Domain\\Model\\FileReference');
+                                                $fileReference->setOriginalResource($image->getOriginalResource());
+                                                $fileReference->setTablenames('tt_content');
+                                                $fileReference->setTableLocal('sys_file');
+                                                $fileReference->setFile($image->getFile());
+                                                $fileReference->setUidForeign($ttContentElement->getUid());
 
-                                            $this->fileReferenceRepository->add($fileReference);
+                                                $this->fileReferenceRepository->add($fileReference);
 
-                                            // $ttContentElement->addImage($fileReference);
-                                            // $ttContentRepository->update($ttContentElement);
-                                            $this->ttContentRepository->updateImage($ttContentElement);
-                                            $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Added a fileReference with uid=%s to tt-content-element with id=%s for newsletter with id=%s.', $fileReference->getUid(), $ttContentElement->getUid(), $newsletter->getUid()));
+                                                // $ttContentElement->addImage($fileReference);
+                                                // $ttContentRepository->update($ttContentElement);
+                                                $this->ttContentRepository->updateImage($ttContentElement);
+                                                $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Added a fileReference with uid=%s to tt-content-element with id=%s for newsletter with id=%s.', $fileReference->getUid(), $ttContentElement->getUid(), $newsletter->getUid()));
 
+                                            }
+                                        } catch (\Exception $e) {
+                                            $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Can not add fileReference to tt-content-element with id=%s for newsletter with id=%s. Error: %s', $ttContentElement->getUid(), $newsletter->getUid(), $e->getMessage()));
                                         }
+
 
                                         // 3.5 mark current page as already used
                                         $page->setTxRkwnewsletterIncludeTstamp(time());
