@@ -28,7 +28,7 @@ class IsTopicSubscribedViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\Abstr
     /**
      * checks is user has subscribed to a topic
      *
-     * @param \RKW\RkwNewsletter\Domain\Model\FrontendUser|null $frontendUser
+     * @param mixed $frontendUser
      * @param \RKW\RkwNewsletter\Domain\Model\Topic $topic
      * @return boolean
      */
@@ -41,13 +41,10 @@ class IsTopicSubscribedViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\Abstr
 
                 if ($userTopic->getUid() == $topic->getUid()) {
                     return true;
-                    //===
-
                 }
             }
         }
 
         return false;
-        //===
     }
 }

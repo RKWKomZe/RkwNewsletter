@@ -26,7 +26,7 @@
         "php": ">=5.6",
         "typo3/cms-core": "~7.6.0 || ~8.7.0",
         "rkw/rkw-basics": "~8.7.15",
-        "rkw/rkw-mailer": "~8.7.32",
+        "rkw/rkw-mailer": "~8.7.33",
         "rkw/rkw-registration": "~8.7.0"
     },
     "autoload": {
