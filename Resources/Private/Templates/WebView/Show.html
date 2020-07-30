@@ -1,8 +1,8 @@
 {namespace rkwMailer=RKW\RkwMailer\ViewHelpers}
 {namespace rkwNewsletter=RKW\RkwNewsletter\ViewHelpers}
 
-<f:layout name="WebView/{issue.newsletter.template}" />
+<f:layout name="WebView" />
 
 <f:section name="Default">
-    <f:render partial="{issue.newsletter.template}/Body" section="Html" arguments="{_all}" />
+    <f:render partial="Body" section="Html" arguments="{_all}" />
 </f:section>
