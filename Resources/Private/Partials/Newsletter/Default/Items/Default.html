@@ -5,11 +5,11 @@
 <f:section name="Plaintext">
     <f:if condition="{itemIterator.isFirst}">
         <f:then>
-            <f:render partial="Default/Items/Default/TopicBadge" section="Plaintext" arguments="{_all}" />
+            <f:render partial="Items/Default/TopicBadge" section="Plaintext" arguments="{_all}" />
         </f:then>
     </f:if>
-    <f:render partial="Default/Items/Default/Content" section="Plaintext" arguments="{_all}" />\n
-    <f:render partial="Default/Items/Default/Contact" section="Plaintext" arguments="{_all}" />
+    <f:render partial="Items/Default/Content" section="Plaintext" arguments="{_all}" />\n
+    <f:render partial="Items/Default/Contact" section="Plaintext" arguments="{_all}" />
 </f:section>
 
 
@@ -20,7 +20,7 @@
     <f:if condition="{itemIterator.isFirst}">
 
         <!-- badge -->
-        <f:render partial="Default/Items/Default/TopicBadge" section="Html" arguments="{_all}" />
+        <f:render partial="Items/Default/TopicBadge" section="Html" arguments="{_all}" />
 
     </f:if>
 
@@ -45,10 +45,10 @@
                                 <td style="background: #fff" colspan="3">
 
                                     <!-- content -->
-                                    <f:render partial="Default/Items/Default/Content" section="Html" arguments="{_all}" />
+                                    <f:render partial="Items/Default/Content" section="Html" arguments="{_all}" />
 
                                     <!-- contact -->
-                                    <f:render partial="Default/Items/Default/Contact" section="Html" arguments="{_all}" />
+                                    <f:render partial="Items/Default/Contact" section="Html" arguments="{_all}" />
 
                                 </td>
                             </tr>

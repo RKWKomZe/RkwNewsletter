@@ -43,13 +43,6 @@
         </td>
     </tr>
 
-    <!-- Top-News -->
-    <f:if condition="{webView}">
-        <f:else>
-            <f:render partial="TopNews" section="Html" arguments="{_all}" />
-        </f:else>
-    </f:if>
-
     <!-- Special Contents -->
     <f:render partial="Items" section="Html" arguments="{pages: specialPages, issue: issue, queueMail: queueMail, queueRecipient: queueRecipient, maxItemsPerTopic: maxItemsPerTopic, pageTypeMore: pageTypeMore, webView: webView, includeEditorials: includeEditorials}" />
 

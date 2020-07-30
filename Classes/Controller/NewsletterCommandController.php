@@ -398,6 +398,29 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
                         $queueMail->addTemplatePaths($settings['view']['newsletter']['templateRootPaths']);
                         $queueMail->addPartialPaths($settings['view']['newsletter']['partialRootPaths']);
 
+                        // add paths depending on template - including the default one!
+                        $layoutPaths = $settings['view']['newsletter']['layoutRootPaths'];
+                        if (is_array($layoutPaths)) {
+                            foreach ($layoutPaths as $path) {
+                                $path = trim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+                                $queueMail->addLayoutPath($path . 'Default');
+                                if ($issue->getNewsletter()->getTemplate() != 'Default') {
+                                    $queueMail->addLayoutPath($path . $issue->getNewsletter()->getTemplate());
+                                }
+                            }
+                        }
+
+                        $partialPaths = $settings['view']['newsletter']['partialRootPaths'];
+                        if (is_array($partialPaths)) {
+                            foreach ($partialPaths as $path) {
+                                $path = trim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+                                $queueMail->addPartialPath($path . 'Default');
+                                if ($issue->getNewsletter()->getTemplate() != 'Default') {
+                                    $queueMail->addPartialPath($path . $issue->getNewsletter()->getTemplate());
+                                }
+                            }
+                        }
+
                         $queueMail->setPlaintextTemplate($issue->getNewsletter()->getTemplate());
                         $queueMail->setHtmlTemplate($issue->getNewsletter()->getTemplate());
 

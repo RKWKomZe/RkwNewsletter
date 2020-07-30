@@ -137,13 +137,13 @@ module.tx_rkwnewsletter {
 
         newsletter {
             # cat=module.tx_rkwnewsletter/file; type=string; label=Path to template root for newsletter
-            templateRootPath = EXT:rkw_newsletter/Resources/Private/Templates/Newsletter/
+            templateRootPath = EXT:rkw_newsletter/Resources/Private/Templates/Newsletter
 
             # cat=module.tx_rkwnewsletter/file; type=string; label=Path to template partials for newsletter
-            partialRootPath = EXT:rkw_newsletter/Resources/Private/Partials/Newsletter/
+            partialRootPath = EXT:rkw_newsletter/Resources/Private/Partials/Newsletter
 
             # cat=module.tx_rkwnewsletter/file; type=string; label=Path to template layouts for newsletter
-            layoutRootPath = EXT:rkw_newsletter/Resources/Private/Layouts/Newsletter/
+            layoutRootPath = EXT:rkw_newsletter/Resources/Private/Layouts/Newsletter
         }
 	}
 }

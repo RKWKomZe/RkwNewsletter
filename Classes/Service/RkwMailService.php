@@ -410,6 +410,29 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
             $mailService->getQueueMail()->addTemplatePaths($settings['view']['newsletter']['templateRootPaths']);
             $mailService->getQueueMail()->addPartialPaths($settings['view']['newsletter']['partialRootPaths']);
 
+            // add paths depending on template - including the default one!
+            $layoutPaths = $settings['view']['newsletter']['layoutRootPaths'];
+            if (is_array($layoutPaths)) {
+                foreach ($layoutPaths as $path) {
+                    $path = trim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+                    $mailService->getQueueMail()->addLayoutPath($path . 'Default');
+                    if ($issue->getNewsletter()->getTemplate() != 'Default') {
+                        $mailService->getQueueMail()->addLayoutPath($path . $issue->getNewsletter()->getTemplate());
+                    }
+                }
+            }
+
+            $partialPaths = $settings['view']['newsletter']['partialRootPaths'];
+            if (is_array($partialPaths)) {
+                foreach ($partialPaths as $path) {
+                    $path = trim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+                    $mailService->getQueueMail()->addPartialPath($path . 'Default');
+                    if ($issue->getNewsletter()->getTemplate() != 'Default') {
+                        $mailService->getQueueMail()->addPartialPath($path . $issue->getNewsletter()->getTemplate());
+                    }
+                }
+            }
+
             $mailService->getQueueMail()->setPlaintextTemplate($issue->getNewsletter()->getTemplate());
             $mailService->getQueueMail()->setHtmlTemplate($issue->getNewsletter()->getTemplate());
 

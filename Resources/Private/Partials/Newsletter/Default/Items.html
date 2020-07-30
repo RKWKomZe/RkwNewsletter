@@ -15,13 +15,13 @@
                     <rkwMailer:cache.setRenderCache queueMail="{queueMail}" isPlaintext="true" additionalIdentifier="{page.uid}-{webView}-{includeEditorials}" marker="{pagesOrder : pagesOrder}">
                         <rkwMailer:frontend.replace.redirectLinks queueMail="{queueMail}" isPlaintext="true">
                             <f:for each="<rkwNewsletter:getNewsletterContents issue='{issue}' page='{page}' includeEditorials='{includeEditorials}' />" as="content" iteration="itemIterator">
-                                <f:if condition="{iterator.cycle} < {maxItemsPerTopic}">
+                                <f:if condition="{itemIterator.cycle} < {maxItemsPerTopic}">
                                     <f:then>
-                                        <f:render partial="Default/Items/Default" section="Plaintext" arguments="{_all}" />\n\n
+                                        <f:render partial="Items/Default" section="Plaintext" arguments="{_all}" />\n\n
                                     </f:then>
                                     <f:else>
                                         <f:if condition="{itemIterator.isLast}">
-                                            <f:render partial="Default/Items/More" section="Plaintext" arguments="{_all}" />\n\n
+                                            <f:render partial="Items/More" section="Plaintext" arguments="{_all}" />\n\n
                                         </f:if>
                                     </f:else>
                                 </f:if>
@@ -55,7 +55,7 @@
                                     <f:then>
 
                                         <!-- editorial -->
-                                        <f:render partial="Default/Items/Editorial" section="Html" arguments="{_all}" />
+                                        <f:render partial="Items/Editorial" section="Html" arguments="{_all}" />
 
                                     </f:then>
 
@@ -63,9 +63,8 @@
 
                                         <f:if condition="{itemIterator.cycle} < {maxItemsPerTopic}">
                                             <f:then>
-
                                                 <!-- normal -->
-                                                <f:render partial="Default/Items/Default" section="Html" arguments="{_all}" />
+                                                <f:render partial="Items/Default" section="Html" arguments="{_all}" />
 
                                             </f:then>
                                             <f:else>
@@ -74,7 +73,7 @@
                                                     <!-- more link -->
                                                     <tr>
                                                         <td style="padding: 16px 16px 0">
-                                                            <f:render partial="Default/Items/More" section="Html" arguments="{_all}" />
+                                                            <f:render partial="Items/More" section="Html" arguments="{_all}" />
                                                         </td>
                                                     </tr>
                                                 </f:if>

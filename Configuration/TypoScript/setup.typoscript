@@ -186,6 +186,22 @@ plugin.tx_rkwnewsletter_webview {
             0 = EXT:rkw_newsletter/Resources/Private/Partials/Newsletter/
             1 = {$module.tx_rkwnewsletter.view.newsletter.partialRootPath}
         }
+
+        newsletter {
+
+            layoutRootPaths {
+                0 = EXT:rkw_newsletter/Resources/Private/Layouts/Newsletter
+                1 = {$module.tx_rkwnewsletter.view.newsletter.layoutRootPath}
+            }
+            templateRootPaths {
+                0 = EXT:rkw_newsletter/Resources/Private/Templates/Newsletter
+                1 = {$module.tx_rkwnewsletter.view.newsletter.templateRootPath}
+            }
+            partialRootPaths {
+                0 = EXT:rkw_newsletter/Resources/Private/Partials/Newsletter
+                1 = {$module.tx_rkwnewsletter.view.newsletter.partialRootPath}
+            }
+        }
     }
 
     settings < plugin.tx_rkwnewsletter.settings
@@ -214,15 +230,15 @@ module.tx_rkwnewsletter {
         newsletter {
 
             layoutRootPaths {
-                0 = EXT:rkw_newsletter/Resources/Private/Layouts/Newsletter/
+                0 = EXT:rkw_newsletter/Resources/Private/Layouts/Newsletter
                 1 = {$module.tx_rkwnewsletter.view.newsletter.layoutRootPath}
             }
             templateRootPaths {
-                0 = EXT:rkw_newsletter/Resources/Private/Templates/Newsletter/
+                0 = EXT:rkw_newsletter/Resources/Private/Templates/Newsletter
                 1 = {$module.tx_rkwnewsletter.view.newsletter.templateRootPath}
             }
             partialRootPaths {
-                0 = EXT:rkw_newsletter/Resources/Private/Partials/Newsletter/
+                0 = EXT:rkw_newsletter/Resources/Private/Partials/Newsletter
                 1 = {$module.tx_rkwnewsletter.view.newsletter.partialRootPath}
             }
         }
