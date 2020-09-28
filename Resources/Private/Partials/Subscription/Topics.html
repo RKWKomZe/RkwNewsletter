@@ -1,38 +1,60 @@
-{namespace rkwNewsletter=RKW\RkwNewsletter\ViewHelpers}
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:rkwNewsletter="http://typo3.org/ns/RKW/RkwNewsletter/ViewHelpers"
+    data-namespace-typo3-fluid="true">
 
-<table class="v320-1">
     <f:for each="{newsletterList}" as="newsletter" iteration="newsletterIterator">
         <f:if condition="<rkwNewsletter:IsNewsletterSubscriptionAllowed frontendUser='{frontendUser}' newsletter='{newsletter}' />">
-            <tr>
-                <th>{newsletter.name}</th>
-            </tr>
-            <tr>
-                <td>
+
+            <table class="responsive-table  responsive-table--background">
+                <tbody>
+                    <tr>
+                        <td>
+                            <p><strong>{newsletter.name}</strong></p>
+                        </td>
+                    </tr>
                     <f:for each="{newsletter.topic}" as="topic" iteration="topicIterator">
                         <f:if condition="{topic.isSpecial} == 0">
-                            <span class="checkbox">
-                                <label>
-                                    <f:if condition="{topicList}">
-                                        <f:then>
-                                            <f:form.checkbox name="topics[{topicIterator.index}]" value="{topic.uid}" checked="<rkwNewsletter:IsTopicInList topicList='{topicList}' topic='{topic}' />" />
-                                        </f:then>
-                                        <f:else>
-                                             <f:form.checkbox name="topics[{topicIterator.index}]" value="{topic.uid}" checked="<rkwNewsletter:IsTopicSubscribed frontendUser='{frontendUser}' topic='{topic}' />" />
-                                        </f:else>
-                                    </f:if>
-                                    {topic.name}
-                                </label>
-                            </span>
+                            <tr>
+                                <td>
+                                    <div class="form__field width100">
+                                        <f:if condition="{topicList}">
+                                            <f:then>
+                                                <f:form.checkbox
+                                                    id="topics[{topicIterator.index}]"
+                                                    class="checkbox"
+                                                    name="topics[{topicIterator.index}]"
+                                                    value="{topic.uid}"
+                                                    checked="<rkwNewsletter:IsTopicInList topicList='{topicList}' topic='{topic}' />"
+                                                />
+                                            </f:then>
+                                            <f:else>
+                                                <f:form.checkbox
+                                                    id="topics[{topicIterator.index}]"
+                                                    class="checkbox"
+                                                    name="topics[{topicIterator.index}]"
+                                                    value="{topic.uid}"
+                                                    checked="<rkwNewsletter:IsTopicSubscribed frontendUser='{frontendUser}' topic='{topic}' />"
+                                                />
+                                            </f:else>
+                                        </f:if>
+                                        <label for="topics[{topicIterator.index}]" class="checkbox-label">
+                                            {topic.name}
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+
                         </f:if>
                     </f:for>
-                </td>
-            </tr>
+
+                </tbody>
+            </table>
+
         </f:if>
     </f:for>
-</table>
 
 
-
+</html>
 
 
 

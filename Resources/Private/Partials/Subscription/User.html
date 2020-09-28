@@ -1,79 +1,112 @@
-{namespace rkwNewsletter=RKW\RkwNewsletter\ViewHelpers}
-{namespace rkwRegistration=RKW\RkwRegistration\ViewHelpers}
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:rkwNewsletter="http://typo3.org/ns/RKW/RkwNewsletter/ViewHelpers"
+    xmlns:rkwRegistration="http://typo3.org/ns/RKW/RkwRegistration/ViewHelpers"
+    data-namespace-typo3-fluid="true">
 
-<div class="v320-1">
-    <label class="form-label" for="gender">
-        <f:translate key="tx_rkwnewsletter_domain_model_frontenduser.tx_rkwregistration_gender" />
-        <f:if condition="<rkwNewsletter:isMandatoryField fieldName='txRkwregistrationGender' /> == 0">
-            <span class="optional">&nbsp;<f:translate key="partials_subscription_user.labelOptional" /></span>
+    <div class="form__field width100">
+        <label class="form-label" for="gender">
+            <f:translate key="tx_rkwnewsletter_domain_model_frontenduser.tx_rkwregistration_gender" />
+            <f:render partial="LabelSuffix" arguments="{field: 'gender'}" />
+        </label>
+        <f:form.select
+            id="gender"
+            class="select-field select-field--longer"
+            property="txRkwregistrationGender"
+            options="{99: '{f:translate(key:\"tx_rkwnewsletter_domain_model_frontenduser.tx_rkwregistration_gender.I.neutral\")}', 0: '{f:translate(key:\"tx_rkwnewsletter_domain_model_frontenduser.tx_rkwregistration_gender.I.man\")}', 1: '{f:translate(key:\"tx_rkwnewsletter_domain_model_frontenduser.tx_rkwregistration_gender.I.woman\")}'}" optionValueField="uid" optionLabelField="name"
+        />
+    </div>
+
+    <f:comment>
+        <f:if condition="<rkwRegistration:titleList />">
+            <div class="form__field width100">
+                <label class="form-label" for="title">
+                    <f:translate key="tx_rkwnewsletter_domain_model_frontenduser.title" />
+                    <f:render partial="LabelSuffix" arguments="{field: 'title'}" />
+                </label>
+                <f:comment><f:form.textfield id="title" property="title" value="{frontendUser.title}"/></f:comment>
+                <f:form.select
+                    id="title"
+                    class="select-field select-field--longer"
+                    property="txRkwregistrationTitle"
+                    options="<rkwRegistration:titleList />"
+                    optionValueField="uid"
+                    optionLabelField="name"
+                    prependOptionValue="0"
+                    prependOptionLabel="{f:translate(key:'tx_rkwnewsletter_domain_model_frontenduser.tx_rkwregistration_title.I.neutral')}"
+                />
+            </div>
         </f:if>
-    </label>
-    <f:form.select id="gender" property="txRkwregistrationGender" options="{99: '{f:translate(key:\"tx_rkwnewsletter_domain_model_frontenduser.tx_rkwregistration_gender.I.neutral\")}', 0: '{f:translate(key:\"tx_rkwnewsletter_domain_model_frontenduser.tx_rkwregistration_gender.I.man\")}', 1: '{f:translate(key:\"tx_rkwnewsletter_domain_model_frontenduser.tx_rkwregistration_gender.I.woman\")}'}" optionValueField="uid" optionLabelField="name" />
-</div>
+    </f:comment>
+    <div class="form__field width100">
+        <label class="form-label" for="firstname">
+            <f:translate key="tx_rkwnewsletter_domain_model_frontenduser.first_name" />
+            <f:render partial="LabelSuffix" arguments="{field: 'firstName'}" />
+        </label>
+        <f:form.textfield
+            id="firstname"
+            property="firstName"
+            value="{frontendUser.firstName}"
+            additionalAttributes="{autocomplete:'fname'}"
+        />
+    </div>
 
-<f:comment>
-    <f:if condition="<rkwRegistration:titleList />">
-        <div class="v320-1">
-            <label class="form-label" for="title">
-                <f:translate key="tx_rkwnewsletter_domain_model_frontenduser.title" />
-                <f:if condition="<rkwNewsletter:isMandatoryField fieldName='title' /> == 0">
-                    <span class="optional">&nbsp;<f:translate key="partials_subscription_user.labelOptional" /></span>
-                </f:if>
-            </label>
-            <f:comment><f:form.textfield id="title" property="title" value="{frontendUser.title}"/></f:comment>
-            <f:form.select id="title" property="txRkwregistrationTitle" options="<rkwRegistration:titleList />" optionValueField="uid" optionLabelField="name" prependOptionValue="0" prependOptionLabel="{f:translate(key:'tx_rkwnewsletter_domain_model_frontenduser.tx_rkwregistration_title.I.neutral')}" />
-        </div>
-    </f:if>
-</f:comment>
-<div class="v320-1">
-    <label class="form-label" for="firstname">
-        <f:translate key="tx_rkwnewsletter_domain_model_frontenduser.first_name" />
-        <f:if condition="<rkwNewsletter:isMandatoryField fieldName='firstName' /> == 0">
-            <span class="optional">&nbsp;<f:translate key="partials_subscription_user.labelOptional" /></span>
+    <div class="form__field width100">
+        <label class="form-label" for="lastname">
+            <f:translate key="tx_rkwnewsletter_domain_model_frontenduser.last_name" />
+            <f:render partial="LabelSuffix" arguments="{field: 'lastName'}" />
+        </label>
+        <f:form.textfield
+            id="lastname"
+            property="lastName"
+            value="{frontendUser.lastName}"
+            additionalAttributes="{autocomplete:'lname'}"
+        />
+    </div>
+
+
+    <div class="form__field width100">
+        <label class="form-label" for="email">
+            <f:translate key="tx_rkwnewsletter_domain_model_frontenduser.email" />
+            <f:render partial="LabelSuffix" arguments="{field: 'email'}" />
+        </label>
+
+        <f:if condition="{frontendUser.uid} > 0">
+            <f:then>
+                <f:form.textfield
+                    id="email"
+                    property="email"
+                    value="{frontendUser.email}"
+                    additionalAttributes="{autocomplete:'email'}"
+                    disabled="true"
+                    type="email"
+                />
+            </f:then>
+            <f:else>
+                <f:form.textfield
+                    id="email"
+                    property="email"
+                    value="{frontendUser.email}"
+                    additionalAttributes="{autocomplete:'email'}"
+                    type="email"
+                />
+            </f:else>
         </f:if>
-    </label>
-    <f:form.textfield id="firstname" property="firstName" value="{frontendUser.firstName}" additionalAttributes="{autocomplete:'fname'}"/>
-</div>
-
-<div class="v320-1">
-    <label class="form-label" for="lastname">
-        <f:translate key="tx_rkwnewsletter_domain_model_frontenduser.last_name" />
-        <f:if condition="<rkwNewsletter:isMandatoryField fieldName='lastName' /> == 0">
-            <span class="optional">&nbsp;<f:translate key="partials_subscription_user.labelOptional" /></span>
-        </f:if>
-    </label>
-    <f:form.textfield id="lastname" property="lastName" value="{frontendUser.lastName}" additionalAttributes="{autocomplete:'lname'}" />
-</div>
+    </div>
 
 
-<div class="v320-1">
-    <label class="form-label" for="email">
-        <f:translate key="tx_rkwnewsletter_domain_model_frontenduser.email" />
-        <f:if condition="<rkwNewsletter:isMandatoryField fieldName='email' /> == 0">
-            <span class="optional">&nbsp;<f:translate key="partials_subscription_user.labelOptional" /></span>
-        </f:if>
-    </label>
+    <div class="form__field width100">
+        <label class="form-label" for="company">
+            <f:translate key="tx_rkwnewsletter_domain_model_frontenduser.company" />
+            <f:render partial="LabelSuffix" arguments="{field: 'company'}" />
+        </label>
+        <f:form.textfield
+            id="company"
+            property="company"
+            value="{frontendUser.company}"
+        />
+    </div>
 
-    <f:if condition="{frontendUser.uid} > 0">
-        <f:then>
-            <f:form.textfield id="email" property="email" value="{frontendUser.email}" additionalAttributes="{autocomplete:'email'}" disabled="true" type="email"/>
-        </f:then>
-        <f:else>
-            <f:form.textfield id="email" property="email" value="{frontendUser.email}" additionalAttributes="{autocomplete:'email'}" type="email"/>
-        </f:else>
-    </f:if>
-</div>
-
-
-<div class="v320-1">
-    <label class="form-label" for="company">
-        <f:translate key="tx_rkwnewsletter_domain_model_frontenduser.company" />
-        <f:if condition="<rkwNewsletter:isMandatoryField fieldName='company' /> == 0">
-            <span class="optional">&nbsp;<f:translate key="partials_subscription_user.labelOptional" /></span>
-        </f:if>
-    </label>
-    <f:form.textfield id="company" property="company" value="{frontendUser.company}" />
-</div>
+</html>
 
 
 
