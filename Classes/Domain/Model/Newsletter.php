@@ -40,6 +40,14 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $name;
 
+
+    /**
+     * introduction
+     *
+     * @var string
+     */
+    protected $introduction;
+
     /**
      * issueTitle
      *
@@ -88,6 +96,14 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var integer
      */
     protected $priority;
+
+    
+    /**
+     * type
+     *
+     * @var integer
+     */
+    protected $type;
 
     /**
      * template
@@ -226,6 +242,29 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+
+    /**
+     * Returns the introduction
+     *
+     * @return string $introduction
+     */
+    public function getIntroduction()
+    {
+        return $this->introduction;
+    }
+
+
+    /**
+     * Sets the introduction
+     *
+     * @param string $introduction
+     * @return void
+     */
+    public function setIntroduction($introduction)
+    {
+        $this->introduction = $introduction;
     }
 
     /**
@@ -373,6 +412,29 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setPriority($priority)
     {
         $this->priority = $priority;
+    }
+
+
+
+    /**
+     * Returns the type
+     *
+     * @return integer $type
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Sets the type
+     *
+     * @param integer $type
+     * @return void
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
     }
 
     /**

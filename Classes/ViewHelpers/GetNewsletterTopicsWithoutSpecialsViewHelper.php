@@ -15,36 +15,34 @@ namespace RKW\RkwNewsletter\ViewHelpers;
  */
 
 /**
- * IsTopicSubscribedViewHelper
+ * GetNewsletterTopicsWithoutSpecialsViewHelper
  *
- * @author Maximilian Fäßler <maximilian@faesslerweb.de>
  * @author Steffen Kroggel <developer@steffenkroggel.de>
  * @copyright Rkw Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class IsTopicSubscribedViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
+class GetNewsletterTopicsWithoutSpecialsViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
 {
     /**
-     * checks is user has subscribed to a topic
+     * Gets all topics of the issue without special topics
      *
-     * @param mixed $frontendUser
-     * @param \RKW\RkwNewsletter\Domain\Model\Topic $topic
-     * @return boolean
+     * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
+     * @return array
      */
-    public function render($frontendUser, \RKW\RkwNewsletter\Domain\Model\Topic $topic)
+    public function render(\RKW\RkwNewsletter\Domain\Model\Issue $issue)
     {
-        if ($frontendUser) {
 
-            /** @var \RKW\RkwNewsletter\Domain\Model\Topic $userTopic */
-            foreach ($frontendUser->getTxRkwnewsletterSubscription() as $userTopic) {
+        $finalTopics = array();
 
-                if ($userTopic->getUid() == $topic->getUid()) {
-                    return true;
-                }
+        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic */
+        foreach ($issue->getNewsletter()->getTopic() as $topic) {
+
+            if (!$topic->getIsSpecial()) {
+                $finalTopics[] = $topic;
             }
         }
 
-        return false;
+        return $finalTopics;
     }
 }

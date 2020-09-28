@@ -61,7 +61,24 @@ class NewsletterRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         );
 
         return $query->execute();
-        //====
     }
 
+
+    /**
+     * Returns all newsletters by type
+     *
+     * @param int $type
+     * @return QueryResultInterface|array
+     * @api
+     */
+    public function findAllByType($type = 0)
+    {
+
+        $query = $this->createQuery();
+        $query->matching(
+            $query->equals('type', $type)
+        );
+
+        return $query->execute();
+    }
 }

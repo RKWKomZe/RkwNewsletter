@@ -16,6 +16,10 @@
 				<source>Name configuration</source>
 				<target state="translated">Name der Konfiguration</target>
 			</trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_newsletter.introduction">
+                <source>Introduction</source>
+                <target state="translated">Einleitung</target>
+            </trans-unit>
 			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.issue_title">
 				<source>Issue Title (e.g. "RKW Newsletter {M}/{Y}" will dynamically insert month and year)</source>
 				<target state="translated">Name der Ausgabe (z.B. "RKW Newsletter {M}/{Y}" generiert automatisch Monat/Jahr)</target>
@@ -56,6 +60,14 @@
 				<source>Low</source>
 				<target state="translated">Niedrig</target>
 			</trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_newsletter.type">
+                <source>Type</source>
+                <target state="translated">Typ</target>
+            </trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_newsletter.type.special">
+                <source>Special-Newsletter (send to all)</source>
+                <target state="translated">Spezial-Newsletter (an alle Abonnenten versenden)</target>
+            </trans-unit>
 			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.template">
 				<source>Template</source>
 				<target state="translated">Template</target>
@@ -91,10 +103,6 @@
 			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.approval">
 				<source>Final Approval for Sending</source>
 				<target state="translated">Finale Freigabe zum Versand</target>
-			</trans-unit>
-			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.type">
-				<source>Type</source>
-				<target state="translated">Newsletter Typ (unterschiedliche Templates)</target>
 			</trans-unit>
 			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.usergroup">
 				<source>FE-User Groups</source>

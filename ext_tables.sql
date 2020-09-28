@@ -7,6 +7,7 @@ CREATE TABLE tx_rkwnewsletter_domain_model_newsletter (
 	pid int(11) DEFAULT '0' NOT NULL,
 
 	name varchar(255) DEFAULT '' NOT NULL,
+	introduction text NOT NULL,
 	issue_title varchar(255) DEFAULT '' NOT NULL,
 	sender_name varchar(255) DEFAULT '' NOT NULL,
 	sender_mail varchar(255) DEFAULT '' NOT NULL,
@@ -14,6 +15,7 @@ CREATE TABLE tx_rkwnewsletter_domain_model_newsletter (
 	reply_mail varchar(255) DEFAULT '' NOT NULL,
 	return_path varchar(255) DEFAULT '' NOT NULL,
 	priority int(11) DEFAULT '0' NOT NULL,
+    type int(11) DEFAULT '0' NOT NULL,
 	template varchar(255) DEFAULT '' NOT NULL,
 	format tinyint(4) DEFAULT '0' NOT NULL,
 	settings_page int(11) DEFAULT '0' NOT NULL,

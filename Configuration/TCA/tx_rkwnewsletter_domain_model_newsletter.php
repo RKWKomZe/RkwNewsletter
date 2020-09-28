@@ -16,14 +16,14 @@ return [
 			'starttime' => 'starttime',
 			'endtime' => 'endtime',
 		],
-		'searchFields' => 'name, issue_title, sender_name, sender_mail, reply_mail, return_path, priority, template, settings_page, format, rythm, approval, type, usergroup, topic, recently_sent,',
+		'searchFields' => 'name, issue_title, sender_name, sender_mail, reply_mail, return_path, priority, template, type, settings_page, format, rythm, approval, usergroup, topic, recently_sent,',
 		'iconfile' => 'EXT:rkw_newsletter/Resources/Public/Icons/tx_rkwnewsletter_domain_model_newsletter.gif'
 	],
 	'interface' => [
-		'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, issue_title, sender_name, sender_mail, reply_mail, return_path, template, settings_page, rythm, approval, type, usergroup, topic, last_sent_tstamp, last_issue_tstamp, issue',
+		'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, issue_title, introduction, sender_name, sender_mail, reply_mail, return_path, template, type, settings_page, rythm, approval, usergroup, topic, last_sent_tstamp, last_issue_tstamp, issue',
 	],
 	'types' => [
-		'1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, name, issue_title, sender_name, sender_mail, reply_mail, return_path, template, settings_page, encoding, charset, rythm, approval, type, usergroup, topic, last_sent_tstamp, last_issue_tstamp, issue, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, hidden,--palette--;;1, starttime, endtime'],
+		'1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, name, issue_title, introduction, sender_name, sender_mail, reply_mail, return_path, template, type, settings_page, encoding, charset, rythm, approval, usergroup, topic, last_sent_tstamp, last_issue_tstamp, issue, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, hidden,--palette--;;1, starttime, endtime'],
 	],
 	'palettes' => [
 		'1' => ['showitem' => ''],
@@ -113,6 +113,16 @@ return [
 				'eval' => 'trim, required',
 			],
 		],
+        'introduction' => [
+            'exclude' => 0,
+            'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.introduction',
+            'config' => [
+                'type' => 'text',
+                'cols' => '40',
+                'rows' => '15',
+                'eval' => 'trim',
+            ],
+        ],
 		'issue_title' => [
 			'exclude' => false,
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.issue_title',
@@ -176,7 +186,7 @@ return [
 				'items' => [
 					['LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.priority.normal', '2'],
 					['LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.priority.high', '3'],
-					['nLLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.priority.low', '1'],
+					['LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.priority.low', '1'],
 				],
 				'size' => 1,
 				'eval' => 'int',
@@ -184,6 +194,16 @@ return [
 				'maxitems' => 1,
 			],
 		],
+        'type' => [
+            'exclude' => false,
+            'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.type',
+            'config' => [
+                'type' => 'check',
+                'items' => [
+                    ['LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.type.special', '1'],
+                ],
+            ],
+        ],
         'template' => [
             'exclude' => false,
             'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.template',

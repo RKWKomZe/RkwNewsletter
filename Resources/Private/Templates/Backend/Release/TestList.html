@@ -37,13 +37,14 @@ Otherwise your changes will be overwritten the next time you save the extension 
             </th>
         </tr>
 
+
         <f:for each="{issues}" as="issue">
             <f:form action="test" name="issue" object="{issue}" >
                 <tr>
                     <td><f:form.textfield name="title" value="{issue.title}" /></td>
                     <td><f:form.textfield name="emails" value="{backendUser.email}" /></td>
                     <td>
-                        <f:form.select additionalAttributes="{onchange : 'this.form.submit()'}" name="topic" options="{issue.newsletter.topic}" optionValueField="uid" optionLabelField="name" prependOptionValue="0" prependOptionLabel="{f:translate(key:'templates_backend_release_testList.pleaseSelect')}" />
+                        <f:form.select additionalAttributes="{onchange : 'this.form.submit()'}" name="topic" options="{rkwNewsletter:getNewsletterTopicsWithoutSpecials(issue: '{issue}')}" optionValueField="uid" optionLabelField="name" prependOptionValue="0" prependOptionLabel="{f:translate(key:'templates_backend_release_testList.pleaseSelect')}" />
                     </td>
                     <td>
                         <f:form.button type="submit">

@@ -2,9 +2,8 @@
 
 namespace RKW\RkwNewsletter\Service;
 
-use \RKW\RkwBasics\Helper\Common;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use RKW\RkwBasics\Helper\Common;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -43,7 +42,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
      * @throws \RKW\RkwMailer\Service\MailException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
-     * @throws \TYPO3\CMS\Fluid\View\Exception\InvalidTemplateResourceException
+     * @throws \TYPO3Fluid\Fluid\View\Exception\InvalidTemplateResourceException
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     public function sendMailAdminApproval($admins, \RKW\RkwNewsletter\Domain\Model\Approval $approval, $stage = 1, $isReminder = false)
@@ -114,7 +113,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
      * @throws \RKW\RkwMailer\Service\MailException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
-     * @throws \TYPO3\CMS\Fluid\View\Exception\InvalidTemplateResourceException
+     * @throws \TYPO3Fluid\Fluid\View\Exception\InvalidTemplateResourceException
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     public function sendMailAdminApprovalAutomatic($admins, \RKW\RkwNewsletter\Domain\Model\Approval $approval, $stage = 1)
@@ -184,7 +183,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
      * @throws \RKW\RkwMailer\Service\MailException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
-     * @throws \TYPO3\CMS\Fluid\View\Exception\InvalidTemplateResourceException
+     * @throws \TYPO3Fluid\Fluid\View\Exception\InvalidTemplateResourceException
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     public function sendMailAdminRelease($admins, \RKW\RkwNewsletter\Domain\Model\Issue $issue, $isReminder = false)
@@ -253,7 +252,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
      * @throws \RKW\RkwMailer\Service\MailException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
-     * @throws \TYPO3\CMS\Fluid\View\Exception\InvalidTemplateResourceException
+     * @throws \TYPO3Fluid\Fluid\View\Exception\InvalidTemplateResourceException
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     public function sendOptInRequest(\RKW\RkwRegistration\Domain\Model\FrontendUser $frontendUser, \RKW\RkwRegistration\Domain\Model\Registration $registration = null)
@@ -312,7 +311,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
      * @throws \RKW\RkwMailer\Service\MailException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
-     * @throws \TYPO3\CMS\Fluid\View\Exception\InvalidTemplateResourceException
+     * @throws \TYPO3Fluid\Fluid\View\Exception\InvalidTemplateResourceException
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     public function sendTestMail(\RKW\RkwNewsletter\Domain\Model\BackendUser $admin, $emailList, \RKW\RkwNewsletter\Domain\Model\Issue $issue, \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $pages, \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $specialPages, $title = null)
@@ -335,9 +334,15 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
             // if there is only one topic-page included, show all contents
             $itemsPerTopic = ($settings['settings']['maxItemsPerTopic'] ? intval($settings['settings']['maxItemsPerTopic']) : 5);
             $includeTutorials = false;
-            if (count($pages->toArray()) == 1) {
-                $itemsPerTopic = 999;
+            if ((count($pages->toArray()) + count($specialPages->toArray())) == 1) {
+                $itemsPerTopic = 9999;
                 $includeTutorials = true;
+            }
+
+            // include topNews?
+            $includeTopNews = false;
+            if ((count($pages->toArray()) > 1) && count($specialPages->toArray()) < 1) {
+                $includeTopNews = true;
             }
 
             /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
@@ -366,6 +371,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
                             'pagesOrder'        => implode(',', $pagesOrderArray),
                             'admin'             => $admin,
                             'includeEditorials' => $includeTutorials,
+                            'includeTopNews'    => $includeTopNews,
                             'webView'           => false,
                             'maxItemsPerTopic'  => $itemsPerTopic,
                             'pageTypeMore'      => $settings['settings']['webViewPageNum'],
@@ -382,20 +388,50 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
             $language = $issue->getNewsletter()->getSysLanguageUid();
 
             /** @var \RKW\RkwNewsletter\Domain\Model\TtContent $firstContentElement */
-            $firstContentElement = $ttContentRepository->findFirstWithHeaderByPid($pages->getFirst()->getUid(), $language, $includeTutorials);
+            if (count($specialPages->toArray())) {
+                $firstContentElement = $ttContentRepository->findFirstWithHeaderByPid($specialPages->getFirst()->getUid(), $language, $includeTutorials);
+            } else if (count($pages->toArray())) {
+                $firstContentElement = $ttContentRepository->findFirstWithHeaderByPid($pages->getFirst()->getUid(), $language, $includeTutorials);
+            }
+
 
             $mailService->getQueueMail()->setSettingsPid($issue->getNewsletter()->getSettingsPage()->getUid());
             $mailService->getQueueMail()->setSubject(
                 \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(
                     'rkwMailService.subject.testMail',
                     'rkw_newsletter',
-                    array('subject' => ($title ? $title : $issue->getTitle()) . ' – '. $firstContentElement->getHeader())
+                    [
+                        'subject' => ($title ? $title : $issue->getTitle()) . ($firstContentElement ? (' – '. $firstContentElement->getHeader()) : '')
+                    ]
                 )
             );
 
             $mailService->getQueueMail()->addLayoutPaths($settings['view']['newsletter']['layoutRootPaths']);
             $mailService->getQueueMail()->addTemplatePaths($settings['view']['newsletter']['templateRootPaths']);
             $mailService->getQueueMail()->addPartialPaths($settings['view']['newsletter']['partialRootPaths']);
+
+            // add paths depending on template - including the default one!
+            $layoutPaths = $settings['view']['newsletter']['layoutRootPaths'];
+            if (is_array($layoutPaths)) {
+                foreach ($layoutPaths as $path) {
+                    $path = trim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+                    $mailService->getQueueMail()->addLayoutPath($path . 'Default');
+                    if ($issue->getNewsletter()->getTemplate() != 'Default') {
+                        $mailService->getQueueMail()->addLayoutPath($path . $issue->getNewsletter()->getTemplate());
+                    }
+                }
+            }
+
+            $partialPaths = $settings['view']['newsletter']['partialRootPaths'];
+            if (is_array($partialPaths)) {
+                foreach ($partialPaths as $path) {
+                    $path = trim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+                    $mailService->getQueueMail()->addPartialPath($path . 'Default');
+                    if ($issue->getNewsletter()->getTemplate() != 'Default') {
+                        $mailService->getQueueMail()->addPartialPath($path . $issue->getNewsletter()->getTemplate());
+                    }
+                }
+            }
 
             $mailService->getQueueMail()->setPlaintextTemplate($issue->getNewsletter()->getTemplate());
             $mailService->getQueueMail()->setHtmlTemplate($issue->getNewsletter()->getTemplate());
@@ -431,7 +467,6 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
     protected function getSettings($which = ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS)
     {
         return Common::getTyposcriptConfiguration('Rkwnewsletter', $which);
-        //===
     }
 
 
@@ -443,7 +478,6 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
     protected function getLogger()
     {
         return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Log\\LogManager')->getLogger(__CLASS__);
-        //===
     }
 
 

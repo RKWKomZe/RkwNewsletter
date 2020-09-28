@@ -14,6 +14,10 @@ namespace RKW\RkwNewsletter\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
+use RKW\RkwBasics\Helper\Common;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+
+
 /**
  * WebViewController
  *
@@ -105,14 +109,47 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
 
         // if frontendUser is given, we use it's subscriptions
-        if ($frontendUser) {
-            $pages = $this->pagesRepository->findAllByIssueAndSubscriptionAndSpecialTopic($issue, $frontendUser->getTxRkwnewsletterSubscription(), false, $pagesOrder);
+        if (
+            ($frontendUser)
+            && ($issue->getNewsletter()->getType() != 1)
+        ){
+            $pages = $this->pagesRepository->findAllByIssueAndSubscription($issue, $frontendUser->getTxRkwnewsletterSubscription(), $pagesOrder);
         } else {
             $pages = $this->pagesRepository->findAllByIssueAndSpecialTopic($issue, false, $pagesOrder);
         }
 
         /** @var \TYPO3\CMS\Extbase\Persistence\QueryResultInterface $finalSpecialPages */
         $specialPages = $this->pagesRepository->findAllByIssueAndSpecialTopic($issue, true);
+
+
+        // add paths depending on template of newsletter - including the default one!
+        $settings = Common::getTyposcriptConfiguration('Rkwnewsletter', ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK );
+        $layoutPaths = $settings['view']['newsletter']['layoutRootPaths'];
+        $layoutPathsNew = [];
+        if (is_array($layoutPaths)) {
+            foreach ($layoutPaths as $path) {
+                $path = trim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+                $layoutPathsNew[] = $path . 'Default';
+                if ($issue->getNewsletter()->getTemplate() != 'Default') {
+                    $layoutPathsNew[] = $path . $issue->getNewsletter()->getTemplate();
+                }
+            }
+        }
+
+        $partialPaths = $settings['view']['newsletter']['partialRootPaths'];
+        $partialPathsNew = [];
+        if (is_array($partialPaths)) {
+            foreach ($partialPaths as $path) {
+                $path = trim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+                $partialPathsNew[] = $path . 'Default';
+                if ($issue->getNewsletter()->getTemplate() != 'Default') {
+                    $partialPathsNew[] = $path . $issue->getNewsletter()->getTemplate();
+                }
+            }
+        }
+
+        $this->view->setLayoutRootPaths($layoutPathsNew);
+        $this->view->setPartialRootPaths($partialPathsNew);
 
         $this->view->assignMultiple(
             array(
