@@ -19,37 +19,18 @@ $tmpColsPagesOverlay = [
             'cols' => '40',
             'rows' => '15',
             'wrap' => 'off',
-            'eval' => 'RKW\\RkwNewsletter\\Validation\\TCA\\NewsletterTeaserLengthEvaluation'
+            'eval' => 'RKW\\RkwNewsletter\\Validation\\TCA\\NewsletterTeaserLengthEvaluation',
+            'enableRichtext' => true,
         ],
-        'defaultExtras' => 'richtext[]:rte_transform[flag=rte_enabled|mode=ts_css]'
     ],
     'tx_rkwnewsletter_teaser_link' => [
         'exclude' => 1,
         'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:pages.tx_rkwnewsletter_teaser_link',
         'config' => [
             'type' => 'input',
+            'renderType' => 'inputLink',
             'size' => 30,
             'eval' => 'trim',
-            'wizards' => [
-                '_PADDING' => 2,
-                'link' => [
-                    'type' => 'popup',
-                    'title' => 'LLL:EXT:cms/locallang_ttc.xlf:header_link_formlabel',
-                    'icon' => 'EXT:backend/Resources/Public/Images/FormFieldWizard/wizard_link.gif',
-                    'module' => [
-                        'name' => 'wizard_link',
-                    ],
-                    'JSopenParams' => 'height=400,width=550,status=0,menubar=0,scrollbars=1',
-                    'params' => [
-                        // List of tabs to hide in link window. Allowed values are:
-                        // file, mail, page, spec, folder, url
-                        // 'blindLinkOptions' => 'mail,file,page,spec,folder',
-                        // allowed extensions for file
-                        //'allowedExtensions' => 'mp3,ogg',
-                    ],
-
-                ],
-            ],
             'softref' => 'typolink'
         ],
     ],

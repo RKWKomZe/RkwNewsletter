@@ -6,15 +6,6 @@ call_user_func(
     {
 
         //=================================================================
-        // Register Plugin
-        //=================================================================
-        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
-            $extKey,
-            'Subscription',
-            'RKW Newsletter: Anmeldung'
-        );
-
-        //=================================================================
         // Register BackendModule
         //=================================================================
         if (TYPO3_MODE === 'BE') {
@@ -55,23 +46,6 @@ call_user_func(
             'tx_rkwnewsletter_domain_model_topic'
         );
 
-        //=================================================================
-        // Add TypoScript
-        //=================================================================
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
-            $extKey,
-            'Configuration/TypoScript',
-            'RKW Newsletter'
-        );
-
-        //=================================================================
-        // Add TsConfig
-        //=================================================================
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerPageTSConfigFile(
-            $extKey,
-            'Configuration/TsConfig/setup.txt',
-            'RKW Newsletter'
-        );
 
     },
     $_EXTKEY
