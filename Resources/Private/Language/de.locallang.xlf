@@ -516,6 +516,10 @@
                 <source>(optional)</source>
                 <target>(optional)</target>
             </trans-unit>
+            <trans-unit id="partials_subscription_user.labelRequired">
+                <source>(required)</source>
+                <target>(pflichtfeld)</target>
+            </trans-unit>
 
 
 			<!-- Templates/Subscription/New.html -->

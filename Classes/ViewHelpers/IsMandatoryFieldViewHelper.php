@@ -20,6 +20,8 @@ use \RKW\RkwBasics\Helper\Common;
 /**
  * IsMandatoryFieldViewHelper
  *
+ * returns true, if given field is mandatory
+ *
  * @author Maximilian Fäßler <maximilian@faesslerweb.de>
  * @author Steffen Kroggel <developer@steffenkroggel.de>
  * @copyright Rkw Kompetenzzentrum

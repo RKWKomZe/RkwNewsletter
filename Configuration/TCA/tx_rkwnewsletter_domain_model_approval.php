@@ -83,6 +83,7 @@ return [
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_approval.allowed_tstamp_stage1',
 			'config' => [
 				'type' => 'input',
+                'renderType' => 'inputDateTime',
 				'size' => 10,
 				'eval' => 'datetime',
 				'checkbox' => 1,
@@ -93,6 +94,7 @@ return [
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_approval.allowed_tstamp_stage2',
 			'config' => [
 				'type' => 'input',
+                'renderType' => 'inputDateTime',
 				'size' => 10,
 				'eval' => 'datetime',
 				'checkbox' => 1,
@@ -103,6 +105,7 @@ return [
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_approval.sent_info_tstamp_stage1',
 			'config' => [
 				'type' => 'input',
+                'renderType' => 'inputDateTime',
 				'size' => 10,
 				'eval' => 'datetime',
 				'checkbox' => 1,
@@ -113,6 +116,7 @@ return [
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_approval.sent_info_tstamp_stage2',
 			'config' => [
 				'type' => 'input',
+                'renderType' => 'inputDateTime',
 				'size' => 10,
 				'eval' => 'datetime',
 				'checkbox' => 1,
@@ -123,6 +127,7 @@ return [
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_approval.sent_reminder_tstamp_stage1',
 			'config' => [
 				'type' => 'input',
+                'renderType' => 'inputDateTime',
 				'size' => 10,
 				'eval' => 'datetime',
 				'checkbox' => 1,
@@ -133,6 +138,7 @@ return [
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_approval.sent_reminder_tstamp_stage2',
 			'config' => [
 				'type' => 'input',
+                'renderType' => 'inputDateTime',
 				'size' => 10,
 				'eval' => 'datetime',
 				'checkbox' => 1,
