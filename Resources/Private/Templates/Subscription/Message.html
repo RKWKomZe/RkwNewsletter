@@ -1,26 +1,24 @@
-{namespace rkwNewsletter=RKW\RkwNewsletter\ViewHelpers}
-{namespace rkwRegistration=RKW\RkwRegistration\ViewHelpers}
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:rkwNewsletter="http://typo3.org/ns/RKW/RkwNewsletter/ViewHelpers"
+    xmlns:rkwRegistration="http://typo3.org/ns/RKW/RkwRegistration/ViewHelpers"
+    data-namespace-typo3-fluid="true">
 
-<f:layout name="Default" />
+    <f:layout name="Default" />
 
-This Template is responsible for creating a table of domain objects.
+    <f:section name="main">
 
-If you modify this template, do not forget to change the overwrite settings
-in /Configuration/ExtensionBuilder/settings.yaml:
-  Resources:
-    Private:
-      Templates:
-        List.html: keep
+        <f:render partial="FlashMessages" arguments="{_all}" />
 
-Otherwise your changes will be overwritten the next time you save the extension in the extension builder
-
-<f:section name="main">
-
-    <f:render partial="FlashMessages" arguments="{_all}" />
-
-    <f:if condition="{frontendUser}">
-        <if condition="{frontendUser.txRkwnewsletterHash}">
-            <f:link.action action="edit" arguments="{hash : frontendUser.txRkwnewsletterHash}" class="button"><f:translate key="templates_subscription_message.goToSettings" /></f:link.action>
-        </if>
-    </f:if>
-</f:section>
+        <f:if condition="{frontendUser}">
+            <if condition="{frontendUser.txRkwnewsletterHash}">
+                <f:link.action
+                    class="btn btn--primary"
+                    action="edit"
+                    arguments="{hash : frontendUser.txRkwnewsletterHash}"
+                >
+                    <f:translate key="templates_subscription_message.goToSettings" />
+                </f:link.action>
+            </if>
+        </f:if>
+    </f:section>
+</html>

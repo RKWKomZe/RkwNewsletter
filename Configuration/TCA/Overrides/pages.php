@@ -2,7 +2,8 @@
 
 // extend "pages" TCA
 // Following line do ask for reload on newsletter-change (for correct topic selection],
-$GLOBALS['TCA']['pages']['ctrl']['requestUpdate'] .= ',tx_rkwnewsletter_newsletter, tx_rkwnewsletter_topic';
+// @deprecated since TYPO3 9.5
+//$GLOBALS['TCA']['pages']['ctrl']['requestUpdate'] .= ',tx_rkwnewsletter_newsletter, tx_rkwnewsletter_topic';
 
 $tmpColsPages = [
 
@@ -80,9 +81,9 @@ $tmpColsPages = [
             'cols' => '40',
             'rows' => '15',
             'wrap' => 'off',
-            'eval' => 'RKW\\RkwNewsletter\\Validation\\TCA\\NewsletterTeaserLengthEvaluation,required'
+            'eval' => 'RKW\\RkwNewsletter\\Validation\\TCA\\NewsletterTeaserLengthEvaluation,required',
+            'enableRichtext' => true,
         ],
-        'defaultExtras' => 'richtext[]:rte_transform[flag=rte_enabled|mode=ts_css]'
     ],
     'tx_rkwnewsletter_teaser_image' => [
         'displayCond' => [
@@ -95,44 +96,8 @@ $tmpColsPages = [
         'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:pages.tx_rkwnewsletter_teaser_image',
         'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
             'txRkwnewsletterTeaserImage',
-            [
-                'maxitems' => 1,
-
-                // Use the imageoverlayPalette instead of the basicoverlayPalette
-                'foreign_types' => [
-                    '0' => [
-                        'showitem' => '
-                            --palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-                            --palette--;;filePalette'
-                    ],
-                    \TYPO3\CMS\Core\Resource\File::FILETYPE_TEXT => [
-                        'showitem' => '
-                            --palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-                            --palette--;;filePalette'
-                    ],
-                    \TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => [
-                        'showitem' => '
-                            --palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-                            --palette--;;filePalette'
-                    ],
-                    \TYPO3\CMS\Core\Resource\File::FILETYPE_AUDIO => [
-                        'showitem' => '
-                            --palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-                            --palette--;;filePalette'
-                    ],
-                    \TYPO3\CMS\Core\Resource\File::FILETYPE_VIDEO => [
-                        'showitem' => '
-                            --palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-                            --palette--;;filePalette'
-                    ],
-                    \TYPO3\CMS\Core\Resource\File::FILETYPE_APPLICATION => [
-                        'showitem' => '
-                            --palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-                            --palette--;;filePalette'
-                    ],
-                ],
-
-            ],
+            ['maxitems' => 1],
+            'jpg, png, gif',
             $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
         ),
     ],
@@ -147,28 +112,9 @@ $tmpColsPages = [
         'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:pages.tx_rkwnewsletter_teaser_link',
         'config' => [
             'type' => 'input',
+            'renderType' => 'inputLink',
             'size' => 30,
             'eval' => 'trim',
-            'wizards' => [
-                '_PADDING' => 2,
-                'link' => [
-                    'type' => 'popup',
-                    'title' => 'LLL:EXT:cms/locallang_ttc.xlf:header_link_formlabel',
-                    'icon' => 'EXT:backend/Resources/Public/Images/FormFieldWizard/wizard_link.gif',
-                    'module' => [
-                        'name' => 'wizard_link',
-                    ],
-                    'JSopenParams' => 'height=400,width=550,status=0,menubar=0,scrollbars=1',
-                    'params' => [
-                        // List of tabs to hide in link window. Allowed values are:
-                        // file, mail, page, spec, folder, url
-                        // 'blindLinkOptions' => 'mail,file,page,spec,folder',
-                        // allowed extensions for file
-                        //'allowedExtensions' => 'mp3,ogg',
-                    ],
-
-                ],
-            ],
             'softref' => 'typolink'
         ],
     ],
@@ -180,12 +126,11 @@ $tmpColsPages = [
             ],
         ],
         'exclude' => 0,
-        'l10n_mode' => 'mergeIfNotBlank',
         'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:pages.tx_rkwnewsletter_include_tstamp',
         'config' => [
             'type' => 'input',
+            'renderType' => 'inputDateTime',
             'size' => 13,
-            'max' => 20,
             'eval' => 'datetime',
             'checkbox' => 0,
             'default' => 0,

@@ -396,6 +396,9 @@
             <trans-unit id="partials_subscription_user.labelOptional">
                 <source>(optional)</source>
             </trans-unit>
+            <trans-unit id="partials_subscription_user.labelRequired">
+                <source>(required)</source>
+            </trans-unit>
 
 
 			<!-- Templates/Subscription/New.html -->

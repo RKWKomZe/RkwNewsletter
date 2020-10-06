@@ -1,0 +1,20 @@
+<f:comment>
+    <!--
+    @param $field The field to check if is required or optional
+    @use arguments="{field: 'firstName'}"
+    -->
+</f:comment>
+
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:rkwNewsletter="http://typo3.org/ns/RKW/RkwNewsletter/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+    <f:if condition="<rkwNewsletter:isMandatoryField fieldName='{field}' />">
+        <f:then>
+            <span class="is-required"><f:translate key="partials_subscription_user.labelRequired" /></span>
+        </f:then>
+        <f:else>
+            <span class="is-optional"><f:translate key="partials_subscription_user.labelOptional" /></span>
+        </f:else>
+    </f:if>
+</html>
