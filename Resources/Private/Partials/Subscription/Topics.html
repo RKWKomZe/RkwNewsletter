@@ -5,12 +5,12 @@
     <f:for each="{newsletterList}" as="newsletter" iteration="newsletterIterator">
         <f:if condition="<rkwNewsletter:IsNewsletterSubscriptionAllowed frontendUser='{frontendUser}' newsletter='{newsletter}' />">
 
-            <table class="responsive-table  responsive-table--background">
+            <table class="responsive-table responsive-table--background">
                 <tbody>
                     <tr>
-                        <td>
-                            <p><strong>{newsletter.name}</strong></p>
-                        </td>
+                        <th>
+                            {newsletter.name}
+                        </th>
                     </tr>
                     <f:for each="{newsletter.topic}" as="topic" iteration="topicIterator">
                         <f:if condition="{topic.isSpecial} == 0">
