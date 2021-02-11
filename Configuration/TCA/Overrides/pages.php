@@ -96,8 +96,9 @@ $tmpColsPages = [
         'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:pages.tx_rkwnewsletter_teaser_image',
         'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
             'txRkwnewsletterTeaserImage',
-            ['maxitems' => 1],
-            'jpg, png, gif',
+            [
+                'maxitems' => 1
+            ],
             $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
         ),
     ],
