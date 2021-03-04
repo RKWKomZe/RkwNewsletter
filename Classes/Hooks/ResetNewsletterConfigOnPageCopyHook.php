@@ -33,7 +33,6 @@ class ResetNewsletterConfigOnPageCopyHook
      * @param string $table The table affected by action, e.g. 'fe_users'.
      * @param int $uid The uid of the record affected by action.
      * @param array $modifiedFields The modified fields of the record.
-     * @param $reference
      *
      * @return void
      */
@@ -41,14 +40,12 @@ class ResetNewsletterConfigOnPageCopyHook
         $action,
         $table,
         $uid,
-        array &$modifiedFields,
-        &$reference
+        array &$modifiedFields
     ) {
 
         if (
-            $action === 'new'
-            && $table === 'pages'
-            && $modifiedFields['tx_rkwnewsletter_include_tstamp'] !== 0
+            $table === 'pages'
+            && isset($modifiedFields['t3_origuid'])
         ) {
             $modifiedFields['tx_rkwnewsletter_include_tstamp'] = 0;
         }
