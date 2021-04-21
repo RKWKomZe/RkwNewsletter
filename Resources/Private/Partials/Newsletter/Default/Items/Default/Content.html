@@ -1,4 +1,5 @@
 {namespace rkwMailer=RKW\RkwMailer\ViewHelpers}
+{namespace rkwBasics=RKW\RkwBasics\ViewHelpers}
 
 <!-- PLAINTEXT -->
 <f:section name="Plaintext">
@@ -48,12 +49,21 @@
         <tr>
             <td style="padding-top: 11px">
                 <f:if condition="{content.image}">
-                    <f:for each="{content.image}" as="image">
-                        <rkwMailer:frontend.image image="{image}" treatIdAsReference="true" absolute="false" width="536" height="200c" style="display: block; width: 100%; height: auto" />
-                    </f:for>
+                    <rkwMailer:frontend.image image="{content.image.0}" treatIdAsReference="true" absolute="false" width="536" height="200c" style="display: block; width: 100%; height: auto" />
                 </f:if>
             </td>
         </tr>
+
+        <!-- copyright -->
+        <f:if condition="{content.image} && {content.image.0.originalResource.properties.tx_rkwbasics_source}">
+            <tr>
+                <td style="padding: 11px 16px 0 16px">
+                    <span style="color: #808080; font-size: 12px; font-weight: 400">
+                        &copy; {content.image.0.originalResource.properties.tx_rkwbasics_publisher} - <rkwBasics:getMediaSourceName mediaSourceId="{content.image.0.originalResource.properties.tx_rkwbasics_source}" />
+                    </span>
+                </td>
+            </tr>
+        </f:if>
 
         <!-- content -->
         <tr>
