@@ -2,7 +2,20 @@
 {namespace rkwAuthors=RKW\RkwAuthors\ViewHelpers}
 
 <!-- PLAINTEXT -->
-<f:section name="Plaintext" />
+<f:section name="Plaintext" >
+    <f:if condition="{content.txRkwnewsletterAuthors}">
+        Kontakt:\n
+        <f:for each="{content.txRkwnewsletterAuthors}" as="author" iteration="iteratorAuthor">
+            <f:if condition="{iteratorAuthor.isFirst}">
+                <rkwAuthors:GetCombinedName author='{author}'/>\n
+                <f:if condition="{author.phone2}">
+                    <rkwAuthors:GetFormattedPhoneNumber phoneExtensionLength="4" author="{author}"/>\n
+                </f:if>
+                {author.email}\n
+            </f:if>
+        </f:for>
+    </f:if>
+</f:section>
 
 
 <!-- HTML for the first item-->
