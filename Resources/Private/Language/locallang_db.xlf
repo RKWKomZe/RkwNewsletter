@@ -15,7 +15,10 @@
 				<source>Name configuration</source>
 			</trans-unit>
             <trans-unit id="tx_rkwnewsletter_domain_model_newsletter.introduction">
-                <source>Introduction</source>
+                <source>Introduction for more than one topic (overrides default text)</source>
+            </trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_newsletter.introduction2">
+                <source>Introduction for only one topic (overrides default text)</source>
             </trans-unit>
 			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.issue_title">
 				<source>Issue Title (e.g. "RKW Newsletter {M}/{Y}" will dynamically insert month and year)</source>

@@ -17,8 +17,12 @@
 				<target state="translated">Name der Konfiguration</target>
 			</trans-unit>
             <trans-unit id="tx_rkwnewsletter_domain_model_newsletter.introduction">
-                <source>Introduction</source>
-                <target state="translated">Einleitung</target>
+                <source>Introduction for more than one topic (overrides default text)</source>
+                <target state="translated">Einleitung bei mehr als einem Thema (überschreibt Standard-Text)</target>
+            </trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_newsletter.introduction2">
+                <source>Introduction for only one topic (overrides default text)</source>
+                <target state="translated">Einleitung bei nur einem Thema (überschreibt Standard-Text)</target>
             </trans-unit>
 			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.issue_title">
 				<source>Issue Title (e.g. "RKW Newsletter {M}/{Y}" will dynamically insert month and year)</source>

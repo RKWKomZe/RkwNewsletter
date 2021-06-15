@@ -20,10 +20,10 @@ return [
 		'iconfile' => 'EXT:rkw_newsletter/Resources/Public/Icons/tx_rkwnewsletter_domain_model_newsletter.gif'
 	],
 	'interface' => [
-		'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, issue_title, introduction, sender_name, sender_mail, reply_mail, return_path, template, type, settings_page, rythm, approval, usergroup, topic, last_sent_tstamp, last_issue_tstamp, issue',
+		'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, issue_title, introduction, introduction2, sender_name, sender_mail, reply_mail, return_path, template, type, settings_page, rythm, approval, usergroup, topic, last_sent_tstamp, last_issue_tstamp, issue',
 	],
 	'types' => [
-		'1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, name, issue_title, introduction, sender_name, sender_mail, reply_mail, return_path, template, type, settings_page, encoding, charset, rythm, approval, usergroup, topic, last_sent_tstamp, last_issue_tstamp, issue, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, hidden,--palette--;;1, starttime, endtime'],
+		'1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, name, issue_title, introduction, introduction2, sender_name, sender_mail, reply_mail, return_path, template, type, settings_page, encoding, charset, rythm, approval, usergroup, topic, last_sent_tstamp, last_issue_tstamp, issue, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, hidden,--palette--;;1, starttime, endtime'],
 	],
 	'palettes' => [
 		'1' => ['showitem' => ''],
@@ -126,6 +126,18 @@ return [
                 'cols' => '40',
                 'rows' => '15',
                 'eval' => 'trim',
+                'enableRichtext' => true
+            ],
+        ],
+        'introduction2' => [
+            'exclude' => 0,
+            'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.introduction2',
+            'config' => [
+                'type' => 'text',
+                'cols' => '40',
+                'rows' => '15',
+                'eval' => 'trim',
+                'enableRichtext' => true
             ],
         ],
 		'issue_title' => [

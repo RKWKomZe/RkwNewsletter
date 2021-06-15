@@ -15,13 +15,21 @@
                     <rkwMailer:cache.setRenderCache queueMail="{queueMail}" isPlaintext="true" additionalIdentifier="{page.uid}-{webView}-{includeEditorials}" marker="{pagesOrder : pagesOrder}">
                         <rkwMailer:frontend.replace.redirectLinks queueMail="{queueMail}" isPlaintext="true">
                             <f:for each="<rkwNewsletter:getNewsletterContents issue='{issue}' page='{page}' includeEditorials='{includeEditorials}' />" as="content" iteration="itemIterator">
-                                <f:if condition="{itemIterator.cycle} < {maxItemsPerTopic}">
+
+                                <f:if condition="{content.txRkwnewsletterIsEditorial}">
                                     <f:then>
-                                        <f:render partial="Items/Default" section="Plaintext" arguments="{_all}" />\n\n
+                                        <f:render partial="Items/Editorial" section="Plaintext" arguments="{_all}" />\n\n
                                     </f:then>
                                     <f:else>
-                                        <f:if condition="{itemIterator.isLast}">
-                                            <f:render partial="Items/More" section="Plaintext" arguments="{_all}" />\n\n
+                                        <f:if condition="{itemIterator.cycle} < {maxItemsPerTopic}">
+                                            <f:then>
+                                                <f:render partial="Items/Default" section="Plaintext" arguments="{_all}" />\n\n
+                                            </f:then>
+                                            <f:else>
+                                                <f:if condition="{itemIterator.isLast}">
+                                                    <f:render partial="Items/More" section="Plaintext" arguments="{_all}" />\n\n
+                                                </f:if>
+                                            </f:else>
                                         </f:if>
                                     </f:else>
                                 </f:if>
