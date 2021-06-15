@@ -44,7 +44,7 @@
 
         <!-- content -->
         <tr>
-            <td class="wysiwyg-content" style="{f:if(condition: '{content.header}', then: 'padding: 0 0 6px 0;', else: 'padding: 18px 0 6px 0;')}  color: #fff; line-height: 22px">
+            <td class="prefix-fix wysiwyg-content" style="{f:if(condition: '{content.header}', then: 'padding: 0 0 6px 0;', else: 'padding: 18px 0 6px 0;')}  color: #fff; line-height: 22px">
                 <rkwMailer:frontend.replace.rteLinks style="color: {page.txRkwnewsletterTopic.secondaryColorEditorial}"><f:format.raw>{content.bodytext}</f:format.raw></rkwMailer:frontend.replace.rteLinks>
             </td>
         </tr>
