@@ -4,33 +4,35 @@
 <!-- PLAINTEXT -->
 <f:section name="Plaintext">
 
-    <f:if condition="{issue.newsletter.introduction} && !{includeEditorials}">
-        <f:then>
-            <f:format.stripTags>
-                <rkwMailer:frontend.replace.rteLinks plaintextFormat="true">
-                    <f:format.raw>
-                        <rkwMailer:plaintextLineBreaks keepLineBreaks="true">{issue.newsletter.introduction}</rkwMailer:plaintextLineBreaks>
-                    </f:format.raw>
-                </rkwMailer:frontend.replace.rteLinks>
-            </f:format.stripTags>
-        </f:then>
-        <f:else>
-            <f:if condition="{issue.newsletter.introduction2} && {includeEditorials}">
-                <f:then>
-                    <f:format.stripTags>
-                        <rkwMailer:frontend.replace.rteLinks plaintextFormat="true">
-                            <f:format.raw>
-                                <rkwMailer:plaintextLineBreaks keepLineBreaks="true">{issue.newsletter.introduction2}</rkwMailer:plaintextLineBreaks>
-                            </f:format.raw>
-                        </rkwMailer:frontend.replace.rteLinks>
-                    </f:format.stripTags>
-                </f:then>
-                <f:else>
-                    <rkwMailer:frontend.translate key="partials_newsletter_body.introduction" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />
-                </f:else>
-            </f:if>
-        </f:else>
-    </f:if>
+    <rkwMailer:frontend.replace.redirectLinks queueMail="{queueMail}" isPlaintext="true">
+        <f:if condition="{issue.newsletter.introduction} && !{includeEditorials}">
+            <f:then>
+                <f:format.stripTags>
+                    <rkwMailer:frontend.replace.rteLinks plaintextFormat="true">
+                        <f:format.raw>
+                            <rkwMailer:plaintextLineBreaks keepLineBreaks="true">{issue.newsletter.introduction}</rkwMailer:plaintextLineBreaks>
+                        </f:format.raw>
+                    </rkwMailer:frontend.replace.rteLinks>
+                </f:format.stripTags>
+            </f:then>
+            <f:else>
+                <f:if condition="{issue.newsletter.introduction2} && {includeEditorials}">
+                    <f:then>
+                        <f:format.stripTags>
+                            <rkwMailer:frontend.replace.rteLinks plaintextFormat="true">
+                                <f:format.raw>
+                                    <rkwMailer:plaintextLineBreaks keepLineBreaks="true">{issue.newsletter.introduction2}</rkwMailer:plaintextLineBreaks>
+                                </f:format.raw>
+                            </rkwMailer:frontend.replace.rteLinks>
+                        </f:format.stripTags>
+                    </f:then>
+                    <f:else>
+                        <rkwMailer:frontend.translate key="partials_newsletter_body.introduction" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />
+                    </f:else>
+                </f:if>
+            </f:else>
+        </f:if>
+    </rkwMailer:frontend.replace.redirectLinks>
 
 </f:section>
 
@@ -39,19 +41,21 @@
 <!-- HTML -->
 <f:section name="Html">
 
-    <f:if condition="{issue.newsletter.introduction} && !{includeEditorials}">
-        <f:then>
-            <rkwMailer:frontend.replace.rteLinks><f:format.raw>{issue.newsletter.introduction}</f:format.raw></rkwMailer:frontend.replace.rteLinks>
-        </f:then>
-        <f:else>
-            <f:if condition="{issue.newsletter.introduction2} && {includeEditorials}">
-                <f:then>
-                    <rkwMailer:frontend.replace.rteLinks><f:format.raw>{issue.newsletter.introduction2}</f:format.raw></rkwMailer:frontend.replace.rteLinks>
-                </f:then>
-                <f:else>
-                    <rkwMailer:frontend.translate key="partials_newsletter_body.introduction" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />
-                </f:else>
-            </f:if>
-        </f:else>
-    </f:if>
+    <rkwMailer:frontend.replace.redirectLinks queueMail="{queueMail}" isPlaintext="true">
+        <f:if condition="{issue.newsletter.introduction} && !{includeEditorials}">
+            <f:then>
+                <rkwMailer:frontend.replace.rteLinks><f:format.raw>{issue.newsletter.introduction}</f:format.raw></rkwMailer:frontend.replace.rteLinks>
+            </f:then>
+            <f:else>
+                <f:if condition="{issue.newsletter.introduction2} && {includeEditorials}">
+                    <f:then>
+                        <rkwMailer:frontend.replace.rteLinks><f:format.raw>{issue.newsletter.introduction2}</f:format.raw></rkwMailer:frontend.replace.rteLinks>
+                    </f:then>
+                    <f:else>
+                        <rkwMailer:frontend.translate key="partials_newsletter_body.introduction" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />
+                    </f:else>
+                </f:if>
+            </f:else>
+        </f:if>
+    </rkwMailer:frontend.replace.redirectLinks>
 </f:section>
