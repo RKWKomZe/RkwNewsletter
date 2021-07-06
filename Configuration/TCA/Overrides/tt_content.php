@@ -20,7 +20,6 @@ $tmpCols = [
         ],
     ],
 ];
-$tmpCols = [];
 
 // Extend TCA when rkw_authors is available
 if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('rkw_authors')) {
