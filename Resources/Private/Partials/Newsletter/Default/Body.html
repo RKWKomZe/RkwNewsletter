@@ -6,8 +6,8 @@
 
 <rkwMailer:recipientSalutation queueRecipient="{queueRecipient}" prependText="<rkwMailer:frontend.translate key='partials_newsletter_body.headline' languageKey='{queueRecipient.languageCode}' extensionName='rkwNewsletter' /> " appendText="," />
 \n\n
-<f:render partial="Introduction" section="Plaintext" arguments="{_all}" />
-\n\n\n
+<f:render partial="Editorial" section="Plaintext" arguments="{_all}" />
+\n\n
 <f:render partial="Items" section="Plaintext" arguments="{pages: specialPages, issue: issue, queueMail: queueMail, queueRecipient: queueRecipient, maxItemsPerTopic: maxItemsPerTopic, pageTypeMore: pageTypeMore, includeEditorials: '0'}" />
 <f:render partial="Items" section="Plaintext" arguments="{pages: pages, issue: issue, queueMail: queueMail, queueRecipient: queueRecipient, maxItemsPerTopic: maxItemsPerTopic, pageTypeMore: pageTypeMore, pagesOrder: pagesOrder, includeEditorials: includeEditorials}" />
 </rkwMailer:plaintextLineBreaks></f:section>
@@ -25,11 +25,9 @@
             </p>
         </td>
     </tr>
-    <tr>
-        <td style="padding: 0 16px; line-height: 20px" class="prefix-fix wysiwyg-content">
-            <f:render partial="Introduction" section="Html" arguments="{_all}" />
-        </td>
-    </tr>
+
+    <!-- Introduction -->
+    <f:render partial="Editorial" section="Html" arguments="{_all}" />
 
     <!-- Top-News -->
     <f:if condition="{webView}">

@@ -20,10 +20,10 @@ return [
 		'iconfile' => 'EXT:rkw_newsletter/Resources/Public/Icons/tx_rkwnewsletter_domain_model_newsletter.gif'
 	],
 	'interface' => [
-		'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, issue_title, introduction, introduction2, sender_name, sender_mail, reply_mail, return_path, template, type, settings_page, rythm, approval, usergroup, topic, last_sent_tstamp, last_issue_tstamp, issue',
+		'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, issue_title, introduction, introduction2, authors, sender_name, sender_mail, reply_mail, return_path, template, type, settings_page, rythm, approval, usergroup, topic, last_sent_tstamp, last_issue_tstamp, issue',
 	],
 	'types' => [
-		'1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, name, issue_title, introduction, introduction2, sender_name, sender_mail, reply_mail, return_path, template, type, settings_page, encoding, charset, rythm, approval, usergroup, topic, last_sent_tstamp, last_issue_tstamp, issue, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, hidden,--palette--;;1, starttime, endtime'],
+		'1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, name, issue_title, introduction, introduction2, authors, sender_name, sender_mail, reply_mail, return_path, template, type, settings_page, encoding, charset, rythm, approval, usergroup, topic, last_sent_tstamp, last_issue_tstamp, issue, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, hidden,--palette--;;1, starttime, endtime'],
 	],
 	'palettes' => [
 		'1' => ['showitem' => ''],
@@ -31,7 +31,7 @@ return [
 	'columns' => [
 	
 		'sys_language_uid' => [
-			'exclude' => false,
+			'exclude' => true,
 			'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.language',
 			'config' => [
 				'type' => 'select',
@@ -66,14 +66,14 @@ return [
 		],
 
 		'hidden' => [
-			'exclude' => false,
+			'exclude' => true,
 			'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.hidden',
 			'config' => [
 				'type' => 'check',
 			],
 		],
 		'starttime' => [
-			'exclude' => false,
+			'exclude' => true,
 			'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.starttime',
 			'config' => [
 				'type' => 'input',
@@ -92,7 +92,7 @@ return [
 			],
 		],
 		'endtime' => [
-			'exclude' => false,
+			'exclude' => true,
 			'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.endtime',
 			'config' => [
 				'type' => 'input',
@@ -110,7 +110,7 @@ return [
 			],
 		],
 		'name' => [
-			'exclude' => false,
+			'exclude' => true,
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.name',
 			'config' => [
 				'type' => 'input',
@@ -119,7 +119,7 @@ return [
 			],
 		],
         'introduction' => [
-            'exclude' => 0,
+            'exclude' => false,
             'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.introduction',
             'config' => [
                 'type' => 'text',
@@ -130,7 +130,7 @@ return [
             ],
         ],
         'introduction2' => [
-            'exclude' => 0,
+            'exclude' => false,
             'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.introduction2',
             'config' => [
                 'type' => 'text',
@@ -140,8 +140,21 @@ return [
                 'enableRichtext' => true
             ],
         ],
+        'authors' => [
+            'exclude' => false,
+            'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.authors',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectMultipleSideBySide',
+                'foreign_table' => 'tx_rkwauthors_domain_model_authors',
+                'foreign_table_where' => 'AND tx_rkwauthors_domain_model_authors.internal = 1 AND ((\'###PAGE_TSCONFIG_IDLIST###\' <> \'0\' AND FIND_IN_SET(tx_rkwauthors_domain_model_authors.pid,\'###PAGE_TSCONFIG_IDLIST###\')) OR (\'###PAGE_TSCONFIG_IDLIST###\' = \'0\')) AND tx_rkwauthors_domain_model_authors.sys_language_uid = ###REC_FIELD_sys_language_uid### ORDER BY tx_rkwauthors_domain_model_authors.last_name ASC',
+                'maxitems'      => 1,
+                'minitems'      => 0,
+                'size'          => 5,
+            ]
+        ],
 		'issue_title' => [
-			'exclude' => false,
+            'exclude' => true,
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.issue_title',
 			'config' => [
 				'type' => 'input',
@@ -150,7 +163,7 @@ return [
 			],
 		],
 		'sender_name' => [
-			'exclude' => false,
+            'exclude' => true,
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.sender_name',
 			'config' => [
 				'type' => 'input',
@@ -159,7 +172,7 @@ return [
 			],
 		],
 		'sender_mail' => [
-			'exclude' => false,
+            'exclude' => true,
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.sender_mail',
 			'config' => [
 				'type' => 'input',
@@ -168,7 +181,7 @@ return [
 			],
 		],
 		'reply_name' => [
-			'exclude' => false,
+            'exclude' => true,
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.reply_name',
 			'config' => [
 				'type' => 'input',
@@ -177,7 +190,7 @@ return [
 			],
 		],
 		'reply_mail' => [
-			'exclude' => false,
+            'exclude' => true,
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.reply_mail',
 			'config' => [
 				'type' => 'input',
@@ -186,7 +199,7 @@ return [
 			],
 		],
 		'return_path' => [
-			'exclude' => false,
+            'exclude' => true,
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.return_path',
 			'config' => [
 				'type' => 'input',
@@ -195,7 +208,7 @@ return [
 			],
 		],
 		'priority' => [
-			'exclude' => false,
+            'exclude' => true,
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.priority',
 			'config' => [
 				'type' => 'select',
@@ -212,7 +225,7 @@ return [
 			],
 		],
         'type' => [
-            'exclude' => false,
+            'exclude' => true,
             'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.type',
             'config' => [
                 'type' => 'check',
@@ -222,7 +235,7 @@ return [
             ],
         ],
         'template' => [
-            'exclude' => false,
+            'exclude' => true,
             'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.template',
             'config' => [
                 'type' => 'input',
@@ -232,7 +245,7 @@ return [
             ],
         ],
         'settings_page' => [
-            'exclude' => false,
+            'exclude' => true,
             'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xl:tx_rkwnewsletter_domain_model_newsletter.settings_page',
             'config' => [
                 'type' => 'input',
@@ -243,7 +256,7 @@ return [
             ],
         ],
 		'format' => [
-			'exclude' => false,
+            'exclude' => true,
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.format',
 			'config' => [
 				'type' => 'select',
@@ -260,7 +273,7 @@ return [
 			],
 		],
 		'rythm' => [
-			'exclude' => false,
+            'exclude' => true,
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.rythm',
 			'config' => [
 				'type' => 'select',
@@ -278,7 +291,7 @@ return [
 			],
 		],
 		'approval' => [
-			'exclude' => false,
+            'exclude' => true,
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.approval',
 			'config' => [
 				'type' => 'select',
@@ -293,7 +306,7 @@ return [
 			],
 		],
 		'usergroup' => [
-			'exclude' => false,
+            'exclude' => true,
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.usergroup',
 			'config' => [
 				'type' => 'select',
@@ -307,7 +320,7 @@ return [
 			],
 		],
 		'topic' => [
-			'exclude' => false,
+            'exclude' => true,
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.topic',
 			'config' => [
 				'type' => 'inline',
@@ -326,7 +339,7 @@ return [
 			],
 		],
         'issue' => [
-            'exclude' => false,
+            'exclude' => true,
             'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.issue',
             'config' => [
                 'type' => 'inline',
@@ -358,7 +371,7 @@ return [
             ],
         ],
         'last_sent_tstamp' => [
-            'exclude' => false,
+            'exclude' => true,
             'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.last_sent_tstamp',
             'config' => [
                 'type' => 'input',
@@ -374,7 +387,7 @@ return [
             ],
         ],
         'last_issue_tstamp' => [
-            'exclude' => false,
+            'exclude' => true,
             'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.last_issue_tstamp',
             'config' => [
                 'type' => 'input',

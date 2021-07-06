@@ -56,6 +56,15 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $introduction2;
 
+    
+    /**
+     * author
+     *
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\Authors>
+     */
+    protected $authors;
+
+
     /**
      * issueTitle
      *
@@ -207,6 +216,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->approval = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
         $this->topic = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
         $this->issue = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $this->authors = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
 
     }
 
@@ -298,7 +308,50 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->introduction2 = $introduction2;
     }
 
+    /**
+     * Adds a Authors
+     *
+     * @param \RKW\RkwNewsletter\Domain\Model\Authors $authors
+     * @return void
+     */
+    public function addAuthors(\RKW\RkwNewsletter\Domain\Model\Authors $authors)
+    {
+        $this->authors->attach($authors);
+    }
 
+    /**
+     * Removes a Authors
+     *
+     * @param \RKW\RkwNewsletter\Domain\Model\Authors $authorsToRemove The Authors to be removed
+     * @return void
+     */
+    public function removeAuthors(\RKW\RkwNewsletter\Domain\Model\Authors $authorsToRemove)
+    {
+        $this->authors->detach($authorsToRemove);
+    }
+
+    /**
+     * Returns the authors
+     *
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\Authors> $authors
+     */
+    public function getAuthors()
+    {
+        return $this->authors;
+    }
+
+    /**
+     * Sets the authors
+     *
+     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\Authors> $authors
+     * @return void
+     */
+    public function setAuthors(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $authors)
+    {
+        $this->authors = $authors;
+    }
+    
+    
     /**
      * Returns the issueTitle
      *
