@@ -13,13 +13,14 @@ defined('TYPO3_MODE') || die('Access denied.');
 
 $tmpCols = [
     'tx_rkwnewsletter_is_editorial' => [
-        'exclude' => 0,
+        'exclude' => true,
         'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tt_content.tx_rkwnewsletter_is_editorial',
         'config' => [
             'type' => 'check',
         ],
     ],
 ];
+$tmpCols = [];
 
 // Extend TCA when rkw_authors is available
 if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('rkw_authors')) {
