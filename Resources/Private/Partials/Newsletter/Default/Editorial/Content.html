@@ -42,7 +42,7 @@
 <f:section name="Html">
     <tr>
         <td style="padding: 0 16px; line-height: 20px" class="prefix-fix wysiwyg-content">
-            <rkwMailer:frontend.replace.redirectLinks queueMail="{queueMail}" isPlaintext="true">
+            <rkwMailer:frontend.replace.redirectLinks queueMail="{queueMail}">
                 <f:if condition="{issue.newsletter.introduction} && !{includeEditorials}">
                     <f:then>
                         <rkwMailer:frontend.replace.rteLinks><f:format.raw>{issue.newsletter.introduction}</f:format.raw></rkwMailer:frontend.replace.rteLinks>
