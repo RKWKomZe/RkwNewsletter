@@ -70,7 +70,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
                             'stage'       => $stage,
                             'isReminder'  => $isReminder,
                         ),
-                        'subject' => \RKW\RkwMailer\Helper\FrontendLocalization::translate(
+                        'subject' => \RKW\RkwMailer\Utility\FrontendLocalizationUtility::translate(
                             ($isReminder ? 'rkwMailService.subject.adminApprovalReminder' : 'rkwMailService.subject.adminApproval'),
                             'rkw_newsletter',
                             null,
@@ -140,7 +140,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
                             'backendUser' => $admin,
                             'stage'       => $stage,
                         ),
-                        'subject' => \RKW\RkwMailer\Helper\FrontendLocalization::translate(
+                        'subject' => \RKW\RkwMailer\Utility\FrontendLocalizationUtility::translate(
                             'rkwMailService.subject.adminApprovalAutomatic',
                             'rkw_newsletter',
                             null,
@@ -210,7 +210,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
                             'backendUser' => $admin,
                             'isReminder'  => $isReminder,
                         ),
-                        'subject' => \RKW\RkwMailer\Helper\FrontendLocalization::translate(
+                        'subject' => \RKW\RkwMailer\Utility\FrontendLocalizationUtility::translate(
                             ($isReminder ? 'rkwMailService.subject.adminReleaseReminder' : 'rkwMailService.subject.adminRelease'),
                             'rkw_newsletter',
                             null,
@@ -276,7 +276,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
             ));
 
             $mailService->getQueueMail()->setSubject(
-                \RKW\RkwMailer\Helper\FrontendLocalization::translate(
+                \RKW\RkwMailer\Utility\FrontendLocalizationUtility::translate(
                     'rkwMailService.subject.optInRequest',
                     'rkw_newsletter',
                     array(),
