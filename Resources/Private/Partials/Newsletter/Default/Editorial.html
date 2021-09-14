@@ -4,12 +4,16 @@
 <!-- PLAINTEXT -->
 <f:section name="Plaintext">
     <f:render partial="Editorial/Content" section="Plaintext" arguments="{_all}" />
-    <f:render partial="Editorial/Contact" section="Plaintext" arguments="{_all}" />
+    <f:if condition="!{includeEditorials}">
+        <f:render partial="Editorial/Contact" section="Plaintext" arguments="{_all}" />
+    </f:if>
 </f:section>
 
 
 <!-- HTML -->
 <f:section name="Html">
     <f:render partial="Editorial/Content" section="Html" arguments="{_all}" />
-    <f:render partial="Editorial/Contact" section="Html" arguments="{_all}" />
+    <f:if condition="!{includeEditorials}">
+        <f:render partial="Editorial/Contact" section="Html" arguments="{_all}" />
+    </f:if>
 </f:section>

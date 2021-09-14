@@ -4,12 +4,16 @@
 <!-- PLAINTEXT -->
 <f:section name="Plaintext"><rkwMailer:plaintextLineBreaks>
 
-<rkwMailer:recipientSalutation queueRecipient="{queueRecipient}" prependText="<rkwMailer:frontend.translate key='partials_newsletter_body.headline' languageKey='{queueRecipient.languageCode}' extensionName='rkwNewsletter' /> " appendText="," />
-\n\n
-<f:render partial="Editorial" section="Plaintext" arguments="{_all}" />
-\n\n
-<f:render partial="Items" section="Plaintext" arguments="{pages: specialPages, issue: issue, queueMail: queueMail, queueRecipient: queueRecipient, maxItemsPerTopic: maxItemsPerTopic, pageTypeMore: pageTypeMore, includeEditorials: '0'}" />
-<f:render partial="Items" section="Plaintext" arguments="{pages: pages, issue: issue, queueMail: queueMail, queueRecipient: queueRecipient, maxItemsPerTopic: maxItemsPerTopic, pageTypeMore: pageTypeMore, pagesOrder: pagesOrder, includeEditorials: includeEditorials}" />
+    <f:if condition="!{includeEditorials}">
+        <f:then>
+            <rkwMailer:recipientSalutation queueRecipient="{queueRecipient}" prependText="<rkwMailer:frontend.translate key='partials_newsletter_body.headline' languageKey='{queueRecipient.languageCode}' extensionName='rkwNewsletter' /> " appendText="," />
+            \n\n
+        </f:then>
+    </f:if>
+    <f:render partial="Editorial" section="Plaintext" arguments="{_all}" />
+    \n\n
+    <f:render partial="Items" section="Plaintext" arguments="{pages: specialPages, issue: issue, queueMail: queueMail, queueRecipient: queueRecipient, maxItemsPerTopic: maxItemsPerTopic, pageTypeMore: pageTypeMore, includeEditorials: '0'}" />
+    <f:render partial="Items" section="Plaintext" arguments="{pages: pages, issue: issue, queueMail: queueMail, queueRecipient: queueRecipient, maxItemsPerTopic: maxItemsPerTopic, pageTypeMore: pageTypeMore, pagesOrder: pagesOrder, includeEditorials: includeEditorials}" />
 </rkwMailer:plaintextLineBreaks></f:section>
 
 
@@ -18,13 +22,17 @@
 <f:section name="Html">
 
     <!-- Headline -->
-    <tr>
-        <td style="padding: 0 16px; line-height: 20px">
-            <p style="margin: 24px 0 24px; font-size:24px; line-height: 28px">
-                <rkwMailer:recipientSalutation queueRecipient="{queueRecipient}" prependText="<rkwMailer:frontend.translate key='partials_newsletter_body.headline' languageKey='{queueRecipient.languageCode}' extensionName='rkwNewsletter' /> " appendText="," />
-            </p>
-        </td>
-    </tr>
+    <f:if condition="!{includeEditorials}">
+        <f:then>
+            <tr>
+                <td style="padding: 0 16px; line-height: 20px">
+                    <p style="margin: 24px 0 24px; font-size:24px; line-height: 28px">
+                        <rkwMailer:recipientSalutation queueRecipient="{queueRecipient}" prependText="<rkwMailer:frontend.translate key='partials_newsletter_body.headline' languageKey='{queueRecipient.languageCode}' extensionName='rkwNewsletter' /> " appendText="," />
+                    </p>
+                </td>
+            </tr>
+        </f:then>
+    </f:if>
 
     <!-- Introduction -->
     <f:render partial="Editorial" section="Html" arguments="{_all}" />
