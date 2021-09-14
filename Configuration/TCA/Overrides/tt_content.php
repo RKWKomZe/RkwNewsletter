@@ -13,7 +13,7 @@ defined('TYPO3_MODE') || die('Access denied.');
 
 $tmpCols = [
     'tx_rkwnewsletter_is_editorial' => [
-        'exclude' => true,
+        'exclude' => false,
         'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tt_content.tx_rkwnewsletter_is_editorial',
         'config' => [
             'type' => 'check',

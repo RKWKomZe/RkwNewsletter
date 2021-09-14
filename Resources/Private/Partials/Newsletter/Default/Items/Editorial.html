@@ -4,7 +4,6 @@
 <!-- PLAINTEXT -->
 <f:section name="Plaintext" >
 
-    <f:render partial="Items/Editorial/TopicBadge" section="Plaintext" arguments="{_all}" />
     <f:render partial="Items/Editorial/Content" section="Plaintext" arguments="{_all}" />
     <f:render partial="Items/Editorial/Contact" section="Plaintext" arguments="{_all}" />
 
@@ -13,15 +12,11 @@
 <!-- HTML for all other items -->
 <f:section name="Html">
 
-
     <tr>
         <td style="padding-top:32px;">
             <table cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
                 <tr>
                     <td style="background: {page.txRkwnewsletterTopic.primaryColorEditorial}">
-
-                        <!-- badge -->
-                        <f:render partial="Items/Editorial/TopicBadge" section="Html" arguments="{_all}" />
 
                         <!-- main part -->
                         <table cellpadding="0" cellspacing="0" border="0" style="width: 100%; font-family: 'Arial', sans-serif; font-size: 14px">
@@ -32,7 +27,9 @@
                                     <f:render partial="Items/Editorial/Content" section="Html" arguments="{_all}" />
 
                                     <!-- Contact -->
-                                    <f:render partial="Items/Editorial/Contact" section="Html" arguments="{_all}" />
+                                    <f:if condition="{includeEditorials}">
+                                        <f:render partial="Items/Editorial/Contact" section="Html" arguments="{_all}" />
+                                    </f:if>
 
                                 </td>
                             </tr>
