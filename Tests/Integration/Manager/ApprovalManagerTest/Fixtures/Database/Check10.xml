@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+
+    <tx_rkwnewsletter_domain_model_issue>
+        <uid>10</uid>
+        <pid>0</pid>
+        <newsletter>0</newsletter>
+        <pages>10</pages>
+    </tx_rkwnewsletter_domain_model_issue>
+
+    <tx_rkwnewsletter_domain_model_topic>
+        <uid>10</uid>
+        <pid>0</pid>
+        <container_page>0</container_page>
+        <newsletter>0</newsletter>
+    </tx_rkwnewsletter_domain_model_topic>
+
+    <pages>
+        <uid>10</uid>
+        <pid>0</pid>
+        <title>Test-Title</title>
+    </pages>
+</dataset>

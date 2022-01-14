@@ -15,7 +15,7 @@ namespace RKW\RkwNewsletter\Domain\Repository;
  */
 
 /**
- * TtContentRepository
+ * ContentRepository
  *
  * @author Maximilian Fäßler <maximilian@faesslerweb.de>
  * @author Steffen Kroggel <developer@steffenkroggel.de>
@@ -23,7 +23,7 @@ namespace RKW\RkwNewsletter\Domain\Repository;
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class TtContentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
+class ContentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
     /*
      * initializeObject
@@ -78,7 +78,7 @@ class TtContentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @param int $pid
      * @param int $languageUid
      * @param bool $includeEditorials
-     * @return \RKW\RkwNewsletter\Domain\Model\TtContent
+     * @return \RKW\RkwNewsletter\Domain\Model\Content
      */
     public function findFirstWithHeaderByPid($pid, $languageUid = 0, $includeEditorials = false)
     {
@@ -108,16 +108,15 @@ class TtContentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * add
      * Workaround because extension of repository doesn't seem to work properly here
      *
-     * @toDo: remove this work-around
-     * @param \RKW\RkwNewsletter\Domain\Model\TtContent $ttContentElement
+     * @param \RKW\RkwNewsletter\Domain\Model\Content $ttContentElement
      * @return void
-     */
+     
     public function add($ttContentElement)
     {
 
         $authorsList = array();
         if (count($ttContentElement->getTxRkwNewsletterAuthors())) {
-            /** @var \RKW\RkwNewsletter\Domain\Model\Authors $author */
+            /** @var \RKW\RkwNewsletter\Domain\Model\Authors $author 
             foreach ($ttContentElement->getTxRkwNewsletterAuthors() as $author) {
                 $authorsList[] = $author->getUid();
             }
@@ -142,16 +141,16 @@ class TtContentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         );
 
         $ttContentElement->setUid($GLOBALS['TYPO3_DB']->sql_insert_id());
-    }
+    }*/
 
     /**
      * updateImage
      * Workaround because extension of repository doesn't seem to work properly here
      *
      * @toDo: remove this work-around
-     * @param \RKW\RkwNewsletter\Domain\Model\TtContent $ttContentElement
+     * @param \RKW\RkwNewsletter\Domain\Model\Content $ttContentElement
      * @return void
-     */
+     
     public function updateImage($ttContentElement)
     {
         $GLOBALS['TYPO3_DB']->exec_UPDATEquery(
@@ -161,6 +160,6 @@ class TtContentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 'image' => 1,
             ]
         );
-    }
+    }*/
 
 }

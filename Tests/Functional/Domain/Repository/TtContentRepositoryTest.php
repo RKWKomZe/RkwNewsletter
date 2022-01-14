@@ -3,7 +3,7 @@ namespace RKW\RkwNewsletter\Tests\Functional\Domain\Repository;
 
 
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
-use RKW\RkwNewsletter\Domain\Repository\TtContentRepository;
+use RKW\RkwNewsletter\Domain\Repository\ContentRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
@@ -27,7 +27,7 @@ use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
  * @package RKW_RkwMailer
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class TtContentRepositoryTest extends FunctionalTestCase
+class ContentRepositoryTest extends FunctionalTestCase
 {
     /**
      * @var string[]
@@ -61,8 +61,8 @@ class TtContentRepositoryTest extends FunctionalTestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->importDataSet(__DIR__ . '/Fixtures/Database/TtContentRepository/Pages.xml');
-        $this->importDataSet(__DIR__ . '/Fixtures/Database/TtContentRepository/TtContent.xml');
+        $this->importDataSet(__DIR__ . '/Fixtures/Database/ContentRepository/Pages.xml');
+        $this->importDataSet(__DIR__ . '/Fixtures/Database/ContentRepository/TtContent.xml');
 
 
         $this->setUpFrontendRootPage(
@@ -79,7 +79,7 @@ class TtContentRepositoryTest extends FunctionalTestCase
 
         /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
         $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $this->subject = $this->objectManager->get(TtContentRepository::class);
+        $this->subject = $this->objectManager->get(ContentRepository::class);
     }
 
 
@@ -89,10 +89,10 @@ class TtContentRepositoryTest extends FunctionalTestCase
     public function findFirstWithHeaderByPidGivenPidReturnsOneContentOfGivenPageWithDefaultLanguageUid()
     {
 
-        /** @var \RKW\RkwNewsletter\Domain\Model\TtContent $result */
+        /** @var \RKW\RkwNewsletter\Domain\Model\Content $result */
         $result = $this->subject->findFirstWithHeaderByPid(1);
 
-        self::assertInstanceOf('\RKW\RkwNewsletter\Domain\Model\TtContent', $result);
+        self::assertInstanceOf('\RKW\RkwNewsletter\Domain\Model\Content', $result);
         self::assertEquals(1, $result->getPid());
         self::assertEquals(0, $result->getSysLanguageUid());
 
@@ -104,7 +104,7 @@ class TtContentRepositoryTest extends FunctionalTestCase
     public function findFirstWithHeaderByPidGivenPidWithNonMatchingLanguageUidReturnsNull()
     {
 
-        /** @var \RKW\RkwNewsletter\Domain\Model\TtContent $result */
+        /** @var \RKW\RkwNewsletter\Domain\Model\Content $result */
         $result = $this->subject->findFirstWithHeaderByPid(1, 1);
 
         self::assertNull($result);
@@ -117,10 +117,10 @@ class TtContentRepositoryTest extends FunctionalTestCase
     public function findFirstWithHeaderByPidGivenPidWithMatchingLanguageUidReturnsOneContentOfGivenPageWithMatchingLanguageUid()
     {
 
-        /** @var \RKW\RkwNewsletter\Domain\Model\TtContent $result */
+        /** @var \RKW\RkwNewsletter\Domain\Model\Content $result */
         $result = $this->subject->findFirstWithHeaderByPid(2, 1);
 
-        self::assertInstanceOf('\RKW\RkwNewsletter\Domain\Model\TtContent', $result);
+        self::assertInstanceOf('\RKW\RkwNewsletter\Domain\Model\Content', $result);
         self::assertEquals(2, $result->getPid());
         self::assertEquals(1, $result->getSysLanguageUid());
     }
@@ -131,10 +131,10 @@ class TtContentRepositoryTest extends FunctionalTestCase
     public function findFirstWithHeaderByPidGivenPidReturnsOneContentWhichIsNotAnEditorialByDefault()
     {
 
-        /** @var \RKW\RkwNewsletter\Domain\Model\TtContent $result */
+        /** @var \RKW\RkwNewsletter\Domain\Model\Content $result */
         $result = $this->subject->findFirstWithHeaderByPid(3);
 
-        self::assertInstanceOf('\RKW\RkwNewsletter\Domain\Model\TtContent', $result);
+        self::assertInstanceOf('\RKW\RkwNewsletter\Domain\Model\Content', $result);
         self::assertEquals(5, $result->getUid());
         self::assertEquals(3, $result->getPid());
     }
@@ -145,10 +145,10 @@ class TtContentRepositoryTest extends FunctionalTestCase
     public function findFirstWithHeaderByPidGivenPidAndIncludeEditorialTrueReturnsOneContentWhichAnEditorial()
     {
 
-        /** @var \RKW\RkwNewsletter\Domain\Model\TtContent $result */
+        /** @var \RKW\RkwNewsletter\Domain\Model\Content $result */
         $result = $this->subject->findFirstWithHeaderByPid(3, 0, true);
 
-        self::assertInstanceOf('\RKW\RkwNewsletter\Domain\Model\TtContent', $result);
+        self::assertInstanceOf('\RKW\RkwNewsletter\Domain\Model\Content', $result);
         self::assertEquals(4, $result->getUid());
         self::assertEquals(3, $result->getPid());
     }
@@ -159,10 +159,10 @@ class TtContentRepositoryTest extends FunctionalTestCase
     public function findFirstWithHeaderByPidReturnsFirstContentWhichHasAnHeader()
     {
 
-        /** @var \RKW\RkwNewsletter\Domain\Model\TtContent $result */
+        /** @var \RKW\RkwNewsletter\Domain\Model\Content $result */
         $result = $this->subject->findFirstWithHeaderByPid(4);
 
-        self::assertInstanceOf('\RKW\RkwNewsletter\Domain\Model\TtContent', $result);
+        self::assertInstanceOf('\RKW\RkwNewsletter\Domain\Model\Content', $result);
         self::assertEquals(7, $result->getUid());
         self::assertNotEmpty($result->getHeader());
     }
@@ -173,7 +173,7 @@ class TtContentRepositoryTest extends FunctionalTestCase
     public function findFirstWithHeaderByPidReturnsOnlyContentWhichHasAnHeader()
     {
 
-        /** @var \RKW\RkwNewsletter\Domain\Model\TtContent $result */
+        /** @var \RKW\RkwNewsletter\Domain\Model\Content $result */
         $result = $this->subject->findFirstWithHeaderByPid(5);
 
         self::assertNull($result);
@@ -186,10 +186,10 @@ class TtContentRepositoryTest extends FunctionalTestCase
     public function findFirstWithHeaderByPidReturnsFirstContentSortedByOrdering()
     {
 
-        /** @var \RKW\RkwNewsletter\Domain\Model\TtContent $result */
+        /** @var \RKW\RkwNewsletter\Domain\Model\Content $result */
         $result = $this->subject->findFirstWithHeaderByPid(6);
 
-        self::assertInstanceOf('\RKW\RkwNewsletter\Domain\Model\TtContent', $result);
+        self::assertInstanceOf('\RKW\RkwNewsletter\Domain\Model\Content', $result);
         self::assertEquals(11, $result->getUid());
 
     }

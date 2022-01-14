@@ -382,12 +382,12 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
             }
 
             // get first content element of first page with header for subject
-            /** @var \RKW\RkwNewsletter\Domain\Repository\TtContentRepository $ttContentRepository */
-            $ttContentRepository = $objectManager->get('RKW\\RkwNewsletter\\Domain\\Repository\\TtContentRepository');
+            /** @var \RKW\RkwNewsletter\Domain\Repository\ContentRepository $ttContentRepository */
+            $ttContentRepository = $objectManager->get('RKW\\RkwNewsletter\\Domain\\Repository\\ContentRepository');
 
             $language = $issue->getNewsletter()->getSysLanguageUid();
 
-            /** @var \RKW\RkwNewsletter\Domain\Model\TtContent $firstContentElement */
+            /** @var \RKW\RkwNewsletter\Domain\Model\Content $firstContentElement */
             if (count($specialPages->toArray())) {
                 $firstContentElement = $ttContentRepository->findFirstWithHeaderByPid($specialPages->getFirst()->getUid(), $language, $includeTutorials);
             } else if (count($pages->toArray())) {

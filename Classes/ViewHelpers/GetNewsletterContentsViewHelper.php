@@ -71,8 +71,8 @@ if ($currentVersion < 8000000) {
             /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
             $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Object\ObjectManager');
 
-            /** @var \RKW\RkwNewsletter\Domain\Repository\TtContentRepository $ttContentRepository */
-            $ttContentRepository = $objectManager->get('RKW\\RkwNewsletter\\Domain\\Repository\\TtContentRepository');
+            /** @var \RKW\RkwNewsletter\Domain\Repository\ContentRepository $ttContentRepository */
+            $ttContentRepository = $objectManager->get('RKW\\RkwNewsletter\\Domain\\Repository\\ContentRepository');
 
             // get language of newsletter
             $language = $issue->getNewsletter()->getSysLanguageUid();
@@ -135,8 +135,8 @@ if ($currentVersion < 8000000) {
             /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
             $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Object\ObjectManager');
 
-            /** @var \RKW\RkwNewsletter\Domain\Repository\TtContentRepository $ttContentRepository */
-            $ttContentRepository = $objectManager->get('RKW\\RkwNewsletter\\Domain\\Repository\\TtContentRepository');
+            /** @var \RKW\RkwNewsletter\Domain\Repository\ContentRepository $ttContentRepository */
+            $ttContentRepository = $objectManager->get('RKW\\RkwNewsletter\\Domain\\Repository\\ContentRepository');
 
             // get language of newsletter
             $language = $issue->getNewsletter()->getSysLanguageUid();

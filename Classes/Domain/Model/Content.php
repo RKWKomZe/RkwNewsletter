@@ -14,8 +14,12 @@ namespace RKW\RkwNewsletter\Domain\Model;
  * The TYPO3 project - inspiring people to share!
  */
 
+use RKW\RkwAuthors\Domain\Model\Authors;
+use RKW\RkwBasics\Domain\Model\FileReference;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+
 /**
- * TtContent
+ * Content
  *
  * @author Maximilian Fäßler <maximilian@faesslerweb.de>
  * @author Steffen Kroggel <developer@steffenkroggel.de>
@@ -23,50 +27,50 @@ namespace RKW\RkwNewsletter\Domain\Model;
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class TtContent extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
-    /**
-     * uid
-     *
-     * @var integer
-     */
-    protected $uid;
-
+ 
+    
     /**
      * crdate
      *
-     * @var integer
+     * @var int
      */
-    protected $crdate;
+    protected $crdate = 0;
 
+    
     /**
      * sysLanguageUid
      *
-     * @var integer
+     * @var int
      */
-    protected $sysLanguageUid;
+    protected $sysLanguageUid = 0;
 
+    
     /**
      * header
      *
      * @var string
      */
-    protected $header;
+    protected $header = '';
 
+    
     /**
      * headerLink
      *
      * @var string
      */
-    protected $headerLink;
+    protected $headerLink = '';
 
+    
     /**
      * bodytext
      *
      * @var string
      */
-    protected $bodytext;
+    protected $bodytext = '';
 
+    
     /**
      * cType
      *
@@ -74,6 +78,7 @@ class TtContent extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $contentType = 'textpic';
 
+    
     /**
      * imageCols
      *
@@ -81,20 +86,21 @@ class TtContent extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $imageCols = 0;
 
+    
     /**
      * Image
      *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwBasics\Domain\Model\FileReference>
      */
-    protected $image;
+    protected $image = null;
 
 
     /**
      * txRkwnewsletterAuthors
      *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\Authors>
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwAuthors\Domain\Model\Authors>
      */
-    protected $txRkwnewsletterAuthors;
+    protected $txRkwnewsletterAuthors = null;
 
 
     /**
@@ -102,8 +108,9 @@ class TtContent extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var bool
      */
-    protected $txRkwnewsletterIsEditorial;
+    protected $txRkwnewsletterIsEditorial = false;
 
+    
     /**
      * __construct
      */
@@ -133,41 +140,44 @@ class TtContent extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the uid
      *
-     * @return integer $uid
+     * @return int $uid
      */
-    public function getUid()
+    public function getUid(): int
     {
         return $this->uid;
     }
 
+    
     /**
      * Sets the uid
      *
-     * @param integer $uid
+     * @param int $uid
      * @return void
      */
-    public function setUid($uid)
+    public function setUid(int $uid): void
     {
         $this->uid = $uid;
     }
 
+    
     /**
      * Returns the crdate
      *
-     * @return integer $crdate
+     * @return int $crdate
      */
-    public function getCrdate()
+    public function getCrdate(): int
     {
         return $this->crdate;
     }
 
+    
     /**
      * Sets the crdate
      *
-     * @param integer $crdate
+     * @param int $crdate
      * @return void
      */
-    public function setCrdate($crdate)
+    public function setCrdate(int $crdate): void
     {
         $this->crdate = $crdate;
     }
@@ -175,30 +185,32 @@ class TtContent extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the sysLanguageUid
      *
-     * @return integer $sysLanguageUid
+     * @return int $sysLanguageUid
      */
-    public function getSysLanguageUid()
+    public function getSysLanguageUid(): int
     {
         return $this->sysLanguageUid;
     }
 
+    
     /**
      * Sets the sysLanguageUid
      *
-     * @param integer $sysLanguageUid
+     * @param int $sysLanguageUid
      * @return void
      */
-    public function setSysLanguageUid($sysLanguageUid)
+    public function setSysLanguageUid(int $sysLanguageUid): void
     {
         $this->sysLanguageUid = $sysLanguageUid;
     }
 
+    
     /**
      * Returns the header
      *
      * @return string $header
      */
-    public function getHeader()
+    public function getHeader(): string
     {
         return $this->header;
     }
@@ -209,7 +221,7 @@ class TtContent extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @param string $header
      * @return void
      */
-    public function setHeader($header)
+    public function setHeader(string $header): void
     {
         $this->header = $header;
     }
@@ -220,18 +232,19 @@ class TtContent extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return string $headerLink
      */
-    public function getHeaderLink()
+    public function getHeaderLink(): string
     {
         return $this->headerLink;
     }
 
+    
     /**
      * Sets the headerLink
      *
      * @param string $headerLink
      * @return void
      */
-    public function setHeaderLink($headerLink)
+    public function setHeaderLink(string $headerLink): void
     {
         $this->headerLink = $headerLink;
     }
@@ -242,173 +255,186 @@ class TtContent extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return string $bodytext
      */
-    public function getBodytext()
+    public function getBodytext(): string
     {
         return $this->bodytext;
     }
 
+    
     /**
      * Sets the bodytext
      *
      * @param string $bodytext
      * @return void
      */
-    public function setBodytext($bodytext)
+    public function setBodytext(string $bodytext): void
     {
         $this->bodytext = $bodytext;
     }
 
+    
     /**
      * Returns the contentType
      *
      * @return string $contentType
      */
-    public function getContentType()
+    public function getContentType(): string
     {
         return $this->contentType;
     }
 
+    
     /**
      * Sets the contentType
      *
      * @param string $contentType
      * @return void
      */
-    public function setContentType($contentType)
+    public function setContentType(string $contentType): void
     {
         $this->contentType = $contentType;
     }
 
+    
     /**
      * Returns the imageCols
      *
      * @return int $imageCols
      */
-    public function getImageCols()
+    public function getImageCols(): int
     {
         return $this->imageCols;
     }
 
+    
     /**
      * Sets the imageCols
      *
      * @param int $imageCols
      * @return void
      */
-    public function setImageCols($imageCols)
+    public function setImageCols(int $imageCols): void
     {
         $this->imageCols = $imageCols;
     }
 
 
     /**
-     * Adds a backend user to the newsletter
+     * Adds an image 
      *
      * @param \RKW\RkwBasics\Domain\Model\FileReference $image
      * @return void
      * @api
      */
-    public function addImage(\RKW\RkwBasics\Domain\Model\FileReference $image)
+    public function addImage(FileReference $image): void
     {
         $this->image->attach($image);
     }
 
+    
     /**
-     * Removes a backend user from the newsletter
+     * Removes an image
      *
      * @param \RKW\RkwBasics\Domain\Model\FileReference $image
      * @return void
      * @api
      */
-    public function removeImage(\RKW\RkwBasics\Domain\Model\FileReference $image)
+    public function removeImage(FileReference $image): void
     {
         $this->image->detach($image);
     }
 
+    
     /**
-     * Returns the backend user.
+     * Returns the images
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage An object storage containing the backend user
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwBasics\Domain\Model\FileReference> An object storage containing the backend user
      * @api
      */
-    public function getImage()
+    public function getImage(): ObjectStorage
     {
         return $this->image;
     }
+    
 
     /**
-     * Sets the backend user.
+     * Sets the images
      *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage $image
+     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwBasics\Domain\Model\FileReference> $image
      * @return void
      * @api
      */
-    public function setImage(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $image)
+    public function setImage(ObjectStorage $image): void
     {
         $this->image = $image;
     }
 
 
     /**
-     * Adds a Authors
+     * Adds a txRkwnewsletterAuthors
      *
-     * @param \RKW\RkwNewsletter\Domain\Model\Authors $txRkwnewsletterAuthors
+     * @param \RKW\RkwAuthors\Domain\Model\Authors $txRkwnewsletterAuthors
      * @return void
      */
-    public function addTxRkwnewsletterAuthors(\RKW\RkwNewsletter\Domain\Model\Authors $txRkwnewsletterAuthors)
+    public function addTxRkwnewsletterAuthors(Authors $txRkwnewsletterAuthors): void
     {
         $this->txRkwnewsletterAuthors->attach($txRkwnewsletterAuthors);
     }
 
+    
     /**
-     * Removes a Authors
+     * Removes a txRkwnewsletterAuthors
      *
-     * @param \RKW\RkwNewsletter\Domain\Model\Authors $txRkwnewsletterAuthorsToRemove The Authors to be removed
+     * @param \RKW\RkwAuthors\Domain\Model\Authors $txRkwnewsletterAuthors The Authors to be removed
      * @return void
      */
-    public function removeTxRkwnewsletterAuthors(\RKW\RkwNewsletter\Domain\Model\Authors $txRkwnewsletterAuthorsToRemove)
+    public function removeTxRkwnewsletterAuthors(Authors $txRkwnewsletterAuthors): void
     {
-        $this->txRkwnewsletterAuthors->detach($txRkwnewsletterAuthorsToRemove);
+        $this->txRkwnewsletterAuthors->detach($txRkwnewsletterAuthors);
     }
 
+    
     /**
      * Returns the txRkwnewsletterAuthors
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\Authors> $txRkwnewsletterAuthors
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwAuthors\Domain\Model\Authors> $txRkwnewsletterAuthors
      */
-    public function getTxRkwnewsletterAuthors()
+    public function getTxRkwnewsletterAuthors(): ObjectStorage
     {
         return $this->txRkwnewsletterAuthors;
     }
 
+    
     /**
      * Sets the txRkwnewsletterAuthors
      *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\Authors> $txRkwnewsletterAuthors
+     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwAuthors\Domain\Model\Authors> $txRkwnewsletterAuthors
      * @return void
      */
-    public function setTxRkwnewsletterAuthors(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $txRkwnewsletterAuthors)
+    public function setTxRkwnewsletterAuthors(ObjectStorage $txRkwnewsletterAuthors): void
     {
         $this->txRkwnewsletterAuthors = $txRkwnewsletterAuthors;
     }
 
+    
     /**
      * Returns the uid
      *
      * @return bool $txRkwnewsletterIsEditorial
      */
-    public function getTxRkwnewsletterIsEditorial()
+    public function getTxRkwnewsletterIsEditorial(): bool
     {
         return $this->txRkwnewsletterIsEditorial;
     }
 
+    
     /**
      * Sets the uid
      *
      * @param bool $uid
      * @return void
      */
-    public function setTxRkwnewsletterIsEditorial($txRkwnewsletterIsEditorial)
+    public function setTxRkwnewsletterIsEditorial(bool $txRkwnewsletterIsEditorial): void
     {
         $this->txRkwnewsletterIsEditorial = $txRkwnewsletterIsEditorial;
     }

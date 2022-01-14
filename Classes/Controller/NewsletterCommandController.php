@@ -15,7 +15,12 @@ namespace RKW\RkwNewsletter\Controller;
  */
 
 use \RKW\RkwBasics\Helper\Common;
+use RKW\RkwNewsletter\Manager\IssueManager;
+use TYPO3\CMS\Core\Log\LogLevel;
+use TYPO3\CMS\Core\Utility\DebugUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * ReleaseCommandController
@@ -67,7 +72,7 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
     /**
      * ttContentRepository
      *
-     * @var \RKW\RkwNewsletter\Domain\Repository\TtContentRepository
+     * @var \RKW\RkwNewsletter\Domain\Repository\ContentRepository
      * @inject
      */
     protected $ttContentRepository;
@@ -97,30 +102,31 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
 
 
     /**
-     * function processIssuesCommand
-     * create issues
+     * create issues for all newsletters
      *
-     * @param int $tolerance Tolance for creating next issue according to last time an issue was built (in seconds)
+     * @param int $tolerance Tolerance for creating next issue according to last time an issue was built (in seconds)
      * @param int $dayOfMonth Day of month the newsletter are planned to be sent
      * @return void
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException*
      */
-    public function processIssuesCommand($tolerance = 0, $dayOfMonth = 15)
+    public function processIssuesCommand(int $tolerance = 0, int $dayOfMonth = 15): void
     {
         try {
 
             /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-            $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Object\ObjectManager');
-
-            // Create new issues for newsletter-configurations if needed
-            /** @var \RKW\RkwNewsletter\Helper\Issue $issue */
-            $issue = $objectManager->get('RKW\\RkwNewsletter\\Helper\\Issue');
-            $issue->buildIssue($tolerance, $dayOfMonth);
+            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+            
+            /** @var \RKW\RkwNewsletter\Manager\IssueManager $issueManager */
+            $issueManager = $objectManager->get(IssueManager::class);
+            $issueManager->buildAllIssues($tolerance, $dayOfMonth);
 
         } catch (\Exception $e) {
-            $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::ERROR, sprintf('An unexpected error occurred while trying to process issues: %s', $e->getMessage()));
+            $this->getLogger()->log(
+                LogLevel::ERROR, 
+                sprintf(
+                    'An unexpected error occurred while trying to process issues: %s', 
+                    $e->getMessage()
+                )
+            );
         }
     }
 
@@ -281,7 +287,7 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
                                             // get first content element of first page with header for subject
                                             $language = $issue->getNewsletter()->getSysLanguageUid();
 
-                                            /** @var \RKW\RkwNewsletter\Domain\Model\TtContent $firstContentElement */
+                                            /** @var \RKW\RkwNewsletter\Domain\Model\Content $firstContentElement */
                                             if (count($specialPages->toArray())) {
                                                 $firstContentElement = $this->ttContentRepository->findFirstWithHeaderByPid($specialPages->getFirst()->getUid(), $language, $includeTutorials);
                                             } else {

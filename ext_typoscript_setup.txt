@@ -18,34 +18,26 @@ config.tx_extbase.persistence {
             mapping {
                 tableName = pages
                 columns {
-                    doktype.mapOnProperty = dokType
+                    perms_userid.mapOnProperty = permsUserId
+                    perms_groupid.mapOnProperty = permsGroupId
+                    perms_user.mapOnProperty = permsUser
+                    perms_group.mapOnProperty = permsGroup
+                    perms_everybody.mapOnProperty = permsEverybody
                 }
             }
         }
-
+        
         #===============================================
 
-        RKW\RkwNewsletter\Domain\Model\PagesLanguageOverlay {
-            mapping {
-                tableName = pages_language_overlay
-                columns {
-                    sys_language_uid.mapOnProperty = sysLanguageUid
-                }
-            }
-        }
-
-        #===============================================
-
-        RKW\RkwNewsletter\Domain\Model\TtContent {
+        RKW\RkwNewsletter\Domain\Model\Content {
             mapping {
                 tableName = tt_content
                 columns {
+                    uid.mapOnProperty = uid
+                    pid.mapOnProperty = pid                
                     CType.mapOnProperty = contentType
                     imagecols.mapOnProperty = imageCols
-                    uid.mapOnProperty = uid
-                    pid.mapOnProperty = pid
                     sys_language_uid.mapOnProperty = sysLanguageUid
-
                 }
             }
         }

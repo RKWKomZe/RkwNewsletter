@@ -14,6 +14,8 @@ namespace RKW\RkwNewsletter\Domain\Model;
  * The TYPO3 project - inspiring people to share!
  */
 
+use RKW\RkwBasics\Domain\Model\FileReference;
+
 /**
  * Pages
  *
@@ -23,7 +25,7 @@ namespace RKW\RkwNewsletter\Domain\Model;
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Pages extends \RKW\RkwNewsletter\Domain\Model\PagesAbstract
+class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
 {
     /**
      * permsUserId
@@ -32,6 +34,7 @@ class Pages extends \RKW\RkwNewsletter\Domain\Model\PagesAbstract
      */
     protected $permsUserId = 0;
 
+    
     /**
      * permsGroupId
      *
@@ -39,6 +42,7 @@ class Pages extends \RKW\RkwNewsletter\Domain\Model\PagesAbstract
      */
     protected $permsGroupId = 0;
 
+    
     /**
      * permsUser
      *
@@ -46,6 +50,7 @@ class Pages extends \RKW\RkwNewsletter\Domain\Model\PagesAbstract
      */
     protected $permsUser = 0;
 
+    
     /**
      * permsGroup
      *
@@ -53,6 +58,7 @@ class Pages extends \RKW\RkwNewsletter\Domain\Model\PagesAbstract
      */
     protected $permsGroup = 0;
 
+    
     /**
      * permsEverybody
      *
@@ -60,204 +66,194 @@ class Pages extends \RKW\RkwNewsletter\Domain\Model\PagesAbstract
      */
     protected $permsEverybody = 0;
 
-    /**
-     * doktype
-     *
-     * @var integer
-     */
-    protected $dokType = 1;
-
+   
     /**
      * txRkwnewsletterNewsletter
      *
      * @var \RKW\RkwNewsletter\Domain\Model\Newsletter
      */
-    protected $txRkwnewsletterNewsletter;
+    protected $txRkwnewsletterNewsletter = null;
 
     /**
      * txRkwnewsletterTopic
      *
      * @var \RKW\RkwNewsletter\Domain\Model\Topic
      */
-    protected $txRkwnewsletterTopic;
+    protected $txRkwnewsletterTopic  = null;
 
 
     /**
      * txRkwnewsletterIssue
      *
      * @var \RKW\RkwNewsletter\Domain\Model\Issue
+     * @deprecated 
      */
-    protected $txRkwnewsletterIssue;
+    protected $txRkwnewsletterIssue  = null;
 
 
     /**
      * txRkwnewsletterExclude
      *
-     * @var integer
+     * @var bool
      */
-    protected $txRkwnewsletterExclude;
+    protected $txRkwnewsletterExclude = false;
 
+    
     /**
      * txRkwnewsletterTeaserHeading
      *
      * @var string
      */
-    protected $txRkwnewsletterTeaserHeading;
+    protected $txRkwnewsletterTeaserHeading = '';
 
+    
     /**
      * txRkwnewsletterTeaserText
      *
      * @var string
      */
-    protected $txRkwnewsletterTeaserText;
+    protected $txRkwnewsletterTeaserText = '';
 
+    
     /**
      * txRkwnewsletterTeaserImage
      *
      * @var \RKW\RkwBasics\Domain\Model\FileReference
      */
-    protected $txRkwnewsletterTeaserImage;
+    protected $txRkwnewsletterTeaserImage = null;
 
+    
     /**
      * txRkwnewsletterTeaserLink
      *
      * @var string
      */
-    protected $txRkwnewsletterTeaserLink;
+    protected $txRkwnewsletterTeaserLink = '';
 
+    
     /**
      * txRkwnewsletterIncludeTstamp
      *
      * @var int
      */
-    protected $txRkwnewsletterIncludeTstamp;
+    protected $txRkwnewsletterIncludeTstamp = 0;
 
+    
     /**
      * Returns the permsUserId
      *
-     * @return integer $permsUserId
+     * @return int $permsUserId
      */
-    public function getPermsUserId()
+    public function getPermsUserId(): int
     {
         return $this->permsUserId;
     }
 
+    
     /**
      * Sets the permsUserId
      *
-     * @param integer $permsUserId
+     * @param int $permsUserId
      * @return void
      */
-    public function setPermsUserId($permsUserId)
+    public function setPermsUserId(int $permsUserId): void
     {
         $this->permsUserId = $permsUserId;
     }
 
+    
     /**
      * Returns the permsGroupId
      *
-     * @return integer $permsGroupId
+     * @return int $permsGroupId
      */
-    public function getPermsGroupId()
+    public function getPermsGroupId(): int
     {
         return $this->permsGroupId;
     }
 
+    
     /**
      * Sets the permsGroupId
      *
-     * @param integer $permsGroupId
+     * @param int $permsGroupId
      * @return void
      */
-    public function setPermsGroupId($permsGroupId)
+    public function setPermsGroupId(int $permsGroupId) :void
     {
         $this->permsGroupId = $permsGroupId;
     }
 
+    
     /**
      * Returns the permsUser
      *
-     * @return integer $permsUser
+     * @return int $permsUser
      */
-    public function getPermsUser()
+    public function getPermsUser(): int
     {
         return $this->permsUser;
     }
 
+    
     /**
      * Sets the permsUser
      *
-     * @param integer $permsUser
+     * @param int $permsUser
      * @return void
      */
-    public function setPermsUser($permsUser)
+    public function setPermsUser(int $permsUser): void
     {
         $this->permsUser = $permsUser;
     }
 
+    
     /**
      * Returns the permsGroup
      *
-     * @return integer $permsGroup
+     * @return int $permsGroup
      */
-    public function getPermsGroup()
+    public function getPermsGroup(): int
     {
         return $this->permsGroup;
     }
 
+    
     /**
      * Sets the permsGroup
      *
      * @param integer $permsGroup
      * @return void
      */
-    public function setPermsGroup($permsGroup)
+    public function setPermsGroup(int $permsGroup): void
     {
         $this->permsGroup = $permsGroup;
     }
 
+    
     /**
      * Returns the permsEverybody
      *
-     * @return integer $permsEverybody
+     * @return int $permsEverybody
      */
-    public function getPermsEverybody()
+    public function getPermsEverybody(): int
     {
         return $this->permsEverybody;
     }
 
+    
     /**
      * Sets the permsEverybody
      *
-     * @param integer $permsEverybody
+     * @param int $permsEverybody
      * @return void
      */
-    public function setPermsEverybody($permsEverybody)
+    public function setPermsEverybody(int $permsEverybody): void
     {
         $this->permsEverybody = $permsEverybody;
     }
-
-    /**
-     * Returns the dokType
-     *
-     * @return integer $dokType
-     */
-    public function getDokType()
-    {
-        return $this->dokType;
-    }
-
-    /**
-     * Sets the dokType
-     *
-     * @param integer $dokType
-     * @return void
-     */
-    public function setDokType($dokType)
-    {
-        $this->dokType = $dokType;
-    }
-
+    
+    
     /**
      * Returns the newsletter
      *
@@ -268,17 +264,19 @@ class Pages extends \RKW\RkwNewsletter\Domain\Model\PagesAbstract
         return $this->txRkwnewsletterNewsletter;
     }
 
+    
     /**
      * Sets the newsletter
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Newsletter $txRkwnewsletterNewsletter
      * @return void
      */
-    public function setTxRkwnewsletterNewsletter($txRkwnewsletterNewsletter)
+    public function setTxRkwnewsletterNewsletter(Newsletter $txRkwnewsletterNewsletter): void
     {
         $this->txRkwnewsletterNewsletter = $txRkwnewsletterNewsletter;
     }
 
+    
     /**
      * Returns the topic
      *
@@ -289,13 +287,14 @@ class Pages extends \RKW\RkwNewsletter\Domain\Model\PagesAbstract
         return $this->txRkwnewsletterTopic;
     }
 
+    
     /**
      * Sets the topic
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Topic $txRkwnewsletterTopic
      * @return void
      */
-    public function setTxRkwnewsletterTopic($txRkwnewsletterTopic)
+    public function setTxRkwnewsletterTopic(Topic $txRkwnewsletterTopic): void
     {
         $this->txRkwnewsletterTopic = $txRkwnewsletterTopic;
     }
@@ -305,19 +304,22 @@ class Pages extends \RKW\RkwNewsletter\Domain\Model\PagesAbstract
      * Returns the txRkwnewsletterIssue
      *
      * @return \RKW\RkwNewsletter\Domain\Model\Issue $txRkwnewsletterIssue
+     * @deprecated
      */
     public function getTxRkwnewsletterIssue()
     {
         return $this->txRkwnewsletterIssue;
     }
 
+    
     /**
      * Sets the txRkwnewsletterIssue
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Issue $txRkwnewsletterIssue
      * @return void
+     * @deprecated
      */
-    public function setTxRkwnewsletterIssue($txRkwnewsletterIssue)
+    public function setTxRkwnewsletterIssue(Issue $txRkwnewsletterIssue): void
     {
         $this->txRkwnewsletterIssue = $txRkwnewsletterIssue;
     }
@@ -326,51 +328,55 @@ class Pages extends \RKW\RkwNewsletter\Domain\Model\PagesAbstract
     /**
      * Returns the txRkwnewsletterExclude
      *
-     * @return integer $txRkwnewsletterExclude
+     * @return bool $txRkwnewsletterExclude
      */
-    public function getTxRkwnewsletterExclude()
+    public function getTxRkwnewsletterExclude(): bool
     {
         return $this->txRkwnewsletterExclude;
     }
 
+    
     /**
      * Sets the txRkwnewsletterExclude
      *
-     * @param integer $txRkwnewsletterExclude
+     * @param bool $txRkwnewsletterExclude
      * @return void
      */
-    public function setTxRkwnewsletterExclude($txRkwnewsletterExclude)
+    public function setTxRkwnewsletterExclude(bool $txRkwnewsletterExclude): void
     {
         $this->txRkwnewsletterExclude = $txRkwnewsletterExclude;
     }
 
+    
     /**
      * Returns the txRkwnewsletterTeaserHeading
      *
      * @return string $txRkwnewsletterTeaserHeading
      */
-    public function getTxRkwnewsletterTeaserHeading()
+    public function getTxRkwnewsletterTeaserHeading(): string
     {
         return $this->txRkwnewsletterTeaserHeading;
     }
 
+    
     /**
      * Sets the txRkwnewsletterTeaserHeading
      *
      * @param string $txRkwnewsletterTeaserHeading
      * @return void
      */
-    public function setTxRkwnewsletterTeaserHeading($txRkwnewsletterTeaserHeading)
+    public function setTxRkwnewsletterTeaserHeading(string $txRkwnewsletterTeaserHeading): void
     {
         $this->txRkwnewsletterTeaserHeading = $txRkwnewsletterTeaserHeading;
     }
 
+    
     /**
      * Returns the txRkwnewsletterTeaserText
      *
      * @return string $txRkwnewsletterTeaserText
      */
-    public function getTxRkwnewsletterTeaserText()
+    public function getTxRkwnewsletterTeaserText(): string
     {
         return $this->txRkwnewsletterTeaserText;
     }
@@ -381,11 +387,12 @@ class Pages extends \RKW\RkwNewsletter\Domain\Model\PagesAbstract
      * @param string $txRkwnewsletterTeaserText
      * @return void
      */
-    public function setTxRkwnewsletterTeaserText($txRkwnewsletterTeaserText)
+    public function setTxRkwnewsletterTeaserText(string $txRkwnewsletterTeaserText): void
     {
         $this->txRkwnewsletterTeaserText = $txRkwnewsletterTeaserText;
     }
 
+    
     /**
      * Returns the image
      *
@@ -396,58 +403,61 @@ class Pages extends \RKW\RkwNewsletter\Domain\Model\PagesAbstract
         return $this->txRkwnewsletterTeaserImage;
     }
 
+    
     /**
      * Sets the image
      *
      * @param \RKW\RkwBasics\Domain\Model\FileReference $txRkwnewsletterTeaserImage
      * @return void
      */
-    public function setTxRkwnewsletterTeaserImage($image)
+    public function setTxRkwnewsletterTeaserImage(FileReference $image): void
     {
         $this->txRkwnewsletterTeaserImage = $image;
     }
 
+    
     /**
      * Returns the txRkwnewsletterTeaserLink
      *
      * @return string $txRkwnewsletterTeaserLink
      */
-    public function getTxRkwnewsletterTeaserLink()
+    public function getTxRkwnewsletterTeaserLink(): string
     {
         return $this->txRkwnewsletterTeaserLink;
     }
 
+    
     /**
      * Sets the txRkwnewsletterTeaserLink
      *
      * @param string $txRkwnewsletterTeaserLink
      * @return void
      */
-    public function setTxRkwnewsletterTeaserLink($txRkwnewsletterTeaserLink)
+    public function setTxRkwnewsletterTeaserLink(string $txRkwnewsletterTeaserLink): void
     {
         $this->txRkwnewsletterTeaserLink = $txRkwnewsletterTeaserLink;
     }
 
+    
     /**
      * Returns the txRkwnewsletterIncludeTstamp
      *
-     * @return integer $txRkwnewsletterIncludeTstamp
+     * @return int $txRkwnewsletterIncludeTstamp
      */
-    public function getTxRkwnewsletterIncludeTstamp()
+    public function getTxRkwnewsletterIncludeTstamp(): int
     {
         return $this->txRkwnewsletterIncludeTstamp;
     }
 
+    
     /**
      * Sets the txRkwnewsletterIncludeTstamp
      *
-     * @param integer $txRkwnewsletterIncludeTstamp
+     * @param int $txRkwnewsletterIncludeTstamp
      * @return void
      */
-    public function setTxRkwnewsletterIncludeTstamp($txRkwnewsletterIncludeTstamp)
+    public function setTxRkwnewsletterIncludeTstamp(int $txRkwnewsletterIncludeTstamp): void
     {
         $this->txRkwnewsletterIncludeTstamp = $txRkwnewsletterIncludeTstamp;
     }
-
-
 }

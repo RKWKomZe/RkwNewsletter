@@ -14,6 +14,10 @@ namespace RKW\RkwNewsletter\Domain\Repository;
  * The TYPO3 project - inspiring people to share!
  */
 
+use RKW\RkwBasics\Helper\QueryTypo3;
+use TYPO3\CMS\Core\Utility\DebugUtility;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
+
 /**
  * NewsletterRepository
  *
@@ -29,37 +33,45 @@ class NewsletterRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     /**
      * findAllToBuildIssue
      *
-     * @param int $tolerance
+     * @param int $tolerance in seconds
      * @param int $dayOfMonth
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface|array
+     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      * @throws \TYPO3\CMS\Core\Type\Exception\InvalidEnumerationValueException
      */
-    public function findAllToBuildIssue($tolerance = 0, $dayOfMonth = 15)
+    public function findAllToBuildIssue(int $tolerance = 0, int $dayOfMonth = 15): QueryResultInterface
     {
 
         $query = $this->createQuery();
         $query->statement(
             'SELECT * FROM tx_rkwnewsletter_domain_model_newsletter WHERE
             (
-              (rythm = 1 AND WEEKOFYEAR(FROM_UNIXTIME(last_issue_tstamp)) < WEEKOFYEAR(DATE_ADD(NOW(), INTERVAL +' . intval($tolerance) . ' SECOND))) 			
-	          OR (rythm = 2 
-	            AND (
-                    (
-                        MONTH(FROM_UNIXTIME(last_issue_tstamp)) < MONTH(DATE_ADD(NOW(), INTERVAL +' . intval($tolerance) . ' SECOND)) 
+                (
+                    rythm = 1 
+                    AND WEEKOFYEAR(FROM_UNIXTIME(last_issue_tstamp)) < WEEKOFYEAR(DATE_ADD(NOW(), INTERVAL +' . $tolerance . ' SECOND))
+                ) 			
+                OR (
+                    rythm = 2 
+                    AND (
+                        (
+                            MONTH(FROM_UNIXTIME(last_issue_tstamp)) < MONTH(DATE_ADD(NOW(), INTERVAL +' . $tolerance . ' SECOND)) 
+                        )
+                        OR (
+                            MONTH(FROM_UNIXTIME(last_issue_tstamp)) > MONTH(DATE_ADD(NOW(), INTERVAL +' . $tolerance . ' SECOND)) AND YEAR(FROM_UNIXTIME(last_issue_tstamp)) < YEAR(DATE_ADD(NOW(), INTERVAL +' . $tolerance . ' SECOND))
+                        )
                     )
-                    OR (
-                        MONTH(FROM_UNIXTIME(last_issue_tstamp)) = 12 AND YEAR(FROM_UNIXTIME(last_issue_tstamp)) < YEAR(DATE_ADD(NOW(), INTERVAL +' . intval($tolerance) . ' SECOND))
-                    )
+                    AND DAY(DATE_ADD(NOW(), INTERVAL +' . $tolerance . ' SECOND)) >= ' . $dayOfMonth . ' 
                 )
-                AND DAY(DATE_ADD(NOW(), INTERVAL +' . intval($tolerance) . ' SECOND)) >= ' . intval($dayOfMonth) . ' 
-	          )
-	          OR (rythm = 3 AND QUARTER(FROM_UNIXTIME(last_issue_tstamp)) < QUARTER(DATE_ADD(NOW(), INTERVAL +' . intval($tolerance) . ' SECOND)) AND DAY(DATE_ADD(NOW(), INTERVAL +' . intval($tolerance) . ' SECOND)) >= ' . intval($dayOfMonth) . ')
+                OR (
+                    rythm = 3 
+                    AND QUARTER(FROM_UNIXTIME(last_issue_tstamp)) < QUARTER(DATE_ADD(NOW(), INTERVAL +' . $tolerance . ' SECOND)) 
+                    AND DAY(DATE_ADD(NOW(), INTERVAL +' . $tolerance . ' SECOND)) >= ' . $dayOfMonth . '
+                )
             )' .
-            \RKW\RkwBasics\Helper\QueryTypo3::getWhereClauseForEnableFields('tx_rkwnewsletter_domain_model_newsletter') .
-            \RKW\RkwBasics\Helper\QueryTypo3::getWhereClauseForVersioning('tx_rkwnewsletter_domain_model_newsletter')
+            QueryTypo3::getWhereClauseForEnableFields('tx_rkwnewsletter_domain_model_newsletter') .
+            QueryTypo3::getWhereClauseForVersioning('tx_rkwnewsletter_domain_model_newsletter')
         );
-
+        
         return $query->execute();
     }
 
@@ -68,10 +80,10 @@ class NewsletterRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * Returns all newsletters by type
      *
      * @param int $type
-     * @return QueryResultInterface|array
+     * @return QueryResultInterface
      * @api
      */
-    public function findAllByType($type = 0)
+    public function findAllByType(int $type = 0): QueryResultInterface
     {
 
         $query = $this->createQuery();

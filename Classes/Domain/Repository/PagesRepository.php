@@ -5,6 +5,8 @@ namespace RKW\RkwNewsletter\Domain\Repository;
 use RKW\RkwBasics\Helper\QueryTypo3;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use \RKW\RkwBasics\Helper\Common;
+use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -33,7 +35,7 @@ class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
     public function initializeObject()
     {
-        $querySettings = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\Typo3QuerySettings');
+        $querySettings = $this->objectManager->get(Typo3QuerySettings::class);
         $querySettings->setRespectStoragePage(false);
     }
 
@@ -41,9 +43,8 @@ class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     /**
      * @param \RKW\RkwNewsletter\Domain\Model\Topic $topic
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      */
-    public function findByTopicNotIncluded(\RKW\RkwNewsletter\Domain\Model\Topic $topic)
+    public function findByTopicNotIncluded(\RKW\RkwNewsletter\Domain\Model\Topic $topic): QueryResultInterface
     {
 
         $query = $this->createQuery();
@@ -55,15 +56,11 @@ class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 $query->equals('txRkwnewsletterNewsletter', $topic->getNewsletter()),
                 $query->equals('txRkwnewsletterTopic', $topic->getUid()),
                 $query->equals('txRkwnewsletterIncludeTstamp', 0),
-                $query->equals('txRkwnewsletterExclude', 0),
-                $query->equals('deleted', 0),
-                $query->equals('hidden', 0),
-                $query->lessThanOrEqual('starttime', time())
+                $query->equals('txRkwnewsletterExclude', false)
             )
         );
 
         return $query->execute();
-        //===
     }
 
 

@@ -45,13 +45,13 @@ $tmpColsPages = [
             ],
         ],
     ],
-    /*'tx_rkwnewsletter_exclude' => [
+    'tx_rkwnewsletter_exclude' => [
         'exclude' => 0,
         'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:pages.tx_rkwnewsletter_exclude',
         'config' => [
             'type' => 'passthrough',
         ],
-    ),*/
+    ],
     'tx_rkwnewsletter_teaser_heading' => [
         'displayCond' => [
             'AND' => [
