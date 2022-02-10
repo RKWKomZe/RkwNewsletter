@@ -1,7 +1,12 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version='1.0' encoding='utf-8' standalone='yes'?>
 <xliff version="1.0">
-	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2015-04-07T16:19:42Z" product-name="rkw_newsletter">
-		<header/>
+	<file original="messages" target-language="de" date="2015-04-07T16:19:42Z" source-language="en" datatype="plaintext" product-name="rkw_newsletter">
+		<header>
+      <phase-group>
+        <phase contact-email="berberich@rkw.de" process-name="approval" phase-name="approval-1" date="2022-02-09" contact-name="Melanie" tool-id="lokalize-22.03.70"/>
+      </phase-group>
+      <tool tool-version="22.03.70" tool-id="lokalize-22.03.70" tool-name="Lokalize"/>
+    </header>
 		<body>
 
 
@@ -89,9 +94,9 @@
 			<!-- Controllers -->
 			<!-- ##################### -->
             <!-- releaseController -->
-			<trans-unit id="releaseController.message.approvalSuccessful">
+			<trans-unit id="releaseController.message.approvalSuccessful" approved="no">
 				<source>Wohoo! Successfully approved.  The newsletter output was set to the next stage. A notification to the respective editors will be sent shortly.</source>
-				<target>Wohoo! Die Freigabe war erfolgreich. Die Newsletterausgabe wurde auf die nächste Freigabestufe gesetzt. Eine Benachrichtigung an die betreffenden Redakteure wird in Kürze versendet.</target>
+				<target phase-name="approval-1" state="final">Wohoo! Die Freigabe war erfolgreich. Die Newsletterausgabe wurde auf die nächste Freigabestufe gesetzt. Eine Benachrichtigung an die betreffende Redaktion wird in Kürze versendet.</target>
 			</trans-unit>
 			<trans-unit id="releaseController.message.issueDeferredSuccessfully">
 				<source>Wohoo! Issue sucessfuly deferred.</source>
@@ -105,9 +110,9 @@
 				<source>Wohoo! The newsletter issue has been successfully released for dispatch..</source>
 				<target>Wohoo! Die Newsletter-Ausgabe wurde erfolgreich zum Versand freigegeben.</target>
 			</trans-unit>
-            <trans-unit id="releaseController.warning.checkTitle">
+            <trans-unit id="releaseController.warning.checkTitle" approved="no">
                 <source>The subject of the newsletter should ideally be between 40 and 60 characters long and motivate the user to read the newsletter (call-to-action). Please check the subject again before sending the newsletter.</source>
-                <target>Der Betreff des Newsletters sollte im Idealfall zwischen 40 und 60 Zeichen lang sein und den Nutzer dazu motivieren, den Newsletter zu lesen (Call-To-Action). Bitte prüfen Sie den gesetzten Betreff vor dem Versand noch einmal.</target>
+                <target phase-name="approval-1" state="final">Der Betreff des Newsletters sollte im Idealfall zwischen 40 und 60 Zeichen lang sein und die Nutzenden dazu motivieren, den Newsletter zu lesen (Call-To-Action). Bitte prüfen Sie den gesetzten Betreff vor dem Versand noch einmal.</target>
             </trans-unit>
             <trans-unit id="releaseController.error.selectIssue">
                 <source>Please first select a newsletter issue that you would like to send.</source>
@@ -117,9 +122,9 @@
 				<source>Oh no! The given E-Mail-address "%s" seems to be incorrect. Please check and try again.</source>
 				<target>Upps! Die angegebene E-Mail-Adresse "%s" scheint nicht korrekt zu sein. Bitte prüfen Sie die Angabe und versuchen Sie es erneut.</target>
 			</trans-unit>
-            <trans-unit id="releaseController.error.unexpected">
+            <trans-unit id="releaseController.error.unexpected" approved="no">
                 <source>Oh no! An unexpected error occurred. Please contact your trusted administrator.</source>
-                <target>Upps! Ein unerwarteter Fehler ist aufgetreten. Bitte wenden Sie sich an den Administrator Ihres Vertrauens.</target>
+                <target phase-name="approval-1" state="final">Upps! Ein unerwarteter Fehler ist aufgetreten. Bitte wenden Sie sich an Administrierende Ihres Vertrauens.</target>
             </trans-unit>
 
 
@@ -137,9 +142,9 @@
                <source>Your wish is our command. The changes were discarded.</source>
                <target>Ihr Wunsch ist uns Befehl. Die Änderungen an Ihrem Newsletter-Abonnement wurden verworfen.</target>
             </trans-unit>
-            <trans-unit id="subscriptionController.message.allSubscriptionsDeleted">
+            <trans-unit id="subscriptionController.message.allSubscriptionsDeleted" approved="no">
                <source>Too bad that we lose you as a subscriber. All topics have been unsubscribed as requested. From now on you will no longer receive any newsletters from us. Of course you can subscribe to our newsletter again at any time.</source>
-               <target>Schade, dass wir Sie als Abonnenten verlieren. Alle Themen wurden wunschgemäß abbestellt. Sie erhalten ab jetzt keine Newsletter mehr von uns. Selbstverständlich können Sie unsere Newsletter jederzeit erneut abonnieren.</target>
+               <target phase-name="approval-1" state="final">Schade, dass wir Sie als Abonnierenden verlieren. Alle Themen wurden wunschgemäß abbestellt. Sie erhalten ab jetzt keine Newsletter mehr von uns. Selbstverständlich können Sie unsere Newsletter jederzeit erneut abonnieren.</target>
             </trans-unit>
             <trans-unit id="subscriptionController.error.noTopicSelected">
                <source>Oops, you may have forgotten a little something: Please select at least one topic you would like to subscribe to.</source>
@@ -165,9 +170,9 @@
                 <source>Oops, it seems that you have not made any changes. Please check your details again.</source>
                 <target>Upps, es scheint als hätten Sie gar keine Änderung vorgenommen. Bitte prüfen Sie Ihre Angaben erneut.</target>
             </trans-unit>
-            <trans-unit id="subscriptionController.error.alreadyLoggedIn">
+            <trans-unit id="subscriptionController.error.alreadyLoggedIn" approved="no">
                 <source>Oops, it seems that you are logged in with a different user than the one indicated by the link used. Please log out to use the link.</source>
-                <target>Upps, es scheint als wären Sie mit einem anderen Nutzer eingeloggt als durch den verwendeten Link angegeben. Bitte loggen Sie sich aus, um den Link nutzen zu können.</target>
+                <target phase-name="approval-1" state="final">Upps, es scheint als wären Sie mit einem anderen Nutzenden eingeloggt als durch den verwendeten Link angegeben. Bitte loggen Sie sich aus, um den Link nutzen zu können.</target>
             </trans-unit>
 
 
@@ -179,9 +184,9 @@
 				<source>Teaser-Text</source>
 				<target>Teaser-Text zu kurz</target>
 			</trans-unit>
-			<trans-unit id="newsletterTeaserLengthEvaluation.message.tooShort">
+			<trans-unit id="newsletterTeaserLengthEvaluation.message.tooShort" approved="no">
 				<source>So that the recipients of the newsletter also know what your contribution is about, the teaser text should be at least %s characters long (currently: %s characters). However, your teaser text was still saved.</source>
-				<target>Damit die Empfänger des Newsletters auch wissen, worum es in Ihrem Beitrag geht, sollte der angegebene Teaser-Text mindestens %s Zeichen lang sein (aktuell: %s Zeichen). Ihr Teaser-Text wurde aber trotzdem gespeichert.</target>
+				<target phase-name="approval-1" state="final">Damit die Abonnementen des Newsletters auch wissen, worum es in Ihrem Beitrag geht, sollte der angegebene Teaser-Text mindestens %s Zeichen lang sein (aktuell: %s Zeichen). Ihr Teaser-Text wurde aber trotzdem gespeichert.</target>
 			</trans-unit>
 			<trans-unit id="newsletterTeaserLengthEvaluation.header.tooLong">
 				<source>Teaser-Text</source>
@@ -268,9 +273,9 @@
 				<source>Already Approved</source>
 				<target>Bereits freigegeben</target>
 			</trans-unit>
-			<trans-unit id="tx_rkwnewsletter_backend_partials_release_approval.approvalUser">
+			<trans-unit id="tx_rkwnewsletter_backend_partials_release_approval.approvalUser" approved="no">
 				<source>User</source>
-				<target>Nutzer</target>
+				<target phase-name="approval-1" state="final">Nutzende</target>
 			</trans-unit>
             <trans-unit id="tx_rkwnewsletter_backend_partials_release_approval.approvalTime">
                 <source>Time</source>
@@ -287,9 +292,9 @@
 				<source>Test</source>
 				<target>Testversand</target>
 			</trans-unit>
-			<trans-unit id="templates_backend_release_testList.description">
+			<trans-unit id="templates_backend_release_testList.description" approved="no">
 				<source>Here you will find all newsletter issues for which you are registered as the responsible editor. Here you can send a test to your e-mail address. You can decide whether the test mailing should cover all topics or only the topics for which you are registered as an editor.</source>
-				<target>Hier finden Sie alle Newsletterausgaben, für die Sie als verantwortlicher Redakteur eingetragen sind. Sie können hier einen Testversand an Ihre E-Mailadresse anstoßen. Dabei können Sie entscheiden, ob der Testversand alle Themen berücksichtigen soll oder nur die Themen, für die Sie als Redakteur eingetragen sind.</target>
+				<target phase-name="approval-1" state="final">Hier finden Sie alle Newsletterausgaben, für die Sie als verantwortliche Redaktion eingetragen sind. Sie können hier einen Testversand an Ihre E-Mailadresse anstoßen. Dabei können Sie entscheiden, ob der Testversand alle Themen berücksichtigen soll oder nur die Themen, für die Sie als Redaktion eingetragen sind.</target>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_testList.title">
 				<source>Subject (is prepended to automatically set subject)</source>
@@ -322,17 +327,17 @@
 				<source>Dispatching (Step 1/2)</source>
 				<target>Versand (Schritt 1/2)</target>
 			</trans-unit>
-			<trans-unit id="templates_backend_release_sendList.description">
+			<trans-unit id="templates_backend_release_sendList.description" approved="no">
 				<source>Here you will find all newsletter issues which you can start as responsible editor. Please note that the dispatch is staggered.</source>
-				<target>Hier finden Sie alle Newsletterausgaben, deren Versand Sie als verantwortlicher Redakteur starten können.</target>
+				<target phase-name="approval-1" state="final">Hier finden Sie alle Newsletterausgaben, deren Versand Sie als verantwortliche Redaktion starten können.</target>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_sendList.title">
 				<source>Subject (is prepended to automatically set subject)</source>
 				<target>Betreff (wird dem automatisch generierten Betreff vorangestellt)</target>
 			</trans-unit>
-			<trans-unit id="templates_backend_release_sendList.subscriptions">
+			<trans-unit id="templates_backend_release_sendList.subscriptions" approved="no">
 				<source>Subscription</source>
-				<target>Abonnenten</target>
+				<target phase-name="approval-1" state="final">Abonnement</target>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_sendList.subscriptionsAll">
 				<source>All</source>
@@ -354,17 +359,17 @@
 				<source>Confirmation for Dispatching (Step 2/2)</source>
 				<target>Bestätigung des Versands (Schritt 2/2)</target>
 			</trans-unit>
-			<trans-unit id="templates_backend_release_sendConfirm.description">
+			<trans-unit id="templates_backend_release_sendConfirm.description" approved="no">
 				<source>Please confirm below the dispatch of the selected newsletter. Please also check the subject of the newsletter and adjust it if necessary. Please note that the dispatch is staggered, i.e. the recipients may receive the newsletter at different times.</source>
-				<target>Bitte bestätigen Sie untenstehend den Versand des ausgewählten Newsletters. Bitte prüfen Sie auch den Betreff des Newsletters und passen Sie diesen ggf. noch an. Bitte beachten Sie, dass der Versand gestaffelt erfolgt; die Empfänger den Newsletter also gegebenenfalls zeitlich versetzt erhalten.</target>
+				<target phase-name="approval-1" state="final">Bitte bestätigen Sie untenstehend den Versand des ausgewählten Newsletters. Bitte prüfen Sie auch den Betreff des Newsletters und passen Sie diesen ggf. noch an. Bitte beachten Sie, dass der Versand gestaffelt erfolgt; den Abonnierenden wird der Newsletter also gegebenenfalls zeitlich zugestellt.</target>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_sendConfirm.title">
 				<source>Subject (is prepended to automatically set subject)</source>
 				<target>Betreff (wird dem automatisch generierten Betreff vorangestellt)</target>
 			</trans-unit>
-			<trans-unit id="templates_backend_release_sendConfirm.subscriptions">
+			<trans-unit id="templates_backend_release_sendConfirm.subscriptions" approved="no">
 				<source>Subscription</source>
-				<target>Abonnenten</target>
+				<target phase-name="approval-1" state="final">Abonnement</target>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_sendConfirm.subscriptionsAll">
 				<source>All</source>
@@ -436,9 +441,9 @@
 				<source>Please check the details for correctness and confirm them using the link below. Our service is of course free of charge.</source>
 				<target>Bitte prüfen Sie die Angaben auf Richtigkeit und bestätigen Sie sie über den untenstehenden Link. Unser Newsletter-Service ist selbstverständlich kostenlos.</target>
 			</trans-unit>
-			<trans-unit id="templates_email_optInRequest.textOptIn">
+			<trans-unit id="templates_email_optInRequest.textOptIn" approved="no">
 				<source>Please click here to confirm your subscription. To make future changes easier for you, a free account will automatically be created if you are not already registered as a user. You will receive your password in another e-mail.</source>
-				<target>Bitte klicken Sie hier, um das Abonnement zu bestätigen. Um Ihnen zukünftige Änderungen zu erleichtern, wird automatisch ein kostenloser Account erstellt, falls Sie nicht schon als Nutzer registriert sind. Das Passwort erhalten Sie in einer weiteren E-Mail.</target>
+				<target phase-name="approval-1" state="final">Bitte klicken Sie hier, um das Abonnement zu bestätigen. Um Ihnen zukünftige Änderungen zu erleichtern, wird automatisch ein kostenloser Account erstellt, falls Sie nicht schon als Nutzende oder Nutzender registriert sind. Das Passwort erhalten Sie in einer weiteren E-Mail.</target>
 			</trans-unit>
 			<trans-unit id="templates_email_optInRequest.textOptOut">
 				<source>Did you change your mind or did you not request the subscription yourself? Simply click here to delete all data:</source>
