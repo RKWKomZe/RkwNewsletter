@@ -124,7 +124,7 @@
 			</trans-unit>
             <trans-unit id="releaseController.error.unexpected" approved="no">
                 <source>Oh no! An unexpected error occurred. Please contact your trusted administrator.</source>
-                <target phase-name="approval-1" state="final">Upps! Ein unerwarteter Fehler ist aufgetreten. Bitte wenden Sie sich an Administrierende Ihres Vertrauens.</target>
+                <target phase-name="approval-1" state="final">Upps! Ein unerwarteter Fehler ist aufgetreten. Bitte wenden Sie sich an den Support.</target>
             </trans-unit>
 
 
@@ -172,7 +172,7 @@
             </trans-unit>
             <trans-unit id="subscriptionController.error.alreadyLoggedIn" approved="no">
                 <source>Oops, it seems that you are logged in with a different user than the one indicated by the link used. Please log out to use the link.</source>
-                <target phase-name="approval-1" state="final">Upps, es scheint als wären Sie mit einem anderen Nutzenden eingeloggt als durch den verwendeten Link angegeben. Bitte loggen Sie sich aus, um den Link nutzen zu können.</target>
+                <target phase-name="approval-1" state="final">Upps, es scheint als wären Sie mit einem anderen Nutzenden-Konto eingeloggt als durch den verwendeten Link angegeben. Bitte loggen Sie sich aus, um den Link nutzen zu können.</target>
             </trans-unit>
 
 
@@ -361,7 +361,7 @@
 			</trans-unit>
 			<trans-unit id="templates_backend_release_sendConfirm.description" approved="no">
 				<source>Please confirm below the dispatch of the selected newsletter. Please also check the subject of the newsletter and adjust it if necessary. Please note that the dispatch is staggered, i.e. the recipients may receive the newsletter at different times.</source>
-				<target phase-name="approval-1" state="final">Bitte bestätigen Sie untenstehend den Versand des ausgewählten Newsletters. Bitte prüfen Sie auch den Betreff des Newsletters und passen Sie diesen ggf. noch an. Bitte beachten Sie, dass der Versand gestaffelt erfolgt; den Abonnierenden wird der Newsletter also gegebenenfalls zeitlich zugestellt.</target>
+				<target phase-name="approval-1" state="final">Bitte bestätigen Sie untenstehend den Versand des ausgewählten Newsletters. Bitte prüfen Sie auch den Betreff des Newsletters und passen Sie diesen ggf. noch an. Bitte beachten Sie, dass der Versand gestaffelt erfolgt; den Abonnierenden wird der Newsletter also gegebenenfalls zeitlich versetzt zugestellt.</target>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_sendConfirm.title">
 				<source>Subject (is prepended to automatically set subject)</source>
@@ -443,7 +443,7 @@
 			</trans-unit>
 			<trans-unit id="templates_email_optInRequest.textOptIn" approved="no">
 				<source>Please click here to confirm your subscription. To make future changes easier for you, a free account will automatically be created if you are not already registered as a user. You will receive your password in another e-mail.</source>
-				<target phase-name="approval-1" state="final">Bitte klicken Sie hier, um das Abonnement zu bestätigen. Um Ihnen zukünftige Änderungen zu erleichtern, wird automatisch ein kostenloser Account erstellt, falls Sie nicht schon als Nutzende oder Nutzender registriert sind. Das Passwort erhalten Sie in einer weiteren E-Mail.</target>
+				<target phase-name="approval-1" state="final">Bitte klicken Sie hier, um das Abonnement zu bestätigen. Um Ihnen zukünftige Änderungen zu erleichtern, wird automatisch ein kostenloser Account erstellt, falls Sie nicht schon als Nutzerin oder Nutzer registriert sind. Das Passwort erhalten Sie in einer weiteren E-Mail.</target>
 			</trans-unit>
 			<trans-unit id="templates_email_optInRequest.textOptOut">
 				<source>Did you change your mind or did you not request the subscription yourself? Simply click here to delete all data:</source>
