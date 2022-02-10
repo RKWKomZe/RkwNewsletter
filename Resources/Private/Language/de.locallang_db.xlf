@@ -114,7 +114,7 @@
 			</trans-unit>
 			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.usergroup">
 				<source>FE-User Groups</source>
-				<target state="translated">FE-Nutzergruppen (Beschränkung)</target>
+				<target state="translated">FE-Nutzendengruppen (Beschränkung)</target>
 			</trans-unit>
 			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.topic">
 				<source>Topic</source>
@@ -205,11 +205,11 @@
 			</trans-unit>
 			<trans-unit id="tx_rkwnewsletter_domain_model_approval.allowed_by_user_stage1">
 				<source>Stage 1: Allowed By User</source>
-				<target state="translated">Stufe 1: Freigabe durch Nutzer</target>
+				<target state="translated">Stufe 1: Freigabe durch Nutzende</target>
 			</trans-unit>
             <trans-unit id="tx_rkwnewsletter_domain_model_approval.allowed_by_user_stage2">
                 <source>Stage 2: Allowed By User</source>
-                <target state="translated">Stufe 2: Freigabe durch Nutzer</target>
+                <target state="translated">Stufe 2: Freigabe durch Nutzende</target>
             </trans-unit>
             <trans-unit id="tx_rkwnewsletter_domain_model_approval.allowed_tstamp_stage1">
                 <source>Stage 1: Allowed At</source>
@@ -368,7 +368,7 @@
             </trans-unit>
             <trans-unit id="tt_content.tx_rkwnewsletter_authors">
                 <source>Authors</source>
-                <target>Ansprechpartner</target>
+                <target>Ansprechpersonen</target>
             </trans-unit>
             <trans-unit id="tt_content.tx_rkwnewsletter_is_editorial">
                 <source>This is an editorial</source>
