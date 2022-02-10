@@ -14,6 +14,8 @@ namespace RKW\RkwNewsletter\Domain\Repository;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
+
 /**
  * IssueRepository
  *
@@ -25,7 +27,15 @@ namespace RKW\RkwNewsletter\Domain\Repository;
  */
 class IssueRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
-
+    /*
+     * initializeObject
+     */
+    public function initializeObject()
+    {
+        $this->defaultQuerySettings = $this->objectManager->get(Typo3QuerySettings::class);
+        $this->defaultQuerySettings->setRespectStoragePage(false);
+    }
+    
     /**
      * findAllToReleaseByTime
      *

@@ -3,7 +3,12 @@
 namespace RKW\RkwNewsletter\Helper;
 
 use \RKW\RkwBasics\Helper\Common;
+use RKW\RkwNewsletter\Manager\ApprovalManager;
+use RKW\RkwNewsletter\Permission\ApprovalStatus;
+use RKW\RkwNewsletter\Utility\ApprovalStageUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /*
@@ -98,7 +103,7 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
-     */
+    
     public function doAutomaticApprovalsByTime()
     {
         // get settings
@@ -110,10 +115,13 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
             && (intval($settings['automaticApprovalStage2']))
         ) {
 
-            $automaticApprovalList = $this->approvalRepository->findAllForAutomaticApproveByTime(intval($settings['automaticApprovalStage1']), intval($settings['automaticApprovalStage2']));
+            $automaticApprovalList = $this->approvalRepository->findAllForAutomaticApproveByTime(
+                intval($settings['automaticApprovalStage1']),
+                intval($settings['automaticApprovalStage2'])
+            );
             if (count($automaticApprovalList)) {
 
-                /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
+                /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval 
                 foreach ($automaticApprovalList as $approval) {
 
                     // Fix for immediate execution after issue creation
@@ -161,7 +169,7 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
         } else {
             $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Automatic approval by time not configured.'));
         }
-    }
+    } */
 
     /**
      * doAutomaticApprovalsByAdminsMissing
@@ -174,14 +182,14 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
-     */
+     
     public function doAutomaticApprovalsByAdminsMissing()
     {
 
         $automaticApprovalList = $this->approvalRepository->findAllForAutomaticApproveByAdminsMissing();
         if (count($automaticApprovalList)) {
 
-            /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
+            /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval 
             foreach ($automaticApprovalList as $approval) {
 
                 // Fix for immediate execution after issue creation
@@ -214,7 +222,7 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
             $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('No automatic approval by missing admins needed.'));
         }
     }
-
+    */
 
     /**
      * sendInfoAndReminderMailsForApprovals
@@ -233,111 +241,22 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
 
         // get settings
         $settings = $this->getSettings();
+        
+        /** @var  \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        
+        /** @var \RKW\RkwNewsletter\Manager\ApprovalManager $approvalManager */
+        $approvalManager = $objectManager->get(ApprovalManager::class);
+        $approvalManager->processAllApprovals(
+            intval($settings['reminderApprovalStage1']), 
+            intval($settings['reminderApprovalStage2']),
+            intval($settings['automaticApprovalStage1']),
+            intval($settings['automaticApprovalStage2'])            
+        );
 
-        $openApprovalList = $this->approvalRepository->findAllOpenApprovalsByTime(intval($settings['reminderApprovalStage1']), intval($settings['reminderApprovalStage2']));
-        if (count($openApprovalList)) {
-
-            /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
-            foreach ($openApprovalList as $approval) {
-
-                // Fix for immediate execution after issue creation
-                if (!$approval->getIssue()) {
-                    continue;
-                    //===
-                }
-
-                // Case 1: infomail at stage 1
-                $approvalAdmins = [];
-                $stage = 1;
-                $isReminder = false;
-                if (
-                    ($approval->getAllowedTstampStage1() < 1)
-                    && ($approval->getSentInfoTstampStage1() < 1)
-                ) {
-
-                    if (count($approval->getTopic()->getApprovalStage1()) > 0) {
-                        $approval->setSentInfoTstampStage1(time());
-                        $approvalAdmins = $approval->getTopic()->getApprovalStage1()->toArray();
-                    }
-
-                // Case 2: reminder at stage 1
-                } else {
-                    if (
-                        ($approval->getAllowedTstampStage1() < 1)
-                        && ($approval->getSentInfoTstampStage1() > 0)
-                        && ($approval->getSentReminderTstampStage1() < 1)
-                    ) {
-
-                        $isReminder = true;
-                        if (count($approval->getTopic()->getApprovalStage1()) > 0) {
-                            $approval->setSentReminderTstampStage1(time());
-                            $approvalAdmins = $approval->getTopic()->getApprovalStage1()->toArray();
-                        }
-
-                    // Case 3: infomail at stage 2
-                    } else {
-                        if (
-                            ($approval->getAllowedTstampStage1() > 0)
-                            && ($approval->getAllowedTstampStage2() < 1)
-                            && ($approval->getSentInfoTstampStage1() > 0)
-                            && ($approval->getSentInfoTstampStage2() < 1)
-                        ) {
-
-                            $stage = 2;
-                            if (count($approval->getTopic()->getApprovalStage2()) > 0) {
-                                $approval->setSentInfoTstampStage2(time());
-                                $approvalAdmins = $approval->getTopic()->getApprovalStage2()->toArray();
-                            }
-
-                        // Case 4: reminder at stage 2
-                        } else {
-                            if (
-                                ($approval->getAllowedTstampStage1() > 0)
-                                && ($approval->getAllowedTstampStage2() < 1)
-                                && ($approval->getSentInfoTstampStage1() > 0)
-                                && ($approval->getSentInfoTstampStage2() > 0)
-                                && ($approval->getSentReminderTstampStage2() < 1)
-                                && (count($approval->getTopic()->getApprovalStage2()) > 0)
-                            ) {
-
-                                $stage = 2;
-                                $isReminder = true;
-                                if (count($approval->getTopic()->getApprovalStage2()) > 0) {
-                                    $approval->setSentReminderTstampStage2(time());
-                                    $approvalAdmins = $approval->getTopic()->getApprovalStage2()->toArray();
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (count($approvalAdmins) > 0) {
-
-                    // Signal for e.g. E-Mails
-                    $this->signalSlotDispatcher->dispatch(__CLASS__, self::SIGNAL_FOR_SENDING_MAIL_APPROVAL, array($approvalAdmins, $approval, $stage, $isReminder));
-                    if ($isReminder) {
-                        $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Sending reminder mail for approval: stage %s, topic "%s", issue id=%s, newsletter-configuration id=%s.', $stage, $approval->getTopic()->getName(), $approval->getIssue()->getUid(), $approval->getIssue()->getNewsletter()->getUid()));
-
-                    } else {
-
-                        $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Sending info mail for approval: stage %s, topic "%s", issue id=%s, newsletter-configuration id=%s.', $stage, $approval->getTopic()->getName(), $approval->getIssue()->getUid(), $approval->getIssue()->getNewsletter()->getUid()));
-
-                        // Update permissions
-                        $this->updatePagePermissions($approval);
-                    }
-
-                    // Update
-                    $this->approvalRepository->update($approval);
-                }
-
-            }
-
-            // Persist to keep the following database-requests up-to-date
-            $this->persistenceManager->persistAll();
-
-        } else {
-            $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('No info mails/reminder mails for approval needed.'));
-        }
+        // Update permissions
+        $this->updatePagePermissions($approval);
+       
     }
 
 
@@ -354,25 +273,12 @@ class Approval implements \TYPO3\CMS\Core\SingletonInterface
     public function updatePagePermissions(\RKW\RkwNewsletter\Domain\Model\Approval $approval)
     {
 
-        // -> new page
-        $stage = 'stage1';
-        if (
-            $approval->getIssue()
-            && $approval->getIssue()->getReleaseTstamp()
-        ) {
-            // -> after final sending
-            $stage = 'sent';
-        } else if ($approval->getAllowedTstampStage2()) {
-            // -> allowed on stage 2
-            $stage = 'release';
-        } else if ($approval->getAllowedTstampStage1()) {
-            // -> allowed on stage 1
-            $stage = 'stage2';
-        }
+        $stage = ApprovalStatus::getStage($approval);
 
         $this->setPagePermissions($approval->getPage(), $stage);
         $this->pagesRepository->update($approval->getPage());
-
+        $this->persistenceManager->persistAll();
+        
         $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Updated page permission: stage="%s", topic ="%s", issue id=%s, newsletter-configuration id=%s.', $stage, $approval->getTopic()->getName(), $approval->getIssue()->getUid(), $approval->getIssue()->getNewsletter()->getUid()));
 
     }

@@ -194,7 +194,6 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function createContent (Newsletter $newsletter, Pages $page, Pages $sourcePage): Content
     {
-
         /** @var \RKW\RkwNewsletter\Domain\Model\Content $content */
         $content  = GeneralUtility::makeInstance(Content::class);
         
@@ -213,9 +212,8 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
             $this->getLogger()->log(
                 LogLevel::DEBUG,
                 sprintf(
-                    'Added author with id=%s and sysLanguageUid=%s to content of page with uid=%s of newsletter with id=%s.',
+                    'Added author with id=%s to content of page with uid=%s of newsletter with id=%s.',
                     $author->getUid(),
-                    $author->getSysLanguageUid(),
                     $sourcePage->getUid(),
                     $newsletter->getUid()
                 )
@@ -257,7 +255,6 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
         $backendUserAuthentication = GeneralUtility::makeInstance(BackendUserAuthentication::class);
         $backendUserAuthentication->setWorkspace(0);
         
-        //$languageService = GeneralUtility::makeInstance(LanguageService::class);
         $beUserTemp = $GLOBALS['BE_USER'];
         $GLOBALS['BE_USER'] = $backendUserAuthentication;
                 
@@ -482,16 +479,17 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
      *
      * @param int $tolerance
      * @param int $dayOfMonth
+     * @param int $timestampNow
      * @return bool
      * @throws Exception
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      */
-    public function buildAllIssues (int $tolerance = 0, int $dayOfMonth = 15): bool
+    public function buildAllIssues (int $tolerance = 0, int $dayOfMonth = 15, int $timestampNow = 0): bool
     {
 
-        $newsletterList = $this->newsletterRepository->findAllToBuildIssue($tolerance, $dayOfMonth);
+        $newsletterList = $this->newsletterRepository->findAllToBuildIssue($tolerance, $dayOfMonth, $timestampNow);
         if (count($newsletterList)) {
 
             /** @var \RKW\RkwNewsletter\Domain\Model\Newsletter $newsletter */

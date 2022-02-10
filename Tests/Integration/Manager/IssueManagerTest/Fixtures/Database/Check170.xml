@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+
+    <tx_rkwnewsletter_domain_model_newsletter>
+        <uid>170</uid>
+        <pid>0</pid>
+        <issue_title><![CDATA[Newsletter {M}/{Y}]]></issue_title>
+        <topic>2</topic>
+        <rythm>3</rythm>
+    </tx_rkwnewsletter_domain_model_newsletter>
+
+    <tx_rkwnewsletter_domain_model_newsletter>
+        <uid>171</uid>
+        <pid>0</pid>
+        <issue_title><![CDATA[Newsletter {M}/{Y}]]></issue_title>
+        <topic>2</topic>
+        <rythm>3</rythm>
+    </tx_rkwnewsletter_domain_model_newsletter>
+    
+    <tx_rkwnewsletter_domain_model_topic>
+        <uid>170</uid>
+        <pid>0</pid>
+        <container_page>170</container_page>
+        <newsletter>170</newsletter>
+    </tx_rkwnewsletter_domain_model_topic>
+
+    <tx_rkwnewsletter_domain_model_topic>
+        <uid>171</uid>
+        <pid>0</pid>
+        <container_page>171</container_page>
+        <newsletter>170</newsletter>
+    </tx_rkwnewsletter_domain_model_topic>
+
+    <tx_rkwnewsletter_domain_model_topic>
+        <uid>172</uid>
+        <pid>0</pid>
+        <container_page>172</container_page>
+        <newsletter>171</newsletter>
+    </tx_rkwnewsletter_domain_model_topic>
+
+    <tx_rkwnewsletter_domain_model_topic>
+        <uid>173</uid>
+        <pid>0</pid>
+        <container_page>173</container_page>
+        <newsletter>171</newsletter>
+    </tx_rkwnewsletter_domain_model_topic>
+
+    <pages>
+        <uid>170</uid>
+        <pid>1</pid>
+        <title>Container One</title>
+    </pages>
+
+    <pages>
+        <uid>171</uid>
+        <pid>1</pid>
+        <title>Container Two</title>
+    </pages>
+    
+    <pages>
+        <uid>172</uid>
+        <pid>1</pid>
+        <title>Container One</title>
+    </pages>
+
+    <pages>
+        <uid>173</uid>
+        <pid>1</pid>
+        <title>Container Two</title>
+    </pages>
+</dataset>

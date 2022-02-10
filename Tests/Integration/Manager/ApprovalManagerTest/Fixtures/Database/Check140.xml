@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+    
+    <tx_rkwnewsletter_domain_model_topic>
+        <uid>140</uid>
+        <pid>0</pid>
+        <container_page>0</container_page>
+        <newsletter>0</newsletter>
+    </tx_rkwnewsletter_domain_model_topic>
+
+    <tx_rkwnewsletter_domain_model_approval>
+        <uid>140</uid>
+        <pid>0</pid>
+        <issue>0</issue>
+        <topic>140</topic>
+        <allowed_tstamp_stage1>0</allowed_tstamp_stage1>
+        <allowed_tstamp_stage2>0</allowed_tstamp_stage2>
+        <sent_info_tstamp_stage1>0</sent_info_tstamp_stage1>
+        <sent_info_tstamp_stage2>0</sent_info_tstamp_stage2>
+        <sent_reminder_tstamp_stage1>0</sent_reminder_tstamp_stage1>
+        <sent_reminder_tstamp_stage2>0</sent_reminder_tstamp_stage2>
+    </tx_rkwnewsletter_domain_model_approval>
+
+    
+</dataset>

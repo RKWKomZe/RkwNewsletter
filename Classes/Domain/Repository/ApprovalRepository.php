@@ -14,6 +14,9 @@ namespace RKW\RkwNewsletter\Domain\Repository;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
+
 /**
  * ApprovalRepository
  *
@@ -25,134 +28,89 @@ namespace RKW\RkwNewsletter\Domain\Repository;
  */
 class ApprovalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
-    /**
-     * findAllAutomaticApproveByTime
-     *
-     * @param int $toleranceApprovalStage1
-     * @param int $toleranceApprovalStage2
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
-     */
-    public function findAllForAutomaticApproveByTime($toleranceApprovalStage1, $toleranceApprovalStage2)
+
+    /*
+    * initializeObject
+    */
+    public function initializeObject()
     {
-        $query = $this->createQuery();
-        $query->matching(
-            $query->logicalAnd(
-                $query->logicalOr(
-                    $query->logicalAnd(
-                        $query->lessThan('sentInfoTstampStage1', intval(time() - $toleranceApprovalStage1)),
-                        $query->greaterThan('sentInfoTstampStage1', 0),
-                        $query->equals('allowedTstampStage1', 0)
-                    ),
-                    $query->logicalAnd(
-                        $query->lessThan('sentInfoTstampStage2', intval(time() - $toleranceApprovalStage2)),
-                        $query->greaterThan('sentInfoTstampStage2', 0),
-                        $query->greaterThan('allowedTstampStage1', 0),
-                        $query->equals('allowedTstampStage2', 0)
-                    )
-                ),
-                $query->equals('issue.status', 1),
-                $query->equals('issue.sentTstamp', 0),
-                $query->equals('issue.releaseTstamp', 0)
-            )
-
-        );
-
-        return $query->execute();
-        //===
+        $this->defaultQuerySettings = $this->objectManager->get(Typo3QuerySettings::class);
+        $this->defaultQuerySettings->setRespectStoragePage(false);
     }
-
-
-    /**
-     * findAllAutomaticApproveByAdminsMissing
-     *
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
-     */
-    public function findAllForAutomaticApproveByAdminsMissing()
-    {
-        $query = $this->createQuery();
-        $query->matching(
-            $query->logicalAnd(
-                $query->logicalOr(
-                    $query->logicalAnd(
-                        $query->equals('allowedTstampStage1', 0),
-                        $query->lessThan('topic.approvalStage1', 1)
-                    ),
-                    $query->logicalAnd(
-                        $query->greaterThan('allowedTstampStage1', 0),
-                        $query->equals('allowedTstampStage2', 0),
-                        $query->lessThan('topic.approvalStage2', 1)
-                    )
-                ),
-                $query->equals('issue.status', 1),
-                $query->equals('issue.sentTstamp', 0),
-                $query->equals('issue.releaseTstamp', 0)
-            )
-
-        );
-
-        return $query->execute();
-        //===
-    }
+    
 
 
     /**
      * findAllOpenApprovals
      *
-     * @param int $toleranceReminderStage1
-     * @param int $toleranceReminderStage2
+     * @param int $toleranceLevel2
+     * @param int $toleranceLevel1
+     * @param int $toleranceStage1
+     * @param int $toleranceStage2
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      */
-    public function findAllOpenApprovalsByTime($toleranceReminderStage1, $toleranceReminderStage2)
+    public function findAllOpenApprovalsByTime(
+        int $toleranceLevel1, 
+        int $toleranceLevel2,
+        int $toleranceStage1 = 0,
+        int $toleranceStage2 = 0
+    ): QueryResultInterface
     {
         $query = $this->createQuery();
         $constraints = [];
 
-        // Check for reminder settings on stage 1
-        if (intval($toleranceReminderStage1) > 0) {
-            $constraints[] =
-                $query->logicalAnd(
-                    $query->equals('allowedTstampStage1', 0),
-                    $query->logicalOr(
-                        $query->equals('sentInfoTstampStage1', 0),
-                        $query->logicalAnd(
-                            $query->lessThan('sentInfoTstampStage1', time() - $toleranceReminderStage1),
-                            $query->equals('sentReminderTstampStage1', 0)
-                        )
-                    )
-                );
-
-        } else {
-            $constraints[] =
-                $query->logicalAnd(
-                    $query->equals('allowedTstampStage1', 0),
-                    $query->equals('sentInfoTstampStage1', 0)
-                );
-        }
-
-        // Check for reminder settings on stage 2
-        if (intval($toleranceReminderStage2) > 0) {
-            $constraints[] =
-                $query->logicalAnd(
-                    $query->greaterThan('allowedTstampStage1', 0),
-                    $query->equals('allowedTstampStage2', 0),
+        // Check for info/reminder settings on stage 1
+        $constraints[] =
+            $query->logicalAnd(
+                $query->equals('allowedTstampStage1', 0),
+                $query->logicalOr(
+                    $query->equals('sentInfoTstampStage1', 0),
                     $query->logicalAnd(
-                        $query->lessThan('sentInfoTstampStage2', time() - $toleranceReminderStage2),
+                        $query->lessThan('sentInfoTstampStage1', time() - $toleranceLevel1),
+                        $query->equals('sentReminderTstampStage1', 0)
+                    )
+                )
+            );
+        
+        // Check for info/reminder on stage 2
+        $constraints[] =
+            $query->logicalAnd(
+                $query->greaterThan('allowedTstampStage1', 0),
+                $query->equals('allowedTstampStage2', 0),
+                $query->logicalOr(
+                    $query->equals('sentInfoTstampStage2', 0),
+                    $query->logicalAnd(
+                        $query->lessThan('sentInfoTstampStage2', time() - $toleranceLevel2),
                         $query->equals('sentReminderTstampStage2', 0)
                     )
-                );
+                )
+            );
 
-        } else {
+        // Check for automatic approval on stage 1
+        if ($toleranceStage1) {
             $constraints[] =
                 $query->logicalAnd(
-                    $query->greaterThan('allowedTstampStage1', 0),
-                    $query->equals('allowedTstampStage2', 0),
-                    $query->equals('sentInfoTstampStage2', 0)
+                    $query->lessThan('sentInfoTstampStage1', time() - $toleranceStage1),
+                    $query->greaterThan('sentInfoTstampStage1', 0),
+                    $query->greaterThan('sentReminderTstampStage1', 0),
+                    $query->equals('allowedTstampStage1', 0)
                 );
         }
-
+    
+        // Check for automatic approval on stage 2
+        if ($toleranceStage2) {
+            $constraints[] =
+                $query->logicalAnd(
+                    $query->lessThan('sentInfoTstampStage2', time() - $toleranceStage2),
+                    $query->greaterThan('sentInfoTstampStage2', 0),
+                    $query->greaterThan('sentReminderTstampStage2', 0),
+                    $query->greaterThan('allowedTstampStage1', 0),
+                    $query->equals('allowedTstampStage2', 0)
+                );
+        }
+        
+        
         // Build query
         $query->matching(
             $query->logicalAnd(
@@ -166,7 +124,6 @@ class ApprovalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         );
 
         return $query->execute();
-        //===
     }
 
 }
