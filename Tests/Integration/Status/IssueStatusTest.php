@@ -112,7 +112,7 @@ class IssueStatusTest extends FunctionalTestCase
          * Given a persisted issue-object
          * Given that issue-object has the status-property set to 0
          * When the method is called
-         * Then $this->subject::DRAFT is returned
+         * Then $this->subject::STAGE_DRAFT is returned
          */
 
         $this->importDataSet(self::FIXTURE_PATH . '/Database/Check10.xml');
@@ -120,7 +120,7 @@ class IssueStatusTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(10);
 
-        self::assertEquals($this->subject::DRAFT, $this->subject::getStage($issue));
+        self::assertEquals($this->subject::STAGE_DRAFT, $this->subject::getStage($issue));
     }
     
    
@@ -138,7 +138,7 @@ class IssueStatusTest extends FunctionalTestCase
          * Given a persisted issue-object
          * Given that issue-object has the status-property set to 1
          * When the method is called
-         * Then $this->subject::APPROVAL is returned
+         * Then $this->subject::STAGE_APPROVAL is returned
          */
 
         $this->importDataSet(self::FIXTURE_PATH . '/Database/Check20.xml');
@@ -146,7 +146,7 @@ class IssueStatusTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(20);
 
-        self::assertEquals($this->subject::APPROVAL, $this->subject::getStage($issue));
+        self::assertEquals($this->subject::STAGE_APPROVAL, $this->subject::getStage($issue));
     }
 
 
@@ -163,7 +163,7 @@ class IssueStatusTest extends FunctionalTestCase
          * Given a persisted issue-object
          * Given that issue-object has the status-property set to 2
          * When the method is called
-         * Then $this->subject::RELEASE is returned
+         * Then $this->subject::STAGE_RELEASE is returned
          */
 
         $this->importDataSet(self::FIXTURE_PATH . '/Database/Check30.xml');
@@ -171,7 +171,7 @@ class IssueStatusTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(30);
 
-        self::assertEquals($this->subject::RELEASE, $this->subject::getStage($issue));
+        self::assertEquals($this->subject::STAGE_RELEASE, $this->subject::getStage($issue));
     }
 
     /**
@@ -187,7 +187,7 @@ class IssueStatusTest extends FunctionalTestCase
          * Given a persisted issue-object
          * Given that issue-object has the status-property set to 3
          * When the method is called
-         * Then $this->subject::SENDING is returned
+         * Then $this->subject::STAGE_SENDING is returned
          */
 
         $this->importDataSet(self::FIXTURE_PATH . '/Database/Check40.xml');
@@ -195,7 +195,7 @@ class IssueStatusTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(40);
 
-        self::assertEquals($this->subject::SENDING, $this->subject::getStage($issue));
+        self::assertEquals($this->subject::STAGE_SENDING, $this->subject::getStage($issue));
     }
 
 
@@ -212,7 +212,7 @@ class IssueStatusTest extends FunctionalTestCase
          * Given a persisted issue-object
          * Given that issue-object has the status-property set to 4
          * When the method is called
-         * Then $this->subject::DONE is returned
+         * Then $this->subject::STAGE_DONE is returned
          */
 
         $this->importDataSet(self::FIXTURE_PATH . '/Database/Check50.xml');
@@ -220,9 +220,12 @@ class IssueStatusTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(50);
 
-        self::assertEquals($this->subject::DONE, $this->subject::getStage($issue));
+        self::assertEquals($this->subject::STAGE_DONE, $this->subject::getStage($issue));
     }
-    
+
+    //=============================================
+
+
 
     //=============================================
 
@@ -240,7 +243,7 @@ class IssueStatusTest extends FunctionalTestCase
          * Given that issue-object has the status-property set to 0
          * When the method is called
          * Then true is returned
-         * Then the status of the issue-object is set to $this->subject::APPROVAL
+         * Then the status of the issue-object is set to $this->subject::STAGE_APPROVAL
          * Then the releaseTstamp-property is not set
          * Then the sentTstamp-property is not set 
          */
@@ -252,7 +255,7 @@ class IssueStatusTest extends FunctionalTestCase
 
         $result = $this->subject->increaseStage($issue);
         self::assertTrue($result);
-        self::assertEquals($this->subject::APPROVAL, $issue->getStatus());
+        self::assertEquals($this->subject::STAGE_APPROVAL, $issue->getStatus());
         self::assertEquals(0, $issue->getReleaseTstamp());
         self::assertEquals(0, $issue->getSentTstamp());        
     }
@@ -271,7 +274,7 @@ class IssueStatusTest extends FunctionalTestCase
          * Given that issue-object has the status-property set to 1
          * When the method is called
          * Then true is returned
-         * Then the status of the issue-object is set to $this->subject::RELEASE
+         * Then the status of the issue-object is set to $this->subject::STAGE_RELEASE
          * Then the releaseTstamp-property is not set
          * Then the sentTstamp-property is not set
          */
@@ -283,7 +286,7 @@ class IssueStatusTest extends FunctionalTestCase
 
         $result = $this->subject->increaseStage($issue);
         self::assertTrue($result);
-        self::assertEquals($this->subject::RELEASE, $issue->getStatus());
+        self::assertEquals($this->subject::STAGE_RELEASE, $issue->getStatus());
         self::assertEquals(0, $issue->getReleaseTstamp());
         self::assertEquals(0, $issue->getSentTstamp());
 
@@ -305,7 +308,7 @@ class IssueStatusTest extends FunctionalTestCase
          * Given that issue-object has the status-property set to 2
          * When the method is called
          * Then true is returned
-         * Then the status of the issue-object is set to $this->subject::SENDING
+         * Then the status of the issue-object is set to $this->subject::STAGE_SENDING
          * Then the releaseTstamp-property is set to the current time
          * Then the sentTstamp-property is not set
          */
@@ -317,7 +320,7 @@ class IssueStatusTest extends FunctionalTestCase
 
         $result = $this->subject->increaseStage($issue);
         self::assertTrue($result);
-        self::assertEquals($this->subject::SENDING, $issue->getStatus());
+        self::assertEquals($this->subject::STAGE_SENDING, $issue->getStatus());
         self::assertGreaterThan(0, $issue->getReleaseTstamp());
         self::assertEquals(0, $issue->getSentTstamp());
     }
@@ -336,7 +339,7 @@ class IssueStatusTest extends FunctionalTestCase
          * Given that issue-object has the status-property set to 3
          * When the method is called
          * Then true is returned
-         * Then the status of the issue-object is set to $this->subject::DONE
+         * Then the status of the issue-object is set to $this->subject::STAGE_DONE
          * Then the releaseTstamp-property is not set
          * Then the sentTstamp-property is set to the current time
          */
@@ -348,7 +351,7 @@ class IssueStatusTest extends FunctionalTestCase
 
         $result = $this->subject->increaseStage($issue);
         self::assertTrue($result);
-        self::assertEquals($this->subject::DONE, $issue->getStatus());
+        self::assertEquals($this->subject::STAGE_DONE, $issue->getStatus());
         self::assertEquals(0, $issue->getReleaseTstamp());
         self::assertGreaterThan(0, $issue->getSentTstamp());
     }

@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dataset>
+
+    <pages>
+        <uid>240</uid>
+        <pid>0</pid>
+        <tx_rkwnewsletter_issue>240</tx_rkwnewsletter_issue>
+        <tx_rkwnewsletter_topic>240</tx_rkwnewsletter_topic>
+    </pages>
+
+    <tx_rkwnewsletter_domain_model_issue>
+        <uid>240</uid>
+        <pid>0</pid>
+        <status>1</status>
+    </tx_rkwnewsletter_domain_model_issue>
     
     <tx_rkwnewsletter_domain_model_topic>
         <uid>240</uid>
@@ -13,8 +26,9 @@
     <tx_rkwnewsletter_domain_model_approval>
         <uid>240</uid>
         <pid>0</pid>
-        <issue>0</issue>
+        <issue>240</issue>
         <topic>240</topic>
+        <page>240</page>
         <allowed_tstamp_stage1>1000</allowed_tstamp_stage1>
         <allowed_tstamp_stage2>0</allowed_tstamp_stage2>
         <sent_info_tstamp_stage1>1000</sent_info_tstamp_stage1>

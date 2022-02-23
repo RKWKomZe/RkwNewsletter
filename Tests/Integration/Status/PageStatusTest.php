@@ -15,8 +15,10 @@ namespace RKW\RkwNewsletter\Tests\Integration\Status;
  */
 
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
+use RKW\RkwNewsletter\Domain\Repository\IssueRepository;
+use RKW\RkwNewsletter\Domain\Repository\PagesRepository;
+use RKW\RkwNewsletter\Domain\Repository\TopicRepository;
 use RKW\RkwNewsletter\Status\PageStatus;
-use RKW\RkwNewsletter\Domain\Repository\ApprovalRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 
@@ -63,9 +65,20 @@ class PageStatusTest extends FunctionalTestCase
     private $objectManager;
 
     /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\ApprovalRepository
+     * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository
      */
-    private $approvalRepository;
+    private $issueRepository;
+
+    /**
+     * @var \RKW\RkwNewsletter\Domain\Repository\TopicRepository
+     */
+    private $topicRepository;
+
+    /**
+     * @var \RKW\RkwNewsletter\Domain\Repository\PagesRepository
+     */
+    private $pagesRepository;
+
 
     /**
      * Setup
@@ -88,65 +101,14 @@ class PageStatusTest extends FunctionalTestCase
 
         /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $this->objectManager */
         $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $this->approvalRepository = $this->objectManager->get(ApprovalRepository::class);
+        $this->issueRepository = $this->objectManager->get(IssueRepository::class);
+        $this->topicRepository = $this->objectManager->get(TopicRepository::class);
+        $this->pagesRepository = $this->objectManager->get(PagesRepository::class);
+
         $this->subject = $this->objectManager->get(PageStatus::class);
 
     }
-
-    //=============================================
-    /**
-     * @test
-     * @throws \Exception
-     */
-    public function validatePermissionsReturnsFalseOnValueBelowZero()
-    {
-
-        /**
-         * Scenario:
-         *
-         * Given a value below zero
-         * When the method is called
-         * Then false is returned
-         */
-        
-        self::assertFalse($this->subject::validatePermissions(-1));
-    }
-
     
-    /**
-     * @test
-     * @throws \Exception
-     */
-    public function validatePermissionsReturnsFalseOnValueAboveThirtyOne()
-    {
-
-        /**
-         * Scenario:
-         *
-         * Given a value above 31
-         * When the method is called
-         * Then false is returned
-         */
-        self::assertFalse($this->subject::validatePermissions(32));
-    }
-    
-
-    /**
-     * @test
-     * @throws \Exception
-     */
-    public function validatePermissionsReturnsTrueOnValueInValidRange()
-    {
-
-        /**
-         * Scenario:
-         *
-         * Given a value in valid range
-         * When the method is called
-         * Then true is returned
-         */
-        self::assertTrue($this->subject::validatePermissions(17));
-    }
 
     //=============================================
 
@@ -163,8 +125,13 @@ class PageStatusTest extends FunctionalTestCase
          *
          * Given a persisted issue-object
          * Given that issue-object has the status-property set to 0
+         * Given a persisted topic-object
+         * Given a persisted page-object
+         * Given that page-object belongs to the issue-object
+         * Given that page-object belongs to the topic-object
          * Given a persisted approval-object
          * Given that approval-object belongs to the issue-object
+         * Given that approval-object belongs to the topic-object
          * Given that approval-object has no value for the allowedTstampStage1-property set
          * Given that approval-object has no value for the allowedTstampStage2-property set
          * When the method is called
@@ -173,10 +140,10 @@ class PageStatusTest extends FunctionalTestCase
 
         $this->importDataSet(self::FIXTURE_PATH . '/Database/Check10.xml');
 
-        /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
-        $approval = $this->approvalRepository->findByUid(10);
-        
-        self::assertEquals($this->subject::DRAFT, $this->subject::getStage($approval));
+        /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
+        $page = $this->pagesRepository->findByUid(10);
+
+        self::assertEquals($this->subject::DRAFT, $this->subject::getStage($page));
     }
 
     /**
@@ -191,8 +158,13 @@ class PageStatusTest extends FunctionalTestCase
          *
          * Given a persisted issue-object
          * Given that issue-object has the status-property set to 1
+         * Given a persisted topic-object
+         * Given a persisted page-object
+         * Given that page-object belongs to the issue-object
+         * Given that page-object belongs to the topic-object 
          * Given a persisted approval-object
          * Given that approval-object belongs to the issue-object
+         * Given that approval-object belongs to the topic-object
          * Given that approval-object has no value for the allowedTstampStage1-property set
          * Given that approval-object has no value for the allowedTstampStage2-property set
          * When the method is called
@@ -201,10 +173,10 @@ class PageStatusTest extends FunctionalTestCase
 
         $this->importDataSet(self::FIXTURE_PATH . '/Database/Check20.xml');
 
-        /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
-        $approval = $this->approvalRepository->findByUid(20);
+        /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
+        $page = $this->pagesRepository->findByUid(20);
 
-        self::assertEquals($this->subject::APPROVAL_1, $this->subject::getStage($approval));
+        self::assertEquals($this->subject::APPROVAL_1, $this->subject::getStage($page));
     }
 
     /**
@@ -219,8 +191,13 @@ class PageStatusTest extends FunctionalTestCase
          *
          * Given a persisted issue-object
          * Given that issue-object has the status-property set to 1
+         * Given a persisted topic-object
+         * Given a persisted page-object
+         * Given that page-object belongs to the issue-object
+         * Given that page-object belongs to the topic-object 
          * Given a persisted approval-object
          * Given that approval-object belongs to the issue-object
+         * Given that approval-object belongs to the topic-object
          * Given that approval-object has a value for the allowedTstampStage1-property set
          * Given that approval-object has no value for the allowedTstampStage2-property set
          * When the method is called
@@ -229,17 +206,17 @@ class PageStatusTest extends FunctionalTestCase
 
         $this->importDataSet(self::FIXTURE_PATH . '/Database/Check30.xml');
 
-        /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
-        $approval = $this->approvalRepository->findByUid(30);
+        /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
+        $page = $this->pagesRepository->findByUid(30);
 
-        self::assertEquals($this->subject::APPROVAL_2, $this->subject::getStage($approval));
+        self::assertEquals($this->subject::APPROVAL_2, $this->subject::getStage($page));
     }
 
     /**
      * @test
      * @throws \Exception
      */
-    public function getStageReturnsStage2EvenWhenDone()
+    public function getStageReturnsReleaseWhenStage2Done()
     {
 
         /**
@@ -247,21 +224,28 @@ class PageStatusTest extends FunctionalTestCase
          *
          * Given a persisted issue-object
          * Given that issue-object has the status-property set to 1
+         * Given a persisted topic-object
+         * Given a persisted page-object
+         * Given that page-object belongs to the issue-object
+         * Given that page-object belongs to the topic-object 
          * Given a persisted approval-object
          * Given that approval-object belongs to the issue-object
+         * Given that approval-object belongs to the topic-object
          * Given that approval-object has a value for the allowedTstampStage1-property set
          * Given that approval-object has a value for the allowedTstampStage2-property set
          * When the method is called
-         * Then $this->subject::APPROVAL_2 is returned
+         * Then $this->subject::RELEASE is returned
          */
 
         $this->importDataSet(self::FIXTURE_PATH . '/Database/Check40.xml');
 
-        /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
-        $approval = $this->approvalRepository->findByUid(40);
+        /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
+        $page = $this->pagesRepository->findByUid(40);
 
-        self::assertEquals($this->subject::APPROVAL_2, $this->subject::getStage($approval));
+        self::assertEquals($this->subject::RELEASE, $this->subject::getStage($page));
     }
+    
+    
 
     /**
      * @test
@@ -275,8 +259,13 @@ class PageStatusTest extends FunctionalTestCase
          *
          * Given a persisted issue-object
          * Given that issue-object has the status-property set to 2
+         * Given a persisted topic-object
+         * Given a persisted page-object
+         * Given that page-object belongs to the issue-object
+         * Given that page-object belongs to the topic-object
          * Given a persisted approval-object
          * Given that approval-object belongs to the issue-object
+         * Given that approval-object belongs to the topic-object
          * Given that approval-object has no value for the allowedTstampStage1-property set
          * Given that approval-object has no value for the allowedTstampStage2-property set
          * When the method is called
@@ -285,10 +274,10 @@ class PageStatusTest extends FunctionalTestCase
 
         $this->importDataSet(self::FIXTURE_PATH . '/Database/Check50.xml');
 
-        /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
-        $approval = $this->approvalRepository->findByUid(50);
+        /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
+        $page = $this->pagesRepository->findByUid(50);
 
-        self::assertEquals($this->subject::RELEASE, $this->subject::getStage($approval));
+        self::assertEquals($this->subject::RELEASE, $this->subject::getStage($page));
     }
 
 
@@ -304,8 +293,13 @@ class PageStatusTest extends FunctionalTestCase
          *
          * Given a persisted issue-object
          * Given that issue-object has the status-property set to 3
+         * Given a persisted topic-object
+         * Given a persisted page-object
+         * Given that page-object belongs to the issue-object
+         * Given that page-object belongs to the topic-object
          * Given a persisted approval-object
          * Given that approval-object belongs to the issue-object
+         * Given that approval-object belongs to the topic-object
          * Given that approval-object has no value for the allowedTstampStage1-property set
          * Given that approval-object has no value for the allowedTstampStage2-property set
          * When the method is called
@@ -314,10 +308,10 @@ class PageStatusTest extends FunctionalTestCase
 
         $this->importDataSet(self::FIXTURE_PATH . '/Database/Check60.xml');
 
-        /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
-        $approval = $this->approvalRepository->findByUid(60);
+        /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
+        $page = $this->pagesRepository->findByUid(60);
 
-        self::assertEquals($this->subject::SENDING, $this->subject::getStage($approval));
+        self::assertEquals($this->subject::SENDING, $this->subject::getStage($page));
     }
 
 
@@ -333,8 +327,13 @@ class PageStatusTest extends FunctionalTestCase
          *
          * Given a persisted issue-object
          * Given that issue-object has the status-property set to 4
+         * Given a persisted topic-object
+         * Given a persisted page-object
+         * Given that page-object belongs to the issue-object
+         * Given that page-object belongs to the topic-object
          * Given a persisted approval-object
          * Given that approval-object belongs to the issue-object
+         * Given that approval-object belongs to the topic-object
          * Given that approval-object has no value for the allowedTstampStage1-property set
          * Given that approval-object has no value for the allowedTstampStage2-property set
          * When the method is called
@@ -343,48 +342,112 @@ class PageStatusTest extends FunctionalTestCase
 
         $this->importDataSet(self::FIXTURE_PATH . '/Database/Check70.xml');
 
-        /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
-        $approval = $this->approvalRepository->findByUid(70);
+        /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
+        $page = $this->pagesRepository->findByUid(70);
 
-        self::assertEquals($this->subject::DONE, $this->subject::getStage($approval));
+        self::assertEquals($this->subject::DONE, $this->subject::getStage($page));
     }
-
-
+    
+    
+    //=============================================
 
     /**
      * @test
      * @throws \Exception
      */
-    public function setPagePermissions()
+    public function getApprovalThrowsExceptionOnNonMatchingTopic()
     {
 
         /**
          * Scenario:
          *
-         * Given a persisted approval-object in stage 1
-         * Given no valid configuration for this stage
+         * Given a persisted issue-object
+         * Given a persisted topic-object
+         * Given a persisted approval-object
+         * Given that approval-object belongs to the issue-object
+         * Given that approval-object does not belong to the topic-object
          * When the method is called
-         * Then false is returned
+         * Then the exception is an instance of \RKW\RkwNewsletter\Exception
+         * Then the exception has the code 1644845316
          */
-        
-        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check10.xml');
+        static::expectException(\RKW\RkwNewsletter\Exception::class);
+        static::expectExceptionCode(1644845316);
 
-        /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
-        $approval = $this->approvalRepository->findByUid(10);
-        
-        $settings = [
-            'stage2' => [
-                    'userId' => 1,
-                    'groupId'  => 1,
-                    'user'  => 1,
-                    'group'  => 1,
-                    'everybody' => 1,
-                ]
-            ];
-                
-        self::assertFalse($this->subject::setPagePermissions($approval, $settings));
+        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check80.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(80);
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic */
+        $topic = $this->topicRepository->findByUid(80);
+
+        $this->subject::getApproval($issue, $topic);
     }
 
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function getApprovalThrowsExceptionOnNonExistingApproval()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a persisted issue-object
+         * Given a persisted topic-object
+         * Given no persisted approval-object
+         * When the method is called
+         * Then the exception is an instance of \RKW\RkwNewsletter\Exception
+         * Then the exception has the code 1644845316
+         */
+        static::expectException(\RKW\RkwNewsletter\Exception::class);
+        static::expectExceptionCode(1644845316);
+
+        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check90.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(90);
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic */
+        $topic = $this->topicRepository->findByUid(90);
+
+        $this->subject::getApproval($issue, $topic);
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function getApprovalReturnsApprovalObject()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a persisted issue-object
+         * Given a persisted topic-object
+         * Given a persisted approval-object
+         * Given that approval-object belongs to the issue-object
+         * Given that approval-object belongs to the topic-object
+         * When the method is called
+         * Then an instance of \RKW\RkwNewsletter\Domain\Model\Approval is returned
+         */
+
+        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check100.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(100);
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic */
+        $topic = $this->topicRepository->findByUid(100);
+
+        self::assertInstanceOf(
+            \RKW\RkwNewsletter\Domain\Model\Approval::class, 
+            $this->subject::getApproval($issue, $topic)
+        );
+    }
+    
     //=============================================
 
     /**

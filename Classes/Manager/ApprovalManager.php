@@ -67,6 +67,12 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
      */
     protected $signalSlotDispatcher;
 
+
+    /**
+     * @var \RKW\RkwNewsletter\Permissions\PagePermissions
+     * @inject
+     */
+    protected $pagePermissions;
     
     /**
      * Signal name for use in ext_localconf.php
@@ -208,13 +214,13 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
      * @param Approval $approval
      * @return array
      */
-    public function getMailRecipientsForApproval (Approval $approval): array 
+    public function getMailRecipients (Approval $approval): array 
     {
 
         $mailRecipients = [];
         $stage = ApprovalStatus::getStage($approval);
 
-        if ($stage == ApprovalStatus::APPROVAL_STAGE1) {
+        if ($stage == ApprovalStatus::STAGE1) {
             if (count($approval->getTopic()->getApprovalStage1()) > 0) {
                 
                 /** @var \RKW\RkwNewsletter\Domain\Model\BackendUser $beUser */
@@ -226,7 +232,7 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
             }
         }
         
-        if ($stage == ApprovalStatus::APPROVAL_STAGE2) {
+        if ($stage == ApprovalStatus::STAGE2) {
             if (count($approval->getTopic()->getApprovalStage2()) > 0) {
                 
                 /** @var \RKW\RkwNewsletter\Domain\Model\BackendUser $beUser */
@@ -262,21 +268,21 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException
      */
-    public function sendMailsForApproval(Approval $approval): int
+    public function sendMails(Approval $approval): int
     {
 
         $stage = ApprovalStatus::getStage($approval);
         $level = ApprovalStatus::getLevel($approval);
-        $isReminder = ($level == ApprovalStatus::APPROVAL_LEVEL2);
+        $isReminder = ($level == ApprovalStatus::LEVEL2);
 
         // get recipients and increase level 
         // but only if stage and level match AND if valid recipients are found
         if (
-            (count($recipients = $this->getMailRecipientsForApproval($approval)))
-            && ($stage != ApprovalStatus::APPROVAL_STAGE_DONE)
+            (count($recipients = $this->getMailRecipients($approval)))
+            && ($stage != ApprovalStatus::STAGE_DONE)
         ){
             
-            if ($level != ApprovalStatus::APPROVAL_LEVEL_DONE) {
+            if ($level != ApprovalStatus::LEVEL_DONE) {
 
                 // Signal for e.g. E-Mails
                 $this->signalSlotDispatcher->dispatch(
@@ -337,26 +343,31 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Approval $approval
      * @return bool
+     * @throws \RKW\RkwNewsletter\Exception
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     public function processApproval(Approval $approval): bool
     {
 
         // if the value 1 is returned, we simply increase the level
-        if ($this->sendMailsForApproval($approval) == 1) {
+        if ($this->sendMails($approval) == 1) {
 
             $this->increaseLevel($approval);
+            $this->pagePermissions->setPermissions($approval->getPage());
+            
             return true;
         }
 
-        // if we reach this point, the approval has timed-out ($this->sendMailsForApproval returns 2)
-        // OR the approval has no recipients ($this->sendMailsForApproval returns 0)
+        // if we reach this point, the approval has timed-out ($this->sendMails returns 2)
+        // OR the approval has no recipients ($this->sendMails returns 0)
         // in that case we increase the stage
         $this->increaseStage($approval);
-
+        $this->pagePermissions->setPermissions($approval->getPage());
+        
         return false;
     }
 
@@ -408,7 +419,7 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
         return count($approvalList);
     }
     
-    
+
     /**
      * Returns logger instance
      *
@@ -422,5 +433,8 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
 
         return $this->logger;
     }
+
+
+
 
 }

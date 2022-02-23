@@ -15,6 +15,7 @@ namespace RKW\RkwNewsletter\Controller;
  */
 
 use \RKW\RkwBasics\Helper\Common;
+use RKW\RkwNewsletter\Manager\ApprovalManager;
 use RKW\RkwNewsletter\Manager\IssueManager;
 use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\Utility\DebugUtility;
@@ -132,35 +133,83 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
 
 
     /**
-     * function processApprovalsCommand
-     * check for approvals
+     * processes approvals and sends emails
+     *
+     * @return void
+     */
+    public function processApprovalsCommand()
+    {
+
+        try {
+            
+            $settings = $this->getSettings(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
+            
+            /** @var  \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
+            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+
+            /** @var \RKW\RkwNewsletter\Manager\ApprovalManager $approvalManager */
+            $approvalManager = $objectManager->get(ApprovalManager::class);
+            $approvalManager->processAllApprovals(
+                intval($settings['reminderApprovalStage1']),
+                intval($settings['reminderApprovalStage2']),
+                intval($settings['automaticApprovalStage1']),
+                intval($settings['automaticApprovalStage2'])
+            );
+
+        } catch (\Exception $e) {
+            $this->getLogger()->log(
+                LogLevel::ERROR, 
+                sprintf(
+                    'An unexpected error occurred while trying to process approvals: %s', 
+                    $e->getMessage()
+                )
+            );
+        }
+    }
+
+    /**
+     * processes releases and sends emails
      *
      * @return void
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      */
-    public function processApprovalsCommand()
+    public function processReleasesCommand()
     {
 
         try {
 
-            /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-            $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Object\ObjectManager');
+            $settings = $this->getSettings(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
 
-            /** @var \RKW\RkwNewsletter\Helper\Approval $approval */
-            $approval = $objectManager->get('RKW\\RkwNewsletter\\Helper\\Approval');
-            $approval->doAutomaticApprovalsByTime();
-            $approval->doAutomaticApprovalsByAdminsMissing();
-            $approval->sendInfoAndReminderMailsForApprovals();
+
+            /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
+            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+
+            /** @var \RKW\RkwNewsletter\Manager\IssueManager $issueManager */
+            $issueManager = $objectManager->get(IssueManager::class);
+            
+            $issueManager->checkAllReleaseStages();
+            
+            $approvalManager->processAllApprovals(
+                intval($settings['reminderApprovalStage1']),
+                intval($settings['reminderApprovalStage2']),
+                intval($settings['automaticApprovalStage1']),
+                intval($settings['automaticApprovalStage2'])
+            );
 
             /** @var \RKW\RkwNewsletter\Helper\Release $release */
             $release = $objectManager->get('RKW\\RkwNewsletter\\Helper\\Release');
             $release->sendInfoAndReminderMailsForReleases();
 
         } catch (\Exception $e) {
-            $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::ERROR, sprintf('An unexpected error occurred while trying to process approvals: %s', $e->getMessage()));
-
+            $this->getLogger()->log(
+                LogLevel::ERROR,
+                sprintf(
+                    'An unexpected error occurred while trying to process approvals: %s',
+                    $e->getMessage()
+                )
+            );
         }
 
     }

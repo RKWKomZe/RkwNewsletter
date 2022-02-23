@@ -30,28 +30,47 @@ class IssueStatus
     /**
      * @var int
      */
-    const DRAFT = 0;
+    const STAGE_DRAFT = 0;
     
     /**
      * @var int
      */
-    const APPROVAL = 1;
+    const STAGE_APPROVAL = 1;
 
     /**
      * @var int
      */
-    const RELEASE = 2;
+    const STAGE_RELEASE = 2;
 
     /**
      * @var int
      */
-    const SENDING = 3;    
+    const STAGE_SENDING = 3;    
     
     /**
      * @var int
      */
-    const DONE = 4;
+    const STAGE_DONE = 4;
+
+    /**
+     * @var int
+     */
+    const LEVEL_NONE = 0;
     
+    /**
+     * @var int
+     */
+    const LEVEL1 = 1;
+
+    /**
+     * @var int
+     */
+    const LEVEL2 = 2;
+
+    /**
+     * @var int
+     */
+    const LEVEL_DONE = 3;
     
     
     /**
@@ -64,26 +83,55 @@ class IssueStatus
     {
 
         if ($issue->getStatus() == 1) {
-            return self::APPROVAL;
+            return self::STAGE_APPROVAL;
         }
 
         if ($issue->getStatus() == 2) {
-            return self::RELEASE;
+            return self::STAGE_RELEASE;
         }
 
         if ($issue->getStatus() == 3) {
-            return self::SENDING;
+            return self::STAGE_SENDING;
         }
 
         if ($issue->getStatus() == 4) {
-            return self::DONE;
+            return self::STAGE_DONE;
         }
         
-        return self::DRAFT;
+        return self::STAGE_DRAFT;
     }
 
-    
-    
+
+    /**
+     * Returns current mail-status of the issue based on timestamps
+     *
+     * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
+     * @return string
+     */
+    public static function getLevel (Issue $issue): string
+    {
+        
+        // Only relevant for stage "release"
+        if (self::getStage($issue) != self::STAGE_RELEASE) {
+            return self::LEVEL_NONE;
+        }
+        
+        if (
+            ($issue->getInfoTstamp() < 1)
+            && ($issue->getReminderTstamp() < 1)
+        ) {
+            return self::LEVEL1;
+        }
+
+        if ($issue->getReminderTstamp() < 1) {
+            return self::LEVEL2;
+        }
+        
+        return self::LEVEL_DONE;
+    }
+
+
+
     /**
      * Increases the current stage
      *
@@ -96,24 +144,24 @@ class IssueStatus
         $stage = self::getStage($issue);
 
         $update = false;
-        if ($stage == self::DRAFT) {
-            $issue->setStatus(self::APPROVAL);
+        if ($stage == self::STAGE_DRAFT) {
+            $issue->setStatus(self::STAGE_APPROVAL);
             $update = true;
         }
 
-        if ($stage == self::APPROVAL) {
-            $issue->setStatus(self::RELEASE);
+        if ($stage == self::STAGE_APPROVAL) {
+            $issue->setStatus(self::STAGE_RELEASE);
             $update = true;
         }
 
-        if ($stage == self::RELEASE) {
-            $issue->setStatus(self::SENDING);
+        if ($stage == self::STAGE_RELEASE) {
+            $issue->setStatus(self::STAGE_SENDING);
             $issue->setReleaseTstamp(time());
             $update = true;
         }
 
-        if ($stage == self::SENDING) {
-            $issue->setStatus(self::DONE);
+        if ($stage == self::STAGE_SENDING) {
+            $issue->setStatus(self::STAGE_DONE);
             $issue->setSentTstamp(time());
             $update = true;
         }

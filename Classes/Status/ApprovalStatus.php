@@ -29,33 +29,33 @@ class ApprovalStatus
     /**
      * @var int
      */
-    const APPROVAL_STAGE1 = 1;
+    const STAGE1 = 1;
 
     /**
      * @var int
      */
-    const APPROVAL_STAGE2 = 2;
+    const STAGE2 = 2;
 
     /**
      * @var int
      */
-    const APPROVAL_STAGE_DONE = 3;
+    const STAGE_DONE = 3;
     
 
     /**
      * @var int
      */
-    const APPROVAL_LEVEL1 = 1;
+    const LEVEL1 = 1;
 
     /**
      * @var int
      */
-    const APPROVAL_LEVEL2 = 2;
+    const LEVEL2 = 2;
 
     /**
      * @var int
      */
-    const APPROVAL_LEVEL_DONE = 3;
+    const LEVEL_DONE = 3;
 
     
     /**
@@ -69,14 +69,14 @@ class ApprovalStatus
         
         if ($approval->getAllowedTstampStage2()) {
 
-            return self::APPROVAL_STAGE_DONE;
+            return self::STAGE_DONE;
             
         } else if ($approval->getAllowedTstampStage1()) {
 
-            return self::APPROVAL_STAGE2;
+            return self::STAGE2;
         }
 
-        return self::APPROVAL_STAGE1;
+        return self::STAGE1;
     }
 
    
@@ -90,35 +90,35 @@ class ApprovalStatus
     public static function getLevel (Approval $approval): string
     {
 
-        if (self::getStage($approval) == self::APPROVAL_STAGE1) {
+        if (self::getStage($approval) == self::STAGE1) {
 
             if (
                 ($approval->getSentInfoTstampStage1() < 1)
                 && ($approval->getSentReminderTstampStage1() < 1)
             ) {
-                return self::APPROVAL_LEVEL1;
+                return self::LEVEL1;
             }
             
             if ($approval->getSentReminderTstampStage1() < 1) {
-                return self::APPROVAL_LEVEL2;
+                return self::LEVEL2;
             }
         }
 
-        if (self::getStage($approval) == self::APPROVAL_STAGE2) {
+        if (self::getStage($approval) == self::STAGE2) {
 
             if (
                 ($approval->getSentInfoTstampStage2() < 1)
                 && ($approval->getSentReminderTstampStage2() < 1)
             ) {
-                return self::APPROVAL_LEVEL1;
+                return self::LEVEL1;
             }
 
             if ($approval->getSentReminderTstampStage2() < 1) {
-                return self::APPROVAL_LEVEL2;
+                return self::LEVEL2;
             }
         }
         
-        return self::APPROVAL_LEVEL_DONE;
+        return self::LEVEL_DONE;
     }
 
     
@@ -134,12 +134,12 @@ class ApprovalStatus
         $stage = self::getStage($approval);
 
         $update = false;
-        if ($stage == self::APPROVAL_STAGE1) {
+        if ($stage == self::STAGE1) {
             $approval->setAllowedTstampStage1(time());
             $update = true;
         }
 
-        if ($stage == self::APPROVAL_STAGE2) {
+        if ($stage == self::STAGE2) {
             $approval->setAllowedTstampStage2(time());
             $update = true;
         }
@@ -161,25 +161,25 @@ class ApprovalStatus
         $level = self::getLevel($approval);
 
         $update = false;
-        if ($stage == self::APPROVAL_STAGE1) {
-            if ($level == self::APPROVAL_LEVEL1) {
+        if ($stage == self::STAGE1) {
+            if ($level == self::LEVEL1) {
                 $approval->setSentInfoTstampStage1(time());
                 $update = true;
 
             } else {
-                if ($level == self::APPROVAL_LEVEL2) {
+                if ($level == self::LEVEL2) {
                     $approval->setSentReminderTstampStage1(time());
                     $update = true;
                 }
             }
         }
 
-        if ($stage == self::APPROVAL_STAGE2) {
-            if ($level == self::APPROVAL_LEVEL1) {
+        if ($stage == self::STAGE2) {
+            if ($level == self::LEVEL1) {
                 $approval->setSentInfoTstampStage2(time());
                 $update = true;
             } else {
-                if ($level == self::APPROVAL_LEVEL2) {
+                if ($level == self::LEVEL2) {
                     $approval->setSentReminderTstampStage2(time());
                     $update = true;
                 }

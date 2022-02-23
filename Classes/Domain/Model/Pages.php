@@ -86,7 +86,6 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
      * txRkwnewsletterIssue
      *
      * @var \RKW\RkwNewsletter\Domain\Model\Issue
-     * @deprecated 
      */
     protected $txRkwnewsletterIssue  = null;
 
@@ -304,26 +303,13 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
      * Returns the txRkwnewsletterIssue
      *
      * @return \RKW\RkwNewsletter\Domain\Model\Issue $txRkwnewsletterIssue
-     * @deprecated
      */
     public function getTxRkwnewsletterIssue()
     {
         return $this->txRkwnewsletterIssue;
     }
 
-    
-    /**
-     * Sets the txRkwnewsletterIssue
-     *
-     * @param \RKW\RkwNewsletter\Domain\Model\Issue $txRkwnewsletterIssue
-     * @return void
-     * @deprecated
-     */
-    public function setTxRkwnewsletterIssue(Issue $txRkwnewsletterIssue): void
-    {
-        $this->txRkwnewsletterIssue = $txRkwnewsletterIssue;
-    }
-
+  
 
     /**
      * Returns the txRkwnewsletterExclude

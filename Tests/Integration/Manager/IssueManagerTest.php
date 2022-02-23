@@ -28,6 +28,7 @@ use RKW\RkwNewsletter\Domain\Repository\NewsletterRepository;
 use RKW\RkwNewsletter\Domain\Repository\PagesRepository;
 use RKW\RkwNewsletter\Domain\Repository\TopicRepository;
 use RKW\RkwNewsletter\Manager\IssueManager;
+use RKW\RkwNewsletter\Status\IssueStatus;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\Database\Query\Restriction\EndTimeRestriction;
@@ -152,6 +153,12 @@ class IssueManagerTest extends FunctionalTestCase
         $this->approvalRepository = $this->objectManager->get(ApprovalRepository::class);
         $this->subject = $this->objectManager->get(IssueManager::class);
 
+        // For Mail-Interface
+        $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromName'] = 'RKW';
+        $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress'] = 'service@mein.rkw.de';
+        $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailReplyName'] = 'RKW';
+        $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailReplyToAddress'] = 'reply@mein.rkw.de';
+        $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailReturnAddress'] = 'bounces@mein.rkw.de';
     }
 
     //=============================================
@@ -722,7 +729,7 @@ class IssueManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function buildContentsForPageBuildsContentsSelectively()
+    public function buildContentsBuildsContentsSelectively()
     {
         
         /**
@@ -756,7 +763,7 @@ class IssueManagerTest extends FunctionalTestCase
         $targetPage = $this->pagesRepository->findByUid(90);
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Content $content */
-        $result = $this->subject->buildContentsForPage($newsletter, $topic, $targetPage);
+        $result = $this->subject->buildContents($newsletter, $topic, $targetPage);
         
         self::assertTrue($result);
         
@@ -774,7 +781,7 @@ class IssueManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function buildContentsForPageUsesRkwBasicsTeaserImage()
+    public function buildContentsUsesRkwBasicsTeaserImage()
     {
 
         /**
@@ -804,7 +811,7 @@ class IssueManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Pages $targetPage */
         $targetPage = $this->pagesRepository->findByUid(100);
 
-        $result = $this->subject->buildContentsForPage($newsletter, $topic, $targetPage);
+        $result = $this->subject->buildContents($newsletter, $topic, $targetPage);
         self::assertTrue($result);
 
         // force TYPO3 to load objects new from database
@@ -829,7 +836,7 @@ class IssueManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function buildContentsForPageUsesRkwNewsletterTeaserImage()
+    public function buildContentsUsesRkwNewsletterTeaserImage()
     {
 
         /**
@@ -858,7 +865,7 @@ class IssueManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Pages $targetPage */
         $targetPage = $this->pagesRepository->findByUid(110);
 
-        $result = $this->subject->buildContentsForPage($newsletter, $topic, $targetPage);
+        $result = $this->subject->buildContents($newsletter, $topic, $targetPage);
         self::assertTrue($result);
 
         // force TYPO3 to load objects new from database
@@ -884,7 +891,7 @@ class IssueManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function buildPagesForIssueReturnsFalseWhenNoTopicsDefined()
+    public function buildPagesReturnsFalseWhenNoTopicsDefined()
     {
 
         /**
@@ -904,7 +911,7 @@ class IssueManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(130);
 
-        $result = $this->subject->buildPagesForIssue($newsletter, $issue);
+        $result = $this->subject->buildPages($newsletter, $issue);
         self::assertFalse($result);
 
     }
@@ -914,7 +921,7 @@ class IssueManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function buildPagesForIssueCreatesPageForEachTopic()
+    public function buildPagesCreatesPageForEachTopic()
     {
 
         /**
@@ -963,7 +970,7 @@ class IssueManagerTest extends FunctionalTestCase
             ->execute()
             ->fetchColumn(0);
         
-        $result = $this->subject->buildPagesForIssue($newsletter, $issue);
+        $result = $this->subject->buildPages($newsletter, $issue);
         self::assertTrue($result);
 
         // force TYPO3 to load objects new from database
@@ -1003,7 +1010,7 @@ class IssueManagerTest extends FunctionalTestCase
     * @test
     * @throws \Exception
     */
-    public function buildIssueForNewsletterReturnsFalseWhenNoTopicsDefined()
+    public function buildIssueReturnsFalseWhenNoTopicsDefined()
     {
         /**
          * Scenario:
@@ -1019,7 +1026,7 @@ class IssueManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Newsletter $newsletter */
         $newsletter = $this->newsletterRepository->findByUid(140);
 
-        $result = $this->subject->buildIssueForNewsletter($newsletter);
+        $result = $this->subject->buildIssue($newsletter);
         self::assertFalse($result);
     }
 
@@ -1027,7 +1034,7 @@ class IssueManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function buildIssueForNewsletterCreatesIssueAndSetsStatus ()
+    public function buildIssueCreatesIssueAndSetsStatus ()
     {
         /**
          * Scenario:
@@ -1047,7 +1054,7 @@ class IssueManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Newsletter $newsletter */
         $newsletter = $this->newsletterRepository->findByUid(150);
 
-        $result = $this->subject->buildIssueForNewsletter($newsletter);
+        $result = $this->subject->buildIssue($newsletter);
         self::assertTrue($result);
 
         $issues = $this->issueRepository->findAll()->toArray();
@@ -1315,6 +1322,144 @@ class IssueManagerTest extends FunctionalTestCase
 
         $issues = $this->issueRepository->findAll()->toArray();
         self::assertCount(2, $issues);
+
+    }
+
+    //=============================================
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function checkReleaseStageReturnsFalseIfOneApprovalNotReady ()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted issue-object
+         * Given the issue-object has the status "approval"
+         * Given two persisted approval-objects
+         * Given the two approval-objects belong to the issue-object
+         * Given one of the approval-objects has the allowedTstampStage2-property set
+         * Given one of the approval-objects has the allowedTstampStage2-property not set
+         * When the method is called
+         * Then false is returned
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check180.xml');
+        
+        $issue = $this->issueRepository->findByUid(180);
+
+        $result = $this->subject->checkReleaseStage($issue);
+        self::assertFalse($result);
+
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function checkReleaseStageReturnsTrueIfAllApprovalsReady ()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted issue-object
+         * Given the issue-object has the status "approval"
+         * Given two persisted approval-objects
+         * Given the two approval-objects belong to the issue-object
+         * Given both of the approval-objects has the allowedTstampStage2-property set
+         * When the method is called
+         * Then true is returned
+         * Then the status of the issue is set to "release"
+         * Then the new status of the issue is persisted
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check190.xml');
+
+        $issue = $this->issueRepository->findByUid(190);
+
+        $result = $this->subject->checkReleaseStage($issue);
+        self::assertTrue($result);
+
+        // force TYPO3 to load objects new from database
+        $persistenceManager = $this->objectManager->get(PersistenceManager::class);
+        $persistenceManager->clearState();
+
+        $issue = $this->issueRepository->findByUid(190);
+        self::assertEquals(IssueStatus::STAGE_RELEASE, $issue->getStatus());
+
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function checkReleaseStageReturnsFalseIfWrongStage ()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted issue-object
+         * Given the issue-object has the status "release"
+         * Given two persisted approval-objects
+         * Given the two approval-objects belong to the issue-object
+         * Given both of the approval-objects has the allowedTstampStage2-property set
+         * When the method is called
+         * Then false is returned
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check200.xml');
+
+        $issue = $this->issueRepository->findByUid(200);
+
+        $result = $this->subject->checkReleaseStage($issue);
+        self::assertFalse($result);
+
+    }
+
+
+    //=============================================
+
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function checkAllReleaseStagesReturnsFalse ()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a two persisted issue-objects
+         * Given one of the issue-objects has the status "release"
+         * Given one of the issue-objects has the status "draft"
+         * When the method is called
+         * Then false is returned
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check210.xml');
+        
+        $result = $this->subject->checkAllReleaseStages();
+        self::assertFalse($result);
+
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function checkAllReleaseStagesReturnsTrue ()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a two persisted issue-objects
+         * Given one of the issue-objects has the status "release"
+         * Given one of the issue-objects has the status "approval"
+         * When the method is called
+         * Then false is returned
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check220.xml');
+
+        $result = $this->subject->checkAllReleaseStages();
+        self::assertTrue($result);
 
     }
 

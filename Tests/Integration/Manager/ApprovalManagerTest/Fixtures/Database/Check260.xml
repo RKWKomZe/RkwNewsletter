@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dataset>
-
+    
+    <pages>
+        <uid>260</uid>
+        <pid>0</pid>
+        <tx_rkwnewsletter_issue>260</tx_rkwnewsletter_issue>
+        <tx_rkwnewsletter_topic>260</tx_rkwnewsletter_topic>
+    </pages>
+    
     <tx_rkwnewsletter_domain_model_issue>
         <uid>260</uid>
         <pid>0</pid>
@@ -23,6 +30,7 @@
         <pid>0</pid>
         <issue>260</issue>
         <topic>260</topic>
+        <page>260</page>
         <allowed_tstamp_stage1>1000</allowed_tstamp_stage1>
         <allowed_tstamp_stage2>0</allowed_tstamp_stage2>
         <sent_info_tstamp_stage1>0</sent_info_tstamp_stage1>

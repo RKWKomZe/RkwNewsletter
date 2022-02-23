@@ -79,14 +79,14 @@ call_user_func(
 
         // Slots for backend module release approval, test send and final send
         $signalSlotDispatcher->connect(
-            'RKW\\RkwNewsletter\\Helper\\Approval',
-            \RKW\RkwNewsletter\Helper\Approval::SIGNAL_FOR_SENDING_MAIL_APPROVAL,
+            \RKW\RkwNewsletter\Manager\ApprovalManager::class,
+            \RKW\RkwNewsletter\Manager\ApprovalManager::SIGNAL_FOR_SENDING_MAIL_APPROVAL,
             'RKW\\RkwNewsletter\\Service\\RkwMailService',
             'sendMailAdminApproval'
         );
         $signalSlotDispatcher->connect(
-            'RKW\\RkwNewsletter\\Helper\\Approval',
-            \RKW\RkwNewsletter\Helper\Approval::SIGNAL_FOR_SENDING_MAIL_APPROVAL_AUTOMATIC,
+            \RKW\RkwNewsletter\Manager\ApprovalManager::class,
+            \RKW\RkwNewsletter\Manager\ApprovalManager::SIGNAL_FOR_SENDING_MAIL_APPROVAL_AUTOMATIC,
             'RKW\\RkwNewsletter\\Service\\RkwMailService',
             'sendMailAdminApprovalAutomatic'
         );

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+
+    <tx_rkwnewsletter_domain_model_issue>
+        <uid>210</uid>
+        <pid>0</pid>
+        <status>0</status>
+    </tx_rkwnewsletter_domain_model_issue>
+
+    <tx_rkwnewsletter_domain_model_issue>
+        <uid>211</uid>
+        <pid>0</pid>
+        <status>2</status>
+    </tx_rkwnewsletter_domain_model_issue>
+       
+</dataset>

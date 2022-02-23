@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+
+    <tx_rkwnewsletter_domain_model_issue>
+        <uid>200</uid>
+        <pid>0</pid>
+        <status>2</status>
+    </tx_rkwnewsletter_domain_model_issue>
+    
+    <tx_rkwnewsletter_domain_model_approval>
+        <uid>200</uid>
+        <pid>0</pid>
+        <issue>200</issue>
+        <topic>0</topic>
+        <page>0</page>
+        <allowed_tstamp_stage1>0</allowed_tstamp_stage1>
+        <allowed_tstamp_stage2>1000</allowed_tstamp_stage2>
+        <sent_info_tstamp_stage1>0</sent_info_tstamp_stage1>
+        <sent_info_tstamp_stage2>0</sent_info_tstamp_stage2>
+        <sent_reminder_tstamp_stage1>0</sent_reminder_tstamp_stage1>
+        <sent_reminder_tstamp_stage2>0</sent_reminder_tstamp_stage2>
+    </tx_rkwnewsletter_domain_model_approval>
+
+    <tx_rkwnewsletter_domain_model_approval>
+        <uid>201</uid>
+        <pid>0</pid>
+        <issue>200</issue>
+        <topic>0</topic>
+        <page>0</page>
+        <allowed_tstamp_stage1>0</allowed_tstamp_stage1>
+        <allowed_tstamp_stage2>1000</allowed_tstamp_stage2>
+        <sent_info_tstamp_stage1>0</sent_info_tstamp_stage1>
+        <sent_info_tstamp_stage2>0</sent_info_tstamp_stage2>
+        <sent_reminder_tstamp_stage1>0</sent_reminder_tstamp_stage1>
+        <sent_reminder_tstamp_stage2>0</sent_reminder_tstamp_stage2>
+    </tx_rkwnewsletter_domain_model_approval>
+    
+</dataset>

@@ -1,36 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dataset>
 
-    <pages>
-        <uid>250</uid>
-        <pid>0</pid>
-        <tx_rkwnewsletter_issue>250</tx_rkwnewsletter_issue>
-        <tx_rkwnewsletter_topic>250</tx_rkwnewsletter_topic>
-    </pages>
-    
     <tx_rkwnewsletter_domain_model_issue>
-        <uid>250</uid>
+        <uid>180</uid>
         <pid>0</pid>
-        <newsletter>0</newsletter>
-        <pages>0</pages>
         <status>1</status>
-        <sent_tstamp>0</sent_tstamp>
-        <release_tstamp>0</release_tstamp>
     </tx_rkwnewsletter_domain_model_issue>
 
-    <tx_rkwnewsletter_domain_model_topic>
-        <uid>250</uid>
-        <pid>0</pid>
-        <container_page>0</container_page>
-        <newsletter>0</newsletter>
-    </tx_rkwnewsletter_domain_model_topic>
-    
+
     <tx_rkwnewsletter_domain_model_approval>
-        <uid>250</uid>
+        <uid>180</uid>
         <pid>0</pid>
-        <issue>250</issue>
-        <topic>250</topic>
-        <page>250</page>
+        <issue>180</issue>
+        <topic>0</topic>
+        <page>0</page>
+        <allowed_tstamp_stage1>0</allowed_tstamp_stage1>
+        <allowed_tstamp_stage2>1000</allowed_tstamp_stage2>
+        <sent_info_tstamp_stage1>0</sent_info_tstamp_stage1>
+        <sent_info_tstamp_stage2>0</sent_info_tstamp_stage2>
+        <sent_reminder_tstamp_stage1>0</sent_reminder_tstamp_stage1>
+        <sent_reminder_tstamp_stage2>0</sent_reminder_tstamp_stage2>
+    </tx_rkwnewsletter_domain_model_approval>
+
+    <tx_rkwnewsletter_domain_model_approval>
+        <uid>181</uid>
+        <pid>0</pid>
+        <issue>180</issue>
+        <topic>0</topic>
+        <page>0</page>
         <allowed_tstamp_stage1>0</allowed_tstamp_stage1>
         <allowed_tstamp_stage2>0</allowed_tstamp_stage2>
         <sent_info_tstamp_stage1>0</sent_info_tstamp_stage1>
@@ -38,6 +35,5 @@
         <sent_reminder_tstamp_stage1>0</sent_reminder_tstamp_stage1>
         <sent_reminder_tstamp_stage2>0</sent_reminder_tstamp_stage2>
     </tx_rkwnewsletter_domain_model_approval>
-
-
+    
 </dataset>

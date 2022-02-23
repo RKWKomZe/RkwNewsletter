@@ -62,54 +62,54 @@ plugin.tx_rkwnewsletter {
                 # on create of a new issue
                 stage1 {
                     # cat=plugin.tx_rkwnewsletter//a; type=integer; label=UserId permission
-                    userId =
+                    userId = 1
                     # cat=plugin.tx_rkwnewsletter//a; type=integer; label=GroupId permission
-                    groupId =
+                    groupId = 1
                     # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Perms of user (0, 1, 2, 4, 8, 16 - and every possible combination of it)
-                    user =
+                    user = 1
                     # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Perms of group (0, 1, 2, 4, 8, 16 - and every possible combination of it)
-                    group =
+                    group = 1
                     # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Perms of everybody (0, 1, 2, 4, 8, 16 - and every possible combination of it)
-                    everybody =
+                    everybody = 1
                 }
                 # perms which come into effect on approve of stage 1
                 stage2 {
                     # cat=plugin.tx_rkwnewsletter//a; type=integer; label=UserId permission
-                    userId =
+                    userId = 2
                     # cat=plugin.tx_rkwnewsletter//a; type=integer; label=GroupId permission
-                    groupId =
+                    groupId = 2
                     # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Perms of user (0, 1, 2, 4, 8, 16 - and every possible combination of it)
-                    user =
+                    user = 2
                     # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Perms of group (0, 1, 2, 4, 8, 16 - and every possible combination of it)
-                    group =
+                    group = 2
                     # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Perms of everybody (0, 1, 2, 4, 8, 16 - and every possible combination of it)
-                    everybody =
+                    everybody = 2
                 }
                 # perms which come into effect on approve of stage 2
                 release {
                     # cat=plugin.tx_rkwnewsletter//a; type=integer; label=UserId permission
-                    userId =
+                    userId = 3
                     # cat=plugin.tx_rkwnewsletter//a; type=integer; label=GroupId permission
-                    groupId =
+                    groupId = 3
                     # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Perms of user (0, 1, 2, 4, 8, 16 - and every possible combination of it)
-                    user =
+                    user = 4
                     # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Perms of group (0, 1, 2, 4, 8, 16 - and every possible combination of it)
-                    group =
+                    group = 4
                     # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Perms of everybody (0, 1, 2, 4, 8, 16 - and every possible combination of it)
-                    everybody =
+                    everybody = 4
                 }
                 # perms which come into effect after final sending of the issue
                 sent {
                     # cat=plugin.tx_rkwnewsletter//a; type=integer; label=UserId permission
-                    userId =
+                    userId = 4
                     # cat=plugin.tx_rkwnewsletter//a; type=integer; label=GroupId permission
-                    groupId =
+                    groupId = 4
                     # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Perms of user (0, 1, 2, 4, 8, 16 - and every possible combination of it)
-                    user =
+                    user = 8 
                     # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Perms of group (0, 1, 2, 4, 8, 16 - and every possible combination of it)
-                    group =
+                    group = 8
                     # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Perms of everybody (0, 1, 2, 4, 8, 16 - and every possible combination of it)
-                    everybody =
+                    everybody = 8
                 }
             }
         }

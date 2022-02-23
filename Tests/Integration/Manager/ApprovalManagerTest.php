@@ -120,6 +120,12 @@ class ApprovalManagerTest extends FunctionalTestCase
         $this->approvalRepository = $this->objectManager->get(ApprovalRepository::class);
         $this->subject = $this->objectManager->get(ApprovalManager::class);
 
+        // For Mail-Interface
+        $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromName'] = 'RKW';
+        $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress'] = 'service@mein.rkw.de';
+        $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailReplyName'] = 'RKW';
+        $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailReplyToAddress'] = 'reply@mein.rkw.de';
+        $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailReturnAddress'] = 'bounces@mein.rkw.de';
     }
 
     //=============================================
@@ -490,7 +496,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function getMailRecipientsForApprovalForStageReturnsEmptyArray()
+    public function getMailRecipientsForStageReturnsEmptyArray()
     {
 
         /**
@@ -508,7 +514,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
         $approval = $this->approvalRepository->findByUid(20);
 
-        self::assertEmpty($this->subject->getMailRecipientsForApproval($approval));
+        self::assertEmpty($this->subject->getMailRecipients($approval));
     }
 
 
@@ -516,7 +522,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function getMailRecipientsForApprovalReturnsRecipientsForStage1()
+    public function getMailRecipientsReturnsRecipientsForStage1()
     {
 
         /**
@@ -537,7 +543,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
         $approval = $this->approvalRepository->findByUid(30);
 
-        $result = $this->subject->getMailRecipientsForApproval($approval);
+        $result = $this->subject->getMailRecipients($approval);
         self::assertInternalType('array', $result);
         self::assertCount(2, $result);
         self::assertEquals(30, $result[0]->getUid());
@@ -548,7 +554,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function getMailRecipientsForApprovalReturnsRecipientsForStage1AndChecksForEmail()
+    public function getMailRecipientsReturnsRecipientsForStage1AndChecksForEmail()
     {
 
         /**
@@ -571,7 +577,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
         $approval = $this->approvalRepository->findByUid(40);
 
-        $result = $this->subject->getMailRecipientsForApproval($approval);
+        $result = $this->subject->getMailRecipients($approval);
         self::assertInternalType('array', $result);
         self::assertCount(1, $result);
         self::assertEquals(40, $result[0]->getUid());
@@ -583,7 +589,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function getMailRecipientsForApprovalReturnsRecipientsForStage2()
+    public function getMailRecipientsReturnsRecipientsForStage2()
     {
 
         /**
@@ -604,7 +610,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
         $approval = $this->approvalRepository->findByUid(50);
 
-        $result = $this->subject->getMailRecipientsForApproval($approval);
+        $result = $this->subject->getMailRecipients($approval);
         self::assertInternalType('array', $result);
         self::assertCount(2, $result);
         self::assertEquals(52, $result[0]->getUid());
@@ -615,7 +621,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function getMailRecipientsForApprovalReturnsRecipientsForStage2AndChecksForEmail()
+    public function getMailRecipientsReturnsRecipientsForStage2AndChecksForEmail()
     {
 
         /**
@@ -638,7 +644,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
         $approval = $this->approvalRepository->findByUid(60);
 
-        $result = $this->subject->getMailRecipientsForApproval($approval);
+        $result = $this->subject->getMailRecipients($approval);
         self::assertInternalType('array', $result);
         self::assertCount(1, $result);
         self::assertEquals(62, $result[0]->getUid());
@@ -649,7 +655,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function getMailRecipientsForApprovalReturnsEmptyArrayOnHigherStages()
+    public function getMailRecipientsReturnsEmptyArrayOnHigherStages()
     {
 
         /**
@@ -670,7 +676,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
         $approval = $this->approvalRepository->findByUid(70);
 
-        $result = $this->subject->getMailRecipientsForApproval($approval);
+        $result = $this->subject->getMailRecipients($approval);
         self::assertEmpty($result);
     }
     //=============================================
@@ -679,7 +685,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function sendMailsForApprovalReturnsOneForStage1Level0()
+    public function sendMailsReturnsOneForStage1Level0()
     {
 
         /**
@@ -702,7 +708,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
         $approval = $this->approvalRepository->findByUid(170);
 
-        $result = $this->subject->sendMailsForApproval($approval);
+        $result = $this->subject->sendMails($approval);
         self::assertEquals(1, $result);
     }
 
@@ -710,7 +716,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function sendMailsForApprovalReturnsOneForStage1Level1()
+    public function sendMailsReturnsOneForStage1Level1()
     {
 
         /**
@@ -733,7 +739,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
         $approval = $this->approvalRepository->findByUid(180);
 
-        $result = $this->subject->sendMailsForApproval($approval);
+        $result = $this->subject->sendMails($approval);
         self::assertEquals(1, $result);
         
     }
@@ -743,7 +749,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function sendMailsForApprovalReturnsTwoForStage1Level2()
+    public function sendMailsReturnsTwoForStage1Level2()
     {
 
         /**
@@ -766,7 +772,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
         $approval = $this->approvalRepository->findByUid(190);
 
-        $result = $this->subject->sendMailsForApproval($approval);
+        $result = $this->subject->sendMails($approval);
         self::assertEquals(2, $result);
         
     }
@@ -776,7 +782,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function sendMailsForApprovalReturnsZeroIfNoRecipientsForStage1()
+    public function sendMailsReturnsZeroIfNoRecipientsForStage1()
     {
 
         /**
@@ -799,7 +805,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
         $approval = $this->approvalRepository->findByUid(200);
 
-        $result = $this->subject->sendMailsForApproval($approval);
+        $result = $this->subject->sendMails($approval);
         self::assertEquals(0, $result);
 
     }
@@ -808,7 +814,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function sendMailsForApprovalReturnsOneForStage2Level0()
+    public function sendMailsReturnsOneForStage2Level0()
     {
 
         /**
@@ -831,7 +837,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
         $approval = $this->approvalRepository->findByUid(210);
 
-        $result = $this->subject->sendMailsForApproval($approval);
+        $result = $this->subject->sendMails($approval);
         self::assertEquals(1, $result);
 
     }
@@ -840,7 +846,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function sendMailsForApprovalReturnsOneForStage2Level1()
+    public function sendMailsReturnsOneForStage2Level1()
     {
 
         /**
@@ -864,7 +870,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
         $approval = $this->approvalRepository->findByUid(220);
 
-        $result = $this->subject->sendMailsForApproval($approval);
+        $result = $this->subject->sendMails($approval);
         self::assertEquals(1, $result);
 
     }
@@ -873,7 +879,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function sendMailsForApprovalReturnsTwoForStage2Level2()
+    public function sendMailsReturnsTwoForStage2Level2()
     {
 
         /**
@@ -896,7 +902,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
         $approval = $this->approvalRepository->findByUid(230);
 
-        $result = $this->subject->sendMailsForApproval($approval);
+        $result = $this->subject->sendMails($approval);
         self::assertEquals(2, $result);
 
     }
@@ -906,7 +912,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function sendMailsForApprovalReturnsZeroIfNoRecipientsForStage2()
+    public function sendMailsReturnsZeroIfNoRecipientsForStage2()
     {
 
         /**
@@ -929,7 +935,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
         $approval = $this->approvalRepository->findByUid(240);
 
-        $result = $this->subject->sendMailsForApproval($approval);
+        $result = $this->subject->sendMails($approval);
         self::assertEquals(0, $result);
 
     }
@@ -938,7 +944,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function sendMailsForApprovalReturnsZeroStageDone()
+    public function sendMailsReturnsZeroStageDone()
     {
 
         /**
@@ -961,7 +967,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
         $approval = $this->approvalRepository->findByUid(270);
 
-        $result = $this->subject->sendMailsForApproval($approval);
+        $result = $this->subject->sendMails($approval);
         self::assertEquals(0, $result);
 
     }
@@ -978,14 +984,22 @@ class ApprovalManagerTest extends FunctionalTestCase
         /**
          * Scenario:
          *
+         * Given a persisted issue-object
+         * Given the issue-object has the status "approval"
          * Given a persisted approval-object
+         * Given the approval-object belongs to this issue-object
          * Given the approval-object has no value for the allowedTstampStage1-property set
          * Given the approval-object has no value for the allowedTstampStage2-property set
          * Given the approval-object has no value for the sentInfoTstampStage1-property set
          * Given the approval-object has no value for the sentReminderTstampStage1-property set
+         * Given the approval-object has a page defined in the page-property
          * Given a persisted topic-object that belongs to the approval-object
          * Given that topic-object has one approval-be-user for stage 1 set
          * Given that topic-object has one approval-be-user for stage 2 set
+         * Given a persisted page-object
+         * Given the page-object refers the issue-object
+         * Given the page-object refers the topic-object
+         * Given the page-object belongs to the approval-object
          * When the method is called
          * Then true is returned
          * Then the sentInfoTstampStage1-property is set
@@ -993,6 +1007,7 @@ class ApprovalManagerTest extends FunctionalTestCase
          * Then the allowTstampStage1-property is not set
          * Then the allowTstampStage2-property is not set
          * Then the changes to the approval-object are persisted
+         * Then the permissions of the page are set according to the configuration of the new status
          */
 
         $this->importDataSet(self::FIXTURE_PATH . '/Database/Check170.xml');
@@ -1013,7 +1028,14 @@ class ApprovalManagerTest extends FunctionalTestCase
         self::assertEquals(0, $approvalDb->getSentReminderTstampStage1());
         self::assertEquals(0, $approvalDb->getAllowedTstampStage1());
         self::assertEquals(0, $approvalDb->getAllowedTstampStage2());
-
+        
+        /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
+        $page = $this->pagesRepository->findByUid(170);
+        self::assertEquals(1, $page->getPermsUserId());
+        self::assertEquals(1, $page->getPermsGroupId());
+        self::assertEquals(1, $page->getPermsUser());
+        self::assertEquals(1, $page->getPermsGroup());
+        self::assertEquals(1, $page->getPermsEverybody());
 
     }
 
@@ -1027,7 +1049,10 @@ class ApprovalManagerTest extends FunctionalTestCase
         /**
          * Scenario:
          *
+         * Given a persisted issue-object
+         * Given the issue-object has the status "approval"
          * Given a persisted approval-object
+         * Given the approval-object belongs to this issue-object
          * Given the approval-object has no value for the allowedTstampStage1-property set
          * Given the approval-object has no value for the allowedTstampStage2-property set
          * Given the approval-object has a value for the sentInfoTstampStage1-property set
@@ -1035,12 +1060,17 @@ class ApprovalManagerTest extends FunctionalTestCase
          * Given a persisted topic-object that belongs to the approval-object
          * Given that topic-object has one approval-be-user for stage 1 set
          * Given that topic-object has one approval-be-user for stage 2 set
+         * Given a persisted page-object
+         * Given the page-object refers the issue-object
+         * Given the page-object refers the topic-object
+         * Given the page-object belongs to the approval-object
          * When the method is called
          * Then true is returned
          * Then the sentReminderTstampStage1-property is set
          * Then the allowTstampStage1-property is not set
          * Then the allowTstampStage2-property is not set
          * Then the changes to the approval-object are persisted
+         * Then the permissions of the page are set according to the configuration of the new status
          */
 
         $this->importDataSet(self::FIXTURE_PATH . '/Database/Check180.xml');
@@ -1060,6 +1090,15 @@ class ApprovalManagerTest extends FunctionalTestCase
         self::assertGreaterThan(0, $approvalDb->getSentReminderTstampStage1());
         self::assertEquals(0, $approvalDb->getAllowedTstampStage1());
         self::assertEquals(0, $approvalDb->getAllowedTstampStage2());
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
+        $page = $this->pagesRepository->findByUid(180);
+        self::assertEquals(1, $page->getPermsUserId());
+        self::assertEquals(1, $page->getPermsGroupId());
+        self::assertEquals(1, $page->getPermsUser());
+        self::assertEquals(1, $page->getPermsGroup());
+        self::assertEquals(1, $page->getPermsEverybody());
+
     }
 
 
@@ -1073,7 +1112,10 @@ class ApprovalManagerTest extends FunctionalTestCase
         /**
          * Scenario:
          *
+         * Given a persisted issue-object
+         * Given the issue-object has the status "approval"
          * Given a persisted approval-object
+         * Given the approval-object belongs to this issue-object
          * Given the approval-object has no value for the allowedTstampStage1-property set
          * Given the approval-object has no value for the allowedTstampStage2-property set
          * Given the approval-object has a value for the sentInfoTstampStage1-property set
@@ -1081,11 +1123,16 @@ class ApprovalManagerTest extends FunctionalTestCase
          * Given a persisted topic-object that belongs to the approval-object
          * Given that topic-object has one approval-be-user for stage 1 set
          * Given that topic-object has one approval-be-user for stage 2 set
+         * Given a persisted page-object
+         * Given the page-object refers the issue-object
+         * Given the page-object refers the topic-object
+         * Given the page-object belongs to the approval-object 
          * When the method is called
          * Then false is returned
          * Then the allowTstampStage1-property is set
          * Then the allowTstampStage2-property is not set
          * Then the changes to the approval-object are persisted
+         * Then the permissions of the page are set according to the configuration of the new status
          */
 
         $this->importDataSet(self::FIXTURE_PATH . '/Database/Check190.xml');
@@ -1105,6 +1152,15 @@ class ApprovalManagerTest extends FunctionalTestCase
         self::assertGreaterThan(0, $approvalDb->getAllowedTstampStage1());
         self::assertEquals(0, $approvalDb->getAllowedTstampStage2());
 
+        /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
+        $page = $this->pagesRepository->findByUid(190);
+        self::assertEquals(2, $page->getPermsUserId());
+        self::assertEquals(2, $page->getPermsGroupId());
+        self::assertEquals(2, $page->getPermsUser());
+        self::assertEquals(2, $page->getPermsGroup());
+        self::assertEquals(2, $page->getPermsEverybody());
+
+
     }
 
 
@@ -1118,7 +1174,10 @@ class ApprovalManagerTest extends FunctionalTestCase
         /**
          * Scenario:
          *
+         * Given a persisted issue-object
+         * Given the issue-object has the status "approval"
          * Given a persisted approval-object
+         * Given the approval-object belongs to this issue-object
          * Given the approval-object has no value for the allowedTstampStage1-property set
          * Given the approval-object has no value for the allowedTstampStage2-property set
          * Given the approval-object has no value for the sentInfoTstampStage1-property set
@@ -1126,11 +1185,16 @@ class ApprovalManagerTest extends FunctionalTestCase
          * Given a persisted topic-object that belongs to the approval-object
          * Given that topic-object has no approval-be-user for stage 1 set
          * Given that topic-object has one approval-be-user for stage 2 set
+         * Given a persisted page-object
+         * Given the page-object refers the issue-object
+         * Given the page-object refers the topic-object
+         * Given the page-object belongs to the approval-object
          * When the method is called
          * Then false is returned
          * Then the allowTstampStage1-property is set
          * Then the allowTstampStage2-property is not set
          * Then the changes to the approval-object are persisted
+         * Then the permissions of the page are set according to the configuration of the new status
          */
 
         $this->importDataSet(self::FIXTURE_PATH . '/Database/Check200.xml');
@@ -1150,6 +1214,14 @@ class ApprovalManagerTest extends FunctionalTestCase
         self::assertGreaterThan(0, $approvalDb->getAllowedTstampStage1());
         self::assertEquals(0, $approvalDb->getAllowedTstampStage2());
 
+        /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
+        $page = $this->pagesRepository->findByUid(200);
+        self::assertEquals(2, $page->getPermsUserId());
+        self::assertEquals(2, $page->getPermsGroupId());
+        self::assertEquals(2, $page->getPermsUser());
+        self::assertEquals(2, $page->getPermsGroup());
+        self::assertEquals(2, $page->getPermsEverybody());
+
     }
 
     /**
@@ -1162,7 +1234,10 @@ class ApprovalManagerTest extends FunctionalTestCase
         /**
          * Scenario:
          *
+         * Given a persisted issue-object
+         * Given the issue-object has the status "approval"
          * Given a persisted approval-object
+         * Given the approval-object belongs to this issue-object
          * Given the approval-object has a value for the allowedTstampStage1-property set
          * Given the approval-object has no value for the allowedTstampStage2-property set
          * Given the approval-object has no value for the sentInfoTstampStage2-property set
@@ -1170,12 +1245,17 @@ class ApprovalManagerTest extends FunctionalTestCase
          * Given a persisted topic-object that belongs to the approval-object
          * Given that topic-object has one approval-be-user for stage 1 set
          * Given that topic-object has one approval-be-user for stage 2 set
+         * Given a persisted page-object
+         * Given the page-object refers the issue-object
+         * Given the page-object refers the topic-object
+         * Given the page-object belongs to the approval-object
          * When the method is called
          * Then true is returned
          * Then the sentInfoTstampStage2-property is set
          * Then the sentReminderTstampStage2-property is not set
          * Then the allowTstampStage2-property is not set
          * Then the changes to the approval-object are persisted
+         * Then the permissions of the page are set according to the configuration of the new status
          */
 
         $this->importDataSet(self::FIXTURE_PATH . '/Database/Check210.xml');
@@ -1195,6 +1275,14 @@ class ApprovalManagerTest extends FunctionalTestCase
         self::assertGreaterThan(0, $approvalDb->getSentInfoTstampStage2());
         self::assertEquals(0, $approvalDb->getSentReminderTstampStage2());
         self::assertEquals(0, $approvalDb->getAllowedTstampStage2());
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
+        $page = $this->pagesRepository->findByUid(210);
+        self::assertEquals(2, $page->getPermsUserId());
+        self::assertEquals(2, $page->getPermsGroupId());
+        self::assertEquals(2, $page->getPermsUser());
+        self::assertEquals(2, $page->getPermsGroup());
+        self::assertEquals(2, $page->getPermsEverybody());
     }
 
     /**
@@ -1207,7 +1295,10 @@ class ApprovalManagerTest extends FunctionalTestCase
         /**
          * Scenario:
          *
+         * Given a persisted issue-object
+         * Given the issue-object has the status "approval"
          * Given a persisted approval-object
+         * Given the approval-object belongs to this issue-object
          * Given the approval-object has a value for the allowedTstampStage1-property set
          * Given the approval-object has no value for the allowedTstampStage2-property set
          * Given the approval-object has a value for the sentInfoTstampStage2-property set
@@ -1215,11 +1306,16 @@ class ApprovalManagerTest extends FunctionalTestCase
          * Given a persisted topic-object that belongs to the approval-object
          * Given that topic-object has one approval-be-user for stage 1 set
          * Given that topic-object has one approval-be-user for stage 2 set
+         * Given a persisted page-object
+         * Given the page-object refers the issue-object
+         * Given the page-object refers the topic-object
+         * Given the page-object belongs to the approval-object
          * When the method is called
          * Then true is returned
          * Then the sentReminderTstampStage2-property is set
          * Then the allowTstampStage2-property is not set
          * Then the changes to the approval-object are persisted
+         * Then the permissions of the page are set according to the configuration of the new status
          */
 
         $this->importDataSet(self::FIXTURE_PATH . '/Database/Check220.xml');
@@ -1239,6 +1335,14 @@ class ApprovalManagerTest extends FunctionalTestCase
         self::assertGreaterThan(0, $approvalDb->getSentReminderTstampStage2());
         self::assertEquals(0, $approvalDb->getAllowedTstampStage2());
 
+        /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
+        $page = $this->pagesRepository->findByUid(220);
+        self::assertEquals(2, $page->getPermsUserId());
+        self::assertEquals(2, $page->getPermsGroupId());
+        self::assertEquals(2, $page->getPermsUser());
+        self::assertEquals(2, $page->getPermsGroup());
+        self::assertEquals(2, $page->getPermsEverybody());
+
     }
 
     /**
@@ -1251,7 +1355,10 @@ class ApprovalManagerTest extends FunctionalTestCase
         /**
          * Scenario:
          *
+         * Given a persisted issue-object
+         * Given the issue-object has the status "approval"
          * Given a persisted approval-object
+         * Given the approval-object belongs to this issue-object
          * Given the approval-object has a value for the allowedTstampStage1-property set
          * Given the approval-object has no value for the allowedTstampStage2-property set
          * Given the approval-object has a value for the sentInfoTstampStage2-property set
@@ -1259,10 +1366,15 @@ class ApprovalManagerTest extends FunctionalTestCase
          * Given a persisted topic-object that belongs to the approval-object
          * Given that topic-object has one approval-be-user for stage 1 set
          * Given that topic-object has one approval-be-user for stage 2 set
+         * Given a persisted page-object
+         * Given the page-object refers the issue-object
+         * Given the page-object refers the topic-object
+         * Given the page-object belongs to the approval-object
          * When the method is called
          * Then false is returned
          * Then the allowTstampStage2-property is set
          * Then the changes to the approval-object are persisted
+         * Then the permissions of the page are set according to the configuration of the new status
          */
 
         $this->importDataSet(self::FIXTURE_PATH . '/Database/Check230.xml');
@@ -1281,6 +1393,14 @@ class ApprovalManagerTest extends FunctionalTestCase
         $approvalDb = $this->approvalRepository->findByUid(230);
         self::assertGreaterThan(0, $approvalDb->getAllowedTstampStage2());
 
+        /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
+        $page = $this->pagesRepository->findByUid(230);
+        self::assertEquals(3, $page->getPermsUserId());
+        self::assertEquals(3, $page->getPermsGroupId());
+        self::assertEquals(4, $page->getPermsUser());
+        self::assertEquals(4, $page->getPermsGroup());
+        self::assertEquals(4, $page->getPermsEverybody());
+
     }
 
 
@@ -1294,7 +1414,10 @@ class ApprovalManagerTest extends FunctionalTestCase
         /**
          * Scenario:
          *
+         * Given a persisted issue-object
+         * Given the issue-object has the status "approval"
          * Given a persisted approval-object
+         * Given the approval-object belongs to this issue-object
          * Given the approval-object has a value for the allowedTstampStage1-property set
          * Given the approval-object has no value for the allowedTstampStage2-property set
          * Given the approval-object has no value for the sentInfoTstampStage1-property set
@@ -1302,10 +1425,15 @@ class ApprovalManagerTest extends FunctionalTestCase
          * Given a persisted topic-object that belongs to the approval-object
          * Given that topic-object has one approval-be-user for stage 1 set
          * Given that topic-object has no approval-be-user for stage 2 set
+         * Given a persisted page-object
+         * Given the page-object refers the issue-object
+         * Given the page-object refers the topic-object
+         * Given the page-object belongs to the approval-object
          * When the method is called
          * Then false is returned
          * Then the allowTstampStage2-property is set
          * Then the changes to the approval-object are persisted
+         * Then the permissions of the page are set according to the configuration of the new status
          */
 
         $this->importDataSet(self::FIXTURE_PATH . '/Database/Check240.xml');
@@ -1324,6 +1452,14 @@ class ApprovalManagerTest extends FunctionalTestCase
         $approvalDb = $this->approvalRepository->findByUid(240);
         self::assertGreaterThan(0, $approvalDb->getAllowedTstampStage2());
 
+        /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
+        $page = $this->pagesRepository->findByUid(240);
+        self::assertEquals(3, $page->getPermsUserId());
+        self::assertEquals(3, $page->getPermsGroupId());
+        self::assertEquals(4, $page->getPermsUser());
+        self::assertEquals(4, $page->getPermsGroup());
+        self::assertEquals(4, $page->getPermsEverybody());
+
     }
 
     //=============================================
@@ -1339,12 +1475,16 @@ class ApprovalManagerTest extends FunctionalTestCase
          * Scenario:
          *
          * Given a persisted issue-object
-         * Given the issue-object has the status 1
+         * Given the issue-object has the status "approval"
          * Given a persisted approval-object
          * Given the approval-object has no value for the allowedTstampStage1-property set
          * Given the approval-object has no value for the allowedTstampStage2-property set
          * Given the approval-object has no value for the sentInfoTstampStage1-property set
          * Given the approval-object has no value for the sentReminderTstampStage1-property set
+         * Given a persisted page-object
+         * Given the page-object refers the issue-object
+         * Given the page-object refers the topic-object
+         * Given the page-object belongs to the approval-object
          * Given both tolerance-parameters for the level have been set to 600 seconds
          * Given both tolerance-parameters for the stage have been set to 1200 seconds
          * When the method is called
@@ -1369,12 +1509,16 @@ class ApprovalManagerTest extends FunctionalTestCase
          * Scenario:
          *
          * Given a persisted issue-object
-         * Given the issue-object has the status 1
+         * Given the issue-object has the status "approval"
          * Given a persisted approval-object
          * Given the approval-object has no value for the allowedTstampStage1-property set
          * Given the approval-object has no value for the allowedTstampStage2-property set
          * Given the approval-object has a value for the sentInfoTstampStage1-property set
          * Given the approval-object has no value for the sentReminderTstampStage1-property set
+         * Given a persisted page-object
+         * Given the page-object refers the issue-object
+         * Given the page-object refers the topic-object
+         * Given the page-object belongs to the approval-object 
          * Given both tolerance-parameters for the level have been set to 600 seconds
          * Given both tolerance-parameters for the stage have been set to 1200 seconds
          * Given the sentInfoTstampStage1-property is set to a value older than 600 seconds from now
@@ -1408,12 +1552,16 @@ class ApprovalManagerTest extends FunctionalTestCase
          * Scenario:
          *
          * Given a persisted issue-object
-         * Given the issue-object has the status 1
+         * Given the issue-object has the status "approval"
          * Given a persisted approval-object
          * Given the approval-object has no value for the allowedTstampStage1-property set
          * Given the approval-object has no value for the allowedTstampStage2-property set
          * Given the approval-object has a value for the sentInfoTstampStage1-property set
          * Given the approval-object has no value for the sentReminderTstampStage1-property set
+         * Given a persisted page-object
+         * Given the page-object refers the issue-object
+         * Given the page-object refers the topic-object
+         * Given the page-object belongs to the approval-object
          * Given both tolerance-parameters for the level have been set to 600 seconds
          * Given both tolerance-parameters for the stage have been set to 1200 seconds
          * Given the sentInfoTstampStage1-property is set to a value not older than 600 seconds from now
@@ -1448,12 +1596,16 @@ class ApprovalManagerTest extends FunctionalTestCase
          * Scenario:
          *
          * Given a persisted issue-object
-         * Given the issue-object has the status 1
+         * Given the issue-object has the status "approval"
          * Given a persisted approval-object
          * Given the approval-object has no value for the allowedTstampStage1-property set
          * Given the approval-object has no value for the allowedTstampStage2-property set
          * Given the approval-object has a value for the sentInfoTstampStage1-property set
          * Given the approval-object has a value for the sentReminderTstampStage1-property set
+         * Given a persisted page-object
+         * Given the page-object refers the issue-object
+         * Given the page-object refers the topic-object
+         * Given the page-object belongs to the approval-object
          * Given both tolerance-parameters for the level have been set to 600 seconds
          * Given both tolerance-parameters for the stage have been set to 1200 seconds
          * Given the sentInfoTstampStage1-property is set to a value not older than 1200 seconds from now
@@ -1489,12 +1641,16 @@ class ApprovalManagerTest extends FunctionalTestCase
          * Scenario:
          *
          * Given a persisted issue-object
-         * Given the issue-object has the status 1
+         * Given the issue-object has the status "approval"
          * Given a persisted approval-object
          * Given the approval-object has no value for the allowedTstampStage1-property set
          * Given the approval-object has no value for the allowedTstampStage2-property set
          * Given the approval-object has a value for the sentInfoTstampStage1-property set
          * Given the approval-object has a value for the sentReminderTstampStage1-property set
+         * Given a persisted page-object
+         * Given the page-object refers the issue-object
+         * Given the page-object refers the topic-object
+         * Given the page-object belongs to the approval-object
          * Given both tolerance-parameters for the level have been set to 600 seconds
          * Given both tolerance-parameters for the stage have been set to 1200 seconds
          * Given the sentInfoTstampStage1-property is set to a value older than 1200 seconds from now
@@ -1530,12 +1686,16 @@ class ApprovalManagerTest extends FunctionalTestCase
          * Scenario:
          *
          * Given a persisted issue-object
-         * Given the issue-object has the status 1
+         * Given the issue-object has the status "approval"
          * Given a persisted approval-object
          * Given the approval-object has no value for the allowedTstampStage1-property set
          * Given the approval-object has no value for the allowedTstampStage2-property set
          * Given the approval-object has a value for the sentInfoTstampStage1-property set
          * Given the approval-object has a value for the sentReminderTstampStage1-property set
+         * Given a persisted page-object
+         * Given the page-object refers the issue-object
+         * Given the page-object refers the topic-object
+         * Given the page-object belongs to the approval-object
          * Given both tolerance-parameters for the level have been set to 600 seconds
          * Given the tolerance-parameter for the stage1 has been set to 0 seconds
          * Given the tolerance-parameter for the stage2 has been set to 1200 seconds
@@ -1572,12 +1732,16 @@ class ApprovalManagerTest extends FunctionalTestCase
          * Scenario:
          *
          * Given a persisted issue-object
-         * Given the issue-object has the status 1
+         * Given the issue-object has the status "approval"
          * Given a persisted approval-object
          * Given the approval-object a value for the allowedTstampStage1-property set
          * Given the approval-object no value for the allowedTstampStage2-property set
          * Given the approval-object as no value for the sentInfoTstampStage2-property set
          * Given the approval-object as no value for the sentReminderTstampStage2-property set
+         * Given a persisted page-object
+         * Given the page-object refers the issue-object
+         * Given the page-object refers the topic-object
+         * Given the page-object belongs to the approval-object
          * Given both tolerance-parameters for the level have been set to 600 seconds
          * Given both tolerance-parameters for the stage have been set to 1200 seconds
          * When the method is called
@@ -1602,12 +1766,16 @@ class ApprovalManagerTest extends FunctionalTestCase
          * Scenario:
          *
          * Given a persisted issue-object
-         * Given the issue-object has the status 1
+         * Given the issue-object has the status "approval"
          * Given a persisted approval-object
          * Given the approval-object a value for the allowedTstampStage1-property set
          * Given the approval-object no value for the allowedTstampStage2-property set
          * Given the approval-object a value for the sentInfoTstampStage2-property set
          * Given the approval-object as no value for the sentReminderTstampStage2-property set
+         * Given a persisted page-object
+         * Given the page-object refers the issue-object
+         * Given the page-object refers the topic-object
+         * Given the page-object belongs to the approval-object
          * Given both tolerance-parameters for the level have been set to 600 seconds
          * Given both tolerance-parameters for the stage have been set to 1200 seconds
          * Given the sentInfoTstampStage2-property is set to a value older than 600 seconds from now
@@ -1641,12 +1809,16 @@ class ApprovalManagerTest extends FunctionalTestCase
          * Scenario:
          *
          * Given a persisted issue-object
-         * Given the issue-object has the status 1
+         * Given the issue-object has the status "approval"
          * Given a persisted approval-object
          * Given the approval-object a value for the allowedTstampStage1-property set
          * Given the approval-object no value for the allowedTstampStage2-property set
          * Given the approval-object has a value for the sentInfoTstampStage2-property set
          * Given the approval-object has no value for the sentReminderTstampStage2-property set
+         * Given a persisted page-object
+         * Given the page-object refers the issue-object
+         * Given the page-object refers the topic-object
+         * Given the page-object belongs to the approval-object
          * Given both tolerance-parameters for the level have been set to 600 seconds
          * Given both tolerance-parameters for the stage have been set to 1200 seconds
          * Given the sentInfoTstampStage1-property is set to a value not older than 600 seconds from now
@@ -1680,12 +1852,16 @@ class ApprovalManagerTest extends FunctionalTestCase
          * Scenario:
          *
          * Given a persisted issue-object
-         * Given the issue-object has the status 1
+         * Given the issue-object has the status "approval"
          * Given a persisted approval-object
          * Given the approval-object has a value for the allowedTstampStage1-property set
          * Given the approval-object has no value for the allowedTstampStage2-property set
          * Given the approval-object has a value for the sentInfoTstampStage2-property set
          * Given the approval-object has a value for the sentReminderTstampStage2-property set
+         * Given a persisted page-object
+         * Given the page-object refers the issue-object
+         * Given the page-object refers the topic-object
+         * Given the page-object belongs to the approval-object
          * Given both tolerance-parameters for the level have been set to 600 seconds
          * Given both tolerance-parameters for the stage have been set to 1200 seconds
          * Given the sentInfoTstampStage2-property is set to a value not older than 1200 seconds from now
@@ -1722,12 +1898,16 @@ class ApprovalManagerTest extends FunctionalTestCase
          * Scenario:
          *
          * Given a persisted issue-object
-         * Given the issue-object has the status 1
+         * Given the issue-object has the status "approval"
          * Given a persisted approval-object
          * Given the approval-object a value for the allowedTstampStage1-property set
          * Given the approval-object no value for the allowedTstampStage2-property set
          * Given the approval-object a value for the sentInfoTstampStage2-property set
          * Given the approval-object a value for the sentReminderTstampStage1-property set
+         * Given a persisted page-object
+         * Given the page-object refers the issue-object
+         * Given the page-object refers the topic-object
+         * Given the page-object belongs to the approval-object
          * Given both tolerance-parameters for the level have been set to 600 seconds
          * Given both tolerance-parameters for the stage have been set to 1200 seconds
          * Given the sentInfoTstampStage2-property is set to a value older than 1200 seconds from now
@@ -1763,12 +1943,16 @@ class ApprovalManagerTest extends FunctionalTestCase
          * Scenario:
          *
          * Given a persisted issue-object
-         * Given the issue-object has the status 1
+         * Given the issue-object has the status "approval"
          * Given a persisted approval-object
          * Given the approval-object a value for the allowedTstampStage1-property set
          * Given the approval-object no value for the allowedTstampStage2-property set
          * Given the approval-object a value for the sentInfoTstampStage2-property set
          * Given the approval-object a value for the sentReminderTstampStage1-property set
+         * Given a persisted page-object
+         * Given the page-object refers the issue-object
+         * Given the page-object refers the topic-object
+         * Given the page-object belongs to the approval-object
          * Given both tolerance-parameters for the level have been set to 600 seconds
          * Given the tolerance-parameter for the stage1 has been set to 1200 seconds
          * Given the tolerance-parameter for the stage2 has been set to 0 seconds
@@ -1792,7 +1976,8 @@ class ApprovalManagerTest extends FunctionalTestCase
         $result = $this->subject->processAllApprovals(600, 600, 1200, 0);
         self::assertEquals(0, $result);
     }
-    
+
+   
     //=============================================
 
     /**

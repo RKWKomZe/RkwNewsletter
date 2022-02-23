@@ -16,7 +16,9 @@ namespace RKW\RkwNewsletter\Status;
 
 use RKW\RkwNewsletter\Domain\Model\Approval;
 use RKW\RkwNewsletter\Domain\Model\Issue;
-use TYPO3\CMS\Core\Type\Bitmask\Permission;
+use RKW\RkwNewsletter\Domain\Model\Pages;
+use RKW\RkwNewsletter\Domain\Model\Topic;
+use RKW\RkwNewsletter\Exception;
 
 /**
  * PageStatus
@@ -63,94 +65,72 @@ class PageStatus
     /**
      * Returns current stage of the page based on the status of the issue and its approvals
      *
-     * @param \RKW\RkwNewsletter\Domain\Model\Approval $approval
+     * @param \RKW\RkwNewsletter\Domain\Model\Pages $page
      * @return string
+     * @throws \RKW\RkwNewsletter\Exception
      */
-    public static function getStage (Approval $approval): string
+    public static function getStage (Pages $page): string
     {
-        $issueStage = IssueStatus::getStage($approval->getIssue());
-        if ($issueStage == IssueStatus::APPROVAL) {
-
+        $issueStage = IssueStatus::getStage($page->getTxRkwnewsletterIssue());
+        if ($issueStage == IssueStatus::STAGE_APPROVAL) {
+            
+            /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
+            $approval = self::getApproval($page->getTxRkwnewsletterIssue(), $page->getTxRkwnewsletterTopic());
             $approvalStage = ApprovalStatus::getStage($approval);
-            if ($approvalStage == ApprovalStatus::APPROVAL_STAGE1) {
-                return self::APPROVAL_1;
+            
+            if ($approvalStage == ApprovalStatus::STAGE2) {
+                return self::APPROVAL_2;
+            }
+
+            if ($approvalStage == ApprovalStatus::STAGE_DONE) {
+                return self::RELEASE;
             }
             
-            return self::APPROVAL_2;
+            return self::APPROVAL_1;
         }
 
-        if ($issueStage == IssueStatus::RELEASE) {
+        if ($issueStage == IssueStatus::STAGE_RELEASE) {
             return self::RELEASE;
         }
         
-        if ($issueStage == IssueStatus::SENDING) {
+        if ($issueStage == IssueStatus::STAGE_SENDING) {
             return self::SENDING;
         }
 
-        if ($issueStage == IssueStatus::DONE) {
+        if ($issueStage == IssueStatus::STAGE_DONE) {
             return self::DONE;
         }
         
         return self::DRAFT;        
     }
+
     
     
     /**
-     * setPagePermissions
+     * Returns approval-object by given issue and topic
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
-     * @param array $settings
-     * @param bool
-     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
+     * @param \RKW\RkwNewsletter\Domain\Model\Topic $topic
+     * @return \RKW\RkwNewsletter\Domain\Model\Approval
+     * @throws \RKW\RkwNewsletter\Exception
      */
-    public static function setPagePermissions (Issue $issue, array $settings): bool
+    public static function getApproval (Issue $issue, Topic $topic): Approval
     {
-
-        
-        
-        
-        $permissionNames = [
-            'userId',
-            'groupId',
-            'user',
-            'group',
-            'everybody',
-        ];
-        
-        $update = false;
-        foreach ($permissionNames as $permissionName) {
-            
+        /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
+        foreach ($issue->getApprovals() as $approval) {
             if (
-                (isset($settings[$stage]))
-                && (isset($settings[$stage][$permissionName]))
-                && ($permission = $settings[$stage][$permissionName])
-                && (self::validate($permission))
+                ($approval->getTopic())
+                && ($approval->getTopic()->getUid() == $topic->getUid())
             ) {
-                $setter = 'setPerms' . ucfirst($permissionName);
-                $approval->getPage()->$setter($permission);
-                $update = true;
+                return $approval;
             }
         }
-        
-        return $update;
-    }
-    
-    
-    
-    /**
-     * @param int $permission
-     * @return bool
-     */
-    public static function validatePermissions (int $permission): bool
-    {
-        if (
-            ($permission < Permission::NOTHING)
-            || ($permission > Permission::ALL)
-        ) {
-            return false;
-        }
-          
-        return true;
+
+        throw new Exception(
+            'No approval found for given issue and topic',
+            1644845316
+        );
+       
     }
     
 }

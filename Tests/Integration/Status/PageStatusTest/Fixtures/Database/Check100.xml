@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+
+    <tx_rkwnewsletter_domain_model_issue>
+        <uid>100</uid>
+        <pid>0</pid>
+    </tx_rkwnewsletter_domain_model_issue>
+
+    <tx_rkwnewsletter_domain_model_topic>
+        <uid>100</uid>
+        <pid>0</pid>
+    </tx_rkwnewsletter_domain_model_topic>
+    
+    <tx_rkwnewsletter_domain_model_approval>
+        <uid>100</uid>
+        <pid>0</pid>
+        <issue>100</issue>
+        <topic>100</topic>
+    </tx_rkwnewsletter_domain_model_approval>
+    
+</dataset>
