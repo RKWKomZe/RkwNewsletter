@@ -60,12 +60,6 @@ class Pages extends \RKW\RkwNewsletter\Domain\Model\PagesAbstract
      */
     protected $permsEverybody = 0;
 
-    /**
-     * doktype
-     *
-     * @var integer
-     */
-    protected $dokType = 1;
 
     /**
      * txRkwnewsletterNewsletter
@@ -237,26 +231,6 @@ class Pages extends \RKW\RkwNewsletter\Domain\Model\PagesAbstract
         $this->permsEverybody = $permsEverybody;
     }
 
-    /**
-     * Returns the dokType
-     *
-     * @return integer $dokType
-     */
-    public function getDokType()
-    {
-        return $this->dokType;
-    }
-
-    /**
-     * Sets the dokType
-     *
-     * @param integer $dokType
-     * @return void
-     */
-    public function setDokType($dokType)
-    {
-        $this->dokType = $dokType;
-    }
 
     /**
      * Returns the newsletter
