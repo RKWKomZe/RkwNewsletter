@@ -38,15 +38,16 @@ class NewsletterRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $this->defaultQuerySettings = $this->objectManager->get(Typo3QuerySettings::class);
         $this->defaultQuerySettings->setRespectStoragePage(false);
     }
-    
+
     /**
      * findAllToBuildIssue
      *
      * @param int $tolerance in seconds
      * @param int $dayOfMonth
+     * @param int $currentTime
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      * @throws \TYPO3\CMS\Core\Type\Exception\InvalidEnumerationValueException
+     * @comment only used in backend
      */
     public function findAllToBuildIssue(int $tolerance = 0, int $dayOfMonth = 15, int $currentTime = 0): QueryResultInterface
     {
@@ -100,8 +101,7 @@ class NewsletterRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * Returns all newsletters by type
      *
      * @param int $type
-     * @return QueryResultInterface
-     * @api
+     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      */
     public function findAllByType(int $type = 0): QueryResultInterface
     {

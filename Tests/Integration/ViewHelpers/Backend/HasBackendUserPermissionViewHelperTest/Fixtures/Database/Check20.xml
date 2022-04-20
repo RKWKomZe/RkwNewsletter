@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+
+    <tx_rkwnewsletter_domain_model_newsletter>
+        <uid>20</uid>
+        <pid>0</pid>
+        <issue_title><![CDATA[Newsletter {M}/{Y}]]></issue_title>
+        <issue>20</issue>
+        <topic />
+        <approval />
+    </tx_rkwnewsletter_domain_model_newsletter>
+
+    <tx_rkwnewsletter_domain_model_newsletter>
+        <uid>21</uid>
+        <pid>0</pid>
+        <issue_title><![CDATA[Newsletter {M}/{Y}]]></issue_title>
+        <issue>21</issue>
+        <topic />
+        <approval>20</approval>
+    </tx_rkwnewsletter_domain_model_newsletter>
+
+    <tx_rkwnewsletter_domain_model_issue>
+        <uid>20</uid>
+        <pid>0</pid>
+        <newsletter>20</newsletter>
+    </tx_rkwnewsletter_domain_model_issue>
+
+    <tx_rkwnewsletter_domain_model_issue>
+        <uid>21</uid>
+        <pid>0</pid>
+        <newsletter>21</newsletter>
+    </tx_rkwnewsletter_domain_model_issue>
+
+    <be_users>
+        <uid>20</uid>
+        <pid>2</pid>
+        <email>test@rkw.de</email>
+    </be_users>
+
+</dataset>

@@ -16,6 +16,7 @@ namespace RKW\RkwNewsletter\Tests\Integration\Status;
 
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use RKW\RkwNewsletter\Domain\Repository\ApprovalRepository;
+use RKW\RkwNewsletter\Domain\Repository\BackendUserRepository;
 use RKW\RkwNewsletter\Status\ApprovalStatus;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -63,6 +64,12 @@ class ApprovalStatusTest extends FunctionalTestCase
      * @var \RKW\RkwNewsletter\Domain\Repository\ApprovalRepository
      */
     private $approvalRepository;
+
+
+    /**
+     * @var \RKW\RkwNewsletter\Domain\Repository\BackendUserRepository
+     */
+    private $backendUserRepository;
     
     
     /**
@@ -94,6 +101,7 @@ class ApprovalStatusTest extends FunctionalTestCase
         /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $this->objectManager */
         $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $this->approvalRepository = $this->objectManager->get(ApprovalRepository::class);
+        $this->backendUserRepository = $this->objectManager->get(BackendUserRepository::class);
         $this->subject = $this->objectManager->get(ApprovalStatus::class);
 
     }
@@ -369,6 +377,7 @@ class ApprovalStatusTest extends FunctionalTestCase
          * When the method is called
          * Then true is returned
          * Then the sentInfoTstampStage1-property is set
+         * Then the reminderTstamp-property is not set
          */
 
         $this->importDataSet(self::FIXTURE_PATH . '/Database/Check110.xml');
@@ -380,6 +389,7 @@ class ApprovalStatusTest extends FunctionalTestCase
         self::assertTrue($result);
 
         self::assertGreaterThan(0, $approval->getSentInfoTstampStage1());
+        self::assertEquals(0, $approval->getSentReminderTstampStage1());
     }
 
     /**
@@ -398,7 +408,7 @@ class ApprovalStatusTest extends FunctionalTestCase
          * Given the approval-object has no value for the sentReminderTstampStage1-property set
          * When the method is called
          * Then true is returned
-         * Then the sentTeminderTstampStage1-property is set
+         * Then the sentReminderTstampStage1-property is set
          */
 
         $this->importDataSet(self::FIXTURE_PATH . '/Database/Check120.xml');
@@ -458,6 +468,7 @@ class ApprovalStatusTest extends FunctionalTestCase
          * When the method is called
          * Then true is returned
          * Then the sentInfoTstampStage2-property is set
+         * Then the sentReminderTstampStage2-property is not set
          */
 
         $this->importDataSet(self::FIXTURE_PATH . '/Database/Check140.xml');
@@ -469,6 +480,8 @@ class ApprovalStatusTest extends FunctionalTestCase
         self::assertTrue($result);
         
         self::assertGreaterThan(0, $approval->getSentInfoTstampStage2());
+        self::assertEquals(0, $approval->getSentReminderTstampStage2());
+
     }
 
     /**
@@ -543,6 +556,7 @@ class ApprovalStatusTest extends FunctionalTestCase
          *
          * Given a persisted approval-object
          * Given the approval-object has none of the allowedTstampStage-properties set
+         * Given no backendUser
          * When the method is called
          * Then true is returned
          * Then the allowedTstampStage1-property is set
@@ -558,6 +572,41 @@ class ApprovalStatusTest extends FunctionalTestCase
 
         self::assertGreaterThan(0, $approval->getAllowedTstampStage1());
     }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function increaseStageReturnsTrueForStage1AndSetsBeUser()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a persisted approval-object
+         * Given the approval-object has none of the allowedTstampStage-properties set
+         * Given a persisted backendUser
+         * When the method is called
+         * Then true is returned
+         * Then the allowedTstampStage1-property is set
+         * Then the allowedByUserStage1-property is set
+         */
+
+        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check200.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
+        $approval = $this->approvalRepository->findByUid(200);
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\BackendUser $backendUser */
+        $backendUser = $this->backendUserRepository->findByUid(200);
+
+        $result = $this->subject->increaseStage($approval, $backendUser);
+        self::assertTrue($result);
+
+        self::assertGreaterThan(0, $approval->getAllowedTstampStage1());
+        self::assertEquals($backendUser, $approval->getAllowedByUserStage1());
+    }
+
 
     /**
      * @test
@@ -586,6 +635,41 @@ class ApprovalStatusTest extends FunctionalTestCase
 
         self::assertGreaterThan(0, $approval->getAllowedTstampStage2());
     }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function increaseStageReturnsTrueForStage2AndSetsBeUser()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a persisted approval-object
+         * Given the approval-object has a value for the allowedTstampStage1-property set
+         * Given a persisted backendUser
+         * When the method is called
+         * Then true is returned
+         * Then the allowedTstampStage2-property is set
+         * Then the allowedByUserStage2-property is set
+         */
+
+        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check210.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
+        $approval = $this->approvalRepository->findByUid(210);
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\BackendUser $backendUser */
+        $backendUser = $this->backendUserRepository->findByUid(210);
+
+        $result = $this->subject->increaseStage($approval, $backendUser);
+        self::assertTrue($result);
+
+        self::assertGreaterThan(0, $approval->getAllowedTstampStage2());
+        self::assertEquals($backendUser, $approval->getAllowedByUserStage2());
+    }
+
 
     /**
      * @test

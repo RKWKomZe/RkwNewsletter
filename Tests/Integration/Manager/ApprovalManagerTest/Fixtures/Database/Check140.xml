@@ -21,5 +21,10 @@
         <sent_reminder_tstamp_stage2>0</sent_reminder_tstamp_stage2>
     </tx_rkwnewsletter_domain_model_approval>
 
+    <be_users>
+        <uid>140</uid>
+        <pid>1</pid>
+        <email>test@rkw.de</email>
+    </be_users>
     
 </dataset>

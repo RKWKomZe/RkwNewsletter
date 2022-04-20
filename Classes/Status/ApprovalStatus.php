@@ -15,6 +15,7 @@ namespace RKW\RkwNewsletter\Status;
  */
 
 use RKW\RkwNewsletter\Domain\Model\Approval;
+use RKW\RkwNewsletter\Domain\Model\BackendUser;
 
 /**
  * ApprovalStatus
@@ -126,20 +127,28 @@ class ApprovalStatus
      * Increases the current stage
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Approval $approval
+     * @param \RKW\RkwNewsletter\Domain\Model\BackendUser $backendUser
      * @return bool
      */
-    public static function increaseStage (Approval $approval): bool
+    public static function increaseStage (Approval $approval, BackendUser $backendUser = null): bool
     {
 
         $stage = self::getStage($approval);
 
         $update = false;
         if ($stage == self::STAGE1) {
+
+            if ($backendUser) {
+                $approval->setAllowedByUserStage1($backendUser);
+            }
             $approval->setAllowedTstampStage1(time());
             $update = true;
         }
 
         if ($stage == self::STAGE2) {
+            if ($backendUser) {
+                $approval->setAllowedByUserStage2($backendUser);
+            }
             $approval->setAllowedTstampStage2(time());
             $update = true;
         }

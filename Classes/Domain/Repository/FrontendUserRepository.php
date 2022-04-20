@@ -14,10 +14,15 @@ namespace RKW\RkwNewsletter\Domain\Repository;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
+use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
+use RKW\RkwNewsletter\Domain\Model\Topic;
+use RKW\RkwNewsletter\Domain\Model\Newsletter;
+
 /**
  * FrontendUserRepository
  *
- * @author Maximilian Fäßler <maximilian@faesslerweb.de>
  * @author Steffen Kroggel <developer@steffenkroggel.de>
  * @copyright Rkw Kompetenzzentrum
  * @package RKW_RkwNewsletter
@@ -33,14 +38,62 @@ class FrontendUserRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     public function initializeObject()
     {
-
-        /** @var $querySettings \TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings */
-        $querySettings = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\Typo3QuerySettings');
-
-        // don't add the pid constraint and enable fields
-        $querySettings->setRespectStoragePage(false);
-        $this->setDefaultQuerySettings($querySettings);
+        $this->defaultQuerySettings = $this->objectManager->get(Typo3QuerySettings::class);
+        $this->defaultQuerySettings->setRespectStoragePage(false);
     }
+
+
+    /**
+     * findSubscribersByTopic
+     *
+     * @param \RKW\RkwNewsletter\Domain\Model\Topic $topic
+     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @comment implictly tested
+     */
+    public function findSubscriptionsByTopic(Topic $topic): QueryResultInterface
+    {
+
+        $query = $this->createQuery();
+        $query->matching(
+            $query->contains('txRkwnewsletterSubscription', $topic)
+        );
+
+        $query->setOrderings(
+            ['txRkwnewsletterPriority' => QueryInterface::ORDER_DESCENDING]
+        );
+
+        return $query->execute();
+    }
+
+
+    /**
+     * findSubscribersByNewsletter
+     *
+     * @param \RKW\RkwNewsletter\Domain\Model\Newsletter $newsletter
+     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @comment implictly tested
+     */
+    public function findSubscriptionsByNewsletter(Newsletter $newsletter): QueryResultInterface
+    {
+
+        $query = $this->createQuery();
+        $query->matching(
+            $query->in('txRkwnewsletterSubscription.uid', $newsletter->getTopic())
+        );
+
+        $query->setOrderings(
+            ['txRkwnewsletterPriority' => QueryInterface::ORDER_DESCENDING]
+        );
+
+        return $query->execute();
+    }
+
+
+
+
+
 
 
     /**

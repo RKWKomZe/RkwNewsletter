@@ -10,7 +10,7 @@ use TYPO3\CMS\Core\Log\Logger;
 use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-
+use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -49,6 +49,13 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
      */
     protected $approvalRepository;
 
+
+
+    /**
+     * @var \RKW\RkwNewsletter\Domain\Repository\BackendUserRepository
+     * @inject
+     */
+    protected $backendUserRepository;
     
     /**
      * PersistenceManager
@@ -145,7 +152,7 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
             $this->getLogger()->log(
                 LogLevel::INFO,
                 sprintf(
-                    'Increased level for approval id=%s in stage %s.',
+                    'Increased level for approval id=%s in approval-stage %s.',
                     $approval->getUid(),
                     $stage
                 )
@@ -178,15 +185,25 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
     {
 
         $stage = ApprovalStatus::getStage($approval);
-        
-        if (ApprovalStatus::increaseStage($approval)) {
+        $backendUser = null;
+
+        // check if triggered via backend
+        if (
+            ($GLOBALS['BE_USER'] instanceof BackendUserAuthentication)
+            && ($backendUserId = intval($GLOBALS['BE_USER']->user['uid']))
+        ) {
+            /** @var \RKW\RkwNewsletter\Domain\Model\BackendUser $backendUser */
+            $backendUser = $this->backendUserRepository->findByUid(intval($backendUserId));
+        }
+
+        if (ApprovalStatus::increaseStage($approval, $backendUser)) {
             $this->approvalRepository->update($approval);
             $this->persistenceManager->persistAll();
 
             $this->getLogger()->log(
                 LogLevel::INFO,
                 sprintf(
-                    'Increased stage for approval id=%s in stage %s.',
+                    'Increased stage for approval id=%s in approval-stage %s.',
                     $approval->getUid(),
                     $stage
                 )
@@ -247,7 +264,7 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
         $this->getLogger()->log(
             LogLevel::DEBUG,
             sprintf(
-                'Found %s recipients for approval id=%s in stage %s.',
+                'Found %s recipients for approval id=%s in approval-stage %s.',
                 count($mailRecipients),
                 $approval->getUid(),
                 $stage
@@ -261,7 +278,7 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
     
 
     /**
-     * Send info-mails or reminder-mails for outstanding approvals
+     * Send info-mails or reminder-mails for outstanding confirmations
      * 
      * @param \RKW\RkwNewsletter\Domain\Model\Approval $approval
      * @return int
@@ -275,8 +292,7 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
         $level = ApprovalStatus::getLevel($approval);
         $isReminder = ($level == ApprovalStatus::LEVEL2);
 
-        // get recipients and increase level 
-        // but only if stage and level match AND if valid recipients are found
+        // get recipients - but only if stage and level match AND if valid recipients are found
         if (
             (count($recipients = $this->getMailRecipients($approval)))
             && ($stage != ApprovalStatus::STAGE_DONE)
@@ -294,7 +310,7 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
                 $this->getLogger()->log(
                     LogLevel::INFO,
                     sprintf(
-                        'Sending email for approval with id=%s in stage %s and level %s.',
+                        'Sending email for approval with id=%s in approval-stage %s and level %s.',
                         $approval->getUid(),
                         $stage,
                         $level
@@ -315,7 +331,7 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
                 $this->getLogger()->log(
                     LogLevel::INFO,
                     sprintf(
-                        'Sending email for automatic-approval with id=%s in stage %s and level %s.',
+                        'Sending email for automatic confirmation for approval with id=%s in approval-stage %s and level %s.',
                         $approval->getUid(),
                         $stage,
                         $level
@@ -329,7 +345,7 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
         $this->getLogger()->log(
             LogLevel::DEBUG,
             sprintf(
-                'Approval with id=%s in stage %s has no mail-recipients.',
+                'Approval with id=%s in approval-stage %s has no mail-recipients.',
                 $approval->getUid(),
                 $stage
             )
@@ -350,7 +366,7 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
-    public function processApproval(Approval $approval): bool
+    public function processConfirmation(Approval $approval): bool
     {
 
         // if the value 1 is returned, we simply increase the level
@@ -386,14 +402,14 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException
      */
-    public function processAllApprovals (
+    public function processAllConfirmations (
         int $toleranceLevel1,
         int $toleranceLevel2,
         int $toleranceStage1 = 0,
         int $toleranceStage2 = 0
     ): int {
 
-        $approvalList = $this->approvalRepository->findAllOpenApprovalsByTime(
+        $approvalList = $this->approvalRepository->findAllForConfirmationByTolerance(
             $toleranceLevel1,
             $toleranceLevel2,
             $toleranceStage1,
@@ -404,7 +420,7 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
 
             /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
             foreach ($approvalList as $approval) {
-                $this->processApproval($approval);
+                $this->processConfirmation($approval);
             }
         }
 

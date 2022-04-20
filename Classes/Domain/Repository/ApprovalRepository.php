@@ -49,8 +49,9 @@ class ApprovalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @param int $toleranceStage2
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @comment implicitly tested
      */
-    public function findAllOpenApprovalsByTime(
+    public function findAllForConfirmationByTolerance(
         int $toleranceLevel1, 
         int $toleranceLevel2,
         int $toleranceStage1 = 0,

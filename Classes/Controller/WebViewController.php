@@ -14,7 +14,9 @@ namespace RKW\RkwNewsletter\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
-use RKW\RkwBasics\Helper\Common;
+use RKW\RkwMailer\Domain\Model\QueueRecipient;
+use RKW\RkwBasics\Utility\GeneralUtility;
+use RKW\RkwNewsletter\Domain\Model\Issue;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 
@@ -31,12 +33,12 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 {
 
     /**
-     * pagesRepository
+     * topicRepository
      *
-     * @var \RKW\RkwNewsletter\Domain\Repository\PagesRepository
+     * @var \RKW\RkwNewsletter\Domain\Repository\TopicRepository
      * @inject
      */
-    protected $pagesRepository;
+    protected $topicRepository;
 
     /**
      * FrontendUserRepository
@@ -69,14 +71,15 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      *
      * @ignorevalidation $issue
      * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
-     * @param string $pagesOrder
+     * @param array $topicsRaw
+     * @param string $hash
      * @return void
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
-    public function showAction(\RKW\RkwNewsletter\Domain\Model\Issue $issue, $pagesOrder = '')
+    public function showAction(Issue $issue, array $topicsRaw = [], string $hash = '')
     {
-
+        
         $queueMailId = 0;
         $queueRecipientId = 0;
 
@@ -88,23 +91,18 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         if (isset($rkwMailerParams['uid'])) {
             $queueRecipientId = intval($rkwMailerParams['uid']);
         }
-        $pagesOrder = preg_replace('/[^0-9,]+/', '', $pagesOrder);
-
+        
         // set default recipient based on FE-language settings – just in case
         /** @var \RKW\RkwMailer\Domain\Model\QueueRecipient $queueRecipient */
-        $queueRecipient = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('RKW\\RkwMailer\\Domain\\Model\\QueueRecipient');
+        $queueRecipient = GeneralUtility::makeInstance(QueueRecipient::class);
         $queueRecipient->setLanguageCode($GLOBALS['TSFE']->config['config']['language']);
         $this->view->assign('queueRecipient', $queueRecipient);
 
         // check if there is a recipient given
-        $frontendUser = null;
         if (
             ($queueMail = $this->queueMailRepository->findByUid($queueMailId))
             && ($queueRecipient = $this->queueRecipientRepository->findByUid($queueRecipientId))
         ) {
-
-            // get subscription from FE-User - or load everything of issue
-            $frontendUser =  $this->frontendUserRepository->findByIdentifier($queueRecipient->getFrontendUser());
 
             // assign objects to view
             $this->view->assignMultiple(
@@ -114,23 +112,22 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 )
             );
         }
-
-        // if frontendUser is given, we use it's subscriptions
-        if (
-            ($frontendUser)
-            && ($issue->getNewsletter()->getType() != 1)
-        ){
-            $pages = $this->pagesRepository->findAllByIssueAndSubscription($issue, $frontendUser->getTxRkwnewsletterSubscription(), $pagesOrder);
-        } else {
-            $pages = $this->pagesRepository->findAllByIssueAndSpecialTopic($issue, false, $pagesOrder);
+        
+        // convert topic-ids to objects
+        $topics = [];
+        foreach ($topicsRaw as $topicId) {
+            if ($topic = $this->topicRepository->findByIdentifier($topicId)) {
+                $topics[] = $topic;
+            }
         }
-
-        /** @var \TYPO3\CMS\Extbase\Persistence\QueryResultInterface $finalSpecialPages */
-        $specialPages = $this->pagesRepository->findAllByIssueAndSpecialTopic($issue, true);
-
+        
 
         // add paths depending on template of newsletter - including the default one!
-        $settings = Common::getTyposcriptConfiguration('Rkwnewsletter', ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK );
+        $settings = GeneralUtility::getTyposcriptConfiguration(
+            'Rkwnewsletter', 
+            ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK
+        );
+        
         $layoutPaths = $settings['view']['newsletter']['layoutRootPaths'];
         $layoutPathsNew = [];
         if (is_array($layoutPaths)) {
@@ -158,13 +155,15 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->view->setLayoutRootPaths($layoutPathsNew);
         $this->view->setPartialRootPaths($partialPathsNew);
 
+        // override maxContentItems
+        $settings['settings']['maxContentItems'] = 9999;
         $this->view->assignMultiple(
             array(
-                'issue'            => $issue,
-                'pages'            => $pages,
-                'specialPages'     => $specialPages,
-                'maxItemsPerTopic' => 9999,
-                'webView'          => true
+                'issue'      => $issue,
+                'topics'     => $topics,
+                'hash'       => $hash,
+                'settings'   => $settings['settings'],
+                'isWebView'  => true
             )
         );
     }

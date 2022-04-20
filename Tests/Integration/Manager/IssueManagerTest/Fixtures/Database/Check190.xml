@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dataset>
 
+    <tx_rkwnewsletter_domain_model_newsletter>
+        <uid>190</uid>
+        <pid>0</pid>
+        <issue_title><![CDATA[Newsletter {M}/{Y}]]></issue_title>
+        <issue>1</issue>
+        <approval>190,191</approval>
+    </tx_rkwnewsletter_domain_model_newsletter>
+
     <tx_rkwnewsletter_domain_model_issue>
         <uid>190</uid>
         <pid>0</pid>
-        <status>1</status>
+        <status>2</status>
+        <newsletter>190</newsletter>
+        <info_tstamp>0</info_tstamp>
+        <reminder_tstamp>0</reminder_tstamp>
     </tx_rkwnewsletter_domain_model_issue>
     
     <tx_rkwnewsletter_domain_model_approval>
@@ -34,5 +45,16 @@
         <sent_reminder_tstamp_stage1>0</sent_reminder_tstamp_stage1>
         <sent_reminder_tstamp_stage2>0</sent_reminder_tstamp_stage2>
     </tx_rkwnewsletter_domain_model_approval>
-    
+
+    <be_users>
+        <uid>190</uid>
+        <pid>1</pid>
+        <email>test@rkw.de</email>
+    </be_users>
+
+    <be_users>
+        <uid>191</uid>
+        <pid>1</pid>
+        <email>test1@rkw.de</email>
+    </be_users>
 </dataset>

@@ -14,6 +14,8 @@ namespace RKW\RkwNewsletter\Domain\Model;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+
 /**
  * Topic
  *
@@ -30,7 +32,7 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var string
      */
-    protected $name;
+    protected $name = '';
 
 
     /**
@@ -38,7 +40,7 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var string
      */
-    protected $shortDescription;
+    protected $shortDescription = '';
 
 
     /**
@@ -46,72 +48,44 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var \RKW\RkwNewsletter\Domain\Model\Pages
      */
-    protected $containerPage;
+    protected $containerPage = null;
 
     /**
      * newsletter
      *
      * @var \RKW\RkwNewsletter\Domain\Model\Newsletter
      */
-    protected $newsletter;
+    protected $newsletter = null;
 
     /**
      * approvalStage1
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\BackendUser>
      */
-    protected $approvalStage1;
+    protected $approvalStage1 = null;
 
     /**
      * approvalStage2
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\BackendUser>
      */
-    protected $approvalStage2;
+    protected $approvalStage2 = null;
 
-    /**
-     * primaryColor
-     *
-     * @var string
-     */
-    protected $primaryColor;
-
-    /**
-     * primaryColorEditorial
-     *
-     * @var string
-     */
-    protected $primaryColorEditorial;
-
-    /**
-     * secondaryColor
-     *
-     * @var string
-     */
-    protected $secondaryColor;
-
-    /**
-     * secondaryColorEditorial
-     *
-     * @var string
-     */
-    protected $secondaryColorEditorial;
-
-    /**
+       /**
      * isSpecial
      *
      * @var bool
      */
-    protected $isSpecial;
-
+    protected $isSpecial = false;
 
     /**
      * sorting
      *
      * @var int
      */
-    protected $sorting;
+    protected $sorting = 0;
 
+    
     /**
      * __construct
      */
@@ -129,7 +103,7 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return void
      */
-    protected function initStorageObjects()
+    protected function initStorageObjects(): void
     {
         $this->approvalStage1 = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
         $this->approvalStage2 = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
@@ -140,7 +114,7 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return string $name
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -151,7 +125,7 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @param string $name
      * @return void
      */
-    public function setName($name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -159,9 +133,9 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the shortDescription
      *
-     * @return string $shortDescription
+     * @return string 
      */
-    public function getShortDescription()
+    public function getShortDescription(): string
     {
         return $this->shortDescription;
     }
@@ -172,7 +146,7 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @param string $shortDescription
      * @return void
      */
-    public function setShortDescription($shortDescription)
+    public function setShortDescription(string $shortDescription): void
     {
         $this->shortDescription = $shortDescription;
     }
@@ -193,7 +167,7 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @param \RKW\RkwNewsletter\Domain\Model\Pages $containerPage
      * @return void
      */
-    public function setContainerPage(\RKW\RkwNewsletter\Domain\Model\Pages $containerPage)
+    public function setContainerPage(Pages $containerPage): void
     {
         $this->containerPage = $containerPage;
     }
@@ -214,7 +188,7 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @param \RKW\RkwNewsletter\Domain\Model\Newsletter $newsletter
      * @return void
      */
-    public function setNewsletter(\RKW\RkwNewsletter\Domain\Model\Newsletter $newsletter)
+    public function setNewsletter(Newsletter $newsletter): void
     {
         $this->newsletter = $newsletter;
     }
@@ -226,7 +200,7 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @return void
      * @api
      */
-    public function addApprovalStage1(\RKW\RkwNewsletter\Domain\Model\BackendUser $backendUser)
+    public function addApprovalStage1(BackendUser $backendUser): void
     {
         $this->approvalStage1->attach($backendUser);
     }
@@ -238,7 +212,7 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @return void
      * @api
      */
-    public function removeApprovalStage1(\RKW\RkwNewsletter\Domain\Model\BackendUser $backendUser)
+    public function removeApprovalStage1(BackendUser $backendUser): void
     {
         $this->approvalStage1->detach($backendUser);
     }
@@ -246,11 +220,10 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the backend user.
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\BackendUser> An object storage
-     *     containing the backend user
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\BackendUser> An object storage containing the backend user
      * @api
      */
-    public function getApprovalStage1()
+    public function getApprovalStage1(): ObjectStorage
     {
         return $this->approvalStage1;
     }
@@ -262,7 +235,7 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @return void
      * @api
      */
-    public function setApprovalStage1(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $backendUser)
+    public function setApprovalStage1(ObjectStorage $backendUser): void
     {
         $this->approvalStage1 = $backendUser;
     }
@@ -274,7 +247,7 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @return void
      * @api
      */
-    public function addApprovalStage2(\RKW\RkwNewsletter\Domain\Model\BackendUser $backendUser)
+    public function addApprovalStage2(BackendUser $backendUser): void
     {
         $this->approvalStage2->attach($backendUser);
     }
@@ -286,19 +259,18 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @return void
      * @api
      */
-    public function removeApprovalStage2(\RKW\RkwNewsletter\Domain\Model\BackendUser $backendUser)
+    public function removeApprovalStage2(BackendUser $backendUser): void
     {
         $this->approvalStage2->detach($backendUser);
     }
 
-    /**bool
+    /**
      * Returns the backend user.
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\BackendUser> An object storage
-     *     containing the backend user
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\BackendUser> An object storage containing the backend user
      * @api
      */
-    public function getApprovalStage2()
+    public function getApprovalStage2(): ObjectStorage
     {
         return $this->approvalStage2;
     }
@@ -310,102 +282,17 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @return void
      * @api
      */
-    public function setApprovalStage2(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $backendUser)
+    public function setApprovalStage2(ObjectStorage $backendUser): void
     {
         $this->approvalStage2 = $backendUser;
     }
-
-    /**
-     * Returns the primaryColor
-     *
-     * @return string $primaryColor
-     */
-    public function getPrimaryColor()
-    {
-        return $this->primaryColor;
-    }
-
-    /**
-     * Sets the primaryColor
-     *
-     * @param string $primaryColor
-     * @return void
-     */
-    public function setPrimaryColor($primaryColor)
-    {
-        $this->primaryColor = $primaryColor;
-    }
-
-    /**
-     * Returns the primaryColorEditorial
-     *
-     * @return string $primaryColorEditorial
-     */
-    public function getPrimaryColorEditorial()
-    {
-        return $this->primaryColorEditorial;
-    }
-
-    /**
-     * Sets the primaryColorEditorial
-     *
-     * @param string $primaryColorEditorial
-     * @return void
-     */
-    public function setPrimaryColorEditorial($primaryColorEditorial)
-    {
-        $this->primaryColorEditorial = $primaryColorEditorial;
-    }
-
-    /**
-     * Returns the secondaryColor
-     *
-     * @return string $secondaryColor
-     */
-    public function getSecondaryColor()
-    {
-        return $this->secondaryColor;
-    }
-
-    /**
-     * Sets the secondaryColor
-     *
-     * @param string $secondaryColor
-     * @return void
-     */
-    public function setSecondaryColor($secondaryColor)
-    {
-        $this->secondaryColor = $secondaryColor;
-    }
-
-    /**
-     * Returns the secondaryColorEditorial
-     *
-     * @return string $secondaryColorEditorial
-     */
-    public function getSecondaryColorEditorial()
-    {
-        return $this->secondaryColorEditorial;
-    }
-
-    /**
-     * Sets the secondaryColorEditorial
-     *
-     * @param string $secondaryColorEditorial
-     * @return void
-     */
-    public function setSecondaryColorEditorial($secondaryColorEditorial)
-    {
-        $this->secondaryColorEditorial = $secondaryColorEditorial;
-    }
-
 
     /**
      * Returns the isSpecial
      *
      * @return bool $isSpecial
      */
-    public function getIsSpecial()
+    public function getIsSpecial(): bool
     {
         return $this->isSpecial;
     }
@@ -416,7 +303,7 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @param bool $isSpecial
      * @return void
      */
-    public function setIsSpecial($isSpecial)
+    public function setIsSpecial(bool $isSpecial): void
     {
         $this->isSpecial = $isSpecial;
     }
@@ -424,9 +311,9 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the sorting
      *
-     * @return bool $sorting
+     * @return int $sorting
      */
-    public function getSorting()
+    public function getSorting(): int
     {
         return $this->sorting;
     }
@@ -434,10 +321,10 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Sets the sorting
      *
-     * @param bool $sorting
+     * @param int $sorting
      * @return void
      */
-    public function setSorting($sorting)
+    public function setSorting(int $sorting): void
     {
         $this->sorting = $sorting;
     }

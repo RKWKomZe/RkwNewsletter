@@ -1,68 +1,55 @@
-{namespace rkwNewsletter=RKW\RkwNewsletter\ViewHelpers}
-<f:layout name="Default" />
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:rkwNewsletter="http://typo3.org/ns/RKW/RkwNewsletter/ViewHelpers"
+    data-namespace-typo3-fluid="true">
 
-This Template is responsible for creating a table of domain objects.
+    <f:layout name="Default" />
 
-If you modify this template, do not forget to change the overwrite settings
-in /Configuration/ExtensionBuilder/settings.yaml:
-  Resources:
-    Private:
-      Templates:
-        List.html: keep
+    <f:section name="content">
+        <h1>
+            <f:translate key="templates_backend_release_sendList" />
+        </h1>
 
-Otherwise your changes will be overwritten the next time you save the extension in the extension builder
+        <p class="tx-rkwnewsletter-description"><f:translate key="templates_backend_release_sendList.description" /></p>
 
-<f:section name="content">
-	<h1>
-		<f:translate key="templates_backend_release_sendList" />
-	</h1>
-    
-    <p class="tx-rkwnewsletter-description"><f:translate key="templates_backend_release_sendList.description" /></p>
+        <f:render partial="FlashMessages" arguments="{_all}" />
 
-    <f:render partial="FlashMessages" arguments="{_all}" />
+        <table class="tx-rkwnewsletter-list">
+            <tr>
+                <th>
+                    <f:translate key="templates_backend_release_sendList.title" />
+                </th>
+                <th>
+                    <f:translate key="templates_backend_release_sendList.subscriptions" />
+                </th>
+                <th>
+                    <f:translate key="templates_backend_release_sendList.action"  />
+                </th>
+            </tr>
 
-    <table class="tx-rkwnewsletter-list">
-        <tr>
-            <th>
-                <f:translate key="templates_backend_release_sendList.title" />
-            </th>
-            <th>
-                <f:translate key="templates_backend_release_sendList.subscriptions" />
-            </th>
-            <th>
-                <f:translate key="templates_backend_release_sendList.action"  />
-            </th>
-        </tr>
-
-        <f:for each="{issues}" as="issue">
-            <f:form action="sendConfirm" name="issue" object="{issue}" >
-                <tr>
-                    <td><f:form.textfield name="title" value="{issue.title}" /></td>
-                    <td>
-                        <strong><f:translate key="templates_backend_release_sendList.subscriptionsAll" />: <rkwNewsletter:getNumberOfSubscriptions issue="{issue}" /></strong>
-                        <f:if condition="{issue.newsletter.type} == 1">
-                            <f:else>
-                                , <f:translate key="templates_backend_release_sendList.subscriptionsAmong" />:
-                                <f:for each="{issue.newsletter.topic}" as="topic">
-                                    <f:if condition="{topic.isSpecial}">
-                                        <f:else>
-                                            <rkwNewsletter:getNumberOfSubscriptions issue="{issue}" topic="{topic}"/> x {topic.name} /
-                                        </f:else>
-                                    </f:if>
-                                </f:for>
-                            </f:else>
-                        </f:if>
-
-                    </td>
-                    <td>
-                        <f:form.button type="submit" >
-                            <f:translate key="templates_backend_release_sendList.go"  />
-                        </f:form.button>
-                    </td>
-                </tr>
-            </f:form>
-        </f:for>
-    </table>
+            <f:for each="{issues}" as="issue">
+                <f:form action="sendConfirm" name="issue" object="{issue}" >
+                    <tr>
+                        <td><f:form.textfield name="title" value="{issue.title}" /></td>
+                        <td>
+                            <f:render partial="Release/Subscriptions" arguments="{issue : issue}" />
+                        </td>
+                        <td>
+                            <f:if condition="{rkwNewsletter:backend.hasBackendUserPermission(issue: '{issue}')}">
+                                <f:then>
+                                    <f:form.button type="submit" >
+                                        <f:translate key="templates_backend_release_sendList.go"  />
+                                    </f:form.button>
+                                </f:then>
+                                <f:else>
+                                    &ndash;
+                                </f:else>
+                            </f:if>
+                        </td>
+                    </tr>
+                </f:form>
+            </f:for>
+        </table>
 
 
-</f:section>
+    </f:section>
+</html>

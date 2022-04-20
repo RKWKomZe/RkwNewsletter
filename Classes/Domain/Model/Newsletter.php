@@ -14,6 +14,7 @@ namespace RKW\RkwNewsletter\Domain\Model;
  * The TYPO3 project - inspiring people to share!
  */
 
+use RKW\RkwAuthors\Domain\Model\Authors;
 use TYPO3\CMS\Extbase\Domain\Model\FrontendUserGroup;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
@@ -53,14 +54,6 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $introduction = '';
 
 
-    /**
-     * introduction2
-     *
-     * @var string
-     */
-    protected $introduction2 = '';
-
-    
     /**
      * author
      *
@@ -231,7 +224,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return void
      */
-    protected function initStorageObjects()
+    protected function initStorageObjects(): void
     {
         $this->usergroup = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
         $this->approval = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
@@ -287,52 +280,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->name = $name;
     }
 
-
-    /**
-     * Returns the introduction
-     *
-     * @return string $introduction
-     */
-    public function getIntroduction(): string
-    {
-        return $this->introduction;
-    }
-
-
-    /**
-     * Sets the introduction
-     *
-     * @param string $introduction
-     * @return void
-     */
-    public function setIntroduction(string $introduction): void
-    {
-        $this->introduction = $introduction;
-    }
-
-
-    /**
-     * Returns the introduction2
-     *
-     * @return string $introduction2
-     */
-    public function getIntroduction2(): string
-    {
-        return $this->introduction2;
-    }
-
-
-    /**
-     * Sets the introduction2
-     *
-     * @param string $introduction2
-     * @return void
-     */
-    public function setIntroduction2(string $introduction2): void
-    {
-        $this->introduction2 = $introduction2;
-    }
-
+    
     
     /**
      * Adds an Authors
@@ -362,6 +310,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * Returns the authors
      *
      * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwAuthors\Domain\Model\Authors> $authors
+     * @api
      */
     public function getAuthors(): ObjectStorage
     {
@@ -374,6 +323,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwAuthors\Domain\Model\Authors> $authors
      * @return void
+     * @api
      */
     public function setAuthors(ObjectStorage $authors): void
     {

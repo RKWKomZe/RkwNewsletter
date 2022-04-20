@@ -5,7 +5,7 @@
         <uid>10</uid>
         <pid>0</pid>
         <newsletter>0</newsletter>
-        <pages>10</pages>
+        <pages>1</pages>
     </tx_rkwnewsletter_domain_model_issue>
 
     <tx_rkwnewsletter_domain_model_topic>
@@ -19,5 +19,6 @@
         <uid>10</uid>
         <pid>0</pid>
         <title>Test-Title</title>
+        <tx_rkwnewsletter_issue>10</tx_rkwnewsletter_issue>
     </pages>
 </dataset>

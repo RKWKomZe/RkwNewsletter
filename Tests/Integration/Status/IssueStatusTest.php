@@ -225,7 +225,107 @@ class IssueStatusTest extends FunctionalTestCase
 
     //=============================================
 
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function getLevelReturnsNoneOnWrongStage()
+    {
 
+        /**
+         * Scenario:
+         *
+         * Given a persisted issue-object
+         * Given that issue-object has the stage "draft"
+         * When the method is called
+         * Then $this->subject::LEVEL_NONE is returned
+         */
+
+        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check60.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(60);
+
+        self::assertEquals($this->subject::LEVEL_NONE, $this->subject::getLevel($issue));
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function getLevelReturnsLevel1()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a persisted issue-object
+         * Given that issue-object has the stage "release"
+         * Given that issue-object has no value for the infoTimestamp-property set
+         * Given that issue-object has no value for the reminderTimestamp-property set
+         * When the method is called
+         * Then $this->subject::LEVEL1 is returned
+         */
+
+        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check70.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(70);
+
+        self::assertEquals($this->subject::LEVEL1, $this->subject::getLevel($issue));
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function getLevelReturnsLevel2()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a persisted issue-object
+         * Given that issue-object has the stage "release"
+         * Given that issue-object has a value for the infoTimestamp-property set
+         * Given that issue-object has no value for the reminderTimestamp-property set
+         * When the method is called
+         * Then $this->subject::LEVEL2 is returned
+         */
+
+        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check80.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(80);
+
+        self::assertEquals($this->subject::LEVEL2, $this->subject::getLevel($issue));
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function getLevelReturnsLevelDone()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a persisted issue-object
+         * Given that issue-object has the stage "release"
+         * Given that issue-object has a value for the infoTimestamp-property set
+         * Given that issue-object has a value for the reminderTimestamp-property set
+         * When the method is called
+         * Then $this->subject::LEVEL2 is returned
+         */
+
+        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check90.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(90);
+
+        self::assertEquals($this->subject::LEVEL_DONE, $this->subject::getLevel($issue));
+    }
 
     //=============================================
 
@@ -381,8 +481,121 @@ class IssueStatusTest extends FunctionalTestCase
         self::assertFalse($result);
 
     }
-        
 
+    //=============================================
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function increaseLevelReturnsFalseOnWrongStage()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a persisted issue-object
+         * Given that issue-object has the stage "draft"
+         * When the method is called
+         * Then false is returned
+         */
+
+        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check60.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(60);
+
+        self::assertFalse($this->subject::increaseLevel($issue));
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function increaseLevelReturnsTrueForLevel0()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a persisted issue-object
+         * Given that issue-object has the stage "release"
+         * Given that issue-object has no value for the infoTimestamp-property set
+         * Given that issue-object has no value for the reminderTimestamp-property set
+         * When the method is called
+         * Then true is returned
+         * Then the infoTstamp-property is set
+         * Then the reminderTstamp-property is not set
+         */
+
+        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check70.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(70);
+
+        self::assertTrue($this->subject::increaseLevel($issue));
+
+        self::assertGreaterThan(0, $issue->getInfoTstamp());
+        self::assertEquals(0, $issue->getReminderTstamp());
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function increaseLevelReturnsTrueForLevel1()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a persisted issue-object
+         * Given that issue-object has the stage "release"
+         * Given that issue-object has a value for the infoTimestamp-property set
+         * Given that issue-object has no value for the reminderTimestamp-property set
+         * When the method is called
+         * Then true is returned
+         * Then the infoTstamp-property is set
+         * Then the reminderTstamp-property is set
+         */
+
+        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check80.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(80);
+
+        self::assertTrue($this->subject::increaseLevel($issue));
+
+        self::assertGreaterThan(0, $issue->getInfoTstamp());
+        self::assertGreaterThan(0, $issue->getReminderTstamp());
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function increaseLevelReturnsFalseForLevel2()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a persisted issue-object
+         * Given that issue-object has the stage "release"
+         * Given that issue-object has a value for the infoTimestamp-property set
+         * Given that issue-object has a value for the reminderTimestamp-property set
+         * When the method is called
+         * Then false is returned
+         */
+
+        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check90.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(90);
+
+        self::assertFalse($this->subject::increaseLevel($issue));
+    }
+    
     //=============================================
     /**
      * TearDown

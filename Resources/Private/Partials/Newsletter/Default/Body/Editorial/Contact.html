@@ -1,0 +1,54 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:rkwMailer="http://typo3.org/ns/RKW/RkwMailer/ViewHelpers"
+    xmlns:rkwAuthors="http://typo3.org/ns/RKW/RkwAuthors/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+    <!-- PLAINTEXT -->
+    <f:section name="Plaintext" >
+        <f:if condition="{authors}">
+            <rkwMailer:frontend.translate key="partials_newsletter_body_editorial_contact.contact" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />\n
+            <f:for each="{authors}" as="author" iteration="iteratorAuthor">
+                <f:if condition="{iteratorAuthor.isFirst}">
+                    <rkwAuthors:GetCombinedName author='{author}'/>\n
+                    <f:if condition="{author.phone2}">
+                        <rkwAuthors:GetFormattedPhoneNumber phoneExtensionLength="4" author="{author}"/>\n
+                    </f:if>
+                    {author.email}\n
+                </f:if>
+            </f:for>
+        </f:if>
+    </f:section>
+    
+    
+    <!-- HTML for the first item-->
+    <f:section name="Html">
+    
+        <f:if condition="{authors}">
+            <tr>
+                <td style="padding: 0 16px 16px 16px;">
+                    <p style="padding: 23px 0 0; border-top: 1px solid #606060; font-size: 12px; font-weight:bold;">
+                        <rkwMailer:frontend.translate key="partials_newsletter_body_editorial_contact.contact" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />
+                    </p>
+                    <f:for each="{authors}" as="author" iteration="iteratorAuthor">
+                        <f:if condition="{iteratorAuthor.isFirst}">
+                            <table cellpadding="0" cellspacing="0" border="0" style="font-family: 'Arial', sans-serif; font-size: 14px">
+                                <tr>
+                                    <f:if condition="{author.imageBoxes}">
+                                        <td style="padding: 5px 12px 0 0; vertical-align: top">
+                                            <rkwMailer:frontend.image image="{author.imageBoxes}" treatIdAsReference="true" absolute="false" alt="<rkwAuthors:GetCombinedName author='{author}'/>" width="80"  />
+                                        </td>
+                                    </f:if>
+                                    <td style="font-size: 12px; line-height: 24px">
+                                        <rkwAuthors:GetCombinedName author='{author}'/><br />
+                                        <rkwAuthors:GetFormattedPhoneNumber phoneExtensionLength="4" author="{author}"/><br />
+                                        <a href="mailto:{author.email}" style="color: #333; text-decoration: none">{author.email}</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </f:if>
+                    </f:for>
+                </td>
+            </tr>
+        </f:if>
+    </f:section>
+</html>

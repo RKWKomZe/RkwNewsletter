@@ -46,6 +46,14 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
     
     /**
+     * introduction
+     *
+     * @var string
+     */
+    protected $introduction = '';
+    
+    
+    /**
      * newsletter
      *
      * @var \RKW\RkwNewsletter\Domain\Model\Newsletter
@@ -65,7 +73,6 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * approvals
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\Approval>
-     * @cascade remove
      */
     protected $approvals = null;
 
@@ -119,6 +126,14 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
 
     /**
+     * isSpecial
+     *
+     * @var bool
+     */
+    protected $isSpecial;
+
+    
+    /**
      * __construct
      */
     public function __construct()
@@ -136,7 +151,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return void
      */
-    protected function initStorageObjects()
+    protected function initStorageObjects(): void
     {
         $this->pages = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
         $this->approvals = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
@@ -187,6 +202,29 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setStatus(int $status): void
     {
         $this->status = $status;
+    }
+
+    
+    /**
+     * Returns the introduction
+     *
+     * @return string $introduction
+     */
+    public function getIntroduction(): string
+    {
+        return $this->introduction;
+    }
+
+
+    /**
+     * Sets the introduction
+     *
+     * @param string $introduction
+     * @return void
+     */
+    public function setIntroduction(string $introduction): void
+    {
+        $this->introduction = $introduction;
     }
 
     
@@ -501,5 +539,27 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->sentTstamp = $sentTstamp;
     }
+
+    /**
+     * Returns the isSpecial
+     *
+     * @return bool $isSpecial
+     */
+    public function getIsSpecial(): bool
+    {
+        return $this->isSpecial;
+    }
+
+    /**
+     * Sets the isSpecial
+     *
+     * @param bool $isSpecial
+     * @return void
+     */
+    public function setIsSpecial(bool $isSpecial): void
+    {
+        $this->isSpecial = $isSpecial;
+    }
+
 
 }

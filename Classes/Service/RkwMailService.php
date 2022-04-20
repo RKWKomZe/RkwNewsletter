@@ -3,7 +3,13 @@
 namespace RKW\RkwNewsletter\Service;
 
 use RKW\RkwBasics\Helper\Common;
+use RKW\RkwMailer\Service\MailService;
+use RKW\RkwMailer\Utility\FrontendLocalizationUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -300,25 +306,28 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
     /**
      * Send newsletter test mail to one backend user
      *
-     * @param \RKW\RkwNewsletter\Domain\Model\BackendUser $admin
-     * @param array $emailList
      * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
-     * @param \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $pages
-     * @param \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $specialPages
-     * @param string $title
+     * @param \RKW\RkwNewsletter\Domain\Model\BackendUser $admin
+     * @param array $emailArray
+     * @param array<\RKW\RkwNewsletter\Domain\Model\Topic> $topics
+     * @param string $subject
      * @return void
-     * @throws \Exception
-     * @throws \RKW\RkwMailer\Service\MailException
+     * @throws \RKW\RkwMailer\Exception
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      * @throws \TYPO3Fluid\Fluid\View\Exception\InvalidTemplateResourceException
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
-    public function sendTestMail(\RKW\RkwNewsletter\Domain\Model\BackendUser $admin, $emailList, \RKW\RkwNewsletter\Domain\Model\Issue $issue, \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $pages, \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $specialPages, $title = null)
+    public function sendTestMail(
+        \RKW\RkwNewsletter\Domain\Model\Issue $issue,
+        \RKW\RkwNewsletter\Domain\Model\BackendUser $admin, 
+        array $emailArray,
+        array $topics = null,
+        string $subject = 'Test'
+    )
     {
         // get settings
         $settings = $this->getSettings(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
-        $settingsDefault = $this->getSettings();
 
         if (
             ($settings['view']['templateRootPaths'])
@@ -326,34 +335,13 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
         ) {
 
             /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-            $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Object\ObjectManager');
+            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
 
             /** @var \RKW\RkwMailer\Service\MailService $mailService */
-            $mailService = $objectManager->get('RKW\\RkwMailer\\Service\\MailService');
+            $mailService = $objectManager->get(MailService::class);
 
-            // if there is only one topic-page included, show all contents
-            $itemsPerTopic = ($settings['settings']['maxItemsPerTopic'] ? intval($settings['settings']['maxItemsPerTopic']) : 5);
-            $includeTutorials = false;
-            if ((count($pages->toArray()) + count($specialPages->toArray())) == 1) {
-                $itemsPerTopic = 9999;
-                $includeTutorials = true;
-            }
+            foreach ($emailArray as $email) {
 
-            // include topNews?
-            $includeTopNews = false;
-            if ((count($pages->toArray()) > 1) && count($specialPages->toArray()) < 1) {
-                $includeTopNews = true;
-            }
-
-            /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
-            $pagesOrderArray = array();
-            foreach ($pages->toArray() as $page) {
-                $pagesOrderArray[] = $page->getUid();
-            }
-
-            foreach ($emailList as $email) {
-
-                // send new user an email with token
                 $mailService->setTo(
                     array(
                         'salutation'   => 1,
@@ -365,44 +353,24 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
                     ),
                     array(
                         'marker'  => array(
-                            'issue'             => $issue,
-                            'pages'             => $pages,
-                            'specialPages'      => $specialPages,
-                            'pagesOrder'        => implode(',', $pagesOrderArray),
-                            'admin'             => $admin,
-                            'includeEditorials' => $includeTutorials,
-                            'includeTopNews'    => $includeTopNews,
-                            'webView'           => false,
-                            'maxItemsPerTopic'  => $itemsPerTopic,
-                            'pageTypeMore'      => $settings['settings']['webViewPageNum'],
-                            'subscriptionPid'   => $settings['settings']['subscriptionPid'],
+                            'issue'      => $issue,
+                            'topics'     => $topics,
+                            'admin'      => $admin,
+                            'settings'    => $settings['settings']
                         ),
                     )
                 );
             }
 
-            // get first content element of first page with header for subject
-            /** @var \RKW\RkwNewsletter\Domain\Repository\ContentRepository $ttContentRepository */
-            $ttContentRepository = $objectManager->get('RKW\\RkwNewsletter\\Domain\\Repository\\ContentRepository');
-
-            $language = $issue->getNewsletter()->getSysLanguageUid();
-
-            /** @var \RKW\RkwNewsletter\Domain\Model\Content $firstContentElement */
-            if (count($specialPages->toArray())) {
-                $firstContentElement = $ttContentRepository->findFirstWithHeaderByPid($specialPages->getFirst()->getUid(), $language, $includeTutorials);
-            } else if (count($pages->toArray())) {
-                $firstContentElement = $ttContentRepository->findFirstWithHeaderByPid($pages->getFirst()->getUid(), $language, $includeTutorials);
-            }
-
-
             $mailService->getQueueMail()->setSettingsPid($issue->getNewsletter()->getSettingsPage()->getUid());
             $mailService->getQueueMail()->setSubject(
-                \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(
+                FrontendLocalizationUtility::translate(
                     'rkwMailService.subject.testMail',
                     'rkw_newsletter',
                     [
-                        'subject' => ($title ? $title : $issue->getTitle()) . ($firstContentElement ? (' – '. $firstContentElement->getHeader()) : '')
-                    ]
+                        'subject' => $subject
+                    ],
+                    $admin->getLang()
                 )
             );
 
@@ -441,7 +409,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
                 $mailService->getQueueMail()->setReturnPath($issue->getNewsletter()->getReturnPath());
             }
             if ($issue->getNewsletter()->getReplyMail()) {
-                $mailService->getQueueMail()->setReplyAddress($issue->getNewsletter()->getReplyMail());
+                $mailService->getQueueMail()->setReplyToAddress($issue->getNewsletter()->getReplyMail());
             }
             if ($issue->getNewsletter()->getSenderMail()) {
                 $mailService->getQueueMail()->setFromAddress($issue->getNewsletter()->getSenderMail());

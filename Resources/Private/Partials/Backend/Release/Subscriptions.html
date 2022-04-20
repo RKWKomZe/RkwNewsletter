@@ -1,0 +1,14 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:rkwNewsletter="http://typo3.org/ns/RKW/RkwNewsletter/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+
+    <strong><f:translate key="partials_backend_release_subscriptions.subscriptionsAll" />: <rkwNewsletter:backend.countSubscriptions newsletter="{issue.newsletter}" /></strong>
+    <f:if condition="{issue.newsletter.type} != 1">
+        , <f:translate key="partials_backend_release_subscriptions.subscriptionsAmong" />:
+        <f:for each="{rkwNewsletter:backend.getNonSpecialTopics(issue: issue)}" as="topic" iteration="iterator">
+            <rkwNewsletter:backend.countSubscriptions newsletter="{issue.newsletter}" topic="{topic}"/> x {topic.name}
+            <f:if condition="!{iterator.isLast}">/</f:if>
+        </f:for>
+    </f:if>
+</html>

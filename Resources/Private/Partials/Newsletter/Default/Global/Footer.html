@@ -1,0 +1,94 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+	xmlns:rkwMailer="http://typo3.org/ns/RKW/RkwMailer/ViewHelpers"
+	data-namespace-typo3-fluid="true">
+
+	
+	<!-- PLAINTEXT -->
+	<f:section name="Plaintext">
+		<f:if condition="{topics}">
+			##################################################\n
+			<rkwMailer:frontend.translate key="partials_newsletter_global_footer.subscriptionHeadline" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />\n
+			##################################################\n
+			\n
+			<rkwMailer:frontend.translate key="partials_newsletter_global_footer.subscriptionTopics" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />\n
+			<f:for each="{topics}" as="topic">
+				&ndash;&nbsp;&nbsp;{topic.name}\n
+			</f:for>
+			\n
+			<f:if condition="{hash}">
+				<rkwMailer:frontend.translate key="partials_newsletter_footer.subscriptionText" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />\n
+				<rkwMailer:frontend.translate key="partials_newsletter_footer.subscriptionLink" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />: <rkwMailer:frontend.uri.action action="edit" controller="Subscription" extensionName="rkwNewsletter" pluginName="Subscription" pageUid="{subscriptionPid}" absolute="true" queueMail="{queueMail}" arguments="{hash: hash}" noCacheHash="true" />\n
+				\n
+			</f:if>
+		</f:if>
+		----------------------------------------------------------------------------------------------------------------------------------\n
+		\n
+		RKW Rationalisierungs- und Innovationszentrum der Deutschen Wirtschaft e.V.\n
+		Kompetenzzentrum\n
+		Düsseldorfer Strasse 40 A\n
+		65760 Eschborn\n
+		Tel: 06196 495-0\n
+		www.rkw-kompetenzzentrum.de
+	</f:section>
+	
+	
+	<!-- HTML -->
+	<f:section name="Html">
+		<f:if condition="{topics}">
+			<tr>
+				<td style="padding-top:48px;">
+					<table cellpadding="0" cellspacing="0" border="0" style="width: 100%; font-family: 'Arial', sans-serif; font-size: 14px">
+						<tr>
+							<td style="padding: 12px 16px; font-size: 16px; color:#fff; font-weight: 700; line-height: 16px; text-transform: uppercase; background: #303030; ">
+								<rkwMailer:frontend.translate key="partials_newsletter_global_footer.subscriptionHeadline" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />
+							</td>
+						</tr>
+						<tr>
+							<td style="padding: 12px 16px 8px 16px; line-height: 20px;">
+								<rkwMailer:frontend.translate key="partials_newsletter_global_footer.subscriptionTopics" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />
+							</td>
+						</tr>
+						<tr>
+							<td style="padding: 0 16px; line-height: 20px;">
+								<f:for each="{topics}" as="topic">
+									&ndash;&nbsp;&nbsp;{topic.name}<br/>
+								</f:for>
+							</td>
+						</tr>
+						<f:if condition="{hash}">
+						<tr>
+							<td style="padding: 12px 16px; line-height: 20px; font-weight:700">
+								<rkwMailer:frontend.translate key="partials_newsletter_global_footer.subscriptionText" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />
+								<a style="color:#E64415;" href="<rkwMailer:frontend.uri.action action='edit' controller='Subscription' extensionName='rkwNewsletter' pluginName='Subscription' pageUid='{subscriptionPid}' absolute='true' queueMail='{queueMail}' arguments='{hash: hash}' noCacheHash='true' />" target="_blank"><rkwMailer:frontend.translate key="partials_newsletter_global_footer.subscriptionLink" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" /></a>
+							</td>
+						</tr>
+						</f:if>
+					</table>
+				</td>
+			</tr>
+		</f:if>
+		
+		<tr>
+			<td style="padding: 32px 16px 0 16px">
+				<p style="margin: 0; padding: 9px 0 9px; border-top: 1px solid #333; font-size: 12px; line-height:12px;">
+					&nbsp;
+				</p>
+			</td>
+		</tr>
+	
+		<tr>
+			<td style="padding: 0 16px 16px 16px" class="footer">
+				<p>
+					RKW Rationalisierungs- und Innovationszentrum der Deutschen Wirtschaft e.V.<br>
+					Kompetenzzentrum<br>
+					Düsseldorfer Strasse 40 A<br>
+					65760 Eschborn<br>
+					Tel: 06196 495-0<br>
+					<a href="https://www.rkw-kompetenzzentrum.de" target="_blank">www.rkw-kompetenzzentrum.de</a>
+				</p>
+			</td>
+		</tr>
+		
+	</f:section>
+
+</html>

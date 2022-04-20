@@ -15,6 +15,7 @@ namespace RKW\RkwNewsletter\Domain\Repository;
  */
 
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 /**
  * IssueRepository
@@ -35,144 +36,137 @@ class IssueRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $this->defaultQuerySettings = $this->objectManager->get(Typo3QuerySettings::class);
         $this->defaultQuerySettings->setRespectStoragePage(false);
     }
+
     
     /**
-     * findAllToReleaseByTime
+     * findAllForConfirmationByTolerance
      *
-     * @param int $toleranceReminder
+     * @param int $toleranceLevel2
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @comment implicitly tested
      */
-    public function findAllToReleaseByTime($toleranceReminder)
+    public function findAllForConfirmationByTolerance(int $toleranceLevel2): QueryResultInterface
     {
         $query = $this->createQuery();
-        $constraints = $query->equals('infoTstamp', 0);
 
-        // Check for reminder
-        if ($toleranceReminder > 0) {
-            $constraints =
+        $query->matching(
+            $query->logicalAnd(
+                
+                // status is approval or release
+                $query->logicalOr(
+                    $query->equals('status', 2),
+                    $query->equals('status', 1)
+                ),
+                
+                // nor released nor sent
+                $query->equals('sentTstamp', 0),
+                $query->equals('releaseTstamp', 0),
+
+                // Check level 1 and level 2
                 $query->logicalOr(
                     $query->equals('infoTstamp', 0),
                     $query->logicalOr(
                         $query->logicalAnd(
                             $query->greaterThan('infoTstamp', 0),
                             $query->equals('reminderTstamp', 0),
-                            $query->lessThan('infoTstamp', time() - $toleranceReminder)
+                            $query->lessThan('infoTstamp', time() - $toleranceLevel2)
                         ),
                         $query->logicalAnd(
                             $query->greaterThan('infoTstamp', 0),
                             $query->greaterThan('reminderTstamp', 0),
-                            $query->lessThan('reminderTstamp', time() - $toleranceReminder)
+                            $query->lessThan('reminderTstamp', time() - $toleranceLevel2)
                         )
                     )
-                );
-        }
-
-        $query->matching(
-            $query->logicalAnd(
-                $query->logicalOr(
-                    $query->equals('status', 2),
-                    $query->equals('status', 1)
-                ),
-                $query->equals('sentTstamp', 0),
-                $query->equals('releaseTstamp', 0),
-                $constraints
+                )
             )
         );
 
         return $query->execute();
-        //===
     }
 
+
+
     /**
-     *  findAllToApproveOrReleaseByBackendUser
+     * findAllToApproveOnStage1
      *
-     * @param int $backendUser
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @comment only used in backend module
      */
-    public function findAllToApproveOrReleaseByBackendUser($backendUser)
+    public function findAllToApproveOnStage1(): QueryResultInterface
+    {
+        $query = $this->createQuery();
+
+        $query->matching(
+            $query->logicalAnd(
+                $query->equals('status', 1),
+                $query->equals('approvals.allowedTstampStage1', 0)
+            )
+        );
+
+        return $query->execute();
+    }
+
+
+    /**
+     * findAllToApproveOnStage2
+     *
+     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @comment only used in backend module
+     */
+    public function findAllToApproveOnStage2(): QueryResultInterface
+    {
+        $query = $this->createQuery();
+
+        $query->matching(
+            $query->logicalAnd(
+                $query->equals('status', 1),
+                $query->logicalAnd(
+                    $query->greaterThan('approvals.allowedTstampStage1', 0),
+                    $query->equals('approvals.allowedTstampStage2', 0)
+                )
+            )
+        );
+
+        return $query->execute();
+    }
+
+
+    /**
+     * findAllToApproveOrRelease
+     *
+     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @comment only used in backend module
+     */
+    public function findAllToApproveOrRelease(): QueryResultInterface
     {
         $query = $this->createQuery();
 
         $query->matching(
             $query->logicalAnd(
                 $query->in('status', array(1, 2)),
-                $query->equals('releaseTstamp', 0),
-                $query->logicalOr(
-                    $query->contains('newsletter.approval', $backendUser),
-                    $query->contains('approvals.topic.approvalStage1', $backendUser),
-                    $query->contains('approvals.topic.approvalStage2', $backendUser)
-                )
+                $query->equals('releaseTstamp', 0)
             )
         );
 
         return $query->execute();
-        //===
     }
 
-
-    /**
-     * findAllToApproveOnStage1ByBackendUser
-     *
-     * @param int $backendUser
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
-     */
-    public function findAllToApproveOnStage1ByBackendUser($backendUser)
-    {
-        $query = $this->createQuery();
-
-        $query->matching(
-            $query->logicalAnd(
-                $query->equals('status', 1),
-                $query->equals('infoTstamp', 0),
-                $query->equals('releaseTstamp', 0),
-                $query->equals('approvals.allowedTstampStage1', 0),
-                $query->logicalOr(
-                    $query->contains('approvals.topic.approvalStage1', $backendUser),
-                    $query->contains('newsletter.approval', $backendUser)
-                )
-            )
-        );
-
-        return $query->execute();
-        //===
-    }
-
-
-    /**
-     * findAllToApproveOnStage2ByBackendUser
-     *
-     * @param int $backendUser
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
-     */
-    public function findAllToApproveOnStage2ByBackendUser($backendUser)
-    {
-        $query = $this->createQuery();
-
-        $query->matching(
-            $query->logicalAnd(
-                $query->equals('status', 1),
-                $query->equals('infoTstamp', 0),
-                $query->equals('releaseTstamp', 0),
-                $query->logicalAnd(
-                    $query->greaterThan('approvals.allowedTstampStage1', 0),
-                    $query->equals('approvals.allowedTstampStage2', 0)
-                ),
-                $query->logicalOr(
-                    $query->contains('approvals.topic.approvalStage2', $backendUser),
-                    $query->contains('newsletter.approval', $backendUser)
-                )
-            )
-        );
-
-        return $query->execute();
-        //===
-    }
-
-
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      *  findAllToSendByBackendUser
      *

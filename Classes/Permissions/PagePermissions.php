@@ -17,6 +17,9 @@ namespace RKW\RkwNewsletter\Permissions;
 use RKW\RkwBasics\Utility\GeneralUtility;
 use RKW\RkwNewsletter\Domain\Model\Pages;
 use RKW\RkwNewsletter\Status\PageStatus;
+use TYPO3\CMS\Core\Log\Logger;
+use TYPO3\CMS\Core\Log\LogLevel;
+use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Type\Bitmask\Permission;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
@@ -105,6 +108,15 @@ class PagePermissions
         if ($update) {
             $this->pagesRepository->update($page);
             $this->persistenceManager->persistAll();
+            
+            $this->getLogger()->log(
+                LogLevel::INFO,
+                sprintf(
+                    'Updated page permissions for page id=%s to values for "%s".',
+                    $page->getUid(),
+                    $stage
+                )
+            );
         }
 
         return $update;
@@ -144,6 +156,22 @@ class PagePermissions
         );
         
         return $settings['pages']['permissions'] ?: [];
+    }
+
+
+
+    /**
+     * Returns logger instance
+     *
+     * @return \TYPO3\CMS\Core\Log\Logger
+     */
+    protected function getLogger()
+    {
+        if (!$this->logger instanceof Logger) {
+            $this->logger = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(LogManager::class)->getLogger(__CLASS__);
+        }
+
+        return $this->logger;
     }
 
 }

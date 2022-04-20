@@ -14,6 +14,8 @@ namespace RKW\RkwNewsletter\Domain\Model;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+
 /**
  * FrontendUser
  *
@@ -37,8 +39,9 @@ class FrontendUser extends \RKW\RkwRegistration\Domain\Model\FrontendUser
     /**
      * @var string txRkwnewsletterHash
      */
-    protected $txRkwnewsletterHash;
+    protected $txRkwnewsletterHash = '';
 
+    
     /**
      * __construct
      */
@@ -60,7 +63,7 @@ class FrontendUser extends \RKW\RkwRegistration\Domain\Model\FrontendUser
      * @return void
      */
 
-    protected function initStorageObjects()
+    protected function initStorageObjects(): void
     {
         $this->txRkwnewsletterSubscription = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
     }
@@ -71,9 +74,10 @@ class FrontendUser extends \RKW\RkwRegistration\Domain\Model\FrontendUser
      *
      * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage $subscription
      * @return void
+     * @api
      */
 
-    public function setTxRkwnewsletterSubscription(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $subscription)
+    public function setTxRkwnewsletterSubscription(ObjectStorage $subscription): void
     {
         $this->txRkwnewsletterSubscription = $subscription;
     }
@@ -83,9 +87,10 @@ class FrontendUser extends \RKW\RkwRegistration\Domain\Model\FrontendUser
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Topic $subscription
      * @return void
+     * @api
      */
 
-    public function addTxRkwnewsletterSubscription(\RKW\RkwNewsletter\Domain\Model\Topic $subscription)
+    public function addTxRkwnewsletterSubscription(Topic $subscription): void
     {
         $this->txRkwnewsletterSubscription->attach($subscription);
     }
@@ -95,8 +100,9 @@ class FrontendUser extends \RKW\RkwRegistration\Domain\Model\FrontendUser
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Topic $subscription
      * @return void
+     * @api
      */
-    public function removeTxRkwnewsletterSubscription(\RKW\RkwNewsletter\Domain\Model\Topic $subscription)
+    public function removeTxRkwnewsletterSubscription(Topic $subscription): void
     {
         $this->txRkwnewsletterSubscription->detach($subscription);
     }
@@ -106,8 +112,9 @@ class FrontendUser extends \RKW\RkwRegistration\Domain\Model\FrontendUser
      * although it can hold several $newsletter.
      *
      * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage An object storage containing the $newsletter
+     * @api
      */
-    public function getTxRkwnewsletterSubscription()
+    public function getTxRkwnewsletterSubscription(): ObjectStorage
     {
         return $this->txRkwnewsletterSubscription;
     }
@@ -120,7 +127,7 @@ class FrontendUser extends \RKW\RkwRegistration\Domain\Model\FrontendUser
      * @return void
      */
 
-    public function setTxRkwnewsletterHash($hash)
+    public function setTxRkwnewsletterHash(string $hash): void
     {
         $this->txRkwnewsletterHash = $hash;
     }
@@ -130,7 +137,7 @@ class FrontendUser extends \RKW\RkwRegistration\Domain\Model\FrontendUser
      *
      * @return string
      */
-    public function getTxRkwnewsletterHash()
+    public function getTxRkwnewsletterHash(): string
     {
         return $this->txRkwnewsletterHash;
     }

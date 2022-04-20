@@ -15,6 +15,7 @@ namespace RKW\RkwNewsletter\Controller;
  */
 
 use \RKW\RkwBasics\Helper\Common;
+use RKW\RkwNewsletter\Mailing\ContentLoader;
 use RKW\RkwNewsletter\Manager\ApprovalManager;
 use RKW\RkwNewsletter\Manager\IssueManager;
 use TYPO3\CMS\Core\Log\LogLevel;
@@ -133,88 +134,50 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
 
 
     /**
-     * processes approvals and sends emails
+     * processes confirmations of approvals and issues
      *
      * @return void
      */
-    public function processApprovalsCommand()
+    public function processConfirmationsCommand()
     {
 
         try {
             
             $settings = $this->getSettings(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
-            
+$settings['reminderApprovalStage1'] = 600;
+$settings['reminderApprovalStage2'] = 600;
+$settings['automaticApprovalStage1'] = 1200;
+$settings['automaticApprovalStage2'] = 1200;
+$settings['reminderApprovalStage3'] = 600;
+
             /** @var  \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
 
             /** @var \RKW\RkwNewsletter\Manager\ApprovalManager $approvalManager */
             $approvalManager = $objectManager->get(ApprovalManager::class);
-            $approvalManager->processAllApprovals(
+            $approvalManager->processAllConfirmations(
                 intval($settings['reminderApprovalStage1']),
                 intval($settings['reminderApprovalStage2']),
                 intval($settings['automaticApprovalStage1']),
                 intval($settings['automaticApprovalStage2'])
             );
+
+            /** @var \RKW\RkwNewsletter\Manager\IssueManager $issueManager */
+            $issueManager = $objectManager->get(IssueManager::class);
+            $issueManager->processAllConfirmations($settings['reminderApprovalStage3']);
 
         } catch (\Exception $e) {
             $this->getLogger()->log(
                 LogLevel::ERROR, 
                 sprintf(
-                    'An unexpected error occurred while trying to process approvals: %s', 
+                    'An unexpected error occurred while trying to process confirmations: %s', 
                     $e->getMessage()
                 )
             );
         }
     }
 
-    /**
-     * processes releases and sends emails
-     *
-     * @return void
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
-     */
-    public function processReleasesCommand()
-    {
-
-        try {
-
-            $settings = $this->getSettings(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
-
-
-            /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-
-            /** @var \RKW\RkwNewsletter\Manager\IssueManager $issueManager */
-            $issueManager = $objectManager->get(IssueManager::class);
-            
-            $issueManager->checkAllReleaseStages();
-            
-            $approvalManager->processAllApprovals(
-                intval($settings['reminderApprovalStage1']),
-                intval($settings['reminderApprovalStage2']),
-                intval($settings['automaticApprovalStage1']),
-                intval($settings['automaticApprovalStage2'])
-            );
-
-            /** @var \RKW\RkwNewsletter\Helper\Release $release */
-            $release = $objectManager->get('RKW\\RkwNewsletter\\Helper\\Release');
-            $release->sendInfoAndReminderMailsForReleases();
-
-        } catch (\Exception $e) {
-            $this->getLogger()->log(
-                LogLevel::ERROR,
-                sprintf(
-                    'An unexpected error occurred while trying to process approvals: %s',
-                    $e->getMessage()
-                )
-            );
-        }
-
-    }
-
-
+    
     /**
      * function buildNewsletter
      * builds final newsletter-emails and prepares them for sending
@@ -238,9 +201,6 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
             $settings = $this->getSettings(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
             $settingsDefault = $this->getSettings();
 
-            // if there is only one topic-page included, show all contents
-            $itemsPerTopic = ($settings['settings']['maxItemsPerTopic'] ? intval($settings['settings']['maxItemsPerTopic']) : 5);
-
             if (count($issues)) {
 
                 /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
@@ -261,10 +221,6 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
 
                         // load queueMail into MailService
                         $mailService->setQueueMail($issue->getQueueMail());
-
-                        // get special pages
-                        /** @var \TYPO3\CMS\Extbase\Persistence\QueryResultInterface $specialPages */
-                        $specialPages = $this->pagesRepository->findAllByIssueAndSpecialTopic($issue, true);
 
                         //  Go through recipients
                         if (count($issue->getRecipients())) {
@@ -297,82 +253,40 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
 
                                         self::debugTime(__LINE__, __METHOD__);
 
-                                        // get all pages of user by his subscriptions
-                                        /** @var \TYPO3\CMS\Extbase\Persistence\QueryResultInterface $pages */
-                                        if ($newsletter->getType() == 1) {
-                                            $pages = $this->pagesRepository->findAllByIssueAndSpecialTopic($issue, false);
-                                        } else {
-                                            $pages = $this->pagesRepository->findAllByIssueAndSubscription($issue, $frontendUser->getTxRkwnewsletterSubscription());
-                                        }
+                                        // get subscription and shuffle order
+                                        $subscribedTopics = $frontendUser->getTxRkwnewsletterSubscription()->toArray();
+                                        $topics = shuffle($subscribedTopics);
 
-
-                                        /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
-                                        $pagesOrderArray = array();
-                                        foreach ($pages->toArray() as $page) {
-                                            $pagesOrderArray[] = $page->getUid();
-                                        }
+                                        // get first content-element for subject
+                                        /** @var \RKW\RkwNewsletter\Mailing\ContentLoader $contentLoader */
+                                        $contentLoader = $this->objectManager->get(ContentLoader::class, $issue);
+                                        $contentLoader->setTopics($topics);
+                                        $firstHeadline = $contentLoader->getFirstHeadline();
+                                        $subject = ($firstHeadline ? ($issue->getTitle() . ' – ' . $firstHeadline) : $issue->getTitle());
+                                        
+                                        self::debugTime(__LINE__, __METHOD__);
+  
+                                        // add it to final list
+                                        $mailService->setTo(
+                                            $frontendUser,
+                                            array(
+                                                'marker'  => array(
+                                                    'issue'             => $issue,
+                                                    'topics'            => $topics,
+                                                    'hash'              => $frontendUser->getTxRkwnewsletterHash(),
+                                                    'settings'          => $settings['settings']
+                                                ),
+                                                'subject' => $subject,
+                                            ),
+                                            true
+                                        );
 
                                         self::debugTime(__LINE__, __METHOD__);
 
-                                        // add to final list if there are some pages!
-                                        if (
-                                            (count($pages->toArray()) > 0)
-                                            || (count($specialPages->toArray()) > 0)
-                                        ) {
-
-                                            // override itemsPerTopic
-                                            $includeTutorials = false;
-                                            if ((count($pages->toArray()) + count($specialPages->toArray())) == 1) {
-                                                $itemsPerTopic = 9999;
-                                                $includeTutorials = true;
-                                            }
-
-                                            // include topNews?
-                                            $includeTopNews = false;
-                                            if ((count($pages->toArray()) > 1) && count($specialPages->toArray()) < 1) {
-                                                $includeTopNews = true;
-                                            }
-
-                                            // get first content element of first page with header for subject
-                                            $language = $issue->getNewsletter()->getSysLanguageUid();
-
-                                            /** @var \RKW\RkwNewsletter\Domain\Model\Content $firstContentElement */
-                                            if (count($specialPages->toArray())) {
-                                                $firstContentElement = $this->ttContentRepository->findFirstWithHeaderByPid($specialPages->getFirst()->getUid(), $language, $includeTutorials);
-                                            } else {
-                                                if (count($pages->toArray())) {
-                                                    $firstContentElement = $this->ttContentRepository->findFirstWithHeaderByPid($pages->getFirst()->getUid(), $language, $includeTutorials);
-                                                }
-                                            }
-
-                                            // add it to final list
-                                            $mailService->setTo(
-                                                $frontendUser,
-                                                array(
-                                                    'marker'  => array(
-                                                        'issue'             => $issue,
-                                                        'pages'             => $pages,
-                                                        'specialPages'      => $specialPages,
-                                                        'pagesOrder'        => implode(',', $pagesOrderArray),
-                                                        'includeEditorials' => $includeTutorials,
-                                                        'includeTopNews'    => $includeTopNews,
-                                                        'webView'           => false,
-                                                        'maxItemsPerTopic'  => $itemsPerTopic,
-                                                        'pageTypeMore'      => $settings['settings']['webViewPageNum'],
-                                                        'subscriptionPid'   => $settings['settings']['subscriptionPid'],
-                                                        'hash'              => $frontendUser->getTxRkwnewsletterHash()
-                                                    ),
-                                                    'subject' => ($firstContentElement ? ($issue->getTitle() . ' – ' . $firstContentElement->getHeader()) : $issue->getTitle()),
-                                                ),
-                                                true
-                                            );
-
-                                            self::debugTime(__LINE__, __METHOD__);
-
-                                            //  remove recipient from temporary list!
-                                            $issue->removeRecipients($frontendUser);
-                                            $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Prepared newsletter-mails for recipient with uid=%s for issue with uid=%s of newsletter-configuration with id=%s.', $frontendUser->getUid(), $issue->getUid(), $newsletter->getUid()));
-                                        }
+                                        //  remove recipient from temporary list!
+                                        $issue->removeRecipients($frontendUser);
+                                        $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Prepared newsletter-mails for recipient with uid=%s for issue with uid=%s of newsletter-configuration with id=%s.', $frontendUser->getUid(), $issue->getUid(), $newsletter->getUid()));
+                                    
 
                                     } else {
                                         //  remove recipient from temporary list!
@@ -484,7 +398,7 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
                             $queueMail->setReturnPath($issue->getNewsletter()->getReturnPath());
                         }
                         if ($issue->getNewsletter()->getReplyMail()) {
-                            $queueMail->setReplyAddress($issue->getNewsletter()->getReplyMail());
+                            $queueMail->setReplyToAddress($issue->getNewsletter()->getReplyMail());
                         }
                         if ($issue->getNewsletter()->getSenderMail()) {
                             $queueMail->setFromAddress($issue->getNewsletter()->getSenderMail());

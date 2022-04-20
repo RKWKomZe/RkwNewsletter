@@ -52,6 +52,7 @@ class IssueStatus
      */
     const STAGE_DONE = 4;
 
+    
     /**
      * @var int
      */
@@ -169,4 +170,35 @@ class IssueStatus
         return $update;
     }
     
+
+    /**
+     * Increases the level of the release stage - only available here!!!!
+     *
+     * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
+     * @return bool
+     */
+    public static function increaseLevel (Issue $issue): bool
+    {
+
+        // Only relevant for stage "release"
+        if (self::getStage($issue) != self::STAGE_RELEASE) {
+            return false;
+        }
+
+        $level = self::getLevel($issue);
+
+        $update = false;
+        if ($level == self::LEVEL1) {
+            $issue->setInfoTstamp(time());
+            $update = true;
+
+        } else if ($level == self::LEVEL2) {
+            $issue->setReminderTstamp(time());
+            $update = true;
+        }
+      
+        return $update;
+    }
+
+
 }

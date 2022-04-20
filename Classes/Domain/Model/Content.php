@@ -129,7 +129,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return void
      */
-    protected function initStorageObjects()
+    protected function initStorageObjects(): void
     {
         $this->image = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
         $this->txRkwnewsletterAuthors = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
@@ -375,6 +375,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \RKW\RkwAuthors\Domain\Model\Authors $txRkwnewsletterAuthors
      * @return void
+     * @api
      */
     public function addTxRkwnewsletterAuthors(Authors $txRkwnewsletterAuthors): void
     {
@@ -387,6 +388,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \RKW\RkwAuthors\Domain\Model\Authors $txRkwnewsletterAuthors The Authors to be removed
      * @return void
+     * @api
      */
     public function removeTxRkwnewsletterAuthors(Authors $txRkwnewsletterAuthors): void
     {
@@ -398,6 +400,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * Returns the txRkwnewsletterAuthors
      *
      * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwAuthors\Domain\Model\Authors> $txRkwnewsletterAuthors
+     * @api
      */
     public function getTxRkwnewsletterAuthors(): ObjectStorage
     {
@@ -410,6 +413,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwAuthors\Domain\Model\Authors> $txRkwnewsletterAuthors
      * @return void
+     * @api
      */
     public function setTxRkwnewsletterAuthors(ObjectStorage $txRkwnewsletterAuthors): void
     {

@@ -16,6 +16,7 @@ namespace RKW\RkwNewsletter\Tests\Integration\Manager;
 
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use RKW\RkwNewsletter\Domain\Model\Approval;
+use RKW\RkwNewsletter\Domain\Model\BackendUser;
 use RKW\RkwNewsletter\Domain\Repository\ApprovalRepository;
 use RKW\RkwNewsletter\Domain\Repository\IssueRepository;
 use RKW\RkwNewsletter\Domain\Repository\PagesRepository;
@@ -191,7 +192,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function increaseLevelSetsFirstLevelForStage1()
+    public function increaseLevelReturnsTrueAndSetsFirstLevelForStage1()
     {
 
         /**
@@ -228,7 +229,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function increaseLevelSetSecondLevelForStage1()
+    public function increaseLevelReturnsTrueAndSetSecondLevelForStage1()
     {
 
         /**
@@ -294,7 +295,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function increaseLevelSetsFirstLevelForStage2()
+    public function increaseLevelReturnsTrueAndSetsFirstLevelForStage2()
     {
 
         /**
@@ -331,7 +332,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function increaseLevelSetSecondLevelForStage2()
+    public function increaseLevelReturnsTrueAndSetSecondLevelForStage2()
     {
 
         /**
@@ -406,9 +407,11 @@ class ApprovalManagerTest extends FunctionalTestCase
          *
          * Given a persisted approval-object
          * Given the approval-object has none of the allowedTstampStage-properties set
+         * Given no backendUser is logged in
          * When the method is called
          * Then true is returned
          * Then the allowedTstampStage1-property is set
+         * Then the allowedByUserStage1-property is not set
          * Then the changes to the approval-object are persisted
          */
 
@@ -416,6 +419,9 @@ class ApprovalManagerTest extends FunctionalTestCase
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
         $approval = $this->approvalRepository->findByUid(140);
+
+        $GLOBALS['BE_USER'] = new \TYPO3\CMS\Core\Authentication\BackendUserAuthentication();
+        $GLOBALS['BE_USER']->user = [];
 
         $result = $this->subject->increaseStage($approval);
         self::assertTrue($result);
@@ -427,6 +433,52 @@ class ApprovalManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approvalDb */
         $approvalDb = $this->approvalRepository->findByUid(140);
         self::assertGreaterThan(0, $approvalDb->getAllowedTstampStage1());
+        self::assertNull($approvalDb->getAllowedByUserStage1());
+
+    }
+
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function increaseStageReturnsTrueForStage1AndSetsBackendUser()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a persisted approval-object
+         * Given the approval-object has none of the allowedTstampStage-properties set
+         * Given the method is called via backend and thus a backendUser is logged in
+         * When the method is called
+         * Then true is returned
+         * Then the allowedTstampStage1-property is set
+         * Then the changes to the approval-object are persisted
+         */
+
+        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check140.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
+        $approval = $this->approvalRepository->findByUid(140);
+
+        $GLOBALS['BE_USER'] = new \TYPO3\CMS\Core\Authentication\BackendUserAuthentication();
+        $GLOBALS['BE_USER']->user= [];
+        $GLOBALS['BE_USER']->user['uid'] = 140;
+
+        $result = $this->subject->increaseStage($approval);
+        self::assertTrue($result);
+
+        // force TYPO3 to load objects new from database
+        $persistenceManager = $this->objectManager->get(PersistenceManager::class);
+        $persistenceManager->clearState();
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approvalDb */
+        $approvalDb = $this->approvalRepository->findByUid(140);
+        self::assertGreaterThan(0, $approvalDb->getAllowedTstampStage1());
+        self::assertInstanceOf(BackendUser::class, $approvalDb->getAllowedByUserStage1());
+        self::assertEquals(140, $approvalDb->getAllowedByUserStage1()->getUid());
+
     }
 
     /**
@@ -441,9 +493,11 @@ class ApprovalManagerTest extends FunctionalTestCase
          *
          * Given a persisted approval-object
          * Given the approval-object has a value for the allowedTstampStage1-property set
+         * Given no backendUser is logged in
          * When the method is called
          * Then true is returned
          * Then the allowedTstampStage2-property is set
+         * Then the allowedByUserStage2-property is not set
          * Then the changes to the approval-object are persisted
          */
 
@@ -451,6 +505,9 @@ class ApprovalManagerTest extends FunctionalTestCase
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
         $approval = $this->approvalRepository->findByUid(150);
+
+        $GLOBALS['BE_USER'] = new \TYPO3\CMS\Core\Authentication\BackendUserAuthentication();
+        $GLOBALS['BE_USER']->user = [];
 
         $result = $this->subject->increaseStage($approval);
         self::assertTrue($result);
@@ -462,6 +519,50 @@ class ApprovalManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approvalDb */
         $approvalDb = $this->approvalRepository->findByUid(150);
         self::assertGreaterThan(0, $approvalDb->getAllowedTstampStage2());
+        self::assertNull($approvalDb->getAllowedByUserStage2());
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function increaseStageReturnsTrueForStage2AndSetsBackendUser()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a persisted approval-object
+         * Given the approval-object has a value for the allowedTstampStage1-property set
+         * Given no backendUser is logged in
+         * When the method is called
+         * Then true is returned
+         * Then the allowedTstampStage2-property is set
+         * Then the allowedByUserStage2-property is set
+         * Then the changes to the approval-object are persisted
+         */
+
+        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check150.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
+        $approval = $this->approvalRepository->findByUid(150);
+
+        $GLOBALS['BE_USER'] = new \TYPO3\CMS\Core\Authentication\BackendUserAuthentication();
+        $GLOBALS['BE_USER']->user= [];
+        $GLOBALS['BE_USER']->user['uid'] = 150;
+
+        $result = $this->subject->increaseStage($approval);
+        self::assertTrue($result);
+
+        // force TYPO3 to load objects new from database
+        $persistenceManager = $this->objectManager->get(PersistenceManager::class);
+        $persistenceManager->clearState();
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approvalDb */
+        $approvalDb = $this->approvalRepository->findByUid(150);
+        self::assertGreaterThan(0, $approvalDb->getAllowedTstampStage2());
+        self::assertInstanceOf(BackendUser::class, $approvalDb->getAllowedByUserStage2());
+        self::assertEquals(150, $approvalDb->getAllowedByUserStage2()->getUid());
     }
 
     /**
@@ -496,7 +597,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function getMailRecipientsForStageReturnsEmptyArray()
+    public function getMailRecipientsReturnsEmptyArray()
     {
 
         /**
@@ -685,7 +786,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function sendMailsReturnsOneForStage1Level0()
+    public function sendMailsReturnsOneForStage1Level1()
     {
 
         /**
@@ -716,7 +817,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function sendMailsReturnsOneForStage1Level1()
+    public function sendMailsReturnsOneForStage1Level2()
     {
 
         /**
@@ -749,7 +850,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function sendMailsReturnsTwoForStage1Level2()
+    public function sendMailsReturnsTwoForStage1LevelDone()
     {
 
         /**
@@ -814,7 +915,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function sendMailsReturnsOneForStage2Level0()
+    public function sendMailsReturnsOneForStage2Level1()
     {
 
         /**
@@ -846,7 +947,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function sendMailsReturnsOneForStage2Level1()
+    public function sendMailsReturnsOneForStage2Level2()
     {
 
         /**
@@ -879,7 +980,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function sendMailsReturnsTwoForStage2Level2()
+    public function sendMailsReturnsTwoForStage2LevelDone()
     {
 
         /**
@@ -944,7 +1045,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function sendMailsReturnsZeroStageDone()
+    public function sendMailsReturnsZeroForStageDone()
     {
 
         /**
@@ -978,7 +1079,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function processApprovalReturnsTrueAndIncreasesLevelForStage1Level0()
+    public function processConfirmationReturnsTrueAndIncreasesLevelForStage1Level0()
     {
 
         /**
@@ -1015,7 +1116,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
         $approval = $this->approvalRepository->findByUid(170);
 
-        $result = $this->subject->processApproval($approval);
+        $result = $this->subject->processConfirmation($approval);
         self::assertTrue($result);
 
         // force TYPO3 to load objects new from database
@@ -1043,7 +1144,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function processApprovalReturnsTrueAndIncreasesLevelForStage1Level1()
+    public function processConfirmationReturnsTrueAndIncreasesLevelForStage1Level1()
     {
 
         /**
@@ -1078,7 +1179,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
         $approval = $this->approvalRepository->findByUid(180);
 
-        $result = $this->subject->processApproval($approval);
+        $result = $this->subject->processConfirmation($approval);
         self::assertTrue($result);
 
         // force TYPO3 to load objects new from database
@@ -1106,7 +1207,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function processApprovalReturnsFalseAndIncreasesStageForStage1Level2()
+    public function processConfirmationReturnsFalseAndIncreasesStageForStage1Level2()
     {
 
         /**
@@ -1140,7 +1241,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
         $approval = $this->approvalRepository->findByUid(190);
 
-        $result = $this->subject->processApproval($approval);
+        $result = $this->subject->processConfirmation($approval);
         self::assertFalse($result);
 
         // force TYPO3 to load objects new from database
@@ -1168,7 +1269,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function processApprovalReturnsFalseAndIncreasesStageIfNoRecipientsForStage1()
+    public function processConfirmationReturnsFalseAndIncreasesStageIfNoRecipientsForStage1()
     {
 
         /**
@@ -1202,7 +1303,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
         $approval = $this->approvalRepository->findByUid(200);
 
-        $result = $this->subject->processApproval($approval);
+        $result = $this->subject->processConfirmation($approval);
         self::assertFalse($result);
 
         // force TYPO3 to load objects new from database
@@ -1228,7 +1329,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function processApprovalReturnsTrueAndIncreasesLevelForStage2Level0()
+    public function processConfirmationReturnsTrueAndIncreasesLevelForStage2Level0()
     {
 
         /**
@@ -1263,7 +1364,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
         $approval = $this->approvalRepository->findByUid(210);
 
-        $result = $this->subject->processApproval($approval);
+        $result = $this->subject->processConfirmation($approval);
         self::assertTrue($result);
 
         // force TYPO3 to load objects new from database
@@ -1289,7 +1390,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function processApprovalReturnsTrueAndIncreasesLevelForStage2Level1()
+    public function processConfirmationReturnsTrueAndIncreasesLevelForStage2Level1()
     {
 
         /**
@@ -1323,7 +1424,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
         $approval = $this->approvalRepository->findByUid(220);
 
-        $result = $this->subject->processApproval($approval);
+        $result = $this->subject->processConfirmation($approval);
         self::assertTrue($result);
 
         // force TYPO3 to load objects new from database
@@ -1349,7 +1450,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function processApprovalReturnsFalseAndIncreasesStageForStage2Level2()
+    public function processConfirmationReturnsFalseAndIncreasesStageForStage2Level2()
     {
 
         /**
@@ -1382,7 +1483,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
         $approval = $this->approvalRepository->findByUid(230);
 
-        $result = $this->subject->processApproval($approval);
+        $result = $this->subject->processConfirmation($approval);
         self::assertFalse($result);
 
         // force TYPO3 to load objects new from database
@@ -1408,7 +1509,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function processApprovalReturnsFalseAndIncreasesStageIfNoRecipientsForStage2()
+    public function processConfirmationReturnsFalseAndIncreasesStageIfNoRecipientsForStage2()
     {
 
         /**
@@ -1441,7 +1542,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
         $approval = $this->approvalRepository->findByUid(240);
 
-        $result = $this->subject->processApproval($approval);
+        $result = $this->subject->processConfirmation($approval);
         self::assertFalse($result);
 
         // force TYPO3 to load objects new from database
@@ -1468,7 +1569,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function processAllApprovalsReturnsOneIfDueForInfoMailForStage1()
+    public function processAllConfirmationsReturnsOneIfDueForInfoMailForStage1()
     {
 
         /**
@@ -1493,7 +1594,7 @@ class ApprovalManagerTest extends FunctionalTestCase
 
         $this->importDataSet(self::FIXTURE_PATH . '/Database/Check250.xml');
 
-        $result = $this->subject->processAllApprovals(600, 600, 1200, 1200);
+        $result = $this->subject->processAllConfirmations(600, 600, 1200, 1200);
         self::assertEquals(1, $result);
 
     }
@@ -1502,7 +1603,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function processAllApprovalsReturnsOneIfDueForReminderMailForStage1()
+    public function processAllConfirmationsReturnsOneIfDueForReminderMailForStage1()
     {
 
         /**
@@ -1536,7 +1637,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         $persistenceManager = $this->objectManager->get(PersistenceManager::class);
         $persistenceManager->persistAll();
 
-        $result = $this->subject->processAllApprovals(600, 600, 1200, 1200);
+        $result = $this->subject->processAllConfirmations(600, 600, 1200, 1200);
         self::assertEquals(1, $result);
 
     }
@@ -1545,7 +1646,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function processAllApprovalsReturnsNoneIfNotDueForReminderMailForStage1()
+    public function processAllConfirmationsReturnsZeroIfNotDueForReminderMailForStage1()
     {
 
         /**
@@ -1580,7 +1681,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         $persistenceManager->persistAll();
         $persistenceManager->clearState();
 
-        $result = $this->subject->processAllApprovals(600, 600, 1200, 1200);
+        $result = $this->subject->processAllConfirmations(600, 600, 1200, 1200);
         self::assertEquals(0, $result);
 
     }
@@ -1589,7 +1690,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function processAllApprovalsReturnsNoneIfNotDueForAutomaticApprovalForStage1()
+    public function processAllConfirmationsReturnsZeroIfNotDueForAutomaticConfirmationForStage1()
     {
 
         /**
@@ -1624,7 +1725,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         $persistenceManager = $this->objectManager->get(PersistenceManager::class);
         $persistenceManager->persistAll();
 
-        $result = $this->subject->processAllApprovals(600, 600, 1200, 1200);
+        $result = $this->subject->processAllConfirmations(600, 600, 1200, 1200);
         self::assertEquals(0, $result);
 
     }
@@ -1634,7 +1735,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function processAllApprovalsReturnsOneIfDueForAutomaticApprovalForStage1()
+    public function processAllConfirmationsReturnsOneIfDueForAutomaticConfirmationForStage1()
     {
 
         /**
@@ -1670,7 +1771,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         $persistenceManager = $this->objectManager->get(PersistenceManager::class);
         $persistenceManager->persistAll();
 
-        $result = $this->subject->processAllApprovals(600, 600, 1200, 1200);
+        $result = $this->subject->processAllConfirmations(600, 600, 1200, 1200);
         self::assertEquals(1, $result);
     }
 
@@ -1679,7 +1780,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function processAllApprovalsReturnsNoneIfDueForAutomaticApprovalButNoToleranceSetForStage1()
+    public function processAllConfirmationsReturnsZeroIfDueForAutomaticConfirmationButNoToleranceSetForStage1()
     {
 
         /**
@@ -1716,7 +1817,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         $persistenceManager = $this->objectManager->get(PersistenceManager::class);
         $persistenceManager->persistAll();
 
-        $result = $this->subject->processAllApprovals(600, 600, 0, 1200);
+        $result = $this->subject->processAllConfirmations(600, 600, 0, 1200);
         self::assertEquals(0, $result);
     }
 
@@ -1725,7 +1826,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function processAllApprovalsReturnsOneIfDueForInfoMailForStage2()
+    public function processAllConfirmationsReturnsOneIfDueForInfoMailForStage2()
     {
 
         /**
@@ -1750,7 +1851,7 @@ class ApprovalManagerTest extends FunctionalTestCase
 
         $this->importDataSet(self::FIXTURE_PATH . '/Database/Check260.xml');
 
-        $result = $this->subject->processAllApprovals(1200,1200, 600, 600);
+        $result = $this->subject->processAllConfirmations(1200,1200, 600, 600);
         self::assertEquals(1, $result);
 
     }
@@ -1759,7 +1860,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function processAllApprovalsReturnsOneIfDueForReminderMailForStage2()
+    public function processAllConfirmationsReturnsOneIfDueForReminderMailForStage2()
     {
 
         /**
@@ -1793,7 +1894,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         $persistenceManager = $this->objectManager->get(PersistenceManager::class);
         $persistenceManager->persistAll();
 
-        $result = $this->subject->processAllApprovals(600, 600, 1200, 1200);
+        $result = $this->subject->processAllConfirmations(600, 600, 1200, 1200);
         self::assertEquals(1, $result);
 
     }
@@ -1802,7 +1903,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function processAllApprovalsReturnsNoneIfNotDueForReminderMailForStage2()
+    public function processAllConfirmationsReturnsZeroIfNotDueForReminderMailForStage2()
     {
 
         /**
@@ -1837,7 +1938,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         $persistenceManager->persistAll();
         $persistenceManager->clearState();
 
-        $result = $this->subject->processAllApprovals(600, 600, 1200, 1200);
+        $result = $this->subject->processAllConfirmations(600, 600, 1200, 1200);
         self::assertEquals(0, $result);
 
     }
@@ -1845,7 +1946,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function processAllApprovalsReturnsNoneIfNotDueForAutomaticApprovalForStage2()
+    public function processAllConfirmationsReturnsZeroIfNotDueForAutomaticConfirmationForStage2()
     {
 
         /**
@@ -1881,7 +1982,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         $persistenceManager = $this->objectManager->get(PersistenceManager::class);
         $persistenceManager->persistAll();
 
-        $result = $this->subject->processAllApprovals(600, 600, 1200, 1200);
+        $result = $this->subject->processAllConfirmations(600, 600, 1200, 1200);
         self::assertEquals(0, $result);
 
     }
@@ -1891,7 +1992,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function processAllApprovalsReturnsOneIfDueForAutomaticApprovalForStage2()
+    public function processAllConfirmationsReturnsOneIfDueForAutomaticConfirmationForStage2()
     {
 
         /**
@@ -1927,7 +2028,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         $persistenceManager = $this->objectManager->get(PersistenceManager::class);
         $persistenceManager->persistAll();
 
-        $result = $this->subject->processAllApprovals(600, 600, 1200, 1200);
+        $result = $this->subject->processAllConfirmations(600, 600, 1200, 1200);
         self::assertEquals(1, $result);
     }
 
@@ -1936,7 +2037,7 @@ class ApprovalManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function processAllApprovalsReturnsNoneIfDueForAutomaticApprovalButNoToleranceSetForStage2()
+    public function processAllConfirmationsReturnsZeroIfDueForAutomaticConfirmationButNoToleranceSetForStage2()
     {
 
         /**
@@ -1973,7 +2074,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         $persistenceManager = $this->objectManager->get(PersistenceManager::class);
         $persistenceManager->persistAll();
 
-        $result = $this->subject->processAllApprovals(600, 600, 1200, 0);
+        $result = $this->subject->processAllConfirmations(600, 600, 1200, 0);
         self::assertEquals(0, $result);
     }
 

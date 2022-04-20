@@ -91,8 +91,8 @@ call_user_func(
             'sendMailAdminApprovalAutomatic'
         );
         $signalSlotDispatcher->connect(
-            'RKW\\RkwNewsletter\\Helper\\Release',
-            \RKW\RkwNewsletter\Helper\Release::SIGNAL_FOR_SENDING_MAIL_RELEASE,
+            \RKW\RkwNewsletter\Manager\IssueManager::class,
+            \RKW\RkwNewsletter\Manager\IssueManager::SIGNAL_FOR_SENDING_MAIL_RELEASE,
             'RKW\\RkwNewsletter\\Service\\RkwMailService',
             'sendMailAdminRelease'
         );
