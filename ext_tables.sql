@@ -7,8 +7,6 @@ CREATE TABLE tx_rkwnewsletter_domain_model_newsletter (
 	pid int(11) DEFAULT '0' NOT NULL,
 
 	name varchar(255) DEFAULT '' NOT NULL,
-	introduction text NOT NULL,
-	introduction2 text NOT NULL,
 	authors varchar(255) DEFAULT '' NOT NULL,
 	issue_title varchar(255) DEFAULT '' NOT NULL,
 	sender_name varchar(255) DEFAULT '' NOT NULL,
@@ -22,6 +20,7 @@ CREATE TABLE tx_rkwnewsletter_domain_model_newsletter (
 	format tinyint(4) DEFAULT '0' NOT NULL,
 	settings_page int(11) DEFAULT '0' NOT NULL,
 	rythm tinyint(4) DEFAULT '0' NOT NULL,
+	day_for_sending tinyint(4) DEFAULT '0' NOT NULL,
 	approval varchar(255) DEFAULT '' NOT NULL,
 	usergroup varchar(255) DEFAULT '' NOT NULL,
 	topic varchar(255) DEFAULT '' NOT NULL,
@@ -60,10 +59,6 @@ CREATE TABLE tx_rkwnewsletter_domain_model_topic (
 	approval_stage1 varchar(255) DEFAULT '' NOT NULL,
 	approval_stage2 varchar(255) DEFAULT '' NOT NULL,
 	container_page int(11) unsigned DEFAULT '0' NOT NULL,
-	primary_color varchar(255) DEFAULT '' NOT NULL,
-	primary_color_editorial varchar(255) DEFAULT '' NOT NULL,
-	secondary_color varchar(255) DEFAULT '' NOT NULL,
-	secondary_color_editorial varchar(255) DEFAULT '' NOT NULL,
 	is_special int(1) unsigned DEFAULT '0' NOT NULL,
 	newsletter int(11) unsigned DEFAULT '0' NOT NULL,
 
@@ -120,17 +115,19 @@ CREATE TABLE tx_rkwnewsletter_domain_model_issue (
 	pid int(11) DEFAULT '0' NOT NULL,
 
 	title varchar(255) DEFAULT '' NOT NULL,
+	introduction text NOT NULL,
 	status tinyint(4) DEFAULT '0' NOT NULL,
 	newsletter int(11) unsigned DEFAULT '0',
 	pages int(11) unsigned DEFAULT '0',
 	approvals int(11) unsigned DEFAULT '0',
-	recipients text NOT NULL,
 	queue_mail int(11) unsigned DEFAULT '0',
 
 	info_tstamp int(11) unsigned DEFAULT '0',
 	reminder_tstamp int(11) unsigned DEFAULT '0',
 	release_tstamp int(11) unsigned DEFAULT '0',
 	sent_tstamp int(11) unsigned DEFAULT '0',
+	sent_offset int(11) unsigned DEFAULT '0',
+	is_special int(1) unsigned DEFAULT '0' NOT NULL,
 
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
@@ -146,7 +143,6 @@ CREATE TABLE tx_rkwnewsletter_domain_model_issue (
 # Table structure for table 'fe_users'
 #
 CREATE TABLE fe_users (
-  tx_rkwnewsletter_priority tinyint(4) DEFAULT '0' NOT NULL,
   tx_rkwnewsletter_subscription varchar(255) DEFAULT '' NOT NULL,
   tx_rkwnewsletter_hash varchar(255) DEFAULT '' NOT NULL,
 );

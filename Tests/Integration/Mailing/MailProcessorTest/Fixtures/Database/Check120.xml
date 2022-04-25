@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+
+    <tx_rkwnewsletter_domain_model_newsletter>
+        <uid>120</uid>
+        <pid>0</pid>
+        <issue_title><![CDATA[Newsletter {M}/{Y}]]></issue_title>
+        <issue>1</issue>
+        <topic>2</topic>
+        <sender_name>Test</sender_name>
+        <sender_mail>test@testen.de</sender_mail>
+        <reply_mail>reply@testen.de</reply_mail>
+        <return_path>return@testen.de</return_path>
+        <settings_page>2</settings_page>
+    </tx_rkwnewsletter_domain_model_newsletter>
+    
+    
+    <tx_rkwnewsletter_domain_model_issue>
+        <uid>120</uid>
+        <pid>0</pid>
+        <newsletter>120</newsletter>
+        <pages>2</pages>
+        <title>Test</title>
+    </tx_rkwnewsletter_domain_model_issue>
+    
+    
+    <tx_rkwnewsletter_domain_model_topic>
+        <uid>120</uid>
+        <pid>0</pid>
+        <container_page>1</container_page>
+        <newsletter>120</newsletter>
+    </tx_rkwnewsletter_domain_model_topic>
+
+    <tx_rkwnewsletter_domain_model_topic>
+        <uid>121</uid>
+        <pid>0</pid>
+        <container_page>1</container_page>
+        <newsletter>120</newsletter>
+    </tx_rkwnewsletter_domain_model_topic>
+    
+    
+    <pages>
+        <uid>120</uid>
+        <pid>1</pid>
+        <title>One</title>
+        <tx_rkwnewsletter_newsletter>120</tx_rkwnewsletter_newsletter>
+        <tx_rkwnewsletter_issue>120</tx_rkwnewsletter_issue>
+        <tx_rkwnewsletter_topic>120</tx_rkwnewsletter_topic>
+        <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <no_search>1</no_search>
+    </pages>
+
+    <pages>
+        <uid>121</uid>
+        <pid>1</pid>
+        <title>One</title>
+        <tx_rkwnewsletter_newsletter>120</tx_rkwnewsletter_newsletter>
+        <tx_rkwnewsletter_issue>120</tx_rkwnewsletter_issue>
+        <tx_rkwnewsletter_topic>121</tx_rkwnewsletter_topic>
+        <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <no_search>1</no_search>
+    </pages>
+    
+    <tt_content>
+        <uid>120</uid>
+        <pid>121</pid>
+        <header>Content 121.3</header>
+        <sorting>12</sorting>
+    </tt_content>
+
+    <tt_content>
+        <uid>121</uid>
+        <pid>121</pid>
+        <header>Content 121.2</header>
+        <sorting>2</sorting>
+    </tt_content>
+
+    <tt_content>
+        <uid>122</uid>
+        <pid>121</pid>
+        <header>Content 121.1</header>
+        <sorting>1</sorting>
+        <tx_rkwnewsletter_is_editorial>1</tx_rkwnewsletter_is_editorial>
+    </tt_content>
+    
+
+    <fe_users>
+        <uid>120</uid>
+        <pid>0</pid>
+        <tx_rkwnewsletter_subscription>120</tx_rkwnewsletter_subscription>
+    </fe_users>
+    
+</dataset>

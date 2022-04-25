@@ -1,0 +1,72 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:rkwNewsletter="http://typo3.org/ns/RKW/RkwNewsletter/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+
+    <f:if condition="{issues}">
+        <f:then>
+            <table class="tx-rkwnewsletter-list">
+                <tr>
+                    <th>
+                        <f:translate key="partials_backend_release_approvals.id" />
+                    </th>
+                    <th>
+                        <f:translate key="partials_backend_release_approvals.title" />
+                    </th>
+                    <th>
+                        <f:translate key="partials_backend_release_approvals.approvals" />
+                    </th>
+                    <th>
+                        <f:translate key="partials_backend_release_approvals.globalActions" />
+                    </th>
+                </tr>
+
+                <f:for each="{issues}" as="issue">
+                    <tr>
+                        <!-- id -->
+                        <td>
+                            {issue.uid}
+                        </td>
+                        <!-- title -->
+                        <td>
+                            <f:if condition="{issue.status} < 2">
+                                <f:then>
+                                    {issue.title}
+                                </f:then>
+                                <f:else>
+                                    <f:form.textfield property="name" value="{issue.name}" />
+                                </f:else>
+                            </f:if>
+                        </td>
+
+                        <!-- approvals -->
+                        <td>
+                            <f:render partial="Release/Approvals/Details" arguments="{_all}" />
+                        </td>
+
+                        <!-- actions -->
+                        <td>
+                            <f:if condition="{rkwNewsletter:backend.hasBackendUserPermission(issue: issue)}">
+                                <f:then>
+                                    <f:link.action action="defer" arguments="{issue : issue}">
+                                        &gt; <f:translate key="partials_backend_release_approvals.deferIssue" />
+                                    </f:link.action>
+                                </f:then>
+                                <f:else>
+                                    &ndash;
+                                </f:else>
+                            </f:if>
+                            &nbsp;
+                        </td>
+
+                    </tr>
+                </f:for>
+            </table>
+        </f:then>
+        <f:else>
+            <f:translate key="partials_backend_release_approvals.noIssuesWaiting" />
+        </f:else>
+    </f:if>
+
+</html>
+

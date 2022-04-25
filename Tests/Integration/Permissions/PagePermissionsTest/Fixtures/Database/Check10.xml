@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+
+    <tx_rkwnewsletter_domain_model_issue>
+        <uid>10</uid>
+        <pid>0</pid>
+        <status>2</status>
+        <pages>1</pages>
+    </tx_rkwnewsletter_domain_model_issue>
+
+    <tx_rkwnewsletter_domain_model_topic>
+        <uid>10</uid>
+        <pid>0</pid>
+    </tx_rkwnewsletter_domain_model_topic>
+
+    <pages>
+        <uid>10</uid>
+        <pid>1</pid>
+        <title>Use</title>
+        <doktype>1</doktype>
+        <tx_rkwnewsletter_newsletter>0</tx_rkwnewsletter_newsletter>
+        <tx_rkwnewsletter_topic>10</tx_rkwnewsletter_topic>
+        <tx_rkwnewsletter_issue>10</tx_rkwnewsletter_issue>
+    </pages>
+
+
+</dataset>

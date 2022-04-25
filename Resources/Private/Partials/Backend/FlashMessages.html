@@ -1,15 +1,22 @@
-<f:flashMessages as="flashMessages">
-    <f:for each="{flashMessages}" as="flashMessage">
-        <div class="typo3-messages">
-            <div class="alert {flashMessage.class}">
-                <div class="media">
-                    <div class="media-body">
-                        <div class="alert-message">
-                            <f:format.raw>{flashMessage.message}</f:format.raw>
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:rkwMailer="http://typo3.org/ns/RKW/RkwMailer/ViewHelpers"
+    xmlns:rkwNewsletter="http://typo3.org/ns/RKW/RkwNewsletter/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+    <f:flashMessages as="flashMessages">
+        <f:for each="{flashMessages}" as="flashMessage">
+            <div class="typo3-messages">
+                <div class="alert {flashMessage.class}">
+                    <div class="media">
+                        <div class="media-body">
+                            <div class="alert-message">
+                                <f:format.raw>{flashMessage.message}</f:format.raw>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </f:for>
-</f:flashMessages>
+        </f:for>
+    </f:flashMessages>
+
+</html>

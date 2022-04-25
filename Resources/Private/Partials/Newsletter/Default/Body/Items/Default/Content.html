@@ -1,0 +1,106 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:rkwBasics="http://typo3.org/ns/RKW/RkwBasics/ViewHelpers"
+    xmlns:rkwMailer="http://typo3.org/ns/RKW/RkwMailer/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+    <!-- PLAINTEXT -->
+    <f:section name="Plaintext">
+        ==================================================\n
+        {content.header} – <f:render partial="Body/Items/Default/Badge" section="Plaintext" arguments="{_all}" />\n
+        ==================================================\n
+        <f:format.stripTags>
+            <rkwMailer:frontend.replace.rteLinks plaintextFormat="true">
+                <f:format.raw>
+                    <rkwMailer:plaintextLineBreaks convertLineBreaks="true">{content.bodytext}</rkwMailer:plaintextLineBreaks>
+                </f:format.raw>
+            </rkwMailer:frontend.replace.rteLinks>
+        </f:format.stripTags>
+        
+        <f:if condition="{content.headerLink}">
+        \n\n
+        >> <rkwMailer:frontend.uri.typolink parameter='{content.headerLink}' />
+        </f:if>\n
+    </f:section>
+
+
+    
+    <!-- HTML all other items -->
+    <f:section name="Html">
+    
+        <table cellspacing="0" cellpadding="0" style="width: 100%; font-family: 'Arial', sans-serif; font-size: 14px">
+
+            <!-- badge -->
+            <tr>
+                <td valign="top" style="padding: 0 16px 0 16px;">
+                    <f:render partial="Body/Items/Default/Badge" section="Html" arguments="{_all}" />
+                </td>
+            </tr>
+            
+            <!-- headline -->
+            <tr>
+                <td style="padding: 12px 16px 0; line-height: 24px">
+                    <f:if condition="{content.headerLink}">
+                        <f:then>
+                            <a href="{rkwMailer:frontend.uri.typolink(parameter:'{content.headerLink}')}" target="_blank" id="item-{itemIterator.cycle}" name="item-{itemIterator.cycle}" style="font-size: 24px; font-weight: 400; text-decoration: none; color:#E64415;">
+                                {content.header}
+                            </a>
+                        </f:then>
+                        <f:else>
+                            <span style="font-size: 24px; font-weight: 400; text-decoration: none">
+                                {content.header}<a id="item-{itemIterator.cycle}" name="item-{itemIterator.cycle}"></a>
+                            </span>
+                        </f:else>
+                    </f:if>
+                </td>
+            </tr>
+    
+            <!-- image -->
+            <tr>
+                <td style="padding-top: 11px">
+                    <f:if condition="{content.image}">
+                        <rkwMailer:frontend.image image="{content.image.0}" treatIdAsReference="true" absolute="false" width="536" height="200c" style="display: block; width: 100%; height: auto" />
+                    </f:if>
+                </td>
+            </tr>
+    
+            <!-- copyright -->
+            <f:if condition="{content.image} && {content.image.0.originalResource.properties.tx_rkwbasics_source}">
+                <tr>
+                    <td style="padding: 11px 16px 0 16px">
+                        <span style="color: #808080; font-size: 12px; font-weight: 400">
+                           <rkwBasics:mediaCopyright originator="{content.image.0.originalResource.properties.tx_rkwbasics_publisher}" source="{content.image.0.originalResource.properties.tx_rkwbasics_source}" />
+                        </span>
+                    </td>
+                </tr>
+            </f:if>
+    
+            <!-- content -->
+            <tr>
+                <td class="prefix-fix wysiwyg-content" style="padding: 11px 16px {f:if(condition: '{content.headerLink}', then: '0', else: '24px')}; line-height: 22px">
+                    <rkwMailer:frontend.replace.rteLinks style="color:#E64415;"><f:format.raw>{content.bodytext}</f:format.raw></rkwMailer:frontend.replace.rteLinks>
+                </td>
+            </tr>
+    
+            <!-- link -->
+            <f:if condition="{content.headerLink}">
+                <tr>
+                    <td style="padding: 13px 16px 24px">
+                        <a href="<rkwMailer:frontend.uri.typolink parameter='{content.headerLink}' />" target="_blank" style="color:#E64415; font-weight: 700; text-decoration: none; text-transform: uppercase">&gt;&gt; Mehr erfahren</a>
+                    </td>
+                </tr>
+            </f:if>
+    
+            <!-- contact headline -->
+            <f:if condition="{content.txRkwnewsletterAuthors}">
+                <tr>
+                    <td style="padding: 0 16px">
+                        <p style="margin: 0; padding: 23px 0 0; border-top: 1px solid #000; color: #333; font-size: 12px; font-weight:bold">
+                            <rkwMailer:frontend.translate key="partials_newsletter_body_items_default_content.contact" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />
+                        </p>                
+                    </td>
+                </tr>
+            </f:if>
+        </table>
+    
+    </f:section>
+</html>

@@ -14,7 +14,9 @@ namespace RKW\RkwNewsletter\Domain\Model;
  * The TYPO3 project - inspiring people to share!
  */
 
+use RKW\RkwMailer\Domain\Model\QueueMail;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
  * Issue
@@ -32,15 +34,25 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var string
      */
-    protected $title;
+    protected $title = '';
 
+    
     /**
      * status
      *
-     * @var integer
+     * @var int
      */
-    protected $status;
+    protected $status = 0;
 
+    
+    /**
+     * introduction
+     *
+     * @var string
+     */
+    protected $introduction = '';
+    
+    
     /**
      * newsletter
      *
@@ -48,6 +60,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $newsletter;
 
+    
     /**
      * pages
      *
@@ -55,20 +68,13 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $pages;
 
+    
     /**
      * approvals
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\Approval>
-     * @cascade remove
      */
     protected $approvals;
-
-    /**
-     * recipients
-     *
-     * @var string
-     */
-    protected $recipients;
 
 
     /**
@@ -82,34 +88,52 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * infoTstamp
      *
-     * @var integer
+     * @var int
      */
-    protected $infoTstamp;
+    protected $infoTstamp = 0;
 
 
     /**
      * reminderTstamp
      *
-     * @var integer
+     * @var int
      */
-    protected $reminderTstamp;
+    protected $reminderTstamp = 0;
 
 
     /**
-     * allowedAdmin
+     * releaseTstamp
      *
-     * @var integer
+     * @var int
      */
-    protected $releaseTstamp;
+    protected $releaseTstamp = 0;
 
+    
     /**
      * sentTstamp
      *
-     * @var integer
+     * @var int
      */
-    protected $sentTstamp;
+    protected $sentTstamp = 0;
+    
+    
+    /**
+     * sentOffset
+     *
+     * @var int
+     */
+    protected $sentOffset = 0;
 
 
+    /**
+     * isSpecial
+     *
+     * @var bool
+     */
+    protected $isSpecial;
+
+
+    
     /**
      * __construct
      */
@@ -119,6 +143,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->initStorageObjects();
     }
 
+    
     /**
      * Initializes all ObjectStorage properties
      * Do not modify this method!
@@ -127,76 +152,106 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return void
      */
-    protected function initStorageObjects()
+    protected function initStorageObjects(): void
     {
         $this->pages = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
         $this->approvals = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
 
     }
 
+    
     /**
      * Returns the title
      *
      * @return string $title
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
 
+    
     /**
      * Sets the title
      *
      * @param string $title
      * @return void
      */
-    public function setTitle($title)
+    public function setTitle(string $title): void
     {
         $this->title = $title;
     }
 
+    
     /**
      * Returns the status
      *
-     * @return integer $status
+     * @return int $status
      */
-    public function getStatus()
+    public function getStatus(): int
     {
         return $this->status;
     }
 
+    
     /**
      * Sets the status
      *
-     * @param integer $status
+     * @param int $status
      * @return void
      */
-    public function setStatus($status)
+    public function setStatus(int $status): void
     {
         $this->status = $status;
     }
 
+    
+    /**
+     * Returns the introduction
+     *
+     * @return string $introduction
+     */
+    public function getIntroduction(): string
+    {
+        return $this->introduction;
+    }
+
+
+    /**
+     * Sets the introduction
+     *
+     * @param string $introduction
+     * @return void
+     */
+    public function setIntroduction(string $introduction): void
+    {
+        $this->introduction = $introduction;
+    }
+
+    
     /**
      * Returns the newsletter
      *
-     * @return \RKW\RkwNewsletter\Domain\Model\Newsletter $newsletter
+     * @return \RKW\RkwNewsletter\Domain\Model\Newsletter|null $newsletter
      */
     public function getNewsletter()
     {
         return $this->newsletter;
     }
 
+    
     /**
      * Sets the newsletter
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Newsletter $newsletter
      * @return void
      */
-    public function setNewsletter(\RKW\RkwNewsletter\Domain\Model\Newsletter $newsletter)
+    public function setNewsletter(Newsletter $newsletter): void
     {
         $this->newsletter = $newsletter;
     }
 
+    
     /**
      * Adds a page to the issue
      *
@@ -204,11 +259,12 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @return void
      * @api
      */
-    public function addPages(\RKW\RkwNewsletter\Domain\Model\Pages $pages)
+    public function addPages(Pages $pages): void
     {
         $this->pages->attach($pages);
     }
 
+    
     /**
      * Removes a page from the issue
      *
@@ -216,11 +272,12 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @return void
      * @api
      */
-    public function removePages(\RKW\RkwNewsletter\Domain\Model\Pages $pages)
+    public function removePages(Pages $pages): void
     {
         $this->pages->detach($pages);
     }
 
+    
     /**
      * Returns the pages. Keep in mind that the property is called "pages"
      * although it can hold several pages.
@@ -228,11 +285,12 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\Pages>
      * @api
      */
-    public function getPages()
+    public function getPages(): ObjectStorage
     {
         return $this->pages;
     }
 
+    
     /**
      * Sets the pages. Keep in mind that the property is called "pages"
      * although it can hold several pages.
@@ -241,11 +299,12 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @return void
      * @api
      */
-    public function setPages(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $pages)
+    public function setPages(ObjectStorage $pages):void
     {
         $this->pages = $pages;
     }
 
+    
     /**
      * Adds a approval to the release
      *
@@ -253,11 +312,12 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @return void
      * @api
      */
-    public function addApprovals(\RKW\RkwNewsletter\Domain\Model\Approval $approval)
+    public function addApprovals(Approval $approval)
     {
         $this->approvals->attach($approval);
     }
 
+    
     /**
      * Removes a approval from the release
      *
@@ -265,140 +325,69 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @return void
      * @api
      */
-    public function removeApprovals(\RKW\RkwNewsletter\Domain\Model\Approval $approval)
+    public function removeApprovals(Approval $approval): void
     {
         $this->approvals->detach($approval);
     }
 
+    
     /**
      * Returns the approval. Keep in mind that the property is called "approvals"
-     * although it can hold several pages.
+     * although it can hold several approvals.
      *
      * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\Approval>
      * @api
      */
-    public function getApprovals()
+    public function getApprovals(): ObjectStorage
     {
         return $this->approvals;
     }
 
+    
     /**
-     * Sets the approval. Keep in mind that the property is called "pages"
-     * although it can hold several pages.
+     * Sets the approval. Keep in mind that the property is called "approvals"
+     * although it can hold several approvals.
      *
      * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\Approval> $approval
      * @return void
      * @api
      */
-    public function setApprovals(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $approvals)
+    public function setApprovals(ObjectStorage $approvals)
     {
         $this->approvals = $approvals;
     }
 
-
-    /**
-     * Adds a recipient to the release
-     *
-     * @param int|\TYPO3\CMS\Extbase\DomainObject\AbstractEntity $recipientId
-     * @return void
-     * @throws \Exception
-     * @api
-     */
-    public function addRecipients($recipient)
-    {
-        if ($recipient instanceOf \TYPO3\CMS\Extbase\DomainObject\AbstractEntity) {
-            $recipientId = $recipient->getUid();
-        } else if(is_int($recipient)) {
-            $recipientId = $recipient;
-        } else {
-            throw new \Exception('Wrong type given');
-            //====
-        }
-
-        $recipients = $this->getRecipients();
-        $recipients[] = $recipientId;
-        $this->setRecipients($recipients);
-    }
-
-    /**
-     * Removes a recipient from the release
-     *
-     * @param int|\TYPO3\CMS\Extbase\DomainObject\AbstractEntity $recipient
-     * @return void
-     * @throws \Exception
-     * @api
-     */
-    public function removeRecipients($recipient)
-    {
-        if ($recipient instanceOf \TYPO3\CMS\Extbase\DomainObject\AbstractEntity) {
-            $recipientId = $recipient->getUid();
-        } else if(is_int($recipient)) {
-            $recipientId = $recipient;
-        } else {
-            throw new \Exception('Wrong type given');
-            //====
-        }
-
-        $recipients = $this->getRecipients();
-        if (false !== $key = array_search($recipientId, $recipients)) {
-            array_splice($recipients, $key, 1);
-            $this->setRecipients($recipients);
-        }
-    }
-
-    /**
-     * Returns the recipient. Keep in mind that the property is called "recipients"
-     * although it can hold several pages.
-     *
-     * @return array
-     * @api
-     */
-    public function getRecipients()
-    {
-        return GeneralUtility::trimExplode(',', $this->recipients, true);
-    }
-
-    /**
-     * Sets the recipient. Keep in mind that the property is called "pages"
-     * although it can hold several pages.
-     *
-     * @param array $recipients
-     * @return void
-     * @api
-     */
-    public function setRecipients($recipients = [])
-    {
-        $this->recipients = implode(',', $recipients);
-    }
-
+   
     /**
      * Returns the queueMail
      *
-     * @return \RKW\RkwMailer\Domain\Model\QueueMail $queueMail
+     * @return \RKW\RkwMailer\Domain\Model\QueueMail|null $queueMail
      */
     public function getQueueMail()
     {
         return $this->queueMail;
     }
 
+    
     /**
      * Sets the queueMail
      *
      * @param \RKW\RkwMailer\Domain\Model\QueueMail $queueMail
      * @return void
      */
-    public function setQueueMail(\RKW\RkwMailer\Domain\Model\QueueMail $queueMail)
+    public function setQueueMail(QueueMail $queueMail): void
     {
         $this->queueMail = $queueMail;
     }
 
-
+    
+    
     /**
      * Returns the infoTstamp
      *
-     * @return integer $infoTstamp
+     * @return int $infoTstamp
      */
-    public function getInfoTstamp()
+    public function getInfoTstamp(): int
     {
         return $this->infoTstamp;
     }
@@ -406,52 +395,56 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Sets the infoTstamp
      *
-     * @param integer $infoTstamp
+     * @param int $infoTstamp
      * @return void
      */
-    public function setInfoTstamp($infoTstamp)
+    public function setInfoTstamp(int $infoTstamp): void
     {
         $this->infoTstamp = $infoTstamp;
     }
 
+    
     /**
      * Returns the reminderTstamp
      *
-     * @return integer $reminderTstamp
+     * @return int $reminderTstamp
      */
-    public function getReminderTstamp()
+    public function getReminderTstamp(): int
     {
         return $this->reminderTstamp;
     }
+    
 
     /**
      * Sets the reminderTstamp
      *
-     * @param integer $reminderTstamp
+     * @param int $reminderTstamp
      * @return void
      */
-    public function setReminderTstamp($reminderTstamp)
+    public function setReminderTstamp(int $reminderTstamp): void
     {
         $this->reminderTstamp = $reminderTstamp;
     }
 
+    
     /**
      * Returns the releaseTstamp
      *
-     * @return integer $sent
+     * @return int $sent
      */
-    public function getReleaseTstamp()
+    public function getReleaseTstamp(): int
     {
         return $this->releaseTstamp;
     }
 
+    
     /**
      * Sets the releaseTstamp
      *
-     * @param integer releaseTstamp
+     * @param int releaseTstamp
      * @return void
      */
-    public function setReleaseTstamp($releaseTstamp)
+    public function setReleaseTstamp(int $releaseTstamp): void
     {
         $this->releaseTstamp = $releaseTstamp;
     }
@@ -460,9 +453,9 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the sentTstamp
      *
-     * @return integer $sentTstamp
+     * @return int $sentTstamp
      */
-    public function getSentTstamp()
+    public function getSentTstamp(): int
     {
         return $this->sentTstamp;
     }
@@ -470,13 +463,54 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Sets the sent
      *
-     * @param integer $sentTstamp
+     * @param int $sentTstamp
      * @return void
      */
-    public function setSentTstamp($sentTstamp)
+    public function setSentTstamp(int $sentTstamp): void
     {
         $this->sentTstamp = $sentTstamp;
     }
 
+   
+    /**
+     * Returns the sentOffset
+     *
+     * @return int $sentOffset
+     */
+    public function getSentOffset(): int
+    {
+        return $this->sentOffset;
+    }
 
+    /**
+     * Sets the sent
+     *
+     * @param int $sentOffset
+     * @return void
+     */
+    public function setSentOffset(int $sentOffset): void
+    {
+        $this->sentOffset = $sentOffset;
+    }
+
+    /**
+     * Returns the isSpecial
+     *
+     * @return bool $isSpecial
+     */
+    public function getIsSpecial(): bool
+    {
+        return $this->isSpecial;
+    }
+
+    /**
+     * Sets the isSpecial
+     *
+     * @param bool $isSpecial
+     * @return void
+     */
+    public function setIsSpecial(bool $isSpecial): void
+    {
+        $this->isSpecial = $isSpecial;
+    }
 }

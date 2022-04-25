@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+    
+    <tx_rkwnewsletter_domain_model_topic>
+        <uid>30</uid>
+        <pid>0</pid>
+        <container_page>0</container_page>
+        <newsletter>0</newsletter>
+        <approval_stage1>30,31</approval_stage1>
+        <approval_stage2>32,33</approval_stage2>
+    </tx_rkwnewsletter_domain_model_topic>
+
+    <tx_rkwnewsletter_domain_model_approval>
+        <uid>30</uid>
+        <pid>0</pid>
+        <issue>0</issue>
+        <topic>30</topic>
+        <allowed_tstamp_stage1>0</allowed_tstamp_stage1>
+        <allowed_tstamp_stage2>0</allowed_tstamp_stage2>
+        <sent_info_tstamp_stage1>0</sent_info_tstamp_stage1>
+        <sent_info_tstamp_stage2>0</sent_info_tstamp_stage2>
+        <sent_reminder_tstamp_stage1>0</sent_reminder_tstamp_stage1>
+        <sent_reminder_tstamp_stage2>0</sent_reminder_tstamp_stage2>
+    </tx_rkwnewsletter_domain_model_approval>
+
+    <be_users>
+        <uid>30</uid>
+        <pid>1</pid>
+        <email>test@rkw.de</email>
+    </be_users>
+
+    <be_users>
+        <uid>31</uid>
+        <pid>1</pid>
+        <email>test1@rkw.de</email>
+    </be_users>
+
+    <be_users>
+        <uid>32</uid>
+        <pid>1</pid>
+        <email>test2@rkw.de</email>
+    </be_users>
+
+    <be_users>
+        <uid>33</uid>
+        <pid>1</pid>
+        <email>test3@rkw.de</email>
+    </be_users>
+    
+</dataset>

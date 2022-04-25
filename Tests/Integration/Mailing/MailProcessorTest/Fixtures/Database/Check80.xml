@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+
+    <fe_users>
+        <uid>80</uid>
+        <pid>0</pid>
+        <email>test1@rkw.de</email>
+        <tx_rkwnewsletter_subscription />
+        <tx_rkwnewsletter_hash />
+    </fe_users>
+</dataset>

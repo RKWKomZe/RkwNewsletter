@@ -1,8 +1,11 @@
-{namespace rkwMailer=RKW\RkwMailer\ViewHelpers}
-{namespace rkwNewsletter=RKW\RkwNewsletter\ViewHelpers}
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:rkwNewsletter="http://typo3.org/ns/RKW/RkwNewsletter/ViewHelpers"
+    data-namespace-typo3-fluid="true">
 
-<f:layout name="WebView" />
+    <f:layout name="WebView" />
+    
+    <f:section name="Default">
+        <f:render partial="Body" section="Html" arguments="{_all}" />
+    </f:section>
 
-<f:section name="Default">
-    <f:render partial="Body" section="Html" arguments="{_all}" />
-</f:section>
+</html>

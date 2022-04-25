@@ -13,7 +13,16 @@ namespace RKW\RkwNewsletter\Controller;
  *
  * The TYPO3 project - inspiring people to share!
  */
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
+
+use RKW\RkwNewsletter\Domain\Model\Approval;
+use RKW\RkwNewsletter\Domain\Model\Issue;
+use RKW\RkwNewsletter\Domain\Model\Newsletter;
+use RKW\RkwNewsletter\Domain\Model\Topic;
+use RKW\RkwNewsletter\Status\IssueStatus;
+use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * ReleaseController
@@ -26,13 +35,6 @@ use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
  */
 class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
-    /**
-     * Signal name for use in ext_localconf.php
-     *
-     * @const string
-     */
-    const SIGNAL_FOR_SENDING_MAIL_TEST = 'sendTestMail';
-
 
     /**
      * newsletterRepository
@@ -40,7 +42,7 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @var \RKW\RkwNewsletter\Domain\Repository\NewsletterRepository
      * @inject
      */
-    protected $newsletterRepository = null;
+    protected $newsletterRepository;
 
     /**
      * issueRepository
@@ -48,40 +50,7 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository
      * @inject
      */
-    protected $issueRepository = null;
-
-    /**
-     * approvalRepository
-     *
-     * @var \RKW\RkwNewsletter\Domain\Repository\ApprovalRepository
-     * @inject
-     */
-    protected $approvalRepository = null;
-
-    /**
-     * topicRepository
-     *
-     * @var \RKW\RkwNewsletter\Domain\Repository\TopicRepository
-     * @inject
-     */
-    protected $topicRepository = null;
-
-    /**
-     * pagesRepository
-     *
-     * @var \RKW\RkwNewsletter\Domain\Repository\PagesRepository
-     * @inject
-     */
-    protected $pagesRepository = null;
-
-
-    /**
-     * frontendUserRepository
-     *
-     * @var \RKW\RkwNewsletter\Domain\Repository\FrontendUserRepository
-     * @inject
-     */
-    protected $frontendUserRepository = null;
+    protected $issueRepository;
 
 
     /**
@@ -90,59 +59,62 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @var \RKW\RkwNewsletter\Domain\Repository\BackendUserRepository
      * @inject
      */
-    protected $backendUserRepository = null;
-
+    protected $backendUserRepository;
+    
+    
     /**
-     * Persistence Manager
+     * IssueManager
      *
-     * @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager
+     * @var \RKW\RkwNewsletter\Manager\IssueManager
      * @inject
      */
-    protected $persistenceManager;
+    protected $issueManager;
 
     /**
-     * Mail Service
+     * ApprovalManager
      *
-     * @var \RKW\RkwMailer\Service\MailService
+     * @var \RKW\RkwNewsletter\Manager\ApprovalManager
      * @inject
      */
-    protected $mailService;
+    protected $approvalManager;
+
 
     /**
-     * Validation Helper
+     * MailProcessor
      *
-     * @var \RKW\RkwNewsletter\Helper\Validator
+     * @var \RKW\RkwNewsletter\Mailing\MailProcessor
      * @inject
      */
-    protected $validatorHelper;
+    protected $mailProcessor;
 
+    
     /**
-     * Approval Helper
+     * emailValidator
      *
-     * @var \RKW\RkwNewsletter\Helper\Approval
+     * @var \RKW\RkwNewsletter\Validation\EmailValidator
      * @inject
      */
-    protected $approvalHelper;
+    protected $emailValidator;
 
 
-
+  
     /**
-     * action list
+     * Show a list of all outstanding confirmations
      *
      * @return void
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      */
-    public function listAction()
+    public function confirmationListAction(): void
     {
-        $issuesOpenApprovalStage1List = $this->issueRepository->findAllToApproveOnStage1ByBackendUser(intval($GLOBALS['BE_USER']->user['uid']));
-        $issuesOpenApprovalStage2List = $this->issueRepository->findAllToApproveOnStage2ByBackendUser(intval($GLOBALS['BE_USER']->user['uid']));
+        $issuesOpenApprovalStage1List = $this->issueRepository->findAllToApproveOnStage1();
+        $issuesOpenApprovalStage2List = $this->issueRepository->findAllToApproveOnStage2();
+        $issuesReadyToStart = $this->issueRepository->findAllToStartSending();
 
         $this->view->assignMultiple(
             [
                 'issuesOpenApprovalStage1List' => $issuesOpenApprovalStage1List,
                 'issuesOpenApprovalStage2List' => $issuesOpenApprovalStage2List,
-                'backendUserId'                => intval($GLOBALS['BE_USER']->user['uid']),
-                'backendUserName'              => $GLOBALS['BE_USER']->user['realName'],
+                'issuesReadyToStart' => $issuesReadyToStart
             ]
         );
     }
@@ -152,44 +124,33 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * action approve
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Approval $approval
-     * @param int $stage
      * @return void
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
-     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      * @ignorevalidation $approval
      */
-    public function approveAction(\RKW\RkwNewsletter\Domain\Model\Approval $approval, $stage = 1)
+    public function approveAction(Approval $approval): void
     {
-        if (in_array($stage, array(1, 2))) {
 
-            $setterTstamp = 'setAllowedTstampStage' . intval($stage);
-            $setterBackendUser = 'setAllowedByUserStage' . intval($stage);
+        if ($this->approvalManager->increaseStage($approval)) {
 
-            /** @var \RKW\RkwNewsletter\Domain\Model\BackendUser $backendUser */
-            $backendUser = $this->backendUserRepository->findByUid(intval($GLOBALS['BE_USER']->user['uid']));
-
-            $approval->$setterTstamp(time());
-            $approval->$setterBackendUser($backendUser);
-            $this->approvalRepository->update($approval);
-
-            $this->addFlashMessage(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(
+            $this->addFlashMessage(LocalizationUtility::translate(
                 'releaseController.message.approvalSuccessful',
                 'rkw_newsletter'
-            ), '', \TYPO3\CMS\Core\Messaging\FlashMessage::OK);
+            ), '', FlashMessage::OK);
 
         } else {
-            $this->addFlashMessage(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(
+            $this->addFlashMessage(LocalizationUtility::translate(
                 'releaseController.error.unexpected',
                 'rkw_newsletter'
-            ), '', \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
+            ), '', FlashMessage::ERROR);
         }
 
-        $this->redirect('list');
-        //===
+        $this->redirect('confirmationList');
     }
+
 
     /**
      * action defer
@@ -201,22 +162,77 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      */
-    public function deferAction(\RKW\RkwNewsletter\Domain\Model\Issue $issue)
+    public function deferAction(Issue $issue): void
     {
 
         $issue->setStatus(98);
         $this->issueRepository->update($issue);
 
-        $this->addFlashMessage(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(
+        $this->addFlashMessage(LocalizationUtility::translate(
             'releaseController.message.issueDeferredSuccessfully',
             'rkw_newsletter'
-        ), '', \TYPO3\CMS\Core\Messaging\FlashMessage::OK);
+        ), '', FlashMessage::OK);
 
 
-        $this->redirect('list');
-        //===
+        $this->redirect('confirmationList');
     }
 
+
+    /**
+     * action createIssueList
+     *
+     * @return void
+     */
+    public function createIssueListAction(): void
+    {
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\BackendUser $backendUser */
+        $backendUser = $this->backendUserRepository->findByUid(intval($GLOBALS['BE_USER']->user['uid']));
+
+        /** @var \TYPO3\CMS\Extbase\Persistence\QueryResultInterface $newsletters */
+        $newsletters = $this->newsletterRepository->findAll();
+        $this->view->assignMultiple(
+            [
+                'newsletters'  => $newsletters,
+                'backendUser' => $backendUser,
+            ]
+        );
+    }
+
+
+    /**
+     * action createIssue
+     *
+     * @param \RKW\RkwNewsletter\Domain\Model\Newsletter $newsletter
+     * @param \RKW\RkwNewsletter\Domain\Model\Topic|null $topic
+     * @return void
+     * @throws \RKW\RkwNewsletter\Exception
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
+     */
+    public function createIssueAction(Newsletter $newsletter, Topic $topic = null): void
+    {
+
+        // take all topics - or the one given
+        $topicArray = $newsletter->getTopic()->toArray();
+        if ($topic) {
+            $topicArray = [$topic];
+        }
+
+        $this->issueManager->buildIssue($newsletter,$topicArray);
+        
+        $this->addFlashMessage(
+            LocalizationUtility::translate(
+                'releaseController.message.issueCreated',
+                'rkw_newsletter'
+            )
+        );
+
+        $this->redirect('createIssueList');
+    }
+    
 
     /**
      * action testList
@@ -224,19 +240,18 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @return void
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      */
-    public function testListAction()
+    public function testListAction(): void
     {
 
         /** @var \RKW\RkwNewsletter\Domain\Model\BackendUser $backendUser */
         $backendUser = $this->backendUserRepository->findByUid(intval($GLOBALS['BE_USER']->user['uid']));
 
-        $issues = $this->issueRepository->findAllToApproveOrReleaseByBackendUser(intval($GLOBALS['BE_USER']->user['uid']));
+        $issues = $this->issueRepository->findAllForTestSending();
         $this->view->assignMultiple(
-           [
-                'settings'    => $this->settings,
+            [
                 'issues'      => $issues,
                 'backendUser' => $backendUser,
-           ]
+            ]
         );
     }
 
@@ -244,83 +259,81 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     /**
      * action test
      *
-     * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
+     * @param \RKW\RkwNewsletter\Domain\Model\Issue  $issue
      * @param string $emails
-     * @param \RKW\RkwNewsletter\Domain\Model\Topic $topic
+     * @param \RKW\RkwNewsletter\Domain\Model\Topic|null $topic
      * @param string $title
-     * @param int myTopicsOnly
      * @return void
+     * @throws \RKW\RkwMailer\Exception
+     * @throws \RKW\RkwNewsletter\Exception
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
-     * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException
-     * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException
-     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      * @ignorevalidation $issue
      */
-    public function testAction(\RKW\RkwNewsletter\Domain\Model\Issue $issue, $emails, \RKW\RkwNewsletter\Domain\Model\Topic $topic = null, $title = null)
-    {
+    public function testSendAction(Issue $issue, string $emails, Topic $topic = null, string $title = ''): void {
 
-        $emailList = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $emails);
-        foreach ($emailList as $email) {
-            $validateEmail = $this->validatorHelper->email($email);
+        $emailArray = GeneralUtility::trimExplode(',', $emails);
+        foreach ($emailArray as $email) {
+            
+            /** @var \TYPO3\CMS\Extbase\Error\Result $validateEmail */
+            $validateEmail = $this->emailValidator->email($email);
             if ($validateEmail->hasErrors()) {
                 $this->addFlashMessage(
-                    \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(
+                    LocalizationUtility::translate(
                         'releaseController.error.emailIncorrect',
                         'rkw_newsletter',
                         [$email]
                     ),
                     '',
-                    \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR
+                    FlashMessage::ERROR
                 );
 
                 $this->forward("testList");
-                //===
             }
         }
 
-        /** @var \RKW\RkwNewsletter\Domain\Model\BackendUser $backendUser */
-        $backendUser = $this->backendUserRepository->findByUid($GLOBALS['BE_USER']->user['uid']);
+        // update title, and persist it
+        $issue->setTitle($title);
+        $this->issueRepository->update($issue);
 
-        /** @var \TYPO3\CMS\Extbase\Persistence\QueryResultInterface<\RKW\RkwNewsletter\Domain\Model\Pages> $pages */
-        $pages = $this->pagesRepository->findAllByIssueAndSpecialTopic($issue);
+        // set issue and topics
+        $this->mailProcessor->setIssue($issue);
+        $this->mailProcessor->setTopics();
 
-        /** @var \TYPO3\CMS\Extbase\Persistence\QueryResultInterface<\RKW\RkwNewsletter\Domain\Model\Pages> $specialPages */
-        $specialPages = $this->pagesRepository->findAllByIssueAndSpecialTopic($issue, true);
-
-        // if user wants his topics only, we need only their pages!
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
+        $objectStorage = new ObjectStorage();
         if ($topic) {
-            $pages = $this->pagesRepository->findAllByIssueAndTopic($issue, $topic);
-            // $specialPages = $this->pagesRepository->findAllByIssueAndBackendUserAndSpecialTopic($issue, $backendUser, true);
+            $objectStorage->attach($topic);
+            $this->mailProcessor->setTopics($objectStorage);
         }
 
-        $this->getSignalSlotDispatcher()->dispatch(__CLASS__, self::SIGNAL_FOR_SENDING_MAIL_TEST, array($backendUser, $emailList, $issue, $pages, $specialPages, $title));
-
+        // send mail
+        $this->mailProcessor->sendTestMails($emails);
+            
         $this->addFlashMessage(
-            \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(
+            LocalizationUtility::translate(
                 'releaseController.message.testMailSent',
                 'rkw_newsletter'
             )
         );
 
-        $this->redirect("testList");
-        //===
-
+        $this->redirect('testList');
     }
-
+        
 
     /**
      * action sendList
      *
-     * @param \RKW\RkwNewsletter\Domain\Model\Issue $confirmIssue
+     * @param \RKW\RkwNewsletter\Domain\Model\Issue|null $confirmIssue
      * @return void
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      */
-    public function sendListAction($confirmIssue = null)
+    public function sendListAction(Issue $confirmIssue = null): void
     {
 
-        $issues = $this->issueRepository->findAllToSendByBackendUser(intval($GLOBALS['BE_USER']->user['uid']));
+        $issues = $this->issueRepository->findAllToStartSending();
         $this->view->assignMultiple(
             [
                 'issues'          => $issues,
@@ -330,64 +343,41 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             ]
         );
     }
+    
 
     /**
      * action sendConfirm
      *
-     * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
+     * @param \RKW\RkwNewsletter\Domain\Model\Issue|null $issue
      * @param string $title
      * @return void
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      * @ignorevalidation $issue
-     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
-    public function sendConfirmAction(\RKW\RkwNewsletter\Domain\Model\Issue $issue = null, $title = null)
+    public function sendConfirmAction(Issue $issue = null, string $title = ''): void
     {
 
         // check for issue
         if (! $issue) {
 
             $this->addFlashMessage(
-                \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(
+                LocalizationUtility::translate(
                     'releaseController.error.selectIssue',
                     'rkw_newsletter'
                 ),
                 '',
-                \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR
+                FlashMessage::ERROR
             );
 
             $this->redirect('sendList');
-            //===
         }
-
-        /*
-        // check title
-        if (
-            ($title == $issue->getTitle())
-            || (
-                (strlen($title ) < 40)
-                || (strlen($title ) > 60)
-            )
-        ) {
-
-            $this->addFlashMessage(
-                \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(
-                    'releaseController.warning.checkTitle',
-                    'rkw_newsletter'
-                ),
-                '',
-                \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING
-            );
-        }*/
-
+       
         // set title
         $issue->setTitle($title);
         $this->issueRepository->update($issue);
-
 
         $this->view->assignMultiple(
             [
@@ -408,52 +398,29 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      * @ignorevalidation $issue
-     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      * @throws \Exception
      */
-    public function sendAction(\RKW\RkwNewsletter\Domain\Model\Issue $issue, $title = null)
+    public function sendAction(Issue $issue, string $title = ''): void
     {
+        if ($issue->getStatus() == IssueStatus::STAGE_RELEASE) {
+            
+            if ($title) {
+                $issue->setTitle($title);
+                $this->issueRepository->update($issue);
+            }
 
-        // set final title and mark as sending
-        $issue->setTitle($title);
-        $issue->setStatus(3);
-        $issue->setReleaseTstamp(time());
-        $this->issueRepository->update($issue);
-
-        // Issue is sent: Update page permissions to "sent"
-        /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
-        foreach ($issue->getApprovals() as $approval) {
-            $this->approvalHelper->updatePagePermissions($approval);
+            $this->issueManager->increaseStage($issue);
+            
+            $this->addFlashMessage(
+                \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(
+                    'releaseController.message.sendingStarted',
+                    'rkw_newsletter'
+                )
+            );
         }
-
-        $this->addFlashMessage(
-            \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(
-                'releaseController.message.sendingStarted',
-                'rkw_newsletter'
-            )
-        );
-
+        
         $this->redirect('sendList');
-        //===
-
     }
-
-
-    /**
-     * Returns SignalSlotDispatcher
-     *
-     * @return \TYPO3\CMS\Extbase\SignalSlot\Dispatcher
-     */
-    protected function getSignalSlotDispatcher()
-    {
-        if (!$this->signalSlotDispatcher) {
-            $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-            $this->signalSlotDispatcher = $objectManager->get('TYPO3\\CMS\\Extbase\\SignalSlot\\Dispatcher');
-        }
-
-        return $this->signalSlotDispatcher;
-        //===
-    }
+    
 }
