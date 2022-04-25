@@ -16,14 +16,14 @@ return [
 			'starttime' => 'starttime',
 			'endtime' => 'endtime',
 		],
-		'searchFields' => 'name, issue_title, sender_name, sender_mail, reply_mail, return_path, priority, template, type, settings_page, format, rythm, approval, usergroup, topic, recently_sent,',
+		'searchFields' => 'name, issue_title, sender_name, sender_mail, reply_mail, return_path, priority, template, settings_page, format, rythm, day_for_sending, approval, usergroup, topic, recently_sent,',
 		'iconfile' => 'EXT:rkw_newsletter/Resources/Public/Icons/tx_rkwnewsletter_domain_model_newsletter.gif'
 	],
 	'interface' => [
-		'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, issue_title, authors, sender_name, sender_mail, reply_mail, return_path, template, type, settings_page, rythm, approval, usergroup, topic, last_sent_tstamp, last_issue_tstamp, issue',
+		'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, issue_title, sender_name, sender_mail, reply_mail, return_path, template, type, settings_page, rythm, day_for_sending, approval, usergroup, topic, last_sent_tstamp, last_issue_tstamp, issue',
 	],
 	'types' => [
-		'1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, name, issue_title, authors, sender_name, sender_mail, reply_mail, return_path, template, type, settings_page, encoding, charset, rythm, approval, usergroup, topic, last_sent_tstamp, last_issue_tstamp, issue, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, hidden,--palette--;;1, starttime, endtime'],
+		'1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, name, issue_title, sender_name, sender_mail, reply_mail, return_path, template, type, settings_page, encoding, charset, rythm, day_for_sending, approval, usergroup, topic, last_sent_tstamp, last_issue_tstamp, issue, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, hidden,--palette--;;1, starttime, endtime'],
 	],
 	'palettes' => [
 		'1' => ['showitem' => ''],
@@ -118,19 +118,6 @@ return [
 				'eval' => 'trim, required',
 			],
 		],
-        'authors' => [
-            'exclude' => false,
-            'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.authors',
-            'config' => [
-                'type' => 'select',
-                'renderType' => 'selectMultipleSideBySide',
-                'foreign_table' => 'tx_rkwauthors_domain_model_authors',
-                'foreign_table_where' => 'AND tx_rkwauthors_domain_model_authors.internal = 1 AND ((\'###PAGE_TSCONFIG_IDLIST###\' <> \'0\' AND FIND_IN_SET(tx_rkwauthors_domain_model_authors.pid,\'###PAGE_TSCONFIG_IDLIST###\')) OR (\'###PAGE_TSCONFIG_IDLIST###\' = \'0\')) AND tx_rkwauthors_domain_model_authors.sys_language_uid = ###REC_FIELD_sys_language_uid### ORDER BY tx_rkwauthors_domain_model_authors.last_name ASC',
-                'maxitems'      => 1,
-                'minitems'      => 0,
-                'size'          => 5,
-            ]
-        ],
 		'issue_title' => [
             'exclude' => true,
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.issue_title',
@@ -202,16 +189,6 @@ return [
 				'maxitems' => 1,
 			],
 		],
-        'type' => [
-            'exclude' => true,
-            'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.type',
-            'config' => [
-                'type' => 'check',
-                'items' => [
-                    ['LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.type.special', '1'],
-                ],
-            ],
-        ],
         'template' => [
             'exclude' => true,
             'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.template',
@@ -259,8 +236,9 @@ return [
 				'items' => [
 					['LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.rythm.weekly', 1],
 					['LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.rythm.monthly', 2],
-					['LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.rythm.quarterly', 3],
-					['LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.rythm.yearly', 4],
+                    ['LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.rythm.bimonthly', 3],
+                    ['LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.rythm.quarterly', 4],
+					['LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.rythm.semiannually', 5],
 				],
 				'size' => 1,
 				'eval' => 'int, required',
@@ -268,6 +246,20 @@ return [
 				'maxitems' => 1,
 			],
 		],
+        'day_for_sending' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.day_for_sending',
+            'config' => [
+                'type' => 'input',
+                'size' => 30,
+                'range' => array(
+                    'lower' => 1,
+                    'upper' => 31
+                ),
+                'default' => 15,
+                'eval' => 'num, trim, required',
+            ],
+        ],        
 		'approval' => [
             'exclude' => true,
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_newsletter.approval',
@@ -324,7 +316,6 @@ return [
                 'internal_type' => 'db',
                 'foreign_table' => 'tx_rkwnewsletter_domain_model_issue',
                 'foreign_field' => 'newsletter',
-                //'foreign_sortby' => 'sorting',
                 'show_thumbs' =>  true,
                 'minitems' => 0,
                 'maxitems' => 9999,

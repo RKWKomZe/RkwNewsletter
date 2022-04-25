@@ -125,7 +125,10 @@
                 <source>Oh no! An unexpected error occurred. Please contact your trusted administrator.</source>
                 <target>Upps! Ein unerwarteter Fehler ist aufgetreten. Bitte wenden Sie sich an den Administrator Ihres Vertrauens.</target>
             </trans-unit>
-
+			<trans-unit id="releaseController.error.testMail">
+				<source>Oops! Sorry, the email could not be sent. Are corresponding contents created?</source>
+				<target>Upps! Die E-Mail konnte leider nicht versendet werden. Sind entsprechende Inhalte angelegt?</target>
+			</trans-unit>
 
             
             <!-- subscriptionController -->
@@ -258,8 +261,8 @@
 				<target>Los!</target>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_testList.all">
-				<source>All</source>
-				<target>Alle</target>
+				<source>- All -</source>
+				<target>- Alle -</target>
 			</trans-unit>
 			
 			
@@ -285,8 +288,8 @@
                 <target>Los!</target>
             </trans-unit>
             <trans-unit id="templates_backend_release_createIssueList.all">
-                <source>All</source>
-                <target>Alle</target>
+                <source>- All -</source>
+                <target>- Alle -</target>
             </trans-unit>
 
 

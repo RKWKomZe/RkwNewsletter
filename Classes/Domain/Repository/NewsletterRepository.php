@@ -49,7 +49,7 @@ class NewsletterRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @throws \TYPO3\CMS\Core\Type\Exception\InvalidEnumerationValueException
      * @comment only used in backend
      */
-    public function findAllToBuildIssue(int $tolerance = 0, int $dayOfMonth = 15, int $currentTime = 0): QueryResultInterface
+    public function findAllToBuildIssue(int $tolerance = 0, int $currentTime = 0): QueryResultInterface
     {
 
         if (! $currentTime) {
@@ -64,32 +64,35 @@ class NewsletterRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 ) 			
                 OR (
                     rythm = 2 
-                    AND (
-                        (
-                            MONTH(FROM_UNIXTIME(last_issue_tstamp)) < MONTH(FROM_UNIXTIME(' . ($currentTime + $tolerance) . ')) 
-                        )
-                        OR (
-                            MONTH(FROM_UNIXTIME(last_issue_tstamp)) > MONTH(FROM_UNIXTIME(' . ($currentTime + $tolerance) . ')) AND YEAR(FROM_UNIXTIME(last_issue_tstamp)) < YEAR(FROM_UNIXTIME(' . $currentTime . '))
-                        )
-                    )
-                    AND (DAY(FROM_UNIXTIME(' . ($currentTime + $tolerance) . ')) >= ' . $dayOfMonth . ')    
+                    AND DATEDIFF(FROM_UNIXTIME(' . ($currentTime + $tolerance) . '), FROM_UNIXTIME(last_issue_tstamp)) >= 30
+                    AND (DAY(FROM_UNIXTIME(' . ($currentTime + $tolerance) . ')) >= day_for_sending) 
                 )
                 OR (
                     rythm = 3 
+                    AND DATEDIFF(FROM_UNIXTIME(' . ($currentTime + $tolerance) . '), FROM_UNIXTIME(last_issue_tstamp)) >= (30*2)
+                    AND (DAY(FROM_UNIXTIME(' . ($currentTime + $tolerance) . ')) >= day_for_sending) 
+                )
+                OR (
+                    rythm = 5 
+                    AND DATEDIFF(FROM_UNIXTIME(' . ($currentTime + $tolerance) . '), FROM_UNIXTIME(last_issue_tstamp)) >= (30*6)    
+                    AND (DAY(FROM_UNIXTIME(' . ($currentTime + $tolerance) . ')) >= day_for_sending) 
+                )
+                OR (
+                    rythm = 4 
                     AND (
                         (
                             QUARTER(FROM_UNIXTIME(last_issue_tstamp)) < QUARTER(FROM_UNIXTIME(' . ($currentTime + $tolerance). ')) 
+                            AND QUARTER(FROM_UNIXTIME(last_issue_tstamp)) != QUARTER(FROM_UNIXTIME(' . ($currentTime) . '))
                         )
                         OR (
                             QUARTER(FROM_UNIXTIME(last_issue_tstamp)) > QUARTER(FROM_UNIXTIME(' . ($currentTime + $tolerance). '))  AND YEAR(FROM_UNIXTIME(last_issue_tstamp)) < YEAR(FROM_UNIXTIME(' . $currentTime . '))
                         )
                     )                    
-                    AND (DAY(FROM_UNIXTIME(' . ($currentTime + $tolerance) . ')) >= ' . $dayOfMonth . ')   
+                    AND (DAY(FROM_UNIXTIME(' . ($currentTime + $tolerance) . ')) >= day_for_sending)   
                 )
             )' .
             QueryTypo3::getWhereClauseForEnableFields('tx_rkwnewsletter_domain_model_newsletter') .
             QueryTypo3::getWhereClauseForVersioning('tx_rkwnewsletter_domain_model_newsletter');
-
 
         $query = $this->createQuery();
         $query->statement($statement);

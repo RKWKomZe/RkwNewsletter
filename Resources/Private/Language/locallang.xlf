@@ -99,6 +99,9 @@
             <trans-unit id="releaseController.error.unexpected">
                 <source>Oh no! An unexpected error occurred. Please contact your trusted administrator.</source>
             </trans-unit>
+			<trans-unit id="releaseController.error.testMail">
+				<source>Oops! Sorry, the email could not be sent. Are corresponding contents created?</source>
+			</trans-unit>            
             
             
             <!-- subscriptionController -->
@@ -203,7 +206,7 @@
 				<source>Go!</source>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_testList.all">
-				<source>All</source>
+				<source>- All -</source>
 			</trans-unit>
 			
 
@@ -224,7 +227,7 @@
                 <source>Go!</source>
             </trans-unit>
             <trans-unit id="templates_backend_release_createIssueList.all">
-                <source>All</source>
+                <source>- All -</source>
             </trans-unit>
 
 

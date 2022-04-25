@@ -13,7 +13,7 @@
             </f:then>
             <f:else>
                 <f:render partial="Body/Editorial/Content" section="Plaintext" arguments="{queueMail: queueMail, queueRecipient: queueRecipient, content: issue.introduction}" />
-                <f:render partial="Body/Editorial/Contact" section="Plaintext" arguments="{queueRecipient: queueRecipient, authors: issue.newsletter.authors, content: issue.introduction}" />
+                <f:render partial="Body/Editorial/Contact" section="Plaintext" arguments="{queueRecipient: queueRecipient, authors: issue.authors, content: issue.introduction}" />
             </f:else>
         </f:if>
     </f:section>
@@ -29,7 +29,7 @@
             </f:then>
             <f:else>
                 <f:render partial="Body/Editorial/Content" section="Html" arguments="{queueMail: queueMail, queueRecipient: queueRecipient, content: issue.introduction}" />
-                <f:render partial="Body/Editorial/Contact" section="Html" arguments="{queueRecipient: queueRecipient, authors: issue.newsletter.authors, content: issue.introduction}" />
+                <f:render partial="Body/Editorial/Contact" section="Html" arguments="{queueRecipient: queueRecipient, authors: issue.authors, content: issue.introduction}" />
             </f:else>
         </f:if>
     </f:section>

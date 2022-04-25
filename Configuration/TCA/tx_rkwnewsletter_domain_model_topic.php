@@ -101,7 +101,7 @@ return [
 				'minitems' => 1,
 				'maxitems' => 10,
 				'foreign_table' => 'be_users',
-				'foreign_table_where' => 'AND be_users.deleted = 0 AND be_users.disable = 0',
+				'foreign_table_where' => 'AND be_users.deleted = 0 AND be_users.disable = 0 ORDER BY be_users.username',
 			],
 		],
 		'approval_stage2' => [
@@ -115,7 +115,7 @@ return [
 				'minitems' => 0,
 				'maxitems' => 10,
 				'foreign_table' => 'be_users',
-				'foreign_table_where' => 'AND be_users.deleted = 0 AND be_users.disable = 0',
+				'foreign_table_where' => 'AND be_users.deleted = 0 AND be_users.disable = 0 ORDER BY be_users.username',
 			],
 		],
 

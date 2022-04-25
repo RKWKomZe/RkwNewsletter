@@ -1265,6 +1265,7 @@ class IssueManagerTest extends FunctionalTestCase
          * Given both of the newsletter-objects were sent on the 15th of February
          * Given today is the 25th of February
          * Given the tolerance is set to fifteen days
+         * Given dayOfMonth is set to the 15th
          * When the method is called
          * Then false is returned
          */
@@ -1279,16 +1280,58 @@ class IssueManagerTest extends FunctionalTestCase
 
         $updateQueryBuilder = $connection->createQueryBuilder();
         $updateQueryBuilder->update('tx_rkwnewsletter_domain_model_newsletter')
-            ->set('last_issue_tstamp', $timestampNewsletter);
+            ->set('last_issue_tstamp', $timestampNewsletter)
+            ->set('day_for_sending', 15);
+        
+        $updateQueryBuilder->execute();
+
+        // tolerance is 15 days (1209600) for testing
+        $result = $this->subject->buildAllIssues(1209600, $timestampNow);
+        self::assertFalse($result);
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function buildAllIssuesReturnsFalseWhenNoNewsletterDueMonthlyBetweenMonths ()
+    {
+        /**
+         * Scenario:
+         *
+         * Given two persisted newsletter-objects with monthly rhythm
+         * Given to each newsletter-object belong two persisted topic-objects
+         * Given each persisted topic-object has a persisted container-page defined
+         * Given both of the newsletter-objects were sent on the 15th of February
+         * Given today is the 25th of February
+         * Given the tolerance is set to fifteen days
+         * Given dayOfMonth is set to the 1st
+         * When the method is called
+         * Then false is returned
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check160.xml');
+
+        // prepare timestamps for test
+        $timestampNow = mktime(0, 0, 0, 2  , 25, date("Y"));
+        $timestampNewsletter = mktime(0, 0, 0, 2  , 15, date("Y"));
+
+        /** @var  \TYPO3\CMS\Core\Database\Connection $connectionPages */
+        $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('tx_rkwnewsletter_domain_model_newsletter');
+
+        $updateQueryBuilder = $connection->createQueryBuilder();
+        $updateQueryBuilder->update('tx_rkwnewsletter_domain_model_newsletter')
+            ->set('last_issue_tstamp', $timestampNewsletter)
+            ->set('day_for_sending', 1);
 
         $updateQueryBuilder->execute();
 
         // tolerance is 15 days (1209600) for testing
-        $result = $this->subject->buildAllIssues(1209600, 15, $timestampNow);
+        $result = $this->subject->buildAllIssues(1209600, $timestampNow);
         self::assertFalse($result);
-
     }
-    
+
+
+
 
     /**
      * @test
@@ -1305,6 +1348,7 @@ class IssueManagerTest extends FunctionalTestCase
          * Given both of the newsletter-objects were sent on the 15th of January
          * Given today is the 14th of February
          * Given the tolerance is set to fifteen days
+         * Given dayOfMonth is set to the 15th
          * When the method is called
          * Then true is returned
          * Then two issues are created
@@ -1320,12 +1364,13 @@ class IssueManagerTest extends FunctionalTestCase
 
         $updateQueryBuilder = $connection->createQueryBuilder();
         $updateQueryBuilder->update('tx_rkwnewsletter_domain_model_newsletter')
-            ->set('last_issue_tstamp', $timestampNewsletter);
+            ->set('last_issue_tstamp', $timestampNewsletter)
+            ->set('day_for_sending', 15);
 
         $updateQueryBuilder->execute();
 
         // tolerance is 15 days (1209600) for testing
-        $result = $this->subject->buildAllIssues(1209600, 15, $timestampNow);
+        $result = $this->subject->buildAllIssues(1209600, $timestampNow);
         self::assertTrue($result);
 
         $issues = $this->issueRepository->findAll()->toArray();
@@ -1349,6 +1394,7 @@ class IssueManagerTest extends FunctionalTestCase
          * Given both of the newsletter-objects were sent on the 15th of December last year
          * Given today is the 14th of January
          * Given the tolerance is set to fifteen days
+         * Given dayOfMonth is set to the 15th
          * When the method is called
          * Then true is returned
          * Then two issues are created
@@ -1364,12 +1410,229 @@ class IssueManagerTest extends FunctionalTestCase
 
         $updateQueryBuilder = $connection->createQueryBuilder();
         $updateQueryBuilder->update('tx_rkwnewsletter_domain_model_newsletter')
-            ->set('last_issue_tstamp', $timestampNewsletter);
+            ->set('last_issue_tstamp', $timestampNewsletter)
+            ->set('day_for_sending', 15);
 
         $updateQueryBuilder->execute();
 
         // tolerance is 15 days (1209600) for testing
-        $result = $this->subject->buildAllIssues(1209600, 15, $timestampNow);
+        $result = $this->subject->buildAllIssues(1209600, $timestampNow);
+        self::assertTrue($result);
+
+        $issues = $this->issueRepository->findAll()->toArray();
+        self::assertCount(2, $issues);
+
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function buildAllIssuesReturnsFalseWhenNoNewsletterDueBiMonthly ()
+    {
+        /**
+         * Scenario:
+         *
+         * Given two persisted newsletter-objects with bi-monthly rhythm
+         * Given to each newsletter-object belong two persisted topic-objects
+         * Given each persisted topic-object has a persisted container-page defined
+         * Given both of the newsletter-objects were sent on the 15th of February
+         * Given today is the 25th of March
+         * Given the tolerance is set to fifteen days
+         * Given dayOfMonth is set to the 15th
+         * When the method is called
+         * Then false is returned
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check390.xml');
+
+        // prepare timestamps for test
+        $timestampNow = mktime(0, 0, 0, 3, 25, date("Y"));
+        $timestampNewsletter = mktime(0, 0, 0, 2  , 15, date("Y"));
+
+        /** @var  \TYPO3\CMS\Core\Database\Connection $connectionPages */
+        $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('tx_rkwnewsletter_domain_model_newsletter');
+
+        $updateQueryBuilder = $connection->createQueryBuilder();
+        $updateQueryBuilder->update('tx_rkwnewsletter_domain_model_newsletter')
+            ->set('last_issue_tstamp', $timestampNewsletter)
+            ->set('day_for_sending', 15);
+
+        $updateQueryBuilder->execute();
+
+        // tolerance is 15 days (1209600) for testing
+        $result = $this->subject->buildAllIssues(1209600, $timestampNow);
+        self::assertFalse($result);
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function buildAllIssuesReturnsFalseWhenNoNewsletterDueBiMonthlyBetweenMonths ()
+    {
+        /**
+         * Scenario:
+         *
+         * Given two persisted newsletter-objects with bi-monthly rhythm
+         * Given to each newsletter-object belong two persisted topic-objects
+         * Given each persisted topic-object has a persisted container-page defined
+         * Given both of the newsletter-objects were sent on the 15th of February
+         * Given today is the 25th of March
+         * Given the tolerance is set to fifteen days
+         * Given dayOfMonth is set to the 1st
+         * When the method is called
+         * Then false is returned
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check390.xml');
+
+        // prepare timestamps for test
+        $timestampNow = mktime(0, 0, 0, 3, 25, date("Y"));
+        $timestampNewsletter = mktime(0, 0, 0, 2  , 15, date("Y"));
+
+        /** @var  \TYPO3\CMS\Core\Database\Connection $connectionPages */
+        $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('tx_rkwnewsletter_domain_model_newsletter');
+
+        $updateQueryBuilder = $connection->createQueryBuilder();
+        $updateQueryBuilder->update('tx_rkwnewsletter_domain_model_newsletter')
+            ->set('last_issue_tstamp', $timestampNewsletter)
+            ->set('day_for_sending', 1);
+
+        $updateQueryBuilder->execute();
+
+        // tolerance is 15 days (1209600) for testing
+        $result = $this->subject->buildAllIssues(1209600, $timestampNow);
+        self::assertFalse($result);
+    }
+
+
+
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function buildAllIssuesReturnsTrueWhenNewsletterDueBiMonthly ()
+    {
+        /**
+         * Scenario:
+         *
+         * Given two persisted newsletter-objects with bi-monthly rhythm
+         * Given to each newsletter-object belong two persisted topic-objects
+         * Given each persisted topic-object has a persisted container-page defined
+         * Given both of the newsletter-objects were sent on the 15th of January
+         * Given today is the 14th of March
+         * Given the tolerance is set to fifteen days
+         * Given dayOfMonth is set to the 15th
+         * When the method is called
+         * Then true is returned
+         * Then two issues are created
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check390.xml');
+
+        // prepare timestamps for test
+        $timestampNow = mktime(0, 0, 0, 3  , 14, date("Y"));
+        $timestampNewsletter = mktime(0, 0, 0, 1  , 15, date("Y"));
+
+        /** @var  \TYPO3\CMS\Core\Database\Connection $connectionPages */
+        $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('tx_rkwnewsletter_domain_model_newsletter');
+
+        $updateQueryBuilder = $connection->createQueryBuilder();
+        $updateQueryBuilder->update('tx_rkwnewsletter_domain_model_newsletter')
+            ->set('last_issue_tstamp', $timestampNewsletter)
+            ->set('day_for_sending', 15);
+
+        $updateQueryBuilder->execute();
+
+        // tolerance is 15 days (1209600) for testing
+        $result = $this->subject->buildAllIssues(1209600, $timestampNow);
+        self::assertTrue($result);
+
+        $issues = $this->issueRepository->findAll()->toArray();
+        self::assertCount(2, $issues);
+
+    }
+
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function buildAllIssuesReturnsFalseWhenNewsletterDueBiMonthlyBetweenYears ()
+    {
+        /**
+         * Scenario:
+         *
+         * Given two persisted newsletter-objects with bi-monthly rhythm
+         * Given to each newsletter-object belong two persisted topic-objects
+         * Given each persisted topic-object has a persisted container-page defined
+         * Given both of the newsletter-objects were sent on the 15th of December last year
+         * Given today is the 14th of January
+         * Given the tolerance is set to fifteen days
+         * Given dayOfMonth is set to the 15th
+         * When the method is called
+         * Then false is returned
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check390.xml');
+
+        // prepare timestamps for test
+        $timestampNow = mktime(0, 0, 0, 1  , 14, date("Y"));
+        $timestampNewsletter = mktime(0, 0, 0, 12  , 15, date("Y") -1);
+
+        /** @var  \TYPO3\CMS\Core\Database\Connection $connectionPages */
+        $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('tx_rkwnewsletter_domain_model_newsletter');
+
+        $updateQueryBuilder = $connection->createQueryBuilder();
+        $updateQueryBuilder->update('tx_rkwnewsletter_domain_model_newsletter')
+            ->set('last_issue_tstamp', $timestampNewsletter)
+            ->set('day_for_sending', 15);
+
+        $updateQueryBuilder->execute();
+
+        // tolerance is 15 days (1209600) for testing
+        $result = $this->subject->buildAllIssues(1209600, $timestampNow);
+        self::assertFalse($result);
+
+
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function buildAllIssuesReturnsTrueWhenNewsletterDueBiMonthlyBetweenYears ()
+    {
+        /**
+         * Scenario:
+         *
+         * Given two persisted newsletter-objects with bi-monthly rhythm
+         * Given to each newsletter-object belong two persisted topic-objects
+         * Given each persisted topic-object has a persisted container-page defined
+         * Given both of the newsletter-objects were sent on the 15th of December last year
+         * Given today is the 14th of February
+         * Given the tolerance is set to fifteen days
+         * Given dayOfMonth is set to the 15th
+         * When the method is called
+         * Then true is returned
+         * Then two issues are created
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check390.xml');
+
+        // prepare timestamps for test
+        $timestampNow = mktime(0, 0, 0, 2  , 14, date("Y"));
+        $timestampNewsletter = mktime(0, 0, 0, 12  , 15, date("Y") -1);
+
+        /** @var  \TYPO3\CMS\Core\Database\Connection $connectionPages */
+        $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('tx_rkwnewsletter_domain_model_newsletter');
+
+        $updateQueryBuilder = $connection->createQueryBuilder();
+        $updateQueryBuilder->update('tx_rkwnewsletter_domain_model_newsletter')
+            ->set('last_issue_tstamp', $timestampNewsletter)
+            ->set('day_for_sending', 15);
+
+        $updateQueryBuilder->execute();
+
+        // tolerance is 15 days (1209600) for testing
+        $result = $this->subject->buildAllIssues(1209600, $timestampNow);
         self::assertTrue($result);
 
         $issues = $this->issueRepository->findAll()->toArray();
@@ -1392,6 +1655,7 @@ class IssueManagerTest extends FunctionalTestCase
          * Given both of the newsletter-objects were sent on the 15th of January
          * Given today is the 25th of March
          * Given the tolerance is set to fifteen days
+         * Given dayOfMonth is set to the 15th
          * When the method is called
          * Then false is returned
          */
@@ -1406,15 +1670,58 @@ class IssueManagerTest extends FunctionalTestCase
 
         $updateQueryBuilder = $connection->createQueryBuilder();
         $updateQueryBuilder->update('tx_rkwnewsletter_domain_model_newsletter')
-            ->set('last_issue_tstamp', $timestampNewsletter);
+            ->set('last_issue_tstamp', $timestampNewsletter)
+            ->set('day_for_sending', 15);
 
         $updateQueryBuilder->execute();
 
         // tolerance is 15 days (1209600) for testing
-        $result = $this->subject->buildAllIssues(1209600, 15, $timestampNow);
+        $result = $this->subject->buildAllIssues(1209600, $timestampNow);
         self::assertFalse($result);
 
     }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function buildAllIssuesReturnsFalseWhenNoNewsletterDueQuarterlyBetweenMonths ()
+    {
+        /**
+         * Scenario:
+         *
+         * Given two persisted newsletter-objects with quarterly rhythm
+         * Given to each newsletter-object belong two persisted topic-objects
+         * Given each persisted topic-object has a persisted container-page defined
+         * Given both of the newsletter-objects were sent on the 15th of January
+         * Given today is the 25th of March
+         * Given the tolerance is set to fifteen days
+         * Given dayOfMonth is set to the 15th
+         * When the method is called
+         * Then false is returned
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check170.xml');
+
+        // prepare timestamps for test
+        $timestampNow = mktime(0, 0, 0, 3  , 25, date("Y"));
+        $timestampNewsletter = mktime(0, 0, 0, 1  , 15, date("Y"));
+
+        /** @var  \TYPO3\CMS\Core\Database\Connection $connectionPages */
+        $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('tx_rkwnewsletter_domain_model_newsletter');
+
+        $updateQueryBuilder = $connection->createQueryBuilder();
+        $updateQueryBuilder->update('tx_rkwnewsletter_domain_model_newsletter')
+            ->set('last_issue_tstamp', $timestampNewsletter)
+            ->set('day_for_sending', 1);
+
+        $updateQueryBuilder->execute();
+
+        // tolerance is 15 days (1209600) for testing
+        $result = $this->subject->buildAllIssues(1209600,  $timestampNow);
+        self::assertFalse($result);
+
+    }
+
 
     /**
      * @test
@@ -1431,6 +1738,7 @@ class IssueManagerTest extends FunctionalTestCase
          * Given both of the newsletter-objects were sent on the 15th of January
          * Given today is the 2nd of April
          * Given the tolerance is set to fifteen days
+         * Given dayOfMonth is set to the 15th
          * When the method is called
          * Then false is returned
          */
@@ -1445,12 +1753,13 @@ class IssueManagerTest extends FunctionalTestCase
 
         $updateQueryBuilder = $connection->createQueryBuilder();
         $updateQueryBuilder->update('tx_rkwnewsletter_domain_model_newsletter')
-            ->set('last_issue_tstamp', $timestampNewsletter);
+            ->set('last_issue_tstamp', $timestampNewsletter)
+            ->set('day_for_sending', 15);
 
         $updateQueryBuilder->execute();
 
         // tolerance is 15 days (1209600) for testing
-        $result = $this->subject->buildAllIssues(1209600, 15, $timestampNow);
+        $result = $this->subject->buildAllIssues(1209600, $timestampNow);
         self::assertTrue($result);
 
         $issues = $this->issueRepository->findAll()->toArray();
@@ -1474,6 +1783,7 @@ class IssueManagerTest extends FunctionalTestCase
          * Given both of the newsletter-objects were sent on the 15th of October
          * Given today is the 2nd of January the next year
          * Given the tolerance is set to fifteen days
+         * Given dayOfMonth is set to the 15th
          * When the method is called
          * Then false is returned
          */
@@ -1488,12 +1798,141 @@ class IssueManagerTest extends FunctionalTestCase
 
         $updateQueryBuilder = $connection->createQueryBuilder();
         $updateQueryBuilder->update('tx_rkwnewsletter_domain_model_newsletter')
-            ->set('last_issue_tstamp', $timestampNewsletter);
+            ->set('last_issue_tstamp', $timestampNewsletter)
+            ->set('day_for_sending', 15);
 
         $updateQueryBuilder->execute();
 
         // tolerance is 15 days (1209600) for testing
-        $result = $this->subject->buildAllIssues(1209600, 15, $timestampNow);
+        $result = $this->subject->buildAllIssues(1209600, $timestampNow);
+        self::assertTrue($result);
+
+        $issues = $this->issueRepository->findAll()->toArray();
+        self::assertCount(2, $issues);
+
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function buildAllIssuesReturnsFalseWhenNoNewsletterDueBiAnnually ()
+    {
+        /**
+         * Scenario:
+         *
+         * Given two persisted newsletter-objects with bi-monthly rhythm
+         * Given to each newsletter-object belong two persisted topic-objects
+         * Given each persisted topic-object has a persisted container-page defined
+         * Given both of the newsletter-objects were sent on the 15th of February
+         * Given today is the 25th of June
+         * Given the tolerance is set to fifteen days
+         * Given dayOfMonth is set to the 15th
+         * When the method is called
+         * Then false is returned
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check400.xml');
+
+        // prepare timestamps for test
+        $timestampNow = mktime(0, 0, 0, 6, 25, date("Y"));
+        $timestampNewsletter = mktime(0, 0, 0, 1, 15, date("Y"));
+
+        /** @var  \TYPO3\CMS\Core\Database\Connection $connectionPages */
+        $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('tx_rkwnewsletter_domain_model_newsletter');
+
+        $updateQueryBuilder = $connection->createQueryBuilder();
+        $updateQueryBuilder->update('tx_rkwnewsletter_domain_model_newsletter')
+            ->set('last_issue_tstamp', $timestampNewsletter)
+            ->set('day_for_sending', 15);
+
+        $updateQueryBuilder->execute();
+
+        // tolerance is 15 days (1209600) for testing
+        $result = $this->subject->buildAllIssues(1209600, $timestampNow);
+        self::assertFalse($result);
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function buildAllIssuesReturnsFalseWhenNoNewsletterDueBiAnnuallyBetweenMonths ()
+    {
+        /**
+         * Scenario:
+         *
+         * Given two persisted newsletter-objects with bi-monthly rhythm
+         * Given to each newsletter-object belong two persisted topic-objects
+         * Given each persisted topic-object has a persisted container-page defined
+         * Given both of the newsletter-objects were sent on the 15th of February
+         * Given today is the 25th of June
+         * Given the tolerance is set to fifteen days
+         * Given dayOfMonth is set to the 1st
+         * When the method is called
+         * Then false is returned
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check400.xml');
+
+        // prepare timestamps for test
+        $timestampNow = mktime(0, 0, 0, 6, 25, date("Y"));
+        $timestampNewsletter = mktime(0, 0, 0, 1, 15, date("Y"));
+
+        /** @var  \TYPO3\CMS\Core\Database\Connection $connectionPages */
+        $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('tx_rkwnewsletter_domain_model_newsletter');
+
+        $updateQueryBuilder = $connection->createQueryBuilder();
+        $updateQueryBuilder->update('tx_rkwnewsletter_domain_model_newsletter')
+            ->set('last_issue_tstamp', $timestampNewsletter)
+            ->set('day_for_sending', 1);
+
+        $updateQueryBuilder->execute();
+
+        // tolerance is 15 days (1209600) for testing
+        $result = $this->subject->buildAllIssues(1209600, $timestampNow);
+        self::assertFalse($result);
+    }
+
+
+
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function buildAllIssuesReturnsTrueWhenNewsletterDueBiAnnually ()
+    {
+        /**
+         * Scenario:
+         *
+         * Given two persisted newsletter-objects with bi-monthly rhythm
+         * Given to each newsletter-object belong two persisted topic-objects
+         * Given each persisted topic-object has a persisted container-page defined
+         * Given both of the newsletter-objects were sent on the 15th of January
+         * Given today is the 14th of July
+         * Given the tolerance is set to fifteen days
+         * Given dayOfMonth is set to the 15th
+         * When the method is called
+         * Then true is returned
+         * Then two issues are created
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check400.xml');
+
+        // prepare timestamps for test
+        $timestampNow = mktime(0, 0, 0, 7, 14, date("Y"));
+        $timestampNewsletter = mktime(0, 0, 0, 1  , 15, date("Y"));
+
+        /** @var  \TYPO3\CMS\Core\Database\Connection $connectionPages */
+        $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('tx_rkwnewsletter_domain_model_newsletter');
+
+        $updateQueryBuilder = $connection->createQueryBuilder();
+        $updateQueryBuilder->update('tx_rkwnewsletter_domain_model_newsletter')
+            ->set('last_issue_tstamp', $timestampNewsletter)
+            ->set('day_for_sending', 15);
+
+        $updateQueryBuilder->execute();
+
+        // tolerance is 15 days (1209600) for testing
+        $result = $this->subject->buildAllIssues(1209600, $timestampNow);
         self::assertTrue($result);
 
         $issues = $this->issueRepository->findAll()->toArray();
@@ -1502,6 +1941,92 @@ class IssueManagerTest extends FunctionalTestCase
     }
 
 
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function buildAllIssuesReturnsFalseWhenNewsletterDueBiAnnuallyBetweenYears ()
+    {
+        /**
+         * Scenario:
+         *
+         * Given two persisted newsletter-objects with bi-monthly rhythm
+         * Given to each newsletter-object belong two persisted topic-objects
+         * Given each persisted topic-object has a persisted container-page defined
+         * Given both of the newsletter-objects were sent on the 15th of August last year
+         * Given today is the 14th of January
+         * Given the tolerance is set to fifteen days
+         * Given dayOfMonth is set to the 15th
+         * When the method is called
+         * Then false is returned
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check400.xml');
+
+        // prepare timestamps for test
+        $timestampNow = mktime(0, 0, 0, 1  , 14, date("Y"));
+        $timestampNewsletter = mktime(0, 0, 0, 8  , 15, date("Y") -1);
+
+        /** @var  \TYPO3\CMS\Core\Database\Connection $connectionPages */
+        $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('tx_rkwnewsletter_domain_model_newsletter');
+
+        $updateQueryBuilder = $connection->createQueryBuilder();
+        $updateQueryBuilder->update('tx_rkwnewsletter_domain_model_newsletter')
+            ->set('last_issue_tstamp', $timestampNewsletter)
+            ->set('day_for_sending', 15);
+
+        $updateQueryBuilder->execute();
+
+        // tolerance is 15 days (1209600) for testing
+        $result = $this->subject->buildAllIssues(1209600, $timestampNow);
+        self::assertFalse($result);
+
+
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function buildAllIssuesReturnsTrueWhenNewsletterDueBiAnnuallyBetweenYears ()
+    {
+        /**
+         * Scenario:
+         *
+         * Given two persisted newsletter-objects with bi-monthly rhythm
+         * Given to each newsletter-object belong two persisted topic-objects
+         * Given each persisted topic-object has a persisted container-page defined
+         * Given both of the newsletter-objects were sent on the 15th of August last year
+         * Given today is the 14th of February
+         * Given the tolerance is set to fifteen days
+         * Given dayOfMonth is set to the 15th
+         * When the method is called
+         * Then true is returned
+         * Then two issues are created
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check400.xml');
+
+        // prepare timestamps for test
+        $timestampNow = mktime(0, 0, 0, 2  , 14, date("Y"));
+        $timestampNewsletter = mktime(0, 0, 0, 8, 15, date("Y") -1);
+
+        /** @var  \TYPO3\CMS\Core\Database\Connection $connectionPages */
+        $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('tx_rkwnewsletter_domain_model_newsletter');
+
+        $updateQueryBuilder = $connection->createQueryBuilder();
+        $updateQueryBuilder->update('tx_rkwnewsletter_domain_model_newsletter')
+            ->set('last_issue_tstamp', $timestampNewsletter)
+            ->set('day_for_sending', 15);
+
+        $updateQueryBuilder->execute();
+
+        // tolerance is 15 days (1209600) for testing
+        $result = $this->subject->buildAllIssues(1209600, $timestampNow);
+        self::assertTrue($result);
+
+        $issues = $this->issueRepository->findAll()->toArray();
+        self::assertCount(2, $issues);
+
+    }
     //=============================================
     /**
      * @test

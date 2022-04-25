@@ -63,20 +63,18 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
      * create issues for all newsletters
      *
      * @param int $tolerance Tolerance for creating next issue according to last time an issue was built (in seconds)
-     * @param int $dayOfMonth Day of month the newsletter are planned to be sent
      * @return void
      */
-    public function processIssuesCommand(int $tolerance = 0, int $dayOfMonth = 15): void
+    public function processIssuesCommand(int $tolerance = 0): void
     {
         try {
             
-// $dayOfMonth = 1;
             /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
             
             /** @var \RKW\RkwNewsletter\Manager\IssueManager $issueManager */
             $issueManager = $objectManager->get(IssueManager::class);
-            $issueManager->buildAllIssues($tolerance, $dayOfMonth);
+            $issueManager->buildAllIssues($tolerance);
 
         } catch (\Exception $e) {
             $this->getLogger()->log(
@@ -101,11 +99,6 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
         try {
             
             $settings = $this->getSettings(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
-$settings['reminderApprovalStage1'] = 600;
-$settings['reminderApprovalStage2'] = 600;
-$settings['automaticApprovalStage1'] = 1200;
-$settings['automaticApprovalStage2'] = 1200;
-$settings['reminderApprovalStage3'] = 600;
 
             /** @var  \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
