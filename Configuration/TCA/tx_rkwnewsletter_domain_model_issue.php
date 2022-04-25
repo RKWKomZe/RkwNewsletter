@@ -9,14 +9,14 @@ return [
 		'cruser_id' => 'cruser_id',
 		'dividers2tabs' => true,
 
-		'searchFields' => 'name, status, pages, newsletter, pages_approval, allowed_by_user, info_tstamp, reminder_tstamp, allowed_tstamp, sent_tstamp',
+		'searchFields' => 'name, introduction, status, pages, newsletter, pages_approval, allowed_by_user, info_tstamp, reminder_tstamp, allowed_tstamp, sent_tstamp',
 		'iconfile' => 'EXT:rkw_newsletter/Resources/Public/Icons/tx_rkwnewsletter_domain_model_issue.gif'
 	],
 	'interface' => [
-		'showRecordFieldList' => 'title, status, sent_tstamp',
+		'showRecordFieldList' => 'title, introduction, status, sent_tstamp',
 	],
 	'types' => [
-		'1' => ['showitem' => 'title, status, sent_tstamp'],
+		'1' => ['showitem' => 'title, introduction, status, sent_tstamp'],
 	],
 	'palettes' => [
 		'1' => ['showitem' => ''],
@@ -32,6 +32,17 @@ return [
 				'eval' => 'trim'
 			],
 		],
+        'introduction' => [
+            'exclude' => false,
+            'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_issue.introduction',
+            'config' => [
+                'type' => 'text',
+                'cols' => '40',
+                'rows' => '15',
+                'eval' => 'trim',
+                'enableRichtext' => true
+            ],
+        ],
 		'status' => [
 			'exclude' => false,
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_issue.status',
@@ -166,15 +177,20 @@ return [
                 ],
             ],
         ],
+        'sent_offset' => [
+            'config' => [
+                'type' => 'passthrough',
+            ],
+        ],
+        'is_special' => [
+            'config' => [
+                'type' => 'passthrough',
+            ],
+        ],
         'newsletter' => [
             'config' => [
                 'type' => 'passthrough',
                 'foreign_table' => 'tx_rkwnewsletter_domain_model_newsletter',
-            ],
-        ],
-        'recipients' => [
-            'config' => [
-                'type' => 'passthrough',
             ],
         ],
         'queue_mail' => [

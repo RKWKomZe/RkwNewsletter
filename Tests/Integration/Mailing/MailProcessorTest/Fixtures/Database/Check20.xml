@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+
+    <tx_rkwnewsletter_domain_model_newsletter>
+        <uid>20</uid>
+        <pid>0</pid>
+        <issue_title><![CDATA[Newsletter {M}/{Y}]]></issue_title>
+        <issue>1</issue>
+        <template>Managementletter</template>
+    </tx_rkwnewsletter_domain_model_newsletter>
+    
+    <tx_rkwnewsletter_domain_model_issue>
+        <uid>20</uid>
+        <pid>0</pid>
+        <newsletter>20</newsletter>
+        <title>Tester</title>
+    </tx_rkwnewsletter_domain_model_issue>
+    
+    
+    
+</dataset>

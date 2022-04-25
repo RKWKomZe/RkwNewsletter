@@ -1,0 +1,67 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:rkwMailer="http://typo3.org/ns/RKW/RkwMailer/ViewHelpers"
+    xmlns:rkwNewsletter="http://typo3.org/ns/RKW/RkwNewsletter/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+    
+    <!-- PLAINTEXT -->
+    <f:section name="Plaintext">
+        <rkwMailer:frontend.replace.redirectLinks queueMail="{queueMail}" isPlaintext="true">
+            <f:for
+                each="{rkwNewsletter:mailing.getContents(issue:'{issue}', topics:'{topics}')}"
+                as="content"
+                iteration="itemIterator">
+
+                <f:if condition="{itemIterator.cycle} < {settings.maxContentItems}">
+                    <f:then>
+                        <f:if condition="{itemIterator.isFirst}">
+                            <f:render partial="Body/Items/Separator" section="Plaintext" arguments="{_all}" />
+                        </f:if>
+                        <f:render partial="Body/Items/Default" section="Plaintext" arguments="{_all}" />\n\n
+                    </f:then>
+                    <f:else>
+                        <f:if condition="{itemIterator.isLast}">
+                            <f:render partial="Body/Items/More" section="Plaintext" arguments="{_all}" />\n\n
+                        </f:if>
+                    </f:else>
+                </f:if>
+            </f:for>
+        </rkwMailer:frontend.replace.redirectLinks>
+    </f:section>
+    
+    
+    <!-- HTML -->
+    <f:section name="Html">
+      
+        <rkwMailer:frontend.replace.redirectLinks queueMail="{queueMail}">
+            
+            <f:for 
+                each="{rkwNewsletter:mailing.getContents(issue:'{issue}', topics:'{topics}')}" 
+                as="content" 
+                iteration="itemIterator">
+                
+                <f:if condition="{itemIterator.cycle} < {settings.maxContentItems}">
+                    <f:then>
+                        
+                        <f:if condition="{itemIterator.isFirst}">
+                            <!-- separator -->
+                            <f:render partial="Body/Items/Separator" section="Html" arguments="{_all}" />
+                        </f:if>
+
+                        <!-- content -->
+                        <f:render partial="Body/Items/Default" section="Html" arguments="{_all}" />
+                    </f:then>
+                    <f:else>
+                        <f:if condition="{itemIterator.isLast}">
+                            <!-- more link -->
+                            <tr>
+                                <td style="padding: 16px 16px 0">
+                                    <f:render partial="Body/Items/More" section="Html" arguments="{_all}" />
+                                </td>
+                            </tr>
+                        </f:if>
+                    </f:else>
+                </f:if>
+            </f:for>
+        </rkwMailer:frontend.replace.redirectLinks>
+    </f:section>
+</html>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+
+    <tx_rkwnewsletter_domain_model_newsletter>
+        <uid>100</uid>
+        <pid>0</pid>
+        <issue_title><![CDATA[Newsletter {M}/{Y}]]></issue_title>
+        <issue>1</issue>
+        <topic>2</topic>
+    </tx_rkwnewsletter_domain_model_newsletter>
+    
+    
+    <tx_rkwnewsletter_domain_model_issue>
+        <uid>100</uid>
+        <pid>0</pid>
+        <newsletter>100</newsletter>
+        <pages>2</pages>
+    </tx_rkwnewsletter_domain_model_issue>
+    
+    
+    <tx_rkwnewsletter_domain_model_topic>
+        <uid>100</uid>
+        <pid>0</pid>
+        <container_page>1</container_page>
+        <newsletter>100</newsletter>
+    </tx_rkwnewsletter_domain_model_topic>
+
+    <tx_rkwnewsletter_domain_model_topic>
+        <uid>101</uid>
+        <pid>0</pid>
+        <container_page>1</container_page>
+        <newsletter>100</newsletter>
+        <is_special>1</is_special>
+    </tx_rkwnewsletter_domain_model_topic>
+    
+    
+    <pages>
+        <uid>100</uid>
+        <pid>1</pid>
+        <title>One</title>
+        <tx_rkwnewsletter_newsletter>100</tx_rkwnewsletter_newsletter>
+        <tx_rkwnewsletter_issue>100</tx_rkwnewsletter_issue>
+        <tx_rkwnewsletter_topic>100</tx_rkwnewsletter_topic>
+        <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <no_search>1</no_search>
+    </pages>
+
+    <pages>
+        <uid>101</uid>
+        <pid>1</pid>
+        <title>One</title>
+        <tx_rkwnewsletter_newsletter>100</tx_rkwnewsletter_newsletter>
+        <tx_rkwnewsletter_issue>100</tx_rkwnewsletter_issue>
+        <tx_rkwnewsletter_topic>101</tx_rkwnewsletter_topic>
+        <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <no_search>1</no_search>
+    </pages>
+    
+    <tt_content>
+        <uid>100</uid>
+        <pid>100</pid>
+        <header>Content 70.4</header>
+        <sorting>4</sorting>
+    </tt_content>
+    
+    <tt_content>
+        <uid>101</uid>
+        <pid>100</pid>
+        <header>Content 70.3</header>
+        <sorting>3</sorting>
+    </tt_content>
+
+    <tt_content>
+        <uid>102</uid>
+        <pid>100</pid>
+        <header>Content 70.2</header>
+        <sorting>2</sorting>
+    </tt_content>
+
+    <tt_content>
+        <uid>103</uid>
+        <pid>100</pid>
+        <header>Content 70.1</header>
+        <sorting>1</sorting>
+    </tt_content>
+    
+    <tt_content>
+        <uid>104</uid>
+        <pid>101</pid>
+        <header>Content 71.3</header>
+        <sorting>3</sorting>
+    </tt_content>
+
+    <tt_content>
+        <uid>105</uid>
+        <pid>101</pid>
+        <header>Content 71.2</header>
+        <sorting>2</sorting>
+    </tt_content>
+
+    <tt_content>
+        <uid>106</uid>
+        <pid>101</pid>
+        <header>Content 71.1</header>
+        <sorting>1</sorting>
+        <tx_rkwnewsletter_is_editorial>1</tx_rkwnewsletter_is_editorial>
+    </tt_content>
+
+</dataset>

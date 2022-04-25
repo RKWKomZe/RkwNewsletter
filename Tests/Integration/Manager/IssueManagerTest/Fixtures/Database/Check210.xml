@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+
+    <tx_rkwnewsletter_domain_model_newsletter>
+        <uid>210</uid>
+        <pid>0</pid>
+        <issue_title><![CDATA[Newsletter {M}/{Y}]]></issue_title>
+        <issue>1</issue>
+        <approval>210,211</approval>
+    </tx_rkwnewsletter_domain_model_newsletter>
+    
+    <tx_rkwnewsletter_domain_model_issue>
+        <uid>210</uid>
+        <pid>0</pid>
+        <status>2</status>
+        <newsletter>210</newsletter>
+        <info_tstamp>1000</info_tstamp>
+        <reminder_tstamp>1000</reminder_tstamp>
+    </tx_rkwnewsletter_domain_model_issue>
+
+    <tx_rkwnewsletter_domain_model_approval>
+        <uid>210</uid>
+        <pid>0</pid>
+        <issue>210</issue>
+        <topic>0</topic>
+        <page>0</page>
+        <allowed_tstamp_stage1>0</allowed_tstamp_stage1>
+        <allowed_tstamp_stage2>1000</allowed_tstamp_stage2>
+        <sent_info_tstamp_stage1>0</sent_info_tstamp_stage1>
+        <sent_info_tstamp_stage2>0</sent_info_tstamp_stage2>
+        <sent_reminder_tstamp_stage1>0</sent_reminder_tstamp_stage1>
+        <sent_reminder_tstamp_stage2>0</sent_reminder_tstamp_stage2>
+    </tx_rkwnewsletter_domain_model_approval>
+
+    <tx_rkwnewsletter_domain_model_approval>
+        <uid>211</uid>
+        <pid>0</pid>
+        <issue>210</issue>
+        <topic>0</topic>
+        <page>0</page>
+        <allowed_tstamp_stage1>0</allowed_tstamp_stage1>
+        <allowed_tstamp_stage2>1000</allowed_tstamp_stage2>
+        <sent_info_tstamp_stage1>0</sent_info_tstamp_stage1>
+        <sent_info_tstamp_stage2>0</sent_info_tstamp_stage2>
+        <sent_reminder_tstamp_stage1>0</sent_reminder_tstamp_stage1>
+        <sent_reminder_tstamp_stage2>0</sent_reminder_tstamp_stage2>
+    </tx_rkwnewsletter_domain_model_approval>
+
+    <be_users>
+        <uid>210</uid>
+        <pid>1</pid>
+        <email>test@rkw.de</email>
+    </be_users>
+
+    <be_users>
+        <uid>211</uid>
+        <pid>1</pid>
+        <email>test1@rkw.de</email>
+    </be_users>
+</dataset>

@@ -3,6 +3,10 @@
 namespace RKW\RkwNewsletter\Validation;
 
 use \RKW\RkwBasics\Helper\Common;
+use RKW\RkwBasics\Utility\GeneralUtility;
+use RKW\RkwRegistration\Tools\Registration;
+use TYPO3\CMS\Extbase\Error\Error;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -21,35 +25,19 @@ use \RKW\RkwBasics\Helper\Common;
  * Class FormValidator
  *
  * @author Maximilian Fäßler <maximilian@faesslerweb.de>
- * @author Steffen Kroggel <developer@steffenkroggel.de>
  * @copyright Rkw Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class FormValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator
 {
-    /**
-     * booleanValidator
-     *
-     * @var \TYPO3\CMS\Extbase\Validation\Validator\BooleanValidator
-     * @inject
-     */
-    protected $booleanValidator;
-
-    /**
-     * emailAddressValidator
-     *
-     * @var \TYPO3\CMS\Extbase\Validation\Validator\EmailAddressValidator
-     * @inject
-     */
-    protected $emailAddressValidator;
-
-
+    
     /**
      * validation
      *
-     * @var \RKW\RkwRegistration\Domain\Model\FrontendUser $frontendUser
+     * @param \RKW\RkwRegistration\Domain\Model\FrontendUser $frontendUser
      * @return boolean
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     public function isValid($frontendUser)
     {
@@ -57,21 +45,20 @@ class FormValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractVali
         $isValid = true;
 
         // get required fields of user
-        $settings = Common::getTyposcriptConfiguration('Rkwnewsletter');
+        $settings = GeneralUtility::getTyposcriptConfiguration('Rkwnewsletter');
         $requiredFields = array('email');
         if ($settings['requiredFieldsSubscription']) {
             $requiredFields = array_merge($requiredFields, \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $settings['requiredFieldsSubscription'], true));
         }
-
-
+        
         // check valid email
         if (in_array('email', $requiredFields)) {
 
-            if (!\RKW\RkwRegistration\Tools\Registration::validEmail($frontendUser->getEmail())) {
+            if (! Registration::validEmail($frontendUser->getEmail())) {
 
                 $this->result->forProperty('email')->addError(
-                    new \TYPO3\CMS\Extbase\Error\Error(
-                        \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(
+                    new Error(
+                        LocalizationUtility::translate(
                             'validator.email_invalid',
                             'rkw_newsletter'
                         ), 1537173349
@@ -91,7 +78,6 @@ class FormValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractVali
                 // has already been checked!
                 if ($requiredField == 'email') {
                     continue;
-                    //===
                 }
 
                 if (
@@ -106,15 +92,16 @@ class FormValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractVali
                 ) {
 
                     $this->result->forProperty($requiredField)->addError(
-                        new \TYPO3\CMS\Extbase\Error\Error(
-                            \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(
+                        new Error(
+                            LocalizationUtility::translate(
                                 'validator.field_required',
                                 'rkw_newsletter',
                                 array('field' =>
-                                          \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(
-                                              'tx_rkwnewsletter_domain_model_frontenduser.' . \TYPO3\CMS\Core\Utility\GeneralUtility::camelCaseToLowerCaseUnderscored($requiredField),
-                                              'rkw_newsletter'
-                                          ),
+                                    LocalizationUtility::translate(
+                                      'tx_rkwnewsletter_domain_model_frontenduser.' . 
+                                        \TYPO3\CMS\Core\Utility\GeneralUtility::camelCaseToLowerCaseUnderscored($requiredField),
+                                      'rkw_newsletter'
+                                    ),
                                 )
                             ), 1537173350
                         )
@@ -125,10 +112,6 @@ class FormValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractVali
         }
 
         return $isValid;
-        //====
-
     }
-
-
 }
 

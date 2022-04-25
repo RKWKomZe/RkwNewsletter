@@ -1,8 +1,6 @@
 <?php
 
 namespace RKW\RkwNewsletter\Validation\TCA;
-use \RKW\RkwBasics\Helper\Common;
-use \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 /*
 
@@ -19,11 +17,19 @@ use \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
  * The TYPO3 project - inspiring people to share!
  */
 
+use \RKW\RkwBasics\Helper\Common;
+use RKW\RkwBasics\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\FlashMessageService;
+use \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+
+
 /**
  * Class FormValidator
  *
  * @author Maximilian Fäßler <maximilian@faesslerweb.de>
- * @author Steffen Kroggel <developer@steffenkroggel.de>
  * @copyright Rkw Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
@@ -37,7 +43,8 @@ class NewsletterTeaserLengthEvaluation
      *
      * @return string JavaScript code for client side validation/evaluation
      */
-    public function returnFieldJS() {
+    public function returnFieldJS(): string 
+    {
         return 'return value;';
     }
 
@@ -50,18 +57,18 @@ class NewsletterTeaserLengthEvaluation
      * @return string Evaluated field value
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
-    public function evaluateFieldValue($value, $is_in, &$set) {
+    public function evaluateFieldValue($value, $is_in, &$set): string 
+    {
 
         $settings = $this->getSettings();
-
         if (
             ($settings['minTeaserLength'])
             || ($settings['maxTeaserLength'])
         ) {
 
             /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-            $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-            $flashMessageService = $objectManager->get(\TYPO3\CMS\Core\Messaging\FlashMessageService::class);
+            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+            $flashMessageService = $objectManager->get(FlashMessageService::class);
             $messageQueue = $flashMessageService->getMessageQueueByIdentifier();
 
             $strLength = strlen(strip_tags($value));
@@ -71,50 +78,46 @@ class NewsletterTeaserLengthEvaluation
                 && ($strLength < intval($settings['minTeaserLength']))
             ) {
 
-                $message = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Messaging\FlashMessage::class,
-                    \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(
+                $message = GeneralUtility::makeInstance(FlashMessage::class,
+                    LocalizationUtility::translate(
                         'newsletterTeaserLengthEvaluation.message.tooShort',
                         'rkw_newsletter',
                         [$settings['minTeaserLength'], $strLength]
                     ),
-                    \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(
+                    LocalizationUtility::translate(
                         'newsletterTeaserLengthEvaluation.header.tooShort',
                         'rkw_newsletter',
                         [$settings['minTeaserLength'], $strLength]
                     ),
-                    \TYPO3\CMS\Core\Messaging\FlashMessage::INFO
+                    FlashMessage::INFO
                 );
                 $messageQueue->addMessage($message);
-
             }
-
-
+            
             if (
                 ($settings['maxTeaserLength'])
                 && ($strLength  > intval($settings['maxTeaserLength']))
             ) {
 
-                $message = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Messaging\FlashMessage::class,
-                    \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(
+                $message = GeneralUtility::makeInstance(FlashMessage::class,
+                    LocalizationUtility::translate(
                         'newsletterTeaserLengthEvaluation.message.tooLong',
                         'rkw_newsletter',
                         [$settings['maxTeaserLength'], $strLength]
                     ),
-                    \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(
+                    LocalizationUtility::translate(
                         'newsletterTeaserLengthEvaluation.header.tooLong',
                         'rkw_newsletter',
                         [$settings['maxTeaserLength'], $strLength]
                     ),
-                    \TYPO3\CMS\Core\Messaging\FlashMessage::INFO
+                    FlashMessage::INFO
                 );
                 $messageQueue->addMessage($message);
 
             }
-
-
         }
+        
         return $value;
-        //===
     }
 
     /**
@@ -123,9 +126,8 @@ class NewsletterTeaserLengthEvaluation
      * @param array $parameters Array with key 'value' containing the field value from the database
      * @return string Evaluated field value
      */
-    public function deevaluateFieldValue(array $parameters) {
-
-
+    public function deevaluateFieldValue(array $parameters): string 
+    {
         return $parameters['value'];
     }
 
@@ -137,10 +139,9 @@ class NewsletterTeaserLengthEvaluation
      * @return array
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
-    protected function getSettings($which = ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS)
+    protected function getSettings(string $which = ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS): array
     {
-        return Common::getTyposcriptConfiguration('Rkwnewsletter', $which);
-        //===
+        return GeneralUtility::getTyposcriptConfiguration('Rkwnewsletter', $which);
     }
 
 

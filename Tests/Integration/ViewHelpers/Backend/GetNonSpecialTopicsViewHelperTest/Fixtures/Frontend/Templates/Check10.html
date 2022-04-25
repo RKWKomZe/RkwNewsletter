@@ -1,0 +1,7 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:rkwNewsletter="http://typo3.org/ns/RKW/RkwNewsletter/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+    <f:for each="{rkwNewsletter:backend.getNonSpecialTopics(issue: issue)}" as="item">{item.name},</f:for>
+
+</html>

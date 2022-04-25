@@ -1,29 +1,34 @@
-{namespace rkwMailer=RKW\RkwMailer\ViewHelpers}
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" style="background: #ffffff;">
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-		<title>Your Message Subject or Title</title>
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+	xmlns:rkwMailer="http://typo3.org/ns/RKW/RkwMailer/ViewHelpers"
+	xmlns:rkwNewsletter="http://typo3.org/ns/RKW/RkwNewsletter/ViewHelpers"
+	data-namespace-typo3-fluid="true">
 
-        <f:render partial="Css" />
-
-	</head>
-	<body>
-		<table cellpadding="0" cellspacing="0" border="0" id="backgroundTable">
-			<tr>
-				<td align="center">
-                    <table class="contentTable" cellpadding="0" cellspacing="0" border="0" width="600" style="width: 600px; background: #e6e6e6; font-family: 'Arial', sans-serif; font-size: 14px">
-
-                        <f:render partial="Header" section="Html" />
-
-                        <f:render section="Html" />
-
-						<f:render partial="Footer" section="Html" arguments="{_all}" />
-					</table>
-				</td>
-			</tr>
-		</table>
-		<rkwMailer:frontend.pixelCounter queueRecipient="{queueRecipient}" queueMail="{queueMail}" />
-	</body>
+	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+	<html xmlns="http://www.w3.org/1999/xhtml" style="background: #ffffff;">
+		<head>
+			<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<title>Your Message Subject or Title</title>
+	
+			<f:render partial="Global/Css" />
+	
+		</head>
+		<body>
+			<table cellpadding="0" cellspacing="0" border="0" id="backgroundTable">
+				<tr>
+					<td align="center">
+						<table class="contentTable" cellpadding="0" cellspacing="0" border="0" width="600" style="width: 600px; background: #e6e6e6; font-family: 'Arial', sans-serif; font-size: 14px">
+	
+							<f:render partial="Global/Header" section="Html" arguments="{_all}"/>
+	
+							<f:render section="Html" />
+	
+							<f:render partial="Global/Footer" section="Html" arguments="{_all}" />
+						</table>
+					</td>
+				</tr>
+			</table>
+			<rkwMailer:frontend.pixelCounter queueRecipient="{queueRecipient}" queueMail="{queueMail}" />
+		</body>
+	</html>
 </html>

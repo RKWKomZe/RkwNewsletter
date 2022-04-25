@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+
+    <tx_rkwnewsletter_domain_model_newsletter>
+        <uid>130</uid>
+        <pid>0</pid>
+        <issue_title><![CDATA[Newsletter {M}/{Y}]]></issue_title>
+        <issue>1</issue>
+        <topic>2</topic>
+    </tx_rkwnewsletter_domain_model_newsletter>
+    
+    
+    <tx_rkwnewsletter_domain_model_issue>
+        <uid>130</uid>
+        <pid>0</pid>
+        <newsletter>130</newsletter>
+        <pages>2</pages>
+    </tx_rkwnewsletter_domain_model_issue>
+    
+    
+    <tx_rkwnewsletter_domain_model_topic>
+        <uid>130</uid>
+        <pid>0</pid>
+        <container_page>1</container_page>
+        <newsletter>130</newsletter>
+    </tx_rkwnewsletter_domain_model_topic>
+
+    <tx_rkwnewsletter_domain_model_topic>
+        <uid>131</uid>
+        <pid>0</pid>
+        <container_page>1</container_page>
+        <newsletter>130</newsletter>
+    </tx_rkwnewsletter_domain_model_topic>
+
+    <tx_rkwnewsletter_domain_model_topic>
+        <uid>132</uid>
+        <pid>0</pid>
+        <container_page>1</container_page>
+        <newsletter>130</newsletter>
+    </tx_rkwnewsletter_domain_model_topic>
+    
+    <pages>
+        <uid>130</uid>
+        <pid>1</pid>
+        <title>One</title>
+        <tx_rkwnewsletter_newsletter>130</tx_rkwnewsletter_newsletter>
+        <tx_rkwnewsletter_issue>130</tx_rkwnewsletter_issue>
+        <tx_rkwnewsletter_topic />
+        <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <no_search>1</no_search>
+    </pages>
+
+    <pages>
+        <uid>131</uid>
+        <pid>1</pid>
+        <title>Two</title>
+        <tx_rkwnewsletter_newsletter>130</tx_rkwnewsletter_newsletter>
+        <tx_rkwnewsletter_issue>130</tx_rkwnewsletter_issue>
+        <tx_rkwnewsletter_topic>131</tx_rkwnewsletter_topic>
+        <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <no_search>1</no_search>
+    </pages>
+
+    <pages>
+        <uid>132</uid>
+        <pid>1</pid>
+        <title>Three</title>
+        <tx_rkwnewsletter_newsletter>130</tx_rkwnewsletter_newsletter>
+        <tx_rkwnewsletter_issue>130</tx_rkwnewsletter_issue>
+        <tx_rkwnewsletter_topic>132</tx_rkwnewsletter_topic>
+        <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <no_search>1</no_search>
+    </pages>
+    
+</dataset>

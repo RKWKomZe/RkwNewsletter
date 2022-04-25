@@ -2,12 +2,15 @@
 namespace RKW\RkwNewsletter\Manager;
 
 use RKW\RkwBasics\Domain\Model\FileReference;
+use RKW\RkwNewsletter\Domain\Model\Approval;
 use RKW\RkwNewsletter\Domain\Model\Content;
 use RKW\RkwNewsletter\Domain\Model\Issue;
 use RKW\RkwNewsletter\Domain\Model\Newsletter;
 use RKW\RkwNewsletter\Domain\Model\Pages;
 use RKW\RkwNewsletter\Domain\Model\Topic;
 use RKW\RkwNewsletter\Exception;
+use RKW\RkwNewsletter\Status\ApprovalStatus;
+use RKW\RkwNewsletter\Status\IssueStatus;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Log\Logger;
 use TYPO3\CMS\Core\Log\LogLevel;
@@ -87,15 +90,48 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
 
 
     /**
+     * Signal Slot Dispatcher
+     *
+     * @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher
+     * @inject
+     */
+    protected $signalSlotDispatcher;
+
+    
+    /**
+     * Signal name for use in ext_localconf.php
+     *
+     * @const string
+     */
+    const SIGNAL_FOR_SENDING_MAIL_RELEASE = 'sendMailRelease';
+
+    
+    /**
+     * replaceTitlePlaceholder
+     *
+     * @param string $title
+     * @return string
+     */
+    public function replaceTitlePlaceholders (string $title): string
+    {
+        $title = str_replace("{M}", date("m", time()), $title);
+        $title = str_replace("{Y}", date("Y", time()), $title);
+
+        return $title;
+    }
+    
+    
+    /**
      * Creates an issue
      * 
      * @param \RKW\RkwNewsletter\Domain\Model\Newsletter $newsletter
+     * @param bool $isSpecial
      * @return \RKW\RkwNewsletter\Domain\Model\Issue
      * @throws Exception
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      */
-    public function createIssue(Newsletter $newsletter): Issue
+    public function createIssue(Newsletter $newsletter, bool $isSpecial = false): Issue
     {
 
         // check if persisted
@@ -106,8 +142,9 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
         // create issue and set title
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = GeneralUtility::makeInstance(Issue::class);
-        $issue->setTitle($this->replaceTitlePlaceholders($newsletter->getIssueTitle()));
+        $issue->setTitle(($isSpecial ? 'SPECIAL: ': '') . $this->replaceTitlePlaceholders($newsletter->getIssueTitle()));
         $issue->setStatus(0);
+        $issue->setIsSpecial($isSpecial);
 
         // persist in order to get uid
         $this->issueRepository->add($issue);
@@ -159,7 +196,7 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
         $page->setNoSearch(true);
         $page->setTxRkwnewsletterExclude(true);
         // $page->setSysLanguageUid($newsletter->getSysLanguageUid());
-        
+
         $this->pagesRepository->add($page);
         $this->persistenceManager->persistAll();
 
@@ -194,7 +231,6 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function createContent (Newsletter $newsletter, Pages $page, Pages $sourcePage): Content
     {
-
         /** @var \RKW\RkwNewsletter\Domain\Model\Content $content */
         $content  = GeneralUtility::makeInstance(Content::class);
         
@@ -213,9 +249,8 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
             $this->getLogger()->log(
                 LogLevel::DEBUG,
                 sprintf(
-                    'Added author with id=%s and sysLanguageUid=%s to content of page with uid=%s of newsletter with id=%s.',
+                    'Added author with id=%s to content of page with uid=%s of newsletter with id=%s.',
                     $author->getUid(),
-                    $author->getSysLanguageUid(),
                     $sourcePage->getUid(),
                     $newsletter->getUid()
                 )
@@ -232,7 +267,7 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
                 'Added content-element with id=%s and sysLanguageUid=%s to page with uid=%s of newsletter with id=%s.', 
                 $content->getUid(), 
                 $content->getSysLanguageUid(), 
-                $sourcePage->getUid(), 
+                $page->getUid(), 
                 $newsletter->getUid()
             )
         );
@@ -257,7 +292,6 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
         $backendUserAuthentication = GeneralUtility::makeInstance(BackendUserAuthentication::class);
         $backendUserAuthentication->setWorkspace(0);
         
-        //$languageService = GeneralUtility::makeInstance(LanguageService::class);
         $beUserTemp = $GLOBALS['BE_USER'];
         $GLOBALS['BE_USER'] = $backendUserAuthentication;
                 
@@ -300,7 +334,7 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
      * @return bool
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      */
-    public function buildContentsForPage (Newsletter $newsletter, Topic $topic, Pages $page): bool
+    public function buildContents (Newsletter $newsletter, Topic $topic, Pages $page): bool
     {
 
         /** @var \TYPO3\CMS\Extbase\Persistence\QueryResultInterface $sourcePagesList */
@@ -332,7 +366,13 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
                         )
                     );
                 }
+                
+                // update timestamp
+                $sourcePage->setTxRkwnewsletterIncludeTstamp(time());
+                $this->pagesRepository->update($sourcePage);
             }
+            
+            $this->persistenceManager->persistAll();
 
             $this->getLogger()->log(
                 LogLevel::INFO,
@@ -365,24 +405,31 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Newsletter $newsletter
      * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
+     * @param array<\RKW\RkwNewsletter\Domain\Model\Topic> $topics
      * @return bool
      * @throws Exception
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      */
-    public function buildPagesForIssue (Newsletter $newsletter, Issue $issue): bool
+    public function buildPages (Newsletter $newsletter, Issue $issue, array $topics = []): bool
     {
         /** @var \RKW\RkwNewsletter\Manager\ApprovalManager $approvalManager */
         $approvalManager = $this->objectManager->get(ApprovalManager::class);
         
-        if (count($newsletter->getTopic())) {
-            foreach ($newsletter->getTopic()->toArray() as $topic) {
+        if (
+            (! $topics) 
+            && ($newsletter->getTopic())
+        ){
+            $topics = $newsletter->getTopic()->toArray();
+        }
+        if (count($topics)) {
+            foreach ($topics as $topic) {
 
                 // Create page
                 $page = $this->createPage($newsletter, $topic, $issue);
 
                 // Build contents on that page
-                $this->buildContentsForPage ($newsletter, $topic, $page);
+                $this->buildContents ($newsletter, $topic, $page);
 
                 // Create approval for page
                 $approvalManager->createApproval($topic, $issue, $page);
@@ -418,23 +465,22 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
      * Builds an issue with all contents for the given newsletter
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Newsletter $newsletter
+     * @param array<\RKW\RkwNewsletter\Domain\Model\Topic> $topics
      * @return bool
      * @throws Exception
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
-     * 
      */
-    public function buildIssueForNewsletter (Newsletter $newsletter): bool
+    public function buildIssue (Newsletter $newsletter, array $topics = []): bool
     {
 
         // check for topics
         if (count($newsletter->getTopic())) {
 
             // create issue and set approval-status
-            $issue = $this->createIssue($newsletter);
+            $issue = $this->createIssue($newsletter, intval($topics));
             try {
-                $this->buildPagesForIssue ($newsletter, $issue);
+                $this->buildPages ($newsletter, $issue, $topics);
                 $issue->setStatus(1);
 
             } catch (\Exception $e) {
@@ -449,15 +495,20 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
                 );
             }
 
+            // if topics are set, we have a manually created special-issue
+            if (! count($topics)) {
+                $newsletter->setLastIssueTstamp(time());
+                $this->newsletterRepository->update($newsletter);
+            } 
+
             $this->issueRepository->update($issue);
-            $newsletter->setLastIssueTstamp(time());
-            $this->newsletterRepository->update($newsletter);
             $this->persistenceManager->persistAll();
 
             $this->getLogger()->log(
                 LogLevel::INFO,
                 sprintf(
-                    'Built issue for newsletter with id=%s.',
+                    'Built %s created issue for newsletter with id=%s.',
+                    ($topics ? 'manually' : 'automatically'),
                     $newsletter->getUid()
                 )
             );
@@ -482,21 +533,23 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
      *
      * @param int $tolerance
      * @param int $dayOfMonth
+     * @param int $timestampNow
      * @return bool
      * @throws Exception
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
+     * @throws \TYPO3\CMS\Core\Type\Exception\InvalidEnumerationValueException
      */
-    public function buildAllIssues (int $tolerance = 0, int $dayOfMonth = 15): bool
+    public function buildAllIssues (int $tolerance = 0, int $dayOfMonth = 15, int $timestampNow = 0): bool
     {
 
-        $newsletterList = $this->newsletterRepository->findAllToBuildIssue($tolerance, $dayOfMonth);
+        $newsletterList = $this->newsletterRepository->findAllToBuildIssue($tolerance, $dayOfMonth, $timestampNow);
         if (count($newsletterList)) {
 
             /** @var \RKW\RkwNewsletter\Domain\Model\Newsletter $newsletter */
             foreach ($newsletterList as $newsletter) {
-                $this->buildIssueForNewsletter($newsletter);
+                $this->buildIssue($newsletter);
             }
 
             $this->getLogger()->log(
@@ -516,22 +569,290 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
         );
         return false;
     }
-    
-    
+
     
     /**
-     * replaceTitlePlaceholder
+     * Increases the level of the current stage
      *
-     * @param string $title
-     * @return string
+     * @param \RKW\RkwNewsletter\Domain\Model\Approval Issue $issue
+     * @return bool
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      */
-    public function replaceTitlePlaceholders (string $title): string
+    public function increaseLevel (Issue $issue): bool
     {
-        $title = str_replace("{M}", date("m", time()), $title);
-        $title = str_replace("{Y}", date("Y", time()), $title);
 
-        return $title;
+        $stage = IssueStatus::getStage($issue);
+
+        if (IssueStatus::increaseLevel($issue)) {
+            $this->issueRepository->update($issue);
+            $this->persistenceManager->persistAll();
+
+            $this->getLogger()->log(
+                LogLevel::INFO,
+                sprintf(
+                    'Increased level for issue id=%s in issue-stage %s.',
+                    $issue->getUid(),
+                    $stage
+                )
+            );
+
+            return true;
+        }
+
+        $this->getLogger()->log(
+            LogLevel::DEBUG,
+            sprintf(
+                'Did not increase level for issue id=%s.',
+                $issue->getUid()
+            )
+        );
+
+        return false;
     }
+    
+
+    /**
+     * Increases the current stage
+     *
+     * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
+     * @return bool
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     */
+    public function increaseStage (Issue $issue): bool
+    {
+
+        $stage = IssueStatus::getStage($issue);
+
+        if (IssueStatus::increaseStage($issue)) {
+            $this->issueRepository->update($issue);
+            $this->persistenceManager->persistAll();
+
+            $this->getLogger()->log(
+                LogLevel::INFO,
+                sprintf(
+                    'Increased stage for issue id=%s in issue-stage %s.',
+                    $issue->getUid(),
+                    $stage
+                )
+            );
+
+            return true;
+        }
+
+        $this->getLogger()->log(
+            LogLevel::DEBUG,
+            sprintf(
+                'Did not increase stage for issue id=%s.',
+                $issue->getUid()
+            )
+        );
+
+        return false;
+    }
+    
+
+    /**
+     * Get the email-recipients for the approval based in the current stage
+     *
+     * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
+     * @return array
+     */
+    public function getMailRecipients(Issue $issue): array
+    {
+
+        $mailRecipients = [];
+        $stage = IssueStatus::getStage($issue);
+
+        if ($stage == IssueStatus::STAGE_RELEASE) {
+            if (count($issue->getNewsletter()->getApproval()) > 0) {
+
+                /** @var \RKW\RkwNewsletter\Domain\Model\BackendUser $beUser */
+                foreach ($issue->getNewsletter()->getApproval()->toArray() as $beUser) {
+                    if (GeneralUtility::validEmail($beUser->getEmail())) {
+                        $mailRecipients[] = $beUser;
+                    }
+                }
+            }
+
+            $this->getLogger()->log(
+                LogLevel::DEBUG,
+                sprintf(
+                    'Found %s recipients for issue id=%s in issue-stage %s.',
+                    count($mailRecipients),
+                    $issue->getUid(),
+                    $stage
+                )
+            );
+        }
+
+        return $mailRecipients;
+    }
+
+
+    /**
+     * Send info-mails or reminder-mails for outstanding confirmations
+     *
+     * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
+     * @return int
+     * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException
+     * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException
+     */
+    public function sendMails(Issue $issue): int
+    {
+
+        $stage = IssueStatus::getStage($issue);
+        $level = IssueStatus::getLevel($issue);
+        $isReminder = ($level == IssueStatus::LEVEL2);
+
+        // get recipients - but only if stage and level match AND if valid recipients are found
+        if (
+              ($stage == IssueStatus::STAGE_RELEASE)
+              && (count($recipients = $this->getMailRecipients($issue)))
+        ) {
+
+            if ($level != IssueStatus::LEVEL_DONE) {
+                
+                // Signal for e.g. E-Mails
+                $this->signalSlotDispatcher->dispatch(
+                    __CLASS__,
+                    self::SIGNAL_FOR_SENDING_MAIL_RELEASE,
+                    [$recipients, $issue, $isReminder]
+                );
+
+                $this->getLogger()->log(
+                    LogLevel::INFO,
+                    sprintf(
+                        'Sending email for issue with id=%s in issue-stage %s and level %s.',
+                        $issue->getUid(),
+                        $stage,
+                        $level
+                    )
+                );
+
+                return 1;
+            
+            } else {
+                
+                // here we could implement an automatic approval
+                // but we don't want this on here!
+                $this->getLogger()->log(
+                    LogLevel::DEBUG,
+                    sprintf(
+                        'Automatic confirmation for issue with id=%s in issue-stage %s and level %s triggered, but nothing done!',
+                        $issue->getUid(),
+                        $stage,
+                        $level
+                    )
+                );
+                
+                return 2;
+            }
+        }    
+
+        $this->getLogger()->log(
+            LogLevel::DEBUG,
+            sprintf(
+                'Issue with id=%s in issue-stage %s has no mail-recipients.',
+                $issue->getUid(),
+                $stage
+            )
+        );
+        
+        return 0;
+    }
+
+
+
+    /**
+     * Check if all approvals are done and set status of the issue to "release" then
+     *
+     * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
+     * @return bool
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
+     * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException
+     * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException
+     */
+    public function processConfirmation (Issue $issue): bool
+    {
+        // only if status is "approval"
+        if (
+            ($issue->getStatus() != IssueStatus::STAGE_APPROVAL)
+            && ($issue->getStatus() != IssueStatus::STAGE_RELEASE)
+        ){
+            return false;
+        }
+        
+        // check if all approvals are done
+        /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
+        foreach ($issue->getApprovals() as $approval) {
+            if (ApprovalStatus::getStage($approval) != ApprovalStatus::STAGE_DONE) {
+                return false;
+            }
+        }
+        
+        // update if status is approval
+        if ($issue->getStatus() == IssueStatus::STAGE_APPROVAL) {
+            
+            // update status to release
+            $issue->setStatus(IssueStatus::STAGE_RELEASE);
+            $this->issueRepository->update($issue);
+            $this->persistenceManager->persistAll();
+
+            $this->getLogger()->log(
+                LogLevel::INFO,
+                sprintf(
+                    'Set stage to %s for issue with id=%s.',
+                    IssueStatus::STAGE_RELEASE,
+                    $issue->getUid()
+                )
+            );
+        }
+
+        // send mails and increase level for the next time
+        if ($this->sendMails($issue) == 1) {
+            $this->increaseLevel($issue);
+            return true;
+        }
+        
+        return false;       
+    }
+
+    /**
+     * Check all issues if there is a release stage to check
+     *
+     * @param int $toleranceLevel2
+     * @return int
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
+     * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException
+     * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException
+     */
+    public function processAllConfirmations (int $toleranceLevel2): int
+    {
+        $issueList = $this->issueRepository->findAllForConfirmationByTolerance($toleranceLevel2);
+        if (count($issueList)) {
+
+            /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+            foreach ($issueList as $issue) {
+                $this->processConfirmation($issue);
+            }
+        }
+
+        $this->getLogger()->log(
+            LogLevel::INFO,
+            sprintf(
+                'Processed release status for %s issues.',
+                count($issueList)
+            )
+        );
+        
+        return count($issueList);
+    }
+    
 
 
     /**

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+
+    <tx_rkwnewsletter_domain_model_newsletter>
+        <uid>30</uid>
+        <pid>0</pid>
+        <issue_title><![CDATA[Newsletter {M}/{Y}]]></issue_title>
+        <issue>1</issue>
+        <topic>3</topic>
+    </tx_rkwnewsletter_domain_model_newsletter>
+    
+    
+    <tx_rkwnewsletter_domain_model_issue>
+        <uid>30</uid>
+        <pid>0</pid>
+        <newsletter>30</newsletter>
+        <pages>2</pages>
+    </tx_rkwnewsletter_domain_model_issue>
+    
+    
+    <tx_rkwnewsletter_domain_model_topic>
+        <uid>30</uid>
+        <pid>0</pid>
+        <container_page>1</container_page>
+        <newsletter>30</newsletter>
+    </tx_rkwnewsletter_domain_model_topic>
+    
+    <tx_rkwnewsletter_domain_model_topic>
+        <uid>31</uid>
+        <pid>0</pid>
+        <container_page>1</container_page>
+        <newsletter>30</newsletter>
+    </tx_rkwnewsletter_domain_model_topic>
+
+    <tx_rkwnewsletter_domain_model_topic>
+        <uid>32</uid>
+        <pid>0</pid>
+        <container_page>1</container_page>
+        <newsletter>30</newsletter>
+    </tx_rkwnewsletter_domain_model_topic>
+
+    
+    <pages>
+        <uid>30</uid>
+        <pid>1</pid>
+        <title>One</title>
+        <tx_rkwnewsletter_newsletter>30</tx_rkwnewsletter_newsletter>
+        <tx_rkwnewsletter_issue>30</tx_rkwnewsletter_issue>
+        <tx_rkwnewsletter_topic>30</tx_rkwnewsletter_topic>
+        <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <no_search>1</no_search>
+    </pages>
+    
+    <pages>
+        <uid>31</uid>
+        <pid>1</pid>
+        <title>Two</title>
+        <tx_rkwnewsletter_newsletter>30</tx_rkwnewsletter_newsletter>
+        <tx_rkwnewsletter_issue>30</tx_rkwnewsletter_issue>
+        <tx_rkwnewsletter_topic>31</tx_rkwnewsletter_topic>
+        <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <no_search>1</no_search>
+    </pages>
+
+    <pages>
+        <uid>32</uid>
+        <pid>1</pid>
+        <title>Two</title>
+        <tx_rkwnewsletter_newsletter>30</tx_rkwnewsletter_newsletter>
+        <tx_rkwnewsletter_issue>30</tx_rkwnewsletter_issue>
+        <tx_rkwnewsletter_topic>32</tx_rkwnewsletter_topic>
+        <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <no_search>1</no_search>
+    </pages>
+
+
+    <tt_content>
+        <uid>30</uid>
+        <pid>30</pid>
+        <header>Content 30.4</header>
+        <sorting>4</sorting>
+    </tt_content>
+    
+    <tt_content>
+        <uid>31</uid>
+        <pid>30</pid>
+        <header>Content 30.3</header>
+        <sorting>3</sorting>
+    </tt_content>
+
+    <tt_content>
+        <uid>32</uid>
+        <pid>30</pid>
+        <header>Content 30.2</header>
+        <sorting>2</sorting>
+    </tt_content>
+
+    <tt_content>
+        <uid>33</uid>
+        <pid>30</pid>
+        <header>Content 30.1</header>
+        <tx_rkwnewsletter_is_editorial>1</tx_rkwnewsletter_is_editorial>
+        <sorting>1</sorting>
+    </tt_content>
+
+    <tt_content>
+        <uid>34</uid>
+        <pid>31</pid>
+        <header>Content 31.3</header>
+        <sorting>3</sorting>
+    </tt_content>
+
+    <tt_content>
+        <uid>35</uid>
+        <pid>31</pid>
+        <header />
+        <sorting>2</sorting>
+    </tt_content>
+
+    <tt_content>
+        <uid>36</uid>
+        <pid>31</pid>
+        <header>Content 31.1</header>
+        <sorting>1</sorting>
+        <tx_rkwnewsletter_is_editorial>1</tx_rkwnewsletter_is_editorial>
+    </tt_content>
+
+    <tt_content>
+        <uid>37</uid>
+        <pid>32</pid>
+        <header>Content 32.3</header>
+        <sorting>3</sorting>
+    </tt_content>
+
+    <tt_content>
+        <uid>38</uid>
+        <pid>32</pid>
+        <header>Content 32.2</header>
+        <sorting>2</sorting>
+    </tt_content>
+
+    <tt_content>
+        <uid>39</uid>
+        <pid>32</pid>
+        <header>Content 32.1</header>
+        <sorting>1</sorting>
+        <tx_rkwnewsletter_is_editorial>1</tx_rkwnewsletter_is_editorial>
+    </tt_content>
+    
+</dataset>

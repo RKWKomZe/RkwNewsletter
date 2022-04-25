@@ -1,0 +1,37 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:rkwNewsletter="http://typo3.org/ns/RKW/RkwNewsletter/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+    
+    <!-- PLAINTEXT -->
+    <f:section name="Plaintext">
+        <f:variable name="editorial" value="{rkwNewsletter:mailing.content.getEditorial(issue: issue, topics: topics)}" />
+        <f:if condition="{editorial}">
+            <f:then>
+                <f:render partial="Body/Editorial/Content" section="Plaintext" arguments="{queueMail: queueMail, queueRecipient: queueRecipient, content: editorial.bodytext}" />
+                <f:render partial="Body/Editorial/Contact" section="Plaintext" arguments="{queueRecipient: queueRecipient, authors: editorial.txRkwnewsletterAuthors, content: editorial.bodytext}" />
+            </f:then>
+            <f:else>
+                <f:render partial="Body/Editorial/Content" section="Plaintext" arguments="{queueMail: queueMail, queueRecipient: queueRecipient, content: issue.introduction}" />
+                <f:render partial="Body/Editorial/Contact" section="Plaintext" arguments="{queueRecipient: queueRecipient, authors: issue.newsletter.authors, content: issue.introduction}" />
+            </f:else>
+        </f:if>
+    </f:section>
+    
+    
+    <!-- HTML -->
+    <f:section name="Html">
+        <f:variable name="editorial" value="{rkwNewsletter:mailing.content.getEditorial(issue: issue, topics: topics)}" />
+        <f:if condition="{editorial}">
+            <f:then>
+                <f:render partial="Body/Editorial/Content" section="Html" arguments="{queueMail: queueMail, queueRecipient: queueRecipient, content: editorial.bodytext}" />
+                <f:render partial="Body/Editorial/Contact" section="Html" arguments="{queueRecipient: queueRecipient, authors: authors: editorial.txRkwnewsletterAuthors, content: editorial.bodytext}" />
+            </f:then>
+            <f:else>
+                <f:render partial="Body/Editorial/Content" section="Html" arguments="{queueMail: queueMail, queueRecipient: queueRecipient, content: issue.introduction}" />
+                <f:render partial="Body/Editorial/Contact" section="Html" arguments="{queueRecipient: queueRecipient, authors: issue.newsletter.authors, content: issue.introduction}" />
+            </f:else>
+        </f:if>
+    </f:section>
+
+</html>

@@ -1,0 +1,35 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:rkwNewsletter="http://typo3.org/ns/RKW/RkwNewsletter/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+    <f:layout name="Default" />
+
+    <f:section name="content">
+        <h1>
+            <f:translate key="templates_backend_release_list" />
+        </h1>
+        <p class="tx-rkwnewsletter-description">
+            <f:translate key="templates_backend_release_confirmationList.description" />
+        </p>
+
+        <f:render partial="FlashMessages" arguments="{_all}" />
+
+        <h2>
+            <f:translate key="templates_backend_release_confirmationList.approvalsStage1" />
+        </h2>
+        <f:render partial="Release/Approvals" arguments="{issues : issuesOpenApprovalStage1List, stage : 1}" />
+
+        <h2>
+            <f:translate key="templates_backend_release_confirmationList.approvalsStage2" />
+        </h2>
+        <f:render partial="Release/Approvals" arguments="{issues : issuesOpenApprovalStage2List, stage : 2}" />
+
+        <h2>
+            <f:translate key="templates_backend_release_confirmationList.startable" />
+        </h2>
+        <f:render partial="Release/ReadyToStart" arguments="{issues : issuesReadyToStart}" />
+
+    </f:section>
+
+
+</html>

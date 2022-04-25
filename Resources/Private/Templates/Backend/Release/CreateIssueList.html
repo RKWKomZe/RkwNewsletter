@@ -1,0 +1,54 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+    <f:layout name="Default" />
+
+    <f:section name="content">
+        <h1>
+            <f:translate key="templates_backend_release_createIssueList" />
+        </h1>
+
+        <p class="tx-rkwnewsletter-description"><f:translate key="templates_backend_release_createIssueList.description" /></p>
+
+        <f:render partial="FlashMessages" arguments="{_all}" />
+
+        <table class="tx-rkwnewsletter-list">
+            <tr>
+                <th>
+                    <f:translate key="templates_backend_release_createIssueList.title" />
+                </th>
+                <th>
+                    <f:translate key="templates_backend_release_createIssueList.topics" />
+                </th>
+                <th>
+                    &nbsp;
+                </th>
+            </tr>
+
+
+            <f:for each="{newsletters}" as="newsletter">
+                <f:form action="createIssue" name="newsletter" object="{newsletter}" >
+                    <tr>
+                        <td>{newsletter.name}</td>
+                        <td>
+                            <f:form.select name="topic"
+                                options="{newsletter.topic}"
+                                optionValueField="uid"
+                                optionLabelField="name"
+                                prependOptionValue="0"
+                                prependOptionLabel="{f:translate(key:'templates_backend_release_createIssueList.all')}"
+                            />
+                        </td>
+                        <td>
+                            <f:form.button type="submit">
+                                <f:translate key="templates_backend_release_createIssueList.go"  />
+                            </f:form.button>
+                        </td>
+                    </tr>
+                </f:form>
+            </f:for>
+        </table>
+
+
+    </f:section>
+</html>

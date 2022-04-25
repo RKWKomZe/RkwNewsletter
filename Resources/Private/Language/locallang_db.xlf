@@ -14,12 +14,6 @@
 			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.name">
 				<source>Name configuration</source>
 			</trans-unit>
-            <trans-unit id="tx_rkwnewsletter_domain_model_newsletter.introduction">
-                <source>Editorial for more than one topic (overrides default text)</source>
-            </trans-unit>
-            <trans-unit id="tx_rkwnewsletter_domain_model_newsletter.introduction2">
-                <source>Editorial for only one topic (overrides default text)</source>
-            </trans-unit>
             <trans-unit id="tx_rkwnewsletter_domain_model_newsletter.authors">
                 <source>Authors</source>
             </trans-unit>
@@ -128,12 +122,6 @@
             <trans-unit id="tx_rkwnewsletter_domain_model_topic.container_page">
                 <source>Container Page for Editions</source>
             </trans-unit>
-            <trans-unit id="tx_rkwnewsletter_domain_model_topic.primary_color">
-                <source>Primary Color</source>
-            </trans-unit>
-            <trans-unit id="tx_rkwnewsletter_domain_model_topic.secondary_color">
-                <source>Secondary Color</source>
-            </trans-unit>
             <trans-unit id="tx_rkwnewsletter_domain_model_topic.is_special">
                 <source>Always include this topic in newsletter issues</source>
             </trans-unit>
@@ -185,6 +173,9 @@
 			<trans-unit id="tx_rkwnewsletter_domain_model_issue.title">
 				<source>Title</source>
 			</trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_issue.introduction">
+                <source>Editorial for more than one topic (overrides default text)</source>
+            </trans-unit>			
 			<trans-unit id="tx_rkwnewsletter_domain_model_issue.status">
 				<source>Status</source>
 			</trans-unit>

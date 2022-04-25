@@ -1,0 +1,57 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:rkwNewsletter="http://typo3.org/ns/RKW/RkwNewsletter/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+
+    <f:if condition="{issues}">
+        <f:then>
+            <table class="tx-rkwnewsletter-list">
+                <tr>
+                    <th>
+                        <f:translate key="partials_backend_release_readyToStart.id" />
+                    </th>
+                    <th>
+                        <f:translate key="partials_backend_release_readyToStart.title" />
+                    </th>
+                    <th>
+                        <f:translate key="partials_backend_release_readyToStart.actions" />
+                    </th>
+                </tr>
+
+                <f:for each="{issues}" as="issue">
+                    <tr>
+                        <!-- id -->
+                        <td>
+                            {issue.uid}
+                        </td>
+                        
+                        <!-- title -->
+                        <td>
+                            {issue.title}
+                        </td>
+
+                        <!-- actions -->
+                        <td>
+                            <f:if condition="{rkwNewsletter:backend.hasBackendUserPermission(issue: issue)}">
+                                <f:then>
+                                    <f:link.action action="defer" arguments="{issue : issue}">
+                                        &gt; <f:translate key="partials_backend_release_readyToStart.deferIssue" />
+                                    </f:link.action>
+                                </f:then>
+                                <f:else>
+                                    &ndash;
+                                </f:else>
+                            </f:if>
+                            &nbsp;
+                        </td>
+                    </tr>
+                </f:for>
+            </table>
+        </f:then>
+        <f:else>
+            <f:translate key="partials_backend_release_readyToStart.noIssuesWaiting" />
+        </f:else>
+    </f:if>
+
+</html>
+

@@ -46,11 +46,19 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
     
     /**
+     * introduction
+     *
+     * @var string
+     */
+    protected $introduction = '';
+    
+    
+    /**
      * newsletter
      *
      * @var \RKW\RkwNewsletter\Domain\Model\Newsletter
      */
-    protected $newsletter = null;
+    protected $newsletter;
 
     
     /**
@@ -58,16 +66,15 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\Pages>
      */
-    protected $pages = null;
+    protected $pages;
 
     
     /**
      * approvals
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\Approval>
-     * @cascade remove
      */
-    protected $approvals = null;
+    protected $approvals;
 
 
     /**
@@ -75,15 +82,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var \RKW\RkwMailer\Domain\Model\QueueMail
      */
-    protected $queueMail = null;
-
-    
-    /**
-     * recipients
-     *
-     * @var string
-     */
-    protected $recipients = '';
+    protected $queueMail;
 
 
     /**
@@ -116,8 +115,25 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var int
      */
     protected $sentTstamp = 0;
+    
+    
+    /**
+     * sentOffset
+     *
+     * @var int
+     */
+    protected $sentOffset = 0;
 
 
+    /**
+     * isSpecial
+     *
+     * @var bool
+     */
+    protected $isSpecial;
+
+
+    
     /**
      * __construct
      */
@@ -136,7 +152,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return void
      */
-    protected function initStorageObjects()
+    protected function initStorageObjects(): void
     {
         $this->pages = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
         $this->approvals = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
@@ -191,11 +207,34 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
     
     /**
+     * Returns the introduction
+     *
+     * @return string $introduction
+     */
+    public function getIntroduction(): string
+    {
+        return $this->introduction;
+    }
+
+
+    /**
+     * Sets the introduction
+     *
+     * @param string $introduction
+     * @return void
+     */
+    public function setIntroduction(string $introduction): void
+    {
+        $this->introduction = $introduction;
+    }
+
+    
+    /**
      * Returns the newsletter
      *
-     * @return \RKW\RkwNewsletter\Domain\Model\Newsletter $newsletter
+     * @return \RKW\RkwNewsletter\Domain\Model\Newsletter|null $newsletter
      */
-    public function getNewsletter(): Newsletter
+    public function getNewsletter()
     {
         return $this->newsletter;
     }
@@ -322,9 +361,9 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the queueMail
      *
-     * @return \RKW\RkwMailer\Domain\Model\QueueMail $queueMail
+     * @return \RKW\RkwMailer\Domain\Model\QueueMail|null $queueMail
      */
-    public function getQueueMail(): QueueMail
+    public function getQueueMail()
     {
         return $this->queueMail;
     }
@@ -341,76 +380,6 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->queueMail = $queueMail;
     }
 
-
-
-    /**
-     * Adds a recipient to the release
-     *
-     * @param int|\TYPO3\CMS\Extbase\DomainObject\AbstractEntity $recipientId
-     * @return void
-     * @throws \Exception
-     * @api
-     */
-    public function addRecipients($recipient): void
-    {
-        if ($recipient instanceOf \TYPO3\CMS\Extbase\DomainObject\AbstractEntity) {
-            $recipientId = $recipient->getUid();
-        } else if(is_int($recipient)) {
-            $recipientId = $recipient;
-        } else {
-            throw new \Exception('Wrong type given', 1641968790);
-        }
-
-        $recipients = $this->getRecipients();
-        $recipients[] = $recipientId;
-        $this->setRecipients($recipients);
-    }
-
-    
-    /**
-     * Removes a recipient from the release
-     *
-     * @param int|\TYPO3\CMS\Extbase\DomainObject\AbstractEntity $recipient
-     * @return void
-     * @throws \Exception
-     * @api
-     */
-    public function removeRecipients($recipient): void
-    {
-        if ($recipient instanceOf \TYPO3\CMS\Extbase\DomainObject\AbstractEntity) {
-            $recipientId = $recipient->getUid();
-        } else if(is_int($recipient)) {
-            $recipientId = $recipient;
-        } else {
-            throw new \Exception('Wrong type given', 1641968790);
-        }
-
-        $recipients = $this->getRecipients();
-        if (false !== $key = array_search($recipientId, $recipients)) {
-            array_splice($recipients, $key, 1);
-            $this->setRecipients($recipients);
-        }
-    }
-
-    /**
-     * @return array
-     * @api
-     */
-    public function getRecipients(): array
-    {
-        return GeneralUtility::trimExplode(',', $this->recipients, true);
-    }
-
-
-    /**
-     * @param array $recipients
-     * @return void
-     * @api
-     */
-    public function setRecipients(array $recipients = []): void
-    {
-        $this->recipients = implode(',', $recipients);
-    }
     
     
     /**
@@ -502,4 +471,46 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->sentTstamp = $sentTstamp;
     }
 
+   
+    /**
+     * Returns the sentOffset
+     *
+     * @return int $sentOffset
+     */
+    public function getSentOffset(): int
+    {
+        return $this->sentOffset;
+    }
+
+    /**
+     * Sets the sent
+     *
+     * @param int $sentOffset
+     * @return void
+     */
+    public function setSentOffset(int $sentOffset): void
+    {
+        $this->sentOffset = $sentOffset;
+    }
+
+    /**
+     * Returns the isSpecial
+     *
+     * @return bool $isSpecial
+     */
+    public function getIsSpecial(): bool
+    {
+        return $this->isSpecial;
+    }
+
+    /**
+     * Sets the isSpecial
+     *
+     * @param bool $isSpecial
+     * @return void
+     */
+    public function setIsSpecial(bool $isSpecial): void
+    {
+        $this->isSpecial = $isSpecial;
+    }
 }

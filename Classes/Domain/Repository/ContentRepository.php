@@ -14,12 +14,18 @@ namespace RKW\RkwNewsletter\Domain\Repository;
  * The TYPO3 project - inspiring people to share!
  */
 
+use RKW\RkwNewsletter\Domain\Model\Pages;
+use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
+
 /**
  * ContentRepository
  *
  * @author Maximilian Fäßler <maximilian@faesslerweb.de>
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
@@ -30,29 +36,33 @@ class ContentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     public function initializeObject()
     {
-        $this->defaultQuerySettings = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\Typo3QuerySettings');
+        $this->defaultQuerySettings = $this->objectManager->get(Typo3QuerySettings::class);
         $this->defaultQuerySettings->setRespectStoragePage(false);
         $this->defaultQuerySettings->setRespectSysLanguage(false);
     }
 
 
     /**
-     * findByPidAndLanguageUid
+     * findByPageAndLanguageUid
      *
-     * @param int $pid
+     * @param \RKW\RkwNewsletter\Domain\Model\Pages $page
      * @param int $languageUid
      * @param int $limit
      * @param bool $includeEditorials
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
-     * @toDo: Write testing
+     * @comment implicitly tested
      */
-    public function findAllByPidAndLanguageUid($pid, $languageUid = 0, $limit = 0, $includeEditorials = false)
-    {
+    public function findByPageAndLanguage(
+        Pages $page,
+        int $languageUid = 0, 
+        int $limit = 0, 
+        bool $includeEditorials = false
+    ): QueryResultInterface {
+        
         $query = $this->createQuery();
-
         $constraints = [
-            $query->equals('pid', $pid),
-            $query->equals('sysLanguageUid', $languageUid),
+            $query->equals('pid', $page),
+            $query->equals('sysLanguageUid', $languageUid)
         ];
 
         if (! $includeEditorials) {
@@ -63,31 +73,40 @@ class ContentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             $query->logicalAnd($constraints)
         );
 
+        $query->setOrderings(
+            array(
+                'sorting' => QueryInterface::ORDER_ASCENDING,
+            )
+        );
+        
         if ($limit > 0) {
             $query->setLimit($limit);
         }
 
         return $query->execute();
-        //====
     }
 
-
+    
     /**
-     * findFirstWithHeaderByPidAndLanguageUid
+     * countByPagesAndLanguageUid
      *
-     * @param int $pid
+     * @param array<\RKW\RkwNewsletter\Domain\Model\Pages> $pages
      * @param int $languageUid
      * @param bool $includeEditorials
-     * @return \RKW\RkwNewsletter\Domain\Model\Content
+     * @return int
+     * @comment implicitly tested
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      */
-    public function findFirstWithHeaderByPid($pid, $languageUid = 0, $includeEditorials = false)
-    {
+    public function countByPagesAndLanguage(
+        array $pages,
+        int $languageUid = 0,
+        bool $includeEditorials = false
+    ): int {
 
         $query = $this->createQuery();
         $constraints = [
-            $query->equals('pid', intval($pid)),
-            $query->logicalNot($query->equals('header', '')),
-            $query->equals('sysLanguageUid', intval($languageUid))
+            $query->in('pid', $pages),
+            $query->equals('sysLanguageUid', $languageUid)
         ];
 
         if (! $includeEditorials) {
@@ -98,68 +117,40 @@ class ContentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             $query->logicalAnd($constraints)
         );
 
-        return $query->execute()->getFirst();
-        //====
-    }
-
-
-
-    /**
-     * add
-     * Workaround because extension of repository doesn't seem to work properly here
-     *
-     * @param \RKW\RkwNewsletter\Domain\Model\Content $ttContentElement
-     * @return void
-     
-    public function add($ttContentElement)
-    {
-
-        $authorsList = array();
-        if (count($ttContentElement->getTxRkwNewsletterAuthors())) {
-            /** @var \RKW\RkwNewsletter\Domain\Model\Authors $author 
-            foreach ($ttContentElement->getTxRkwNewsletterAuthors() as $author) {
-                $authorsList[] = $author->getUid();
-            }
-        }
-
-
-        $GLOBALS['TYPO3_DB']->exec_INSERTquery(
-            'tt_content',
+        $query->setOrderings(
             array(
-                'pid'                      => $ttContentElement->getPid(),
-                'crdate'                   => time(),
-                'CType'                    => $ttContentElement->getContentType(),
-                'image'                    => 0,
-                'imagecols'                => $ttContentElement->getImageCols(),
-                'sys_language_uid'         => $ttContentElement->getSysLanguageUid(),
-                'header'                   => $ttContentElement->getHeader(),
-                'header_link'              => $ttContentElement->getHeaderLink(),
-                'bodytext'                 => $ttContentElement->getBodytext(),
-                'tx_rkwnewsletter_authors' => implode(',', $authorsList),
-
+                'sorting' => QueryInterface::ORDER_ASCENDING,
             )
         );
 
-        $ttContentElement->setUid($GLOBALS['TYPO3_DB']->sql_insert_id());
-    }*/
+        return $query->execute()->count();
+    }
+
 
     /**
-     * updateImage
-     * Workaround because extension of repository doesn't seem to work properly here
+     * findOneEditorialsByPagesAndLanguage
      *
-     * @toDo: remove this work-around
-     * @param \RKW\RkwNewsletter\Domain\Model\Content $ttContentElement
-     * @return void
-     
-    public function updateImage($ttContentElement)
-    {
-        $GLOBALS['TYPO3_DB']->exec_UPDATEquery(
-            'tt_content',
-            'uid = ' . $ttContentElement->getUid(),
-            [
-                'image' => 1,
-            ]
+     * @param \RKW\RkwNewsletter\Domain\Model\Pages $page
+     * @param int $languageUid
+     * @return \RKW\RkwNewsletter\Domain\Model\Content|null
+     * @comment implicitly tested
+     */
+    public function findOneEditorialByPageAndLanguage(
+        Pages $page,
+        int $languageUid = 0
+    ) {
+
+        $query = $this->createQuery();
+        $query->matching(
+            $query->logicalAnd(
+                $query->equals('pid', $page),
+                $query->equals('sysLanguageUid', $languageUid),
+                $query->equals('txRkwnewsletterIsEditorial', 1)
+            )
         );
-    }*/
+
+        return $query->execute()->getFirst();
+    }
+    
 
 }

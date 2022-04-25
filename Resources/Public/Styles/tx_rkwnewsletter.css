@@ -12,6 +12,7 @@ table.tx-rkwnewsletter-list {
 	border-collapse: collapse;
 	width: 80%;
 	border: 0;
+    margin-bottom:2em;
 }
 
 table.tx-rkwnewsletter-list th,

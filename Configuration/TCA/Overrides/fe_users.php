@@ -20,14 +20,7 @@ $tmpColsUser = [
         'config' => [
             'type' => 'passthrough',
         ],
-    ],
-    'tx_rkwnewsletter_priority' => [
-        'exclude' => 0,
-        'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:fe_user.tx_rkwnewsletter_priority',
-        'config' => [
-            'type' => 'check',
-        ],
-    ],
+    ]
 ];
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns(
@@ -35,7 +28,7 @@ $tmpColsUser = [
 );
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
     'fe_users',
-    '--div--;LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:pages.tx_rkwnewsletter;,tx_rkwnewsletter_subscription,tx_rkwnewsletter_priority'
+    '--div--;LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:pages.tx_rkwnewsletter;,tx_rkwnewsletter_subscription'
 );
 
 

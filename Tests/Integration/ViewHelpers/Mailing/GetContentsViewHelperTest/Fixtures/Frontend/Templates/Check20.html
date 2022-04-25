@@ -1,0 +1,9 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:rkwNewsletter="http://typo3.org/ns/RKW/RkwNewsletter/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+    <f:for 
+        each="{rkwNewsletter:mailing.getContents(issue:'{issue}', topics:'{topics}', limit:'{limit}')}" 
+        as="item" 
+        iteration="iterator">{item.header}<f:if condition="!{iterator.isLast}">,</f:if></f:for>
+</html>

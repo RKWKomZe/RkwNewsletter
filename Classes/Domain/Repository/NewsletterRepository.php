@@ -16,6 +16,7 @@ namespace RKW\RkwNewsletter\Domain\Repository;
 
 use RKW\RkwBasics\Helper\QueryTypo3;
 use TYPO3\CMS\Core\Utility\DebugUtility;
+use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 /**
@@ -29,49 +30,69 @@ use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
  */
 class NewsletterRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
+    /*
+    * initializeObject
+    */
+    public function initializeObject()
+    {
+        $this->defaultQuerySettings = $this->objectManager->get(Typo3QuerySettings::class);
+        $this->defaultQuerySettings->setRespectStoragePage(false);
+    }
 
     /**
      * findAllToBuildIssue
      *
      * @param int $tolerance in seconds
      * @param int $dayOfMonth
+     * @param int $currentTime
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      * @throws \TYPO3\CMS\Core\Type\Exception\InvalidEnumerationValueException
+     * @comment only used in backend
      */
-    public function findAllToBuildIssue(int $tolerance = 0, int $dayOfMonth = 15): QueryResultInterface
+    public function findAllToBuildIssue(int $tolerance = 0, int $dayOfMonth = 15, int $currentTime = 0): QueryResultInterface
     {
 
-        $query = $this->createQuery();
-        $query->statement(
-            'SELECT * FROM tx_rkwnewsletter_domain_model_newsletter WHERE
+        if (! $currentTime) {
+            $currentTime = time();
+        }
+        
+        $statement = 'SELECT * FROM tx_rkwnewsletter_domain_model_newsletter WHERE
             (
                 (
                     rythm = 1 
-                    AND WEEKOFYEAR(FROM_UNIXTIME(last_issue_tstamp)) < WEEKOFYEAR(DATE_ADD(NOW(), INTERVAL +' . $tolerance . ' SECOND))
+                    AND WEEKOFYEAR(FROM_UNIXTIME(last_issue_tstamp)) < WEEKOFYEAR(FROM_UNIXTIME(' . ($currentTime + $tolerance) . '))
                 ) 			
                 OR (
                     rythm = 2 
                     AND (
                         (
-                            MONTH(FROM_UNIXTIME(last_issue_tstamp)) < MONTH(DATE_ADD(NOW(), INTERVAL +' . $tolerance . ' SECOND)) 
+                            MONTH(FROM_UNIXTIME(last_issue_tstamp)) < MONTH(FROM_UNIXTIME(' . ($currentTime + $tolerance) . ')) 
                         )
                         OR (
-                            MONTH(FROM_UNIXTIME(last_issue_tstamp)) > MONTH(DATE_ADD(NOW(), INTERVAL +' . $tolerance . ' SECOND)) AND YEAR(FROM_UNIXTIME(last_issue_tstamp)) < YEAR(DATE_ADD(NOW(), INTERVAL +' . $tolerance . ' SECOND))
+                            MONTH(FROM_UNIXTIME(last_issue_tstamp)) > MONTH(FROM_UNIXTIME(' . ($currentTime + $tolerance) . ')) AND YEAR(FROM_UNIXTIME(last_issue_tstamp)) < YEAR(FROM_UNIXTIME(' . $currentTime . '))
                         )
                     )
-                    AND DAY(DATE_ADD(NOW(), INTERVAL +' . $tolerance . ' SECOND)) >= ' . $dayOfMonth . ' 
+                    AND (DAY(FROM_UNIXTIME(' . ($currentTime + $tolerance) . ')) >= ' . $dayOfMonth . ')    
                 )
                 OR (
                     rythm = 3 
-                    AND QUARTER(FROM_UNIXTIME(last_issue_tstamp)) < QUARTER(DATE_ADD(NOW(), INTERVAL +' . $tolerance . ' SECOND)) 
-                    AND DAY(DATE_ADD(NOW(), INTERVAL +' . $tolerance . ' SECOND)) >= ' . $dayOfMonth . '
+                    AND (
+                        (
+                            QUARTER(FROM_UNIXTIME(last_issue_tstamp)) < QUARTER(FROM_UNIXTIME(' . ($currentTime + $tolerance). ')) 
+                        )
+                        OR (
+                            QUARTER(FROM_UNIXTIME(last_issue_tstamp)) > QUARTER(FROM_UNIXTIME(' . ($currentTime + $tolerance). '))  AND YEAR(FROM_UNIXTIME(last_issue_tstamp)) < YEAR(FROM_UNIXTIME(' . $currentTime . '))
+                        )
+                    )                    
+                    AND (DAY(FROM_UNIXTIME(' . ($currentTime + $tolerance) . ')) >= ' . $dayOfMonth . ')   
                 )
             )' .
             QueryTypo3::getWhereClauseForEnableFields('tx_rkwnewsletter_domain_model_newsletter') .
-            QueryTypo3::getWhereClauseForVersioning('tx_rkwnewsletter_domain_model_newsletter')
-        );
-        
+            QueryTypo3::getWhereClauseForVersioning('tx_rkwnewsletter_domain_model_newsletter');
+
+
+        $query = $this->createQuery();
+        $query->statement($statement);
         return $query->execute();
     }
 
@@ -80,8 +101,7 @@ class NewsletterRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * Returns all newsletters by type
      *
      * @param int $type
-     * @return QueryResultInterface
-     * @api
+     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      */
     public function findAllByType(int $type = 0): QueryResultInterface
     {

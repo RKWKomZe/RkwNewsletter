@@ -45,6 +45,12 @@ $tmpColsPages = [
             ],
         ],
     ],
+    'tx_rkwnewsletter_issue' => [
+        'config' => [
+            'type' => 'passthrough',
+            'foreign_table' => 'tx_rkwnewsletter_domain_model_issue',
+        ],
+    ],
     'tx_rkwnewsletter_exclude' => [
         'exclude' => 0,
         'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:pages.tx_rkwnewsletter_exclude',

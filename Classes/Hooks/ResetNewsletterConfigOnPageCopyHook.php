@@ -41,7 +41,7 @@ class ResetNewsletterConfigOnPageCopyHook
         $table,
         $uid,
         array &$modifiedFields
-    ) {
+    ): void {
 
         if (
             $table === 'pages'

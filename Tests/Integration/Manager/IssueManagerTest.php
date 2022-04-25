@@ -28,6 +28,7 @@ use RKW\RkwNewsletter\Domain\Repository\NewsletterRepository;
 use RKW\RkwNewsletter\Domain\Repository\PagesRepository;
 use RKW\RkwNewsletter\Domain\Repository\TopicRepository;
 use RKW\RkwNewsletter\Manager\IssueManager;
+use RKW\RkwNewsletter\Status\IssueStatus;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\Database\Query\Restriction\EndTimeRestriction;
@@ -136,7 +137,13 @@ class IssueManagerTest extends FunctionalTestCase
             1,
             [
                 'EXT:rkw_basics/Configuration/TypoScript/setup.typoscript',
+                'EXT:rkw_authors/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/setup.typoscript',
+                'EXT:rkw_newsletter/Configuration/TypoScript/setup.typoscript',
+                'EXT:rkw_basics/Configuration/TypoScript/constants.typoscript',
+                'EXT:rkw_authors/Configuration/TypoScript/constants.typoscript',
+                'EXT:rkw_mailer/Configuration/TypoScript/constants.typoscript',
+                'EXT:rkw_newsletter/Configuration/TypoScript/constants.typoscript',
                 static::FIXTURE_PATH . '/Frontend/Configuration/Rootpage.typoscript',
             ]
         );
@@ -152,6 +159,12 @@ class IssueManagerTest extends FunctionalTestCase
         $this->approvalRepository = $this->objectManager->get(ApprovalRepository::class);
         $this->subject = $this->objectManager->get(IssueManager::class);
 
+        // For Mail-Interface
+        $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromName'] = 'RKW';
+        $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress'] = 'service@mein.rkw.de';
+        $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailReplyName'] = 'RKW';
+        $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailReplyToAddress'] = 'reply@mein.rkw.de';
+        $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailReturnAddress'] = 'bounces@mein.rkw.de';
     }
 
     //=============================================
@@ -207,7 +220,7 @@ class IssueManagerTest extends FunctionalTestCase
          *
          * Given a newsletter-object that is not persisted
          * When the method is called
-         * Then an exception is returned
+         * Then an exception is thrown
          * Then the exception is an instance of \RKW\RkwNewsletter\Exception
          * Then the exception has the code 1639058270
          */
@@ -235,7 +248,8 @@ class IssueManagerTest extends FunctionalTestCase
          * When the method is called
          * Then an instance of \RKW\RkwNewsletter\Model\Issue is returned
          * Then the title of this instance is set to the title set in the newsletter-object
-         * Then the status of the instance is set to zero
+         * Then the stage of the instance is set to zero
+         * Then the isSpecial-attribute is set to false
          */
 
         $this->importDataSet(static::FIXTURE_PATH . '/Database/Check10.xml');
@@ -249,6 +263,42 @@ class IssueManagerTest extends FunctionalTestCase
         self::assertInstanceOf(Issue::class, $issue);
         self::assertEquals('Newsletter ' . date('m') . '/' . date('Y'), $issue->getTitle());
         self::assertEquals(0, $issue->getStatus());
+        self::assertEquals(false, $issue->getIsSpecial());
+
+
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function createIssueSetsIsSpecial()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a newsletter-object that is persisted
+         * When the method is called with isSpecial-Parameter
+         * Then an instance of \RKW\RkwNewsletter\Model\Issue is returned
+         * Then the title of this instance is set to the title set in the newsletter-object plus special marks
+         * Then the stage of the instance is set to zero
+         * Then the isSpecial-Attribute is set to true
+         */
+
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check10.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Newsletter $newsletter */
+        $newsletter = $this->newsletterRepository->findByUid(10);
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->subject->createIssue($newsletter, true);
+
+        self::assertInstanceOf(Issue::class, $issue);
+        self::assertEquals('SPECIAL: Newsletter ' . date('m') . '/' . date('Y'), $issue->getTitle());
+        self::assertEquals(0, $issue->getStatus());
+        self::assertEquals(true, $issue->getIsSpecial());
+
 
     }
 
@@ -312,7 +362,7 @@ class IssueManagerTest extends FunctionalTestCase
          * Given a persisted issue-object that belongs to the newsletter-object
          * Given the topic-object has no container-page defined
          * When the method is called
-         * Then an exception is returned
+         * Then an exception is thrown
          * Then the exception is an instance of \RKW\RkwNewsletter\Exception
          * Then the exception has the code 1641967659
          */
@@ -722,7 +772,7 @@ class IssueManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function buildContentsForPageBuildsContentsSelectively()
+    public function buildContentsBuildsContentsSelectively()
     {
         
         /**
@@ -742,6 +792,7 @@ class IssueManagerTest extends FunctionalTestCase
          * Then true is returned
          * Then the contents of the page-objects one to four and seven are ignored
          * Then the contents of the page-objects four and five are created in the container-page
+         * Then the txRkwnewsletterIncludeTstamp for the included page-objects five and six are set
          */
 
         $this->importDataSet(static::FIXTURE_PATH . '/Database/Check90.xml');
@@ -756,7 +807,7 @@ class IssueManagerTest extends FunctionalTestCase
         $targetPage = $this->pagesRepository->findByUid(90);
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Content $content */
-        $result = $this->subject->buildContentsForPage($newsletter, $topic, $targetPage);
+        $result = $this->subject->buildContents($newsletter, $topic, $targetPage);
         
         self::assertTrue($result);
         
@@ -768,13 +819,25 @@ class IssueManagerTest extends FunctionalTestCase
         self::assertEquals('t3://page?uid=96', $contents[1]->getHeaderLink());
         self::assertEquals('Use Two', $contents[1]->getHeader());
 
+        // force TYPO3 to load objects new from database
+        $persistenceManager = $this->objectManager->get(PersistenceManager::class);
+        $persistenceManager->clearState();
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
+        $page = $this->pagesRepository->findByUid(95);
+        self::assertGreaterThan(0, $page->getTxRkwnewsletterIncludeTstamp());
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
+        $page = $this->pagesRepository->findByUid(96);
+        self::assertGreaterThan(0, $page->getTxRkwnewsletterIncludeTstamp());
+
     }
 
     /**
      * @test
      * @throws \Exception
      */
-    public function buildContentsForPageUsesRkwBasicsTeaserImage()
+    public function buildContentsUsesRkwBasicsTeaserImage()
     {
 
         /**
@@ -804,7 +867,7 @@ class IssueManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Pages $targetPage */
         $targetPage = $this->pagesRepository->findByUid(100);
 
-        $result = $this->subject->buildContentsForPage($newsletter, $topic, $targetPage);
+        $result = $this->subject->buildContents($newsletter, $topic, $targetPage);
         self::assertTrue($result);
 
         // force TYPO3 to load objects new from database
@@ -829,7 +892,7 @@ class IssueManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function buildContentsForPageUsesRkwNewsletterTeaserImage()
+    public function buildContentsUsesRkwNewsletterTeaserImage()
     {
 
         /**
@@ -858,7 +921,7 @@ class IssueManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Pages $targetPage */
         $targetPage = $this->pagesRepository->findByUid(110);
 
-        $result = $this->subject->buildContentsForPage($newsletter, $topic, $targetPage);
+        $result = $this->subject->buildContents($newsletter, $topic, $targetPage);
         self::assertTrue($result);
 
         // force TYPO3 to load objects new from database
@@ -884,7 +947,7 @@ class IssueManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function buildPagesForIssueReturnsFalseWhenNoTopicsDefined()
+    public function buildPagesReturnsFalseWhenNoTopicsDefined()
     {
 
         /**
@@ -904,7 +967,7 @@ class IssueManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(130);
 
-        $result = $this->subject->buildPagesForIssue($newsletter, $issue);
+        $result = $this->subject->buildPages($newsletter, $issue);
         self::assertFalse($result);
 
     }
@@ -914,7 +977,7 @@ class IssueManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function buildPagesForIssueCreatesPageForEachTopic()
+    public function buildPagesCreatesPageForEachTopic()
     {
 
         /**
@@ -963,7 +1026,7 @@ class IssueManagerTest extends FunctionalTestCase
             ->execute()
             ->fetchColumn(0);
         
-        $result = $this->subject->buildPagesForIssue($newsletter, $issue);
+        $result = $this->subject->buildPages($newsletter, $issue);
         self::assertTrue($result);
 
         // force TYPO3 to load objects new from database
@@ -997,13 +1060,92 @@ class IssueManagerTest extends FunctionalTestCase
         self::assertEquals($pageTwo->getTxRkwnewsletterTopic(), $approvals[1]->getTopic());  
 
     }
-    
+
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function buildPagesCreatesPageForGivenTopic()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object
+         * Given two persisted topic-objects A and B that belong to the newsletter-object
+         * Given each topic-object has a container-page set
+         * Given these container-pages are persisted
+         * Given a persisted issue-object that belongs to the newsletter-object
+         * When the method is called with topic A as parameter
+         * Then true is returned
+         * Then one content-page is created
+         * Then the content-page is a subpages of the container-page of topic A
+         * Then the content-page has the newsletter and  topic A as reference
+         * Then for the content-page an approval-object is created
+         * Then the approval-object has the content-page and the topic A as reference
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check120.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Newsletter $newsletter */
+        $newsletter = $this->newsletterRepository->findByUid(120);
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topicOne */
+        $topicOne = $this->topicRepository->findByUid(120);
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(120);
+
+        /** @var  \TYPO3\CMS\Core\Database\Connection $connectionPages */
+        $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('pages');
+
+        /** @var \TYPO3\CMS\Core\Database\Query\QueryBuilder $queryBuilder */
+        $queryBuilder = $connection->createQueryBuilder();
+        $queryBuilder->getRestrictions()
+            ->removeByType(StartTimeRestriction::class)
+            ->removeByType(EndTimeRestriction::class)
+            ->removeByType(HiddenRestriction::class)
+            ->removeByType(DeletedRestriction::class);
+
+        $countBefore = $queryBuilder->count('uid')
+            ->from('pages')
+            ->execute()
+            ->fetchColumn(0);
+
+        $result = $this->subject->buildPages($newsletter, $issue, [$topicOne]);
+        self::assertTrue($result);
+
+        // force TYPO3 to load objects new from database
+        $persistenceManager = $this->objectManager->get(PersistenceManager::class);
+        $persistenceManager->clearState();
+
+        $countAfter = $queryBuilder->count('uid')
+            ->from('pages')
+            ->execute()
+            ->fetchColumn(0);
+
+        self::assertEquals(1, $countAfter - $countBefore);
+
+        $pageOne = $this->pagesRepository->findByUid(122);
+        self::assertEquals(120, $pageOne->getPid());
+        self::assertEquals($newsletter->getUid(), $pageOne->getTxRkwnewsletterNewsletter()->getUid());
+        self::assertEquals($topicOne->getUid(), $pageOne->getTxRkwnewsletterTopic()->getUid());
+
+        $approvals = $this->approvalRepository->findAll()->toArray();
+        self::assertCount(1, $approvals);
+
+        self::assertEquals($pageOne, $approvals[0]->getPage());
+        self::assertEquals($pageOne->getTxRkwnewsletterTopic(), $approvals[0]->getTopic());
+
+    }
+
+
     //=============================================
     /**
     * @test
     * @throws \Exception
     */
-    public function buildIssueForNewsletterReturnsFalseWhenNoTopicsDefined()
+    public function buildIssueReturnsFalseWhenNoTopicsDefined()
     {
         /**
          * Scenario:
@@ -1019,7 +1161,7 @@ class IssueManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Newsletter $newsletter */
         $newsletter = $this->newsletterRepository->findByUid(140);
 
-        $result = $this->subject->buildIssueForNewsletter($newsletter);
+        $result = $this->subject->buildIssue($newsletter);
         self::assertFalse($result);
     }
 
@@ -1027,7 +1169,7 @@ class IssueManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function buildIssueForNewsletterCreatesIssueAndSetsStatus ()
+    public function buildIssueCreatesIssueAndSetsStatus ()
     {
         /**
          * Scenario:
@@ -1038,7 +1180,8 @@ class IssueManagerTest extends FunctionalTestCase
          * When the method is called
          * Then true is returned
          * Then an issue is created and persisted
-         * Then the status of the issue is set to the value 1
+         * Then the stage of the issue is set to the value 1
+         * Then the isSpecial-value of the issue is not set
          * Then the lastIssueTimestamp of the newsletter-object is set to the current time
          * Then this change of the newsletter-object is persisted
          */
@@ -1047,12 +1190,13 @@ class IssueManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Newsletter $newsletter */
         $newsletter = $this->newsletterRepository->findByUid(150);
 
-        $result = $this->subject->buildIssueForNewsletter($newsletter);
+        $result = $this->subject->buildIssue($newsletter);
         self::assertTrue($result);
 
         $issues = $this->issueRepository->findAll()->toArray();
         self::assertCount(1, $issues);
         self::assertEquals(1, $issues[0]->getStatus());
+        self::assertEquals(false, $issues[0]->getIsSpecial());
 
         self::assertLessThanOrEqual(time(), $newsletter->getLastIssueTstamp());
         self::assertGreaterThan(time()-10, $newsletter->getLastIssueTstamp());
@@ -1066,41 +1210,208 @@ class IssueManagerTest extends FunctionalTestCase
         self::assertEquals($newsletter->getLastIssueTstamp(), $newsletterDb->getLastIssueTstamp());
     }
 
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function buildIssueCreatesManualIssueWithGivenTopicsAndSetsStatus ()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object
+         * Given two persisted topic-objects A and B belong to the newsletter-object
+         * Given each persisted topic-object has a persisted container-page defined
+         * When the method is called with topic A as parameter
+         * Then true is returned
+         * Then an issue is created and persisted
+         * Then the stage of the issue is set to the value 1
+         * Then no lastIssueTimestamp for the newsletter-object is set 
+         * Then the isSpecial-value of the issue is set
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check150.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Newsletter $newsletter */
+        $newsletter = $this->newsletterRepository->findByUid(150);
+        
+        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topicOne */
+        $topic = $this->topicRepository->findByUid(150);
+        
+        $result = $this->subject->buildIssue($newsletter, [$topic]);
+        self::assertTrue($result);
+
+        $issues = $this->issueRepository->findAll()->toArray();
+        self::assertCount(1, $issues);
+        self::assertEquals(1, $issues[0]->getStatus());
+        self::assertEquals(true, $issues[0]->getIsSpecial());
+
+        self::assertEquals(0, $newsletter->getLastIssueTstamp());
+
+    }
+
     //=============================================
     /**
      * @test
      * @throws \Exception
      */
-    public function buildAllIssuesReturnsFalseWhenNoNewsletterDue ()
+    public function buildAllIssuesReturnsFalseWhenNoNewsletterDueMonthly ()
     {
         /**
          * Scenario:
          *
-         * Given two persisted newsletter-objects
+         * Given two persisted newsletter-objects with monthly rhythm
          * Given to each newsletter-object belong two persisted topic-objects 
          * Given each persisted topic-object has a persisted container-page defined
-         * Given none of the newsletter-objects is due for a new issue
+         * Given both of the newsletter-objects were sent on the 15th of February
+         * Given today is the 25th of February
+         * Given the tolerance is set to fifteen days
          * When the method is called
          * Then false is returned
          */
         $this->importDataSet(static::FIXTURE_PATH . '/Database/Check160.xml');
 
-        // prepare newsletter timestamps for test
-        $timestamp = mktime(0, 0, 0, date("m")  , 15, date("Y"));
-        if (date("d") < 15) {
-            $timestamp = mktime(0, 0, 0, date("m")-1  , 15, date("Y"));
-        } 
-        
+        // prepare timestamps for test
+        $timestampNow = mktime(0, 0, 0, 2  , 25, date("Y"));
+        $timestampNewsletter = mktime(0, 0, 0, 2  , 15, date("Y"));
+
         /** @var  \TYPO3\CMS\Core\Database\Connection $connectionPages */
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('tx_rkwnewsletter_domain_model_newsletter');
 
         $updateQueryBuilder = $connection->createQueryBuilder();
         $updateQueryBuilder->update('tx_rkwnewsletter_domain_model_newsletter')
-            ->set('last_issue_tstamp', $timestamp);
+            ->set('last_issue_tstamp', $timestampNewsletter);
 
         $updateQueryBuilder->execute();
 
-        $result = $this->subject->buildAllIssues(0, 15);
+        // tolerance is 15 days (1209600) for testing
+        $result = $this->subject->buildAllIssues(1209600, 15, $timestampNow);
+        self::assertFalse($result);
+
+    }
+    
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function buildAllIssuesReturnsTrueWhenNewsletterDueMonthly ()
+    {
+        /**
+         * Scenario:
+         *
+         * Given two persisted newsletter-objects with monthly rhythm
+         * Given to each newsletter-object belong two persisted topic-objects
+         * Given each persisted topic-object has a persisted container-page defined
+         * Given both of the newsletter-objects were sent on the 15th of January
+         * Given today is the 14th of February
+         * Given the tolerance is set to fifteen days
+         * When the method is called
+         * Then true is returned
+         * Then two issues are created
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check160.xml');
+
+        // prepare timestamps for test
+        $timestampNow = mktime(0, 0, 0, 2  , 14, date("Y"));
+        $timestampNewsletter = mktime(0, 0, 0, 1  , 15, date("Y"));
+
+        /** @var  \TYPO3\CMS\Core\Database\Connection $connectionPages */
+        $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('tx_rkwnewsletter_domain_model_newsletter');
+
+        $updateQueryBuilder = $connection->createQueryBuilder();
+        $updateQueryBuilder->update('tx_rkwnewsletter_domain_model_newsletter')
+            ->set('last_issue_tstamp', $timestampNewsletter);
+
+        $updateQueryBuilder->execute();
+
+        // tolerance is 15 days (1209600) for testing
+        $result = $this->subject->buildAllIssues(1209600, 15, $timestampNow);
+        self::assertTrue($result);
+
+        $issues = $this->issueRepository->findAll()->toArray();
+        self::assertCount(2, $issues);
+
+    }
+        
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function buildAllIssuesReturnsTrueWhenNewsletterDueMonthlyBetweenYears ()
+    {
+        /**
+         * Scenario:
+         *
+         * Given two persisted newsletter-objects with monthly rhythm
+         * Given to each newsletter-object belong two persisted topic-objects
+         * Given each persisted topic-object has a persisted container-page defined
+         * Given both of the newsletter-objects were sent on the 15th of December last year
+         * Given today is the 14th of January
+         * Given the tolerance is set to fifteen days
+         * When the method is called
+         * Then true is returned
+         * Then two issues are created
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check160.xml');
+
+        // prepare timestamps for test
+        $timestampNow = mktime(0, 0, 0, 1  , 14, date("Y"));
+        $timestampNewsletter = mktime(0, 0, 0, 12  , 15, date("Y") -1);
+
+        /** @var  \TYPO3\CMS\Core\Database\Connection $connectionPages */
+        $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('tx_rkwnewsletter_domain_model_newsletter');
+
+        $updateQueryBuilder = $connection->createQueryBuilder();
+        $updateQueryBuilder->update('tx_rkwnewsletter_domain_model_newsletter')
+            ->set('last_issue_tstamp', $timestampNewsletter);
+
+        $updateQueryBuilder->execute();
+
+        // tolerance is 15 days (1209600) for testing
+        $result = $this->subject->buildAllIssues(1209600, 15, $timestampNow);
+        self::assertTrue($result);
+
+        $issues = $this->issueRepository->findAll()->toArray();
+        self::assertCount(2, $issues);
+
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function buildAllIssuesReturnsFalseWhenNoNewsletterDueQuarterly ()
+    {
+        /**
+         * Scenario:
+         *
+         * Given two persisted newsletter-objects with quarterly rhythm
+         * Given to each newsletter-object belong two persisted topic-objects
+         * Given each persisted topic-object has a persisted container-page defined
+         * Given both of the newsletter-objects were sent on the 15th of January
+         * Given today is the 25th of March
+         * Given the tolerance is set to fifteen days
+         * When the method is called
+         * Then false is returned
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check170.xml');
+
+        // prepare timestamps for test
+        $timestampNow = mktime(0, 0, 0, 3  , 25, date("Y"));
+        $timestampNewsletter = mktime(0, 0, 0, 1  , 15, date("Y"));
+
+        /** @var  \TYPO3\CMS\Core\Database\Connection $connectionPages */
+        $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('tx_rkwnewsletter_domain_model_newsletter');
+
+        $updateQueryBuilder = $connection->createQueryBuilder();
+        $updateQueryBuilder->update('tx_rkwnewsletter_domain_model_newsletter')
+            ->set('last_issue_tstamp', $timestampNewsletter);
+
+        $updateQueryBuilder->execute();
+
+        // tolerance is 15 days (1209600) for testing
+        $result = $this->subject->buildAllIssues(1209600, 15, $timestampNow);
         self::assertFalse($result);
 
     }
@@ -1109,41 +1420,1173 @@ class IssueManagerTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function buildAllIssuesReturnsTrueWhenNewsletterDue ()
+    public function buildAllIssuesReturnsTrueWhenNewsletterDueQuarterly ()
     {
         /**
          * Scenario:
          *
-         * Given two persisted newsletter-objects
+         * Given two persisted newsletter-objects with quarterly rhythm
          * Given to each newsletter-object belong two persisted topic-objects
          * Given each persisted topic-object has a persisted container-page defined
-         * Given both of the newsletter-objects is due for a new issue
+         * Given both of the newsletter-objects were sent on the 15th of January
+         * Given today is the 2nd of April
+         * Given the tolerance is set to fifteen days
          * When the method is called
-         * Then true is returned
-         * Then two issues are created
+         * Then false is returned
          */
-        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check160.xml');
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check170.xml');
 
-        // prepare newsletter timestamps for test
-        $timestamp = mktime(0, 0, 0, date("m")  , 1, date("Y"));
-       
+        // prepare timestamps for test
+        $timestampNow = mktime(0, 0, 0, 4  , 2, date("Y"));
+        $timestampNewsletter = mktime(0, 0, 0, 1  , 15, date("Y"));
+
         /** @var  \TYPO3\CMS\Core\Database\Connection $connectionPages */
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('tx_rkwnewsletter_domain_model_newsletter');
 
         $updateQueryBuilder = $connection->createQueryBuilder();
         $updateQueryBuilder->update('tx_rkwnewsletter_domain_model_newsletter')
-            ->set('last_issue_tstamp', $timestamp);
+            ->set('last_issue_tstamp', $timestampNewsletter);
 
         $updateQueryBuilder->execute();
 
         // tolerance is 15 days (1209600) for testing
-        $result = $this->subject->buildAllIssues(1209600, 15);
+        $result = $this->subject->buildAllIssues(1209600, 15, $timestampNow);
         self::assertTrue($result);
 
         $issues = $this->issueRepository->findAll()->toArray();
         self::assertCount(2, $issues);
 
     }
+
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function buildAllIssuesReturnsTrueWhenNewsletterDueQuarterlyBetweenYears ()
+    {
+        /**
+         * Scenario:
+         *
+         * Given two persisted newsletter-objects with quarterly rhythm
+         * Given to each newsletter-object belong two persisted topic-objects
+         * Given each persisted topic-object has a persisted container-page defined
+         * Given both of the newsletter-objects were sent on the 15th of October
+         * Given today is the 2nd of January the next year
+         * Given the tolerance is set to fifteen days
+         * When the method is called
+         * Then false is returned
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check170.xml');
+
+        // prepare timestamps for test
+        $timestampNow = mktime(0, 0, 0, 1  , 2, date("Y"));
+        $timestampNewsletter = mktime(0, 0, 0, 10  , 15, date("Y") - 1);
+
+        /** @var  \TYPO3\CMS\Core\Database\Connection $connectionPages */
+        $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('tx_rkwnewsletter_domain_model_newsletter');
+
+        $updateQueryBuilder = $connection->createQueryBuilder();
+        $updateQueryBuilder->update('tx_rkwnewsletter_domain_model_newsletter')
+            ->set('last_issue_tstamp', $timestampNewsletter);
+
+        $updateQueryBuilder->execute();
+
+        // tolerance is 15 days (1209600) for testing
+        $result = $this->subject->buildAllIssues(1209600, 15, $timestampNow);
+        self::assertTrue($result);
+
+        $issues = $this->issueRepository->findAll()->toArray();
+        self::assertCount(2, $issues);
+
+    }
+
+
+    //=============================================
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function increaseLevelReturnsFalseForWrongStage()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a persisted issue-object
+         * Given the issue-object has the stage "approval"
+         * Given the issue-object has no value for the infoTstamp-property set
+         * Given the issue-object has no value for the reminderTstamp-property set
+         * When the method is called
+         * Then false is returned
+         */
+
+        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check260.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(260);
+        $issue->setStatus(IssueStatus::STAGE_APPROVAL);
+
+        $result = $this->subject->increaseLevel($issue);
+        self::assertFalse($result);
+
+    }
+    
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function increaseLevelReturnsTrueAndSetsFirstLevel()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a persisted issue-object
+         * Given the issue-object has the stage "release"
+         * Given the issue-object has no value for the infoTstamp-property set
+         * Given the issue-object has no value for the reminderTstamp-property set
+         * When the method is called
+         * Then true is returned
+         * Then the infoTstamp-property is set
+         * Then the changes to the issue-object are persisted
+         */
+
+        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check260.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(260);
+
+        $result = $this->subject->increaseLevel($issue);
+        self::assertTrue($result);
+
+        // force TYPO3 to load objects new from database
+        $persistenceManager = $this->objectManager->get(PersistenceManager::class);
+        $persistenceManager->clearState();
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issueDb = $this->issueRepository->findByUid(260);
+        self::assertGreaterThan(0, $issueDb->getInfoTstamp());
+    }
+
+    
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function increaseLevelReturnsTrueAndSetSecondLevel()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a persisted issue-object
+         * Given the issue-object has the stage "release"
+         * Given the issue-object has a value for the infoTstamp-property is set
+         * Given the issue-object has no value for the reminderTstamp-property set
+         * When the method is called
+         * Then true is returned
+         * Then the reminderTstamp-property is set
+         * Then the changes to the issue-object are persisted
+         */
+
+        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check270.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(270);
+
+        $result = $this->subject->increaseLevel($issue);
+        self::assertTrue($result);
+
+        // force TYPO3 to load objects new from database
+        $persistenceManager = $this->objectManager->get(PersistenceManager::class);
+        $persistenceManager->clearState();
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issueDb = $this->issueRepository->findByUid(270);
+        self::assertGreaterThan(0, $issueDb->getReminderTstamp());
+        
+    }
+
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function increaseLevelReturnsFalseForLevel2()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a persisted issue-object
+         * Given the issue-object has the stage "release"
+         * Given the issue-object has a value for the infoTstamp-property is set
+         * Given the issue-object has a value for the reminderTstamp-property set
+         * When the method is called
+         * Then false is returned
+         */
+
+        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check280.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(280);
+
+        
+        $result = $this->subject->increaseLevel($issue);
+        self::assertFalse($result);
+    }
+
+    //=============================================
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function increaseStageReturnsTrueForStageDraft()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a persisted issue-object
+         * Given the issue-object has the stage "draft"
+         * When the method is called
+         * Then true is returned
+         * Then the stage is set to "approval"
+         * Then the changes to the issue-object are persisted
+         */
+
+        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check290.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(290);
+        $issue->setStatus(IssueStatus::STAGE_DRAFT);
+
+        $result = $this->subject->increaseStage($issue);
+        self::assertTrue($result);
+
+        // force TYPO3 to load objects new from database
+        $persistenceManager = $this->objectManager->get(PersistenceManager::class);
+        $persistenceManager->clearState();
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issueDb */
+        $issueDb = $this->issueRepository->findByUid(290);
+        self::assertEquals(IssueStatus::STAGE_APPROVAL, $issueDb->getStatus());
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function increaseStageReturnsTrueForStageApproval()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a persisted issue-object
+         * Given the issue-object has the stage "approval"
+         * When the method is called
+         * Then true is returned
+         * Then the stage is set to "release"
+         * Then the changes to the issue-object are persisted
+         */
+
+        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check290.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(290);
+        $issue->setStatus(IssueStatus::STAGE_APPROVAL);
+
+        $result = $this->subject->increaseStage($issue);
+        self::assertTrue($result);
+
+        // force TYPO3 to load objects new from database
+        $persistenceManager = $this->objectManager->get(PersistenceManager::class);
+        $persistenceManager->clearState();
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issueDb */
+        $issueDb = $this->issueRepository->findByUid(290);
+        self::assertEquals(IssueStatus::STAGE_RELEASE, $issueDb->getStatus());
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function increaseStageReturnsTrueForStageRelease()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a persisted issue-object
+         * Given the issue-object has the stage "release"
+         * When the method is called
+         * Then true is returned
+         * Then the stage is set to "sending"
+         * Then the releaseTstamp-property is set
+         * Then the changes to the issue-object are persisted
+         */
+
+        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check290.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(290);
+        $issue->setStatus(IssueStatus::STAGE_RELEASE);
+
+        $result = $this->subject->increaseStage($issue);
+        self::assertTrue($result);
+
+        // force TYPO3 to load objects new from database
+        $persistenceManager = $this->objectManager->get(PersistenceManager::class);
+        $persistenceManager->clearState();
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issueDb */
+        $issueDb = $this->issueRepository->findByUid(290);
+        self::assertEquals(IssueStatus::STAGE_SENDING, $issueDb->getStatus());
+        self::assertGreaterThan(0, $issueDb->getReleaseTstamp());
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function increaseStageReturnsTrueForStageSending()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a persisted issue-object
+         * Given the issue-object has the stage "sending"
+         * When the method is called
+         * Then true is returned
+         * Then the stage is set to "done"
+         * Then the sentTstamp-property is set
+         * Then the changes to the issue-object are persisted
+         */
+
+        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check290.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(290);
+        $issue->setStatus(IssueStatus::STAGE_SENDING);
+
+        $result = $this->subject->increaseStage($issue);
+        self::assertTrue($result);
+
+        // force TYPO3 to load objects new from database
+        $persistenceManager = $this->objectManager->get(PersistenceManager::class);
+        $persistenceManager->clearState();
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issueDb */
+        $issueDb = $this->issueRepository->findByUid(290);
+        self::assertEquals(IssueStatus::STAGE_DONE, $issueDb->getStatus());
+        self::assertGreaterThan(0, $issueDb->getSentTstamp());
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function increaseStageReturnsFalseForStageDone()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a persisted issue-object
+         * Given the issue-object has the stage "done"
+         * When the method is called
+         * Then false is returned
+         */
+
+        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check290.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(290);
+        $issue->setStatus(IssueStatus::STAGE_DONE);
+
+        $result = $this->subject->increaseStage($issue);
+        self::assertFalse($result);
+        
+    }
+
+    //=============================================
+
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function getMailRecipientReturnsEmptyArray()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object
+         * Given that newsletter-object has no approval-admins set
+         * Given a persisted issue-object that belongs to the newsletter-object
+         * Given that issue-object has the stage "release"
+         * When the method is called
+         * Then an empty array is returned
+         */
+
+        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check230.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(230);
+
+        self::assertEmpty($this->subject->getMailRecipients($issue));
+    }
+
+    
+    
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function getMailRecipientsReturnsRecipients()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object
+         * Given that newsletter-object has two approval-admins set
+         * Given all of the approval-admins have a valid email-address set
+         * Given a persisted issue-object that belongs to the newsletter-object
+         * Given that issue-object has the stage "release"
+         * When the method is called
+         * Then an array is returned
+         * Then this array contains the two be-users
+         */
+
+        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check240.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(240);
+
+        $result = $this->subject->getMailRecipients($issue);
+        self::assertInternalType('array', $result);
+        self::assertCount(2, $result);
+        self::assertEquals(240, $result[0]->getUid());
+        self::assertEquals(241, $result[1]->getUid());
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function getMailRecipientsReturnsEmptyArrayOnWrongStage()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object
+         * Given that newsletter-object has two approval-admins set
+         * Given all of the approval-admins have a valid email-address set
+         * Given a persisted issue-object that belongs to the newsletter-object
+         * Given that issue-object has the stage "approval"
+         * When the method is called
+         * Then an empty array is returned
+         */
+
+        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check240.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(240);
+        $issue->setStatus(IssueStatus::STAGE_APPROVAL);
+
+        self::assertEmpty($this->subject->getMailRecipients($issue));
+
+    }
+    
+    
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function getMailRecipientsReturnsRecipientsAndChecksForEmail()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object
+         * Given that newsletter-object has two approval-admins set
+         * Given one of the approval-admins has an invalid email-address set
+         * Given a persisted issue-object that belongs to the newsletter-object
+         * Given that issue-object has the stage "release"
+         * When the method is called
+         * Then an array is returned
+         * Then this array contains the be-user with the valid email-address
+         */
+
+        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check250.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(250);
+
+        $result = $this->subject->getMailRecipients($issue);
+        self::assertInternalType('array', $result);
+        self::assertCount(1, $result);
+        self::assertEquals(251, $result[0]->getUid());
+    }
+
+    //=============================================
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function sendMailsReturnsZeroForStageApproval()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object
+         * Given that newsletter-object has two approval-admins set
+         * Given all of the approval-admins have a valid email-address set
+         * Given a persisted issue-object that belongs to the newsletter-object
+         * Given the issue-object has the stage "approval"
+         * Given the issue-object has no value for the infoTstamp-property set
+         * Given the issue-object has no value for the reminderTstamp-property set
+         * When the method is called
+         * Then the value 1 is returned
+         */
+
+        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check300.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(300);
+        $issue->setStatus(IssueStatus::STAGE_APPROVAL);
+
+        $result = $this->subject->sendMails($issue);
+        self::assertEquals(0, $result);
+
+    }
+    
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function sendMailsReturnsOneForStageReleaseLevel1()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object
+         * Given that newsletter-object has two approval-admins set
+         * Given all of the approval-admins have a valid email-address set
+         * Given a persisted issue-object that belongs to the newsletter-object
+         * Given the issue-object has the stage "release"
+         * Given the issue-object has no value for the infoTstamp-property set
+         * Given the issue-object has no value for the reminderTstamp-property set
+         * When the method is called
+         * Then the value 1 is returned
+         */
+
+        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check300.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(300);
+
+        $result = $this->subject->sendMails($issue);
+        self::assertEquals(1, $result);
+    }
+
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function sendMailsReturnsOneForStageReleaseLevel2()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object
+         * Given that newsletter-object has two approval-admins set
+         * Given all of the approval-admins have a valid email-address set
+         * Given a persisted issue-object that belongs to the newsletter-object
+         * Given the issue-object has the stage "release"
+         * Given the issue-object has a value for the infoTstamp-property set
+         * Given the issue-object has no value for the reminderTstamp-property set
+         * When the method is called
+         * Then the value 1 is returned
+         */
+
+        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check310.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(310);
+
+        $result = $this->subject->sendMails($issue);
+        self::assertEquals(1, $result);
+    }
+
+
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function sendMailsReturnsTwoForStageReleaseLevelDone()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object
+         * Given that newsletter-object has two approval-admins set
+         * Given all of the approval-admins have a valid email-address set
+         * Given a persisted issue-object that belongs to the newsletter-object
+         * Given the issue-object has the stage "release"
+         * Given the issue-object has a value for the infoTstamp-property set
+         * Given the issue-object has a value for the reminderTstamp-property set
+         * When the method is called
+         * Then the value 2 is returned
+         */
+
+        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check320.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(320);
+
+        $result = $this->subject->sendMails($issue);
+        self::assertEquals(2, $result);
+    }
+    
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function sendMailsReturnsZeroIfNoRecipients()
+    {
+
+
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object
+         * Given that newsletter-object has no approval-admins set
+         * Given all of the approval-admins have a valid email-address set
+         * Given a persisted issue-object that belongs to the newsletter-object
+         * Given the issue-object has the stage "release"
+         * Given the issue-object has no value for the infoTstamp-property set
+         * Given the issue-object has no value for the reminderTstamp-property set
+         * When the method is called
+         * Then the value 1 is returned
+         */
+
+        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check330.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(330);
+
+        $result = $this->subject->sendMails($issue);
+        self::assertEquals(0, $result);
+
+    }
+    
+    //=============================================
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function processConfirmationReturnsFalseIfOneApprovalNotReady ()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object
+         * Given that newsletter-object has two approval-admins set
+         * Given all of the approval-admins have a valid email-address set
+         * Given a persisted issue-object that belongs to the newsletter-object
+         * Given the issue-object has the stage "approval"
+         * Given the issue-object has no value for the infoTstamp-property set
+         * Given the issue-object has no value for the reminderTstamp-property set
+         * Given two persisted approval-objects
+         * Given the two approval-objects belong to the issue-object
+         * Given one of the approval-objects have the allowedTstampStage2-property set
+         * Given one of the approval-objects have the allowedTstampStage2-property not set
+         * When the method is called
+         * Then false is returned
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check180.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(180);
+
+        $result = $this->subject->processConfirmation($issue);
+        self::assertFalse($result);
+
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function processConfirmationReturnsTrueIfAllApprovalsReady ()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object
+         * Given that newsletter-object has two approval-admins set
+         * Given all of the approval-admins have a valid email-address set
+         * Given a persisted issue-object that belongs to the newsletter-object
+         * Given the issue-object has the stage "approval"
+         * Given the issue-object has no value for the infoTstamp-property set
+         * Given the issue-object has no value for the reminderTstamp-property set
+         * Given two persisted approval-objects
+         * Given the two approval-objects belong to the issue-object
+         * Given both of the approval-objects have the allowedTstampStage2-property set
+         * When the method is called
+         * Then true is returned
+         * Then the stage of the issue is set to "release"
+         * Then the new status of the issue is persisted
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check190.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(190);
+        $issue->setStatus(IssueStatus::STAGE_APPROVAL);
+
+        $result = $this->subject->processConfirmation($issue);
+        self::assertTrue($result);
+
+        // force TYPO3 to load objects new from database
+        $persistenceManager = $this->objectManager->get(PersistenceManager::class);
+        $persistenceManager->clearState();
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(190);
+        self::assertEquals(IssueStatus::STAGE_RELEASE, $issue->getStatus());
+
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function processConfirmationReturnsTrueAndIncreasesLevelForStageReleaseLevel1 ()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object
+         * Given that newsletter-object has two approval-admins set
+         * Given all of the approval-admins have a valid email-address set
+         * Given a persisted issue-object that belongs to the newsletter-object
+         * Given the issue-object has the stage "release"
+         * Given the issue-object has no value for the infoTstamp-property set
+         * Given the issue-object has no value for the reminderTstamp-property set
+         * Given two persisted approval-objects
+         * Given the two approval-objects belong to the issue-object
+         * Given both of the approval-objects have the allowedTstampStage2-property set
+         * When the method is called
+         * Then true is returned
+         * Then the infoTstamp-property is set
+         * Then the reminderTstamp-property is not set
+         * Then the changes to the issue-object are persisted
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check190.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(190);
+
+        $result = $this->subject->processConfirmation($issue);
+        self::assertTrue($result);
+
+        // force TYPO3 to load objects new from database
+        $persistenceManager = $this->objectManager->get(PersistenceManager::class);
+        $persistenceManager->clearState();
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(190);
+        self::assertGreaterThan(0, $issue->getInfoTstamp());
+        self::assertEquals(0, $issue->getReminderTstamp());
+
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function processConfirmationReturnsTrueAndIncreasesLevelForStageReleaseLevel2 ()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object
+         * Given that newsletter-object has two approval-admins set
+         * Given all of the approval-admins have a valid email-address set
+         * Given a persisted issue-object that belongs to the newsletter-object
+         * Given the issue-object has the stage "release"
+         * Given the issue-object has a value for the infoTstamp-property set
+         * Given the issue-object has no value for the reminderTstamp-property set
+         * Given two persisted approval-objects
+         * Given the two approval-objects belong to the issue-object
+         * Given both of the approval-objects have the allowedTstampStage2-property set
+         * When the method is called
+         * Then true is returned
+         * Then the infoTstamp-property is set
+         * Then the reminderTstamp-property is set
+         * Then the changes to the issue-object are persisted
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check200.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(200);
+
+        $result = $this->subject->processConfirmation($issue);
+        self::assertTrue($result);
+
+        // force TYPO3 to load objects new from database
+        $persistenceManager = $this->objectManager->get(PersistenceManager::class);
+        $persistenceManager->clearState();
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(200);
+        self::assertGreaterThan(0, $issue->getInfoTstamp());
+        self::assertGreaterThan(0, $issue->getReminderTstamp());
+
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function processConfirmationReturnsFalseForStageReleaseLevelDone ()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object
+         * Given that newsletter-object has two approval-admins set
+         * Given all of the approval-admins have a valid email-address set
+         * Given a persisted issue-object that belongs to the newsletter-object
+         * Given the issue-object has the stage "release"
+         * Given the issue-object has a value for the infoTstamp-property set
+         * Given the issue-object has a value for the reminderTstamp-property set
+         * Given two persisted approval-objects
+         * Given the two approval-objects belong to the issue-object
+         * Given both of the approval-objects have the allowedTstampStage2-property set
+         * When the method is called
+         * Then false is returned
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check210.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(210);
+
+        $result = $this->subject->processConfirmation($issue);
+        self::assertFalse($result);
+        
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function processConfirmationReturnsFalseForWrongStage ()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object
+         * Given that newsletter-object has two approval-admins set
+         * Given all of the approval-admins have a valid email-address set
+         * Given a persisted issue-object that belongs to the newsletter-object
+         * Given the issue-object has the stage "sending"
+         * Given the issue-object has a value for the infoTstamp-property set
+         * Given the issue-object has no value for the reminderTstamp-property set
+         * Given two persisted approval-objects
+         * Given the two approval-objects belong to the issue-object
+         * Given both of the approval-objects have the allowedTstampStage2-property set
+         * When the method is called
+         * Then false is returned
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check220.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(220);
+
+        $result = $this->subject->processConfirmation($issue);
+        self::assertFalse($result);
+
+    }
+
+
+    //=============================================
+
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function processAllConfirmationsReturnsZeroIfNotInRightStage()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object
+         * Given that newsletter-object has two approval-admins set
+         * Given all of the approval-admins have a valid email-address set
+         * Given a persisted issue-object that belongs to the newsletter-object
+         * Given the issue-object has the stage "sending"
+         * Given the issue-object has no value for the infoTstamp-property set
+         * Given the issue-object has no value for the reminderTstamp-property set
+         * Given two persisted approval-objects
+         * Given the two approval-objects belong to the issue-object
+         * Given both of the approval-objects have the allowedTstampStage2-property set 
+         * Given the tolerance-parameter for the level has been set to 600 seconds
+         * When the method is called
+         * Then zero is returned
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check340.xml');
+        
+        $result = $this->subject->processAllConfirmations(600);
+        self::assertEquals(0, $result);
+
+    }
+
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function processAllConfirmationsReturnsOneIfInStageApprovalAndDueForInfoMail()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object
+         * Given that newsletter-object has two approval-admins set
+         * Given all of the approval-admins have a valid email-address set
+         * Given a persisted issue-object that belongs to the newsletter-object
+         * Given the issue-object has the stage "approval"
+         * Given the issue-object has no value for the infoTstamp-property set
+         * Given the issue-object has no value for the reminderTstamp-property set
+         * Given two persisted approval-objects
+         * Given the two approval-objects belong to the issue-object
+         * Given both of the approval-objects have the allowedTstampStage2-property set
+         * Given the tolerance-parameter for the level has been set to 600 seconds
+         * When the method is called
+         * Then one is returned
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check350.xml');
+
+        $result = $this->subject->processAllConfirmations(600);
+        self::assertEquals(1, $result);
+
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function processAllConfirmationsReturnsOneIfInStageReleaseAndDueForInfoMail()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object
+         * Given that newsletter-object has two approval-admins set
+         * Given all of the approval-admins have a valid email-address set
+         * Given a persisted issue-object that belongs to the newsletter-object
+         * Given the issue-object has the stage "release"
+         * Given the issue-object has no value for the infoTstamp-property set
+         * Given the issue-object has no value for the reminderTstamp-property set
+         * Given two persisted approval-objects
+         * Given the two approval-objects belong to the issue-object
+         * Given both of the approval-objects have the allowedTstampStage2-property set
+         * Given the tolerance-parameter for the level has been set to 600 seconds
+         * When the method is called
+         * Then one is returned
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check360.xml');
+
+        $result = $this->subject->processAllConfirmations(600);
+        self::assertEquals(1, $result);
+
+    }
+
+    
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function processAllConfirmationsReturnsOneIfInStageReleaseAndDueForReminderMail()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object
+         * Given that newsletter-object has two approval-admins set
+         * Given all of the approval-admins have a valid email-address set
+         * Given a persisted issue-object that belongs to the newsletter-object
+         * Given the issue-object has the stage "release"
+         * Given the issue-object has a value for the infoTstamp-property set
+         * Given the issue-object has no value for the reminderTstamp-property set
+         * Given two persisted approval-objects
+         * Given the two approval-objects belong to the issue-object
+         * Given both of the approval-objects have the allowedTstampStage2-property set
+         * Given the tolerance-parameter for the level has been set to 600 seconds
+         * When the method is called
+         * Then one is returned
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check370.xml');
+
+        $result = $this->subject->processAllConfirmations(600);
+        self::assertEquals(1, $result);
+
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function processAllConfirmationsReturnsZeroIfInStageReleaseAndNotDueForReminderMail()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object
+         * Given that newsletter-object has two approval-admins set
+         * Given all of the approval-admins have a valid email-address set
+         * Given a persisted issue-object that belongs to the newsletter-object
+         * Given the issue-object has the stage "release"
+         * Given the issue-object has a value for the infoTstamp-property set
+         * Given the issue-object has no value for the reminderTstamp-property set
+         * Given two persisted approval-objects
+         * Given the two approval-objects belong to the issue-object
+         * Given both of the approval-objects have the allowedTstampStage2-property set
+         * Given the tolerance-parameter for the level has been set to 600 seconds
+         * Given the infoTstamp-property is set to a value not older than 600 seconds from now
+         * When the method is called
+         * Then zero is returned
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check370.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue*/
+        $issue = $this->issueRepository->findByUid(370);
+        $issue->setInfoTstamp(time() - 5);
+        $this->issueRepository->update($issue);
+
+        $persistenceManager = $this->objectManager->get(PersistenceManager::class);
+        $persistenceManager->persistAll();
+        $persistenceManager->clearState();
+
+        $result = $this->subject->processAllConfirmations(600);
+        self::assertEquals(0, $result);
+
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function processAllConfirmationsReturnsOneIfInStageReleaseAndDueForAutomaticConfirmation()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object
+         * Given that newsletter-object has two approval-admins set
+         * Given all of the approval-admins have a valid email-address set
+         * Given a persisted issue-object that belongs to the newsletter-object
+         * Given the issue-object has the stage "release"
+         * Given the issue-object has a value for the infoTstamp-property set
+         * Given the issue-object has a value for the reminderTstamp-property set
+         * Given two persisted approval-objects
+         * Given the two approval-objects belong to the issue-object
+         * Given both of the approval-objects have the allowedTstampStage2-property set
+         * Given the tolerance-parameter for the level has been set to 600 seconds
+         * When the method is called
+         * Then one is returned
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check380.xml');
+
+        $result = $this->subject->processAllConfirmations(600);
+        self::assertEquals(1, $result);
+
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function processAllConfirmationsReturnsZeroIfInStageReleaseAndNotDueForAutomaticConfirmation()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object
+         * Given that newsletter-object has two approval-admins set
+         * Given all of the approval-admins have a valid email-address set
+         * Given a persisted issue-object that belongs to the newsletter-object
+         * Given the issue-object has the stage "release"
+         * Given the issue-object has a value for the infoTstamp-property set
+         * Given the issue-object has a value for the reminderTstamp-property set
+         * Given two persisted approval-objects
+         * Given the two approval-objects belong to the issue-object
+         * Given both of the approval-objects have the allowedTstampStage2-property set
+         * Given the tolerance-parameter for the level has been set to 600 seconds
+         * Given the reminerTstamp-property is set to a value not older than 600 seconds from now
+         * When the method is called
+         * Then zero is returned
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check380.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue*/
+        $issue = $this->issueRepository->findByUid(380);
+        $issue->setReminderTstamp(time() - 5);
+        $this->issueRepository->update($issue);
+
+        $persistenceManager = $this->objectManager->get(PersistenceManager::class);
+        $persistenceManager->persistAll();
+        $persistenceManager->clearState();
+
+        $result = $this->subject->processAllConfirmations(600);
+        self::assertEquals(0, $result);
+
+    }
+    
+    
+    /**
+     * 
+     * @throws \Exception
+     */
+    public function processAllConfirmationsReturnsTrue ()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a two persisted issue-objects
+         * Given one of the issue-objects has the stage "release"
+         * Given one of the issue-objects has the stage "approval"
+         * When the method is called
+         * Then true is returned
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check220.xml');
+
+        $result = $this->subject->processAllConfirmations();
+        self::assertTrue($result);
+
+    }
+ 
+    
 
     //=============================================
 
@@ -1152,7 +2595,7 @@ class IssueManagerTest extends FunctionalTestCase
      */
     protected function tearDown()
     {
-       // parent::tearDown();
+        parent::tearDown();
     }
 
 
