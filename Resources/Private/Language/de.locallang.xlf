@@ -91,7 +91,7 @@
             <!-- releaseController -->
 			<trans-unit id="releaseController.message.approvalSuccessful">
 				<source>Wohoo! Successfully approved.  The newsletter output was set to the next stage. A notification to the respective editors will be sent shortly.</source>
-				<target>Wohoo! Die Freigabe war erfolgreich. Die Newsletterausgabe wurde auf die nächste Freigabestufe gesetzt. Eine Benachrichtigung an die betreffenden Redakteure wird in Kürze versendet.</target>
+				<target>Wohoo! Die Freigabe war erfolgreich. Die Newsletterausgabe wurde auf die nächste Freigabestufe gesetzt. Eine Benachrichtigung an die betreffende Redaktion wird in Kürze versendet.</target>
 			</trans-unit>
 			<trans-unit id="releaseController.message.issueDeferredSuccessfully">
 				<source>Wohoo! Issue sucessfuly deferred.</source>
@@ -111,7 +111,7 @@
 			</trans-unit>
             <trans-unit id="releaseController.warning.checkTitle">
                 <source>The subject of the newsletter should ideally be between 40 and 60 characters long and motivate the user to read the newsletter (call-to-action). Please check the subject again before sending the newsletter.</source>
-                <target>Der Betreff des Newsletters sollte im Idealfall zwischen 40 und 60 Zeichen lang sein und den Nutzer dazu motivieren, den Newsletter zu lesen (Call-To-Action). Bitte prüfen Sie den gesetzten Betreff vor dem Versand noch einmal.</target>
+                <target>Der Betreff des Newsletters sollte im Idealfall zwischen 40 und 60 Zeichen lang sein und ide Nutzenden dazu motivieren, den Newsletter zu lesen (Call-To-Action). Bitte prüfen Sie den gesetzten Betreff vor dem Versand noch einmal.</target>
             </trans-unit>
             <trans-unit id="releaseController.error.selectIssue">
                 <source>Please first select a newsletter issue that you would like to send.</source>
@@ -122,8 +122,8 @@
 				<target>Upps! Die angegebene E-Mail-Adresse "%s" scheint nicht korrekt zu sein. Bitte prüfen Sie die Angabe und versuchen Sie es erneut.</target>
 			</trans-unit>
             <trans-unit id="releaseController.error.unexpected">
-                <source>Oh no! An unexpected error occurred. Please contact your trusted administrator.</source>
-                <target>Upps! Ein unerwarteter Fehler ist aufgetreten. Bitte wenden Sie sich an den Administrator Ihres Vertrauens.</target>
+                <source>Oh no! An unexpected error occurred. Please contact our support.</source>
+                <target>Upps! Ein unerwarteter Fehler ist aufgetreten. Bitte wenden Sie sich an den Support.</target>
             </trans-unit>
 			<trans-unit id="releaseController.error.testMail">
 				<source>Oops! Sorry, the email could not be sent. Are corresponding contents created?</source>
@@ -146,7 +146,7 @@
             </trans-unit>
             <trans-unit id="subscriptionController.message.allSubscriptionsDeleted">
                <source>Too bad that we lose you as a subscriber. All topics have been unsubscribed as requested. From now on you will no longer receive any newsletters from us. Of course you can subscribe to our newsletter again at any time.</source>
-               <target>Schade, dass wir Sie als Abonnenten verlieren. Alle Themen wurden wunschgemäß abbestellt. Sie erhalten ab jetzt keine Newsletter mehr von uns. Selbstverständlich können Sie unsere Newsletter jederzeit erneut abonnieren.</target>
+               <target>Schade, dass wir Sie als Abonnentin bzw. Abonnenten verlieren. Alle Themen wurden wunschgemäß abbestellt. Sie erhalten ab jetzt keine Newsletter mehr von uns. Selbstverständlich können Sie unsere Newsletter jederzeit erneut abonnieren.</target>
             </trans-unit>
             <trans-unit id="subscriptionController.error.noTopicSelected">
                <source>Oops, you may have forgotten a little something: Please select at least one topic you would like to subscribe to.</source>
@@ -312,7 +312,7 @@
 			</trans-unit>
 			<trans-unit id="templates_backend_release_sendList.subscriptions">
 				<source>Subscription</source>
-				<target>Abonnenten</target>
+				<target>Abonnement</target>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_sendList.subscriptionsAll">
 				<source>All</source>
@@ -336,7 +336,7 @@
 			</trans-unit>
 			<trans-unit id="templates_backend_release_sendConfirm.description">
 				<source>Please confirm below the dispatch of the selected newsletter. Please also check the subject of the newsletter and adjust it if necessary. Please note that the dispatch is staggered, i.e. the recipients may receive the newsletter at different times.</source>
-				<target>Bitte bestätigen Sie untenstehend den Versand des ausgewählten Newsletters. Bitte prüfen Sie auch den Betreff des Newsletters und passen Sie diesen ggf. noch an. Bitte beachten Sie, dass der Versand gestaffelt erfolgt; die Empfänger den Newsletter also gegebenenfalls zeitlich versetzt erhalten.</target>
+				<target>Bitte bestätigen Sie untenstehend den Versand des ausgewählten Newsletters. Bitte prüfen Sie auch den Betreff des Newsletters und passen Sie diesen ggf. noch an. Bitte beachten Sie, dass der Versand gestaffelt erfolgt; die Abonnierenden den Newsletter also gegebenenfalls zeitlich versetzt erhalten.</target>
 			</trans-unit>
             <trans-unit id="templates_backend_release_sendConfirm.id">
                 <source>ID</source>
@@ -572,7 +572,7 @@
 			</trans-unit>
 			<trans-unit id="templates_email_optInRequest.textOptIn">
 				<source>Please click here to confirm your subscription. To make future changes easier for you, a free account will automatically be created if you are not already registered as a user. You will receive your password in another e-mail.</source>
-				<target>Bitte klicken Sie hier, um das Abonnement zu bestätigen. Um Ihnen zukünftige Änderungen zu erleichtern, wird automatisch ein kostenloser Account erstellt, falls Sie nicht schon als Nutzer registriert sind. Das Passwort erhalten Sie in einer weiteren E-Mail.</target>
+				<target>Bitte klicken Sie hier, um das Abonnement zu bestätigen. Um Ihnen zukünftige Änderungen zu erleichtern, wird automatisch ein kostenloser Account erstellt, falls Sie nicht schon über einen Account verfügen. Das Passwort erhalten Sie in einer weiteren E-Mail.</target>
 			</trans-unit>
 			<trans-unit id="templates_email_optInRequest.textOptOut">
 				<source>Did you change your mind or did you not request the subscription yourself? Simply click here to delete all data:</source>

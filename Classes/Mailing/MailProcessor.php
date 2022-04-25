@@ -474,7 +474,9 @@ class MailProcessor
                 }
             }
 
-            return $this->mailService->send();
+            // will return true only when status = draft - and since it's called multiple times...
+            $this->mailService->send();
+            return true;
         }
 
         // no subscribers left? Then end current sending!
