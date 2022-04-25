@@ -163,15 +163,6 @@ CREATE TABLE pages (
   tx_rkwnewsletter_include_tstamp int(11) DEFAULT '0' NOT NULL,
 );
 
-#
-# Table structure for table 'pages_language_overlay'
-#
-CREATE TABLE pages_language_overlay (
-  tx_rkwnewsletter_teaser_heading varchar(255) DEFAULT '' NOT NULL,
-  tx_rkwnewsletter_teaser_text varchar(255) DEFAULT '' NOT NULL,
-  tx_rkwnewsletter_teaser_image varchar(255) DEFAULT '' NOT NULL,
-  tx_rkwnewsletter_teaser_link varchar(255) DEFAULT '' NOT NULL,
-);
 
 #
 # Table structure for table 'tt_content'

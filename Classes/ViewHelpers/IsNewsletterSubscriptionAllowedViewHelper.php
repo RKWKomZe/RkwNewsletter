@@ -13,6 +13,7 @@ namespace RKW\RkwNewsletter\ViewHelpers;
  *
  * The TYPO3 project - inspiring people to share!
  */
+use \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * IsNewsletterSubscriptionAllowedViewHelper
@@ -22,8 +23,9 @@ namespace RKW\RkwNewsletter\ViewHelpers;
  * @copyright Rkw Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * @toDo: rework and write tests
  */
-class IsNewsletterSubscriptionAllowedViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
+class IsNewsletterSubscriptionAllowedViewHelper extends AbstractViewHelper
 {
     /**
      * checks whether a user must be logged in to see a newsletter (group restriction / logged in)

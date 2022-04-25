@@ -80,16 +80,16 @@ class SubscriptionControllerTest extends FunctionalTestCase
         $this->setUpFrontendRootPage(
             1,
             [
-                'EXT:css_styled_content/static/constants.txt',
-                'EXT:css_styled_content/static/setup.txt',
-                'EXT:rkw_basics/Configuration/TypoScript/constants.txt',
-                'EXT:rkw_basics/Configuration/TypoScript/setup.txt',
-                'EXT:rkw_mailer/Configuration/TypoScript/constants.txt',
-                'EXT:rkw_mailer/Configuration/TypoScript/setup.txt',
-                'EXT:rkw_registration/Configuration/TypoScript/constants.txt',
-                'EXT:rkw_registration/Configuration/TypoScript/setup.txt',
-                'EXT:rkw_newsletter/Configuration/TypoScript/constants.txt',
-                'EXT:rkw_newsletter/Configuration/TypoScript/setup.txt',
+                'EXT:css_styled_content/static/constants.typoscript',
+                'EXT:css_styled_content/static/setup.typoscript',
+                'EXT:rkw_basics/Configuration/TypoScript/constants.typoscript',
+                'EXT:rkw_basics/Configuration/TypoScript/setup.typoscript',
+                'EXT:rkw_mailer/Configuration/TypoScript/constants.typoscript',
+                'EXT:rkw_mailer/Configuration/TypoScript/setup.typoscript',
+                'EXT:rkw_registration/Configuration/TypoScript/constants.typoscript',
+                'EXT:rkw_registration/Configuration/TypoScript/setup.typoscript',
+                'EXT:rkw_newsletter/Configuration/TypoScript/constants.typoscript',
+                'EXT:rkw_newsletter/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_newsletter/Tests/Functional/Controller/Fixtures/Frontend/Basics.typoscript',
             ]
         );
