@@ -204,10 +204,8 @@ return [
             'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xl:tx_rkwnewsletter_domain_model_newsletter.settings_page',
             'config' => [
                 'type' => 'input',
-                'renderType' => 'inputLink',
                 'size' => 30,
                 'eval' => 'int, required',
-                'softref' => 'typolink'
             ],
         ],
 		'format' => [
