@@ -5,6 +5,8 @@
 	
 	<!-- PLAINTEXT -->
 	<f:section name="Plaintext">
+		Test: {settings.subscriptionPid}
+
 		<f:if condition="{topics}">
 			##################################################\n
 			<rkwMailer:frontend.translate key="partials_newsletter_global_footer.subscriptionHeadline" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />\n
@@ -12,12 +14,12 @@
 			\n
 			<rkwMailer:frontend.translate key="partials_newsletter_global_footer.subscriptionTopics" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />\n
 			<f:for each="{topics}" as="topic">
-				&ndash;&nbsp;&nbsp;{topic.name}\n
+				– {topic.name}<f:if condition="{topic.isSpecial}"> (<rkwMailer:frontend.translate key="partials_newsletter_global_footer.specialTopic" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />)</f:if>\n
 			</f:for>
 			\n
 			<f:if condition="{hash}">
-				<rkwMailer:frontend.translate key="partials_newsletter_footer.subscriptionText" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />\n
-				<rkwMailer:frontend.translate key="partials_newsletter_footer.subscriptionLink" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />: <rkwMailer:frontend.uri.action action="edit" controller="Subscription" extensionName="rkwNewsletter" pluginName="Subscription" pageUid="{subscriptionPid}" absolute="true" queueMail="{queueMail}" arguments="{hash: hash}" noCacheHash="true" />\n
+				<rkwMailer:frontend.translate key="partials_newsletter_global_footer.subscriptionText" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />\n
+				<rkwMailer:frontend.translate key="partials_newsletter_global_footer.subscriptionLink" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />: <rkwMailer:frontend.uri.action action="edit" controller="Subscription" extensionName="rkwNewsletter" pluginName="Subscription" pageUid="{settings.subscriptionPid}" absolute="true" queueMail="{queueMail}" arguments="{hash: hash}" noCacheHash="true" />\n
 				\n
 			</f:if>
 		</f:if>
@@ -51,7 +53,7 @@
 						<tr>
 							<td style="padding: 0 16px; line-height: 20px;">
 								<f:for each="{topics}" as="topic">
-									&ndash;&nbsp;&nbsp;{topic.name}<br/>
+									&ndash;&nbsp;&nbsp;{topic.name}<f:if condition="{topic.isSpecial}"> (<rkwMailer:frontend.translate key="partials_newsletter_global_footer.specialTopic" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />)</f:if><br/>
 								</f:for>
 							</td>
 						</tr>
@@ -59,7 +61,7 @@
 						<tr>
 							<td style="padding: 12px 16px; line-height: 20px; font-weight:700">
 								<rkwMailer:frontend.translate key="partials_newsletter_global_footer.subscriptionText" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />
-								<a style="color:#E64415;" href="<rkwMailer:frontend.uri.action action='edit' controller='Subscription' extensionName='rkwNewsletter' pluginName='Subscription' pageUid='{subscriptionPid}' absolute='true' queueMail='{queueMail}' arguments='{hash: hash}' noCacheHash='true' />" target="_blank"><rkwMailer:frontend.translate key="partials_newsletter_global_footer.subscriptionLink" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" /></a>
+								<a style="color:#E64415;" href="<rkwMailer:frontend.uri.action action='edit' controller='Subscription' extensionName='rkwNewsletter' pluginName='Subscription' pageUid='{settings.subscriptionPid}' absolute='true' queueMail='{queueMail}' arguments='{hash: hash}' noCacheHash='true' />" target="_blank"><rkwMailer:frontend.translate key="partials_newsletter_global_footer.subscriptionLink" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" /></a>
 							</td>
 						</tr>
 						</f:if>

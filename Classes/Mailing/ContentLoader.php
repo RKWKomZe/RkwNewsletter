@@ -48,9 +48,9 @@ class ContentLoader
 
     
     /**
-     * @var array
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage
      */
-    protected $topics = [];
+    protected $topics;
 
 
     /**
@@ -82,17 +82,46 @@ class ContentLoader
      */
     public function __construct(Issue $issue)
     {
+        $this->topics = new ObjectStorage();
+        $this->setIssue($issue);
+    }
+
+    
+    /**
+     * Gets the issue
+     *
+     * @return \RKW\RkwNewsletter\Domain\Model\Issue|null
+     */
+    public function getIssue()
+    {
+        return $this->issue;
+    }
+
+
+    /**
+     * Sets the issue and sets topics accordingly based on pages
+     *
+     * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue $issue
+     * @return void
+     * @throws \RKW\RkwNewsletter\Exception
+     */
+    public function setIssue(Issue $issue): void
+    {
         $this->issue = $issue;
-        
+
         /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
+        $topics = new ObjectStorage();
         foreach($this->issue->getPages() as $page) {
-            
+
             /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic */
             if ($topic = $page->getTxRkwnewsletterTopic()) {
-                $this->addTopic($topic);
+                $topics->attach($topic);
             }
         }
+        
+        $this->setTopics($topics);
     }
+
 
 
     /**
@@ -109,9 +138,9 @@ class ContentLoader
     /**
      * Gets the topics
      *
-     * @return array<\RKW\RkwNewsletter\Domain\Model\Topic> $topics
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\Topic> $topics
      */
-    public function getTopics (): array
+    public function getTopics (): ObjectStorage
     {
         return $this->topics;
     }
@@ -120,11 +149,11 @@ class ContentLoader
     /**
      * Sets the topics 
      *
-     * @param array<\RKW\RkwNewsletter\Domain\Model\Topic> $topics
+     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\Topic> $topics
      * @return void
      * @throws \RKW\RkwNewsletter\Exception
      */
-    public function setTopics (array $topics): void 
+    public function setTopics (ObjectStorage $topics): void 
     {
         $this->topics = $topics;
         $this->updateOrdering();
@@ -140,7 +169,7 @@ class ContentLoader
      */
     public function addTopic (Topic $topic): void
     {
-        $this->topics[] = $topic;
+        $this->topics->attach($topic);
         $this->updateOrdering();
     }
 
@@ -154,15 +183,32 @@ class ContentLoader
      */
     public function removeTopic (Topic $topic): void
     {
-        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $tempTopic */
-        foreach ($this->topics as $key => $tempTopic) {
-            if ($tempTopic->getUid() == $topic->getUid()) {
-                unset($this->topics[$key]);
-            }
-        }
+        $this->topics->detach($topic);
         $this->updateOrdering();
     }
 
+    
+    
+    /**
+     * Checks if contents are available for the given topics
+     *
+     * @return bool
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     */
+    public function hasContents (): bool
+    {
+        
+        if ($pages = $this->getPages()) {
+            return (bool) $this->contentRepository->countByPagesAndLanguage(
+                $pages,
+                ($this->issue->getNewsletter()? $this->issue->getNewsletter()->getSysLanguageUid(): 0),
+                false
+            );
+        }
+
+        return false;
+    }
+        
 
     /**
      * Get all contents as a zip-merged array by topics
@@ -176,40 +222,31 @@ class ContentLoader
         // load all contents of relevant pages
         /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
         $contents = [];
-        foreach ($this->issue->getPages() as $page) {
-
-            // get topic of page
-            $topic = $page->getTxRkwnewsletterTopic();
-
-            // check if topic is allowed
-            if (! isset($this->ordering[$topic->getUid()])) {
-                continue;
-            }
+        foreach ($this->getPages() as $page) {
 
             // get contents for topic 
             $contentsOfTopic = $this->contentRepository->findByPageAndLanguage(
                 $page,
-                $this->issue->getNewsletter()->getSysLanguageUid(),
+                ($this->issue->getNewsletter()? $this->issue->getNewsletter()->getSysLanguageUid(): 0),
                 $limit,
                 false
             )->toArray();
             
-            // set contents to key according to desired order
-            $contents[$this->ordering[$topic->getUid()]] = $contentsOfTopic;
-
+            // set contents to key according to desired order - this is already given via getPages()
+            if ($contentsOfTopic) {
+                $contents[] = $contentsOfTopic;
+            }
+            
             $this->getLogger()->log(
                 LogLevel::DEBUG,
                 sprintf(
                     'Loaded %s contents for topic with id=%s of issue with id=%s.',
                     count($contentsOfTopic),
-                    $topic->getUid(),
+                    $page->getTxRkwnewsletterTopic()->getUid(),
                     $this->issue->getUid()
                 )
             );
         }
-
-        // sort by key for correct order
-        ksort($contents);
 
         // now mix topics together - pass array-items as separate parameters to arrayZipMerge
         $result = call_user_func_array(
@@ -232,50 +269,45 @@ class ContentLoader
      */
     public function getFirstHeadline (): string
     {
-        
-        // get first topic in order
-        $firstTopic = key($this->ordering);
 
+        // get first page in order
         /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
-        foreach ($this->issue->getPages() as $page) {
-
-            // get topic of page
-            $topic = $page->getTxRkwnewsletterTopic();
-
-            // check if topic is the one wanted
-            if ($topic->getUid() !== $firstTopic) {
-                continue;
-            }
+        if (
+            ($pages = $this->getPages())
+            && ($page = $pages[0])
+        ){
 
             /** @var \RKW\RkwNewsletter\Domain\Model\Content $content */
             $content = $this->contentRepository->findByPageAndLanguage(
                 $page,
-                $this->issue->getNewsletter()->getSysLanguageUid(),
+                ($this->issue->getNewsletter()? $this->issue->getNewsletter()->getSysLanguageUid() : 0),
                 1,
                 false
             )->getFirst();
-            
+
             
             if ($content) {
-                
+
                 $this->getLogger()->log(
                     LogLevel::DEBUG,
                     sprintf(
-                        'Loaded headline for topic with id=%s of issue with id=%s.',
-                        $topic->getUid(),
+                        'Loaded first headline for topic with id=%s of issue with id=%s.',
+                        $page->getTxRkwnewsletterTopic()->getUid(),
                         $this->issue->getUid()
                     )
                 );
-                
+
                 return $content->getHeader();
             }
-        }
 
+            return '';
+        }
+        
         $this->getLogger()->log(
             LogLevel::DEBUG,
             sprintf(
-                'No headline found for issue with id=%s.',
-                $topic->getUid()
+                'No first headline found for issue with id=%s.',
+                $this->issue->getUid()
             )
         );
         
@@ -315,27 +347,49 @@ class ContentLoader
             return null;
         }
 
-        // get first topic in order
-        $firstTopic = key($this->ordering);
-
+        // get first page in order
         /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
-        foreach ($this->issue->getPages() as $page) {
-
-            // get topic of page
-            $topic = $page->getTxRkwnewsletterTopic();
-
-            // check if topic is the one wanted
-            if ($topic->getUid() !== $firstTopic) {
-                continue;
-            }
+        if (
+            ($pages = $this->getPages())
+            && ($page = $pages[0])
+        ){
 
             return $this->contentRepository->findOneEditorialByPageAndLanguage(
                 $page,
-                $this->issue->getNewsletter()->getSysLanguageUid()
+                ($this->issue->getNewsletter()? $this->issue->getNewsletter()->getSysLanguageUid(): 0)
             );
         }
-
+  
         return null;
+    }
+    
+
+    /**
+     * Get the relevant pages based on set topics
+     *
+     * @return array
+     */
+    public function getPages(): array
+    {
+
+        $pages = [];
+        foreach ($this->issue->getPages() as $page) {
+
+            // get topic of page
+            if ($topic = $page->getTxRkwnewsletterTopic()) {
+
+                // check if topic is allowed
+                if (!isset($this->ordering[$topic->getUid()])) {
+                    continue;
+                }
+
+                // add page in order of given topics
+                $pages[$this->ordering[$topic->getUid()]] = $page;
+            }
+        }
+        
+        ksort($pages);
+        return $pages;
     }
     
     
@@ -350,32 +404,51 @@ class ContentLoader
         
         // reset
         $this->ordering = [];
+        $newTopics = new ObjectStorage();
         
-        // Always include special topics and set them at the beginning of the array 
-        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic */
-        foreach ($this->issue->getNewsletter()->getTopic() as $topic) {
-            if (
-                ($topic->getIsSpecial())
-                && (!in_array($topic, $this->topics))
-            ) {
-                 array_unshift($this->topics, $topic);
+        // Always include special topics and set them at the beginning of the array
+        if ($this->issue->getNewsletter()) {
+            
+            /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic */
+            foreach ($this->issue->getNewsletter()->getTopic() as $topic) {
+                if (
+                    ($topic->getIsSpecial())
+                    && (!$this->topics->contains($topic))
+                ) {
+                    $newTopics->attach($topic);
 
-                $this->getLogger()->log(
-                    LogLevel::DEBUG,
-                    sprintf(
-                        'Added special topic with id=%s to ordering of issue with id=%s.',
-                        $topic->getUid(),
-                        $this->issue->getUid()
-                    )
-                );
+                    $this->getLogger()->log(
+                        LogLevel::DEBUG,
+                        sprintf(
+                            'Added special topic with id=%s to ordering of issue with id=%s.',
+                            $topic->getUid(),
+                            $this->issue->getUid()
+                        )
+                    );
+                }
             }
         }
         
-        // get ordering in separate array based on topic id
-        $cnt = 0;
-        ksort($this->topics);
-
+        // combine old with new, because we can't do an array_unshift to add topic at position 0
+        if (count($newTopics->toArray())) {
+            foreach ($this->topics as $topic) {
+                
+                if (! $topic instanceof Topic) {
+                    throw new Exception(
+                        'Only instances of \RKW\RkwNewsletter\Domain\Model\Topic are allowed here.',
+                        1649840507
+                    );
+                }
+                
+                $newTopics->attach($topic);
+            }
+            
+            $this->topics = $newTopics;
+        }
+               
+        // get ordering in separate array based on topic-order
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic */
+        $cnt = 0;
         foreach ($this->topics as $topic) {
             
             if (! $topic instanceof Topic) {
@@ -384,7 +457,7 @@ class ContentLoader
                     1649840507
                 );
             }
-            
+
             $this->ordering[$topic->getUid()] = $cnt;
             $cnt++;
         }

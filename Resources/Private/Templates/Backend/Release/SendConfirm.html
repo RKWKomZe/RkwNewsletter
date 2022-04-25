@@ -16,6 +16,9 @@
         <table class="tx-rkwnewsletter-list">
             <tr>
                 <th>
+                    <f:translate key="templates_backend_release_sendConfirm.id" />
+                </th>
+                <th>
                     <f:translate key="templates_backend_release_sendConfirm.title" />
                 </th>
                 <th>
@@ -28,6 +31,7 @@
 
             <f:form action="send" name="issue" object="{issue}" >
                 <tr>
+                    <td>{issue.uid}</td>
                     <td><f:form.textfield name="title" value="{issue.title}" /></td>
                     <td>
                         <f:render partial="Release/Subscriptions" arguments="{issue : issue}" />

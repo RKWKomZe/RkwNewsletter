@@ -85,6 +85,10 @@ class PagePermissionsTest extends FunctionalTestCase
             [
                 'EXT:rkw_basics/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/setup.typoscript',
+                'EXT:rkw_newsletter/Configuration/TypoScript/setup.typoscript',
+                'EXT:rkw_basics/Configuration/TypoScript/constants.typoscript',
+                'EXT:rkw_mailer/Configuration/TypoScript/constants.typoscript',
+                'EXT:rkw_newsletter/Configuration/TypoScript/constants.typoscript',
                 static::FIXTURE_PATH . '/Frontend/Configuration/Rootpage.typoscript',
             ]
         );

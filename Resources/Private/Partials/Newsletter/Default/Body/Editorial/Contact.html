@@ -5,7 +5,7 @@
 
     <!-- PLAINTEXT -->
     <f:section name="Plaintext" >
-        <f:if condition="{authors}">
+        <f:if condition="{authors} && {content}">
             <rkwMailer:frontend.translate key="partials_newsletter_body_editorial_contact.contact" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />\n
             <f:for each="{authors}" as="author" iteration="iteratorAuthor">
                 <f:if condition="{iteratorAuthor.isFirst}">
@@ -23,7 +23,7 @@
     <!-- HTML for the first item-->
     <f:section name="Html">
     
-        <f:if condition="{authors}">
+        <f:if condition="{authors} && {content}">
             <tr>
                 <td style="padding: 0 16px 16px 16px;">
                     <p style="padding: 23px 0 0; border-top: 1px solid #606060; font-size: 12px; font-weight:bold;">

@@ -95,7 +95,7 @@
 			</trans-unit>
 			<trans-unit id="releaseController.message.issueDeferredSuccessfully">
 				<source>Wohoo! Issue sucessfuly deferred.</source>
-				<target>Wohoo! Die Ausgabe wurde erfolglich zurückgestellt.</target>
+				<target>Wohoo! Die Ausgabe wurde erfolgreich zurückgestellt.</target>
 			</trans-unit>
 			<trans-unit id="releaseController.message.testMailSent">
 				<source>Wohoo! The test-E-mail has been sent successfully.</source>
@@ -202,23 +202,27 @@
 			<!-- Backend Templates -->
 			<!-- ##################### -->
 			<!-- Templates/Backend/Release/List.html -->
-			<trans-unit id="templates_backend_release_list">
+			<trans-unit id="templates_backend_release_confirmationList">
 				<source>Open Approvals</source>
 				<target>Ausstehende Freigaben</target>
 			</trans-unit>
-			<trans-unit id="templates_backend_release_list.description">
+			<trans-unit id="templates_backend_release_confirmationList.description">
 				<source>Here you will find all newsletters for which still an editorial approval is missing. Only when all approvals have been granted can the newsletter actually be sent.</source>
 				<target>Hier finden Sie alle Newsletterausgaben, für die noch eine redaktionelle Freigabe erteilt werden muss. Erst wenn alle Freigaben erteilt sind, kann der Newsletter tatsächlich versendet werden.</target>
 			</trans-unit>
-			<trans-unit id="templates_backend_release_list.approvalsStage1">
+			<trans-unit id="templates_backend_release_confirmationList.approvalsStage1">
 				<source>Approvals Stage 1</source>
 				<target>Freigaben Stufe 1</target>
 			</trans-unit>
-			<trans-unit id="templates_backend_release_list.approvalsStage2">
+			<trans-unit id="templates_backend_release_confirmationList.approvalsStage2">
 				<source>Approvals Stage 2</source>
 				<target>Freigaben Stufe 2</target>
 			</trans-unit>
-			<trans-unit id="templates_backend_release_list.stage1">
+			<trans-unit id="templates_backend_release_confirmationList.startable">
+				<source>Issues ready to start</source>
+				<target>Ausgaben, die zum Versand bereit sind</target>
+			</trans-unit>			
+			<trans-unit id="templates_backend_release_confirmationList.stage1">
 				<source>Stage 1</source>
 				<target>Stufe 1</target>
 			</trans-unit>
@@ -233,6 +237,10 @@
 				<source>Here you can initiate a test dispatch for newsletter issues that have not yet been sent to your e-mail address. You can decide whether the test mailing should include all or only selected topics.</source>
 				<target>Hier können hier einen Testversand noch nicht versendete Newsletter-Ausgaben an Ihre E-Mailadresse anstoßen. Dabei können Sie entscheiden, ob der Testversand alle oder nur ausgewählte Themen berücksichtigen soll.</target>
 			</trans-unit>
+            <trans-unit id="templates_backend_release_testList.id">
+                <source>ID</source>
+                <target>ID</target>
+            </trans-unit>
 			<trans-unit id="templates_backend_release_testList.title">
 				<source>Subject (is prepended to automatically set subject)</source>
 				<target>Betreff (wird dem automatisch generierten Betreff vorangestellt)</target>
@@ -282,7 +290,7 @@
             </trans-unit>
 
 
-            <!-- Templates/Backend/Release/sendList.html -->
+            <!-- Templates/Backend/Release/SendList.html -->
 			<trans-unit id="templates_backend_release_sendList">
 				<source>Dispatching (Step 1/2)</source>
 				<target>Versand (Schritt 1/2)</target>
@@ -291,6 +299,10 @@
 				<source>Here you will find all newsletter issues which you can start.</source>
 				<target>Hier finden Sie alle Newsletterausgaben, deren Versand Sie starten können.</target>
 			</trans-unit>
+            <trans-unit id="templates_backend_release_sendList.id">
+                <source>ID</source>
+                <target>ID</target>
+            </trans-unit>			
 			<trans-unit id="templates_backend_release_sendList.title">
 				<source>Subject (is prepended to automatically set subject)</source>
 				<target>Betreff (wird dem automatisch generierten Betreff vorangestellt)</target>
@@ -323,6 +335,10 @@
 				<source>Please confirm below the dispatch of the selected newsletter. Please also check the subject of the newsletter and adjust it if necessary. Please note that the dispatch is staggered, i.e. the recipients may receive the newsletter at different times.</source>
 				<target>Bitte bestätigen Sie untenstehend den Versand des ausgewählten Newsletters. Bitte prüfen Sie auch den Betreff des Newsletters und passen Sie diesen ggf. noch an. Bitte beachten Sie, dass der Versand gestaffelt erfolgt; die Empfänger den Newsletter also gegebenenfalls zeitlich versetzt erhalten.</target>
 			</trans-unit>
+            <trans-unit id="templates_backend_release_sendConfirm.id">
+                <source>ID</source>
+                <target>ID</target>
+            </trans-unit>
 			<trans-unit id="templates_backend_release_sendConfirm.title">
 				<source>Subject (is prepended to automatically set subject)</source>
 				<target>Betreff (wird dem automatisch generierten Betreff vorangestellt)</target>
@@ -355,63 +371,90 @@
             </trans-unit>
 
 
-			<!-- Partials/Backend/Release/List/Issues.html -->
-			<trans-unit id="partials_backend_release_list_issues.title">
+			<!-- Partials/Backend/Release/Approvals.html -->
+            <trans-unit id="partials_backend_release_approvals.id">
+                <source>ID</source>
+                <target>ID</target>
+            </trans-unit>
+			<trans-unit id="partials_backend_release_approvals.title">
 				<source>Title</source>
 				<target>Titel</target>
 			</trans-unit>
-			<trans-unit id="partials_backend_release_list_issues.approvals">
+			<trans-unit id="partials_backend_release_approvals.approvals">
 				<source>Approvals</source>
 				<target>Freigaben</target>
 			</trans-unit>
-			<trans-unit id="partials_backend_release_list_issues.globalActions">
+			<trans-unit id="partials_backend_release_approvals.globalActions">
 				<source>Global Actions</source>
 				<target>Übergreifende Aktionen</target>
 			</trans-unit>
-			<trans-unit id="partials_backend_release_list_issues.actions">
+			<trans-unit id="partials_backend_release_approvals.actions">
 				<source>Actions</source>
 				<target>Aktionen</target>
 			</trans-unit>
-            <trans-unit id="partials_backend_release_list_issues.deferIssue">
+            <trans-unit id="partials_backend_release_approvals.deferIssue">
 				<source>Defer issue</source>
 				<target>Ausgabe zurückstellen</target>
 			</trans-unit>
-			<trans-unit id="partials_backend_release_list_issues.noIssuesWaiting">
+			<trans-unit id="partials_backend_release_approvals.noIssuesWaiting">
 				<source>No issue is waiting for release.</source>
 				<target>Keine Freigaben ausstehend.</target>
 			</trans-unit>
+			
+			
+			<!-- Partials/Backend/Release/readyToStart.html -->
+            <trans-unit id="partials_backend_release_readyToStart.id">
+                <source>ID</source>
+                <target>ID</target>
+            </trans-unit>
+            <trans-unit id="partials_backend_release_readyToStart.title">
+                <source>Title</source>
+                <target>Titel</target>
+            </trans-unit>
+            <trans-unit id="partials_backend_release_readyToStart.actions">
+                <source>Actions</source>
+                <target>Aktionen</target>
+            </trans-unit>
+            <trans-unit id="partials_backend_release_readyToStart.deferIssue">
+                <source>Defer issue</source>
+                <target>Ausgabe zurückstellen</target>
+            </trans-unit>
+            <trans-unit id="partials_backend_release_readyToStart.noIssuesWaiting">
+                <source>No issue are waiting for start.</source>
+                <target>Keine Ausgaben warten auf den Versandstart.</target>
+            </trans-unit>
 
 
-			<!-- Partials/Backend/Release/List/Approval.html -->
-			<trans-unit id="partials_backend_release_list_approvals.topic">
+			<!-- Partials/Backend/Release/Approvals/Details.html -->
+			<trans-unit id="partials_backend_release_approvals_details.topic">
 				<source>Topic</source>
 				<target>Thema</target>
 			</trans-unit>
-			<trans-unit id="partials_backend_release_list_approvals.actions">
+			<trans-unit id="partials_backend_release_approvals_details.actions">
 				<source>Actions</source>
 				<target>Aktionen</target>
 			</trans-unit>
-			<trans-unit id="partials_backend_release_list_approvals.approvalPending">
+			<trans-unit id="partials_backend_release_approvals_details.approvalPending">
 				<source>Pending</source>
 				<target>Ausstehend</target>
 			</trans-unit>
-			<trans-unit id="partials_backend_release_list_approvals.approvalStage1Pending">
+			<trans-unit id="partials_backend_release_approvals_details.approvalStage1Pending">
 				<source>Stage 1 still pending</source>
 				<target>Stufe 1 noch ausstehend</target>
 			</trans-unit>
-			<trans-unit id="partials_backend_release_list_approvals.alreadyApproved">
+			<trans-unit id="partials_backend_release_approvals_details.alreadyApproved">
 				<source>Already Approved</source>
 				<target>Bereits freigegeben</target>
 			</trans-unit>
-			<trans-unit id="partials_backend_release_list_approvals.approvalUser">
+			<trans-unit id="partials_backend_release_approvals_details.approvalUser">
 				<source>User</source>
 				<target>Nutzer</target>
 			</trans-unit>
-            <trans-unit id="partials_backend_release_list_approvals.approvalTime">
+            <trans-unit id="partials_backend_release_approvals_details.approvalTime">
                 <source>Time</source>
                 <target>Zeit</target>
             </trans-unit>
-			<trans-unit id="partials_backend_release_list_approvals.approve">
+			<trans-unit id="partials_backend_release_approvals_details.approve">
 				<source>Approve now</source>
 				<target>Jetzt freigeben</target>
 			</trans-unit>
@@ -457,6 +500,13 @@
                 <source>Contact:</source>
                 <target>Kontakt:</target>
             </trans-unit> 
+            
+            
+            <!-- Partials/Newsletter/*/Body/Items/Separator.html -->
+            <trans-unit id="partials_newsletter_body_items_separator.headline">
+                <source>Recent topics</source>
+                <target>Aktuelle Themen</target>
+            </trans-unit>             
                        
 
 			<!-- Partials/Newsletter/*/Body/Items/More.html -->
@@ -464,7 +514,18 @@
 				<source>Read more</source>
 				<target>Mehr lesen</target>
 			</trans-unit>
-
+			
+			
+            <!-- Partials/Newsletter/*/Global/Header.html -->
+            <trans-unit id="partials_newsletter_global_header.problems1">
+                <source>Having problems with the presentation?</source>
+                <target>Probleme mit der Darstellung?</target>
+            </trans-unit>	
+            <trans-unit id="partials_newsletter_global_header.problems2">
+                <source>Click here</source>
+                <target>Hier klicken</target>
+            </trans-unit>	            			
+			
 
 			<!-- Partials/Newsletter/*/Global/Footer.html -->
             <trans-unit id="partials_newsletter_global_footer.subscriptionHeadline">
@@ -483,6 +544,10 @@
 				<source>Click here to change your subscription.</source>
 				<target>Klicken Sie hier um Ihr Abonnement zu ändern.</target>
 			</trans-unit>
+            <trans-unit id="partials_newsletter_global_footer.specialTopic">
+				<source>Default</source>
+				<target>Standard</target>
+			</trans-unit>			
 			
 
 

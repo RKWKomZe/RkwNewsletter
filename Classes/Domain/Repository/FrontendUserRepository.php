@@ -14,11 +14,13 @@ namespace RKW\RkwNewsletter\Domain\Repository;
  * The TYPO3 project - inspiring people to share!
  */
 
+use RKW\RkwNewsletter\Domain\Model\Issue;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use RKW\RkwNewsletter\Domain\Model\Topic;
 use RKW\RkwNewsletter\Domain\Model\Newsletter;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * FrontendUserRepository
@@ -44,12 +46,12 @@ class FrontendUserRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
 
     /**
-     * findSubscribersByTopic
+     * findSubscriptionsByTopic
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Topic $topic
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
-     * @comment implictly tested
+     * @comment implicitly tested
      */
     public function findSubscriptionsByTopic(Topic $topic): QueryResultInterface
     {
@@ -59,38 +61,61 @@ class FrontendUserRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             $query->contains('txRkwnewsletterSubscription', $topic)
         );
 
+        // we take the uid here in order to be able to work with offset properly!
         $query->setOrderings(
-            ['txRkwnewsletterPriority' => QueryInterface::ORDER_DESCENDING]
+            ['uid' => QueryInterface::ORDER_ASCENDING]
         );
-
+        
         return $query->execute();
     }
 
 
     /**
-     * findSubscribersByNewsletter
+     * findSubscriptionsByNewsletter
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Newsletter $newsletter
+     * @param int $offset
+     * @param int $limit
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
-     * @comment implictly tested
+     * @comment implicitly tested
      */
-    public function findSubscriptionsByNewsletter(Newsletter $newsletter): QueryResultInterface
+    public function findSubscriptionsByNewsletter(Newsletter $newsletter, int $offset = 0, int $limit = 0): QueryResultInterface
     {
 
         $query = $this->createQuery();
         $query->matching(
-            $query->in('txRkwnewsletterSubscription.uid', $newsletter->getTopic())
+            $query->logicalAnd(
+                $query->greaterThan('txRkwnewsletterSubscription', 0),
+                $query->in('txRkwnewsletterSubscription', $newsletter->getTopic())
+            )
         );
 
+        if ($offset) {
+            $query->setOffset($offset);
+        }
+        if ($limit) {
+            $query->setLimit($limit);
+        }
+        
+        // we take the uid here in order to be able to work with offset properly!
         $query->setOrderings(
-            ['txRkwnewsletterPriority' => QueryInterface::ORDER_DESCENDING]
+            ['uid' => QueryInterface::ORDER_ASCENDING]
         );
 
         return $query->execute();
     }
 
-
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 
 
@@ -111,60 +136,7 @@ class FrontendUserRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
         return $query->execute()->getFirst();
     }
-
-
-    /**
-     * findAllSubscribersByIssue
-     *
-     * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
-     * @param \RKW\RkwNewsletter\Domain\Model\Topic $topic
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface|array
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
-     */
-    public function findAllSubscribersByIssue(\RKW\RkwNewsletter\Domain\Model\Issue $issue, \RKW\RkwNewsletter\Domain\Model\Topic $topic = null)
-    {
-
-        $query = $this->createQuery();
-        $constraint = $query->in('txRkwnewsletterSubscription.uid', $issue->getNewsletter()->getTopic());
-        if ($topic) {
-            $constraint = $query->contains('txRkwnewsletterSubscription', $topic);
-        }
-
-        $query->matching(
-            $query->logicalAnd(
-                $query->greaterThan('txRkwnewsletterSubscription', 0),
-                $constraint
-            )
-        );
-
-        $query->setOrderings(
-            ['txRkwnewsletterPriority' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING]
-        );
-
-        return $query->execute();
-    }
-
-
-    /**
-     * findAllSubscribers
-     *
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface|array
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
-     */
-    public function findAllSubscribers()
-    {
-
-        $query = $this->createQuery();
-        $query->matching(
-            $query->greaterThan('txRkwnewsletterSubscription', 0)
-        );
-
-        $query->setOrderings(
-            ['txRkwnewsletterPriority' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING]
-        );
-
-        return $query->execute();
-    }
+    
 
 
 }

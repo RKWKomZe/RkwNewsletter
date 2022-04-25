@@ -72,13 +72,12 @@
     <pages>
         <uid>12</uid>
         <pid>1</pid>
-        <title>Two</title>
+        <title>Three</title>
         <tx_rkwnewsletter_newsletter>10</tx_rkwnewsletter_newsletter>
         <tx_rkwnewsletter_issue>10</tx_rkwnewsletter_issue>
         <tx_rkwnewsletter_topic>12</tx_rkwnewsletter_topic>
         <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
         <no_search>1</no_search>
     </pages>
-
-
+    
 </dataset>

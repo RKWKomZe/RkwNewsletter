@@ -196,7 +196,7 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
         $page->setNoSearch(true);
         $page->setTxRkwnewsletterExclude(true);
         // $page->setSysLanguageUid($newsletter->getSysLanguageUid());
-        
+
         $this->pagesRepository->add($page);
         $this->persistenceManager->persistAll();
 
@@ -496,7 +496,7 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
             }
 
             // if topics are set, we have a manually created special-issue
-            if (! $topics) {
+            if (! count($topics)) {
                 $newsletter->setLastIssueTstamp(time());
                 $this->newsletterRepository->update($newsletter);
             } 

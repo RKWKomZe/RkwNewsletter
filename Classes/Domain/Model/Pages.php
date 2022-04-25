@@ -72,14 +72,14 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
      *
      * @var \RKW\RkwNewsletter\Domain\Model\Newsletter
      */
-    protected $txRkwnewsletterNewsletter = null;
+    protected $txRkwnewsletterNewsletter;
 
     /**
      * txRkwnewsletterTopic
      *
      * @var \RKW\RkwNewsletter\Domain\Model\Topic
      */
-    protected $txRkwnewsletterTopic  = null;
+    protected $txRkwnewsletterTopic;
 
 
     /**
@@ -87,7 +87,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
      *
      * @var \RKW\RkwNewsletter\Domain\Model\Issue
      */
-    protected $txRkwnewsletterIssue  = null;
+    protected $txRkwnewsletterIssue;
 
 
     /**
@@ -119,7 +119,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
      *
      * @var \RKW\RkwBasics\Domain\Model\FileReference
      */
-    protected $txRkwnewsletterTeaserImage = null;
+    protected $txRkwnewsletterTeaserImage;
 
     
     /**
@@ -256,7 +256,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
     /**
      * Returns the newsletter
      *
-     * @return \RKW\RkwNewsletter\Domain\Model\Newsletter
+     * @return \RKW\RkwNewsletter\Domain\Model\Newsletter|null
      */
     public function getTxRkwnewsletterNewsletter()
     {
@@ -279,7 +279,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
     /**
      * Returns the topic
      *
-     * @return \RKW\RkwNewsletter\Domain\Model\Topic
+     * @return \RKW\RkwNewsletter\Domain\Model\Topic|null
      */
     public function getTxRkwnewsletterTopic()
     {
@@ -302,13 +302,12 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
     /**
      * Returns the txRkwnewsletterIssue
      *
-     * @return \RKW\RkwNewsletter\Domain\Model\Issue $txRkwnewsletterIssue
+     * @return \RKW\RkwNewsletter\Domain\Model\Issue|null $txRkwnewsletterIssue
      */
     public function getTxRkwnewsletterIssue()
     {
         return $this->txRkwnewsletterIssue;
     }
-
   
 
     /**
@@ -382,7 +381,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
     /**
      * Returns the image
      *
-     * @return \RKW\RkwBasics\Domain\Model\FileReference $txRkwnewsletterTeaserImage
+     * @return \RKW\RkwBasics\Domain\Model\FileReference|null $txRkwnewsletterTeaserImage
      */
     public function getTxRkwnewsletterTeaserImage()
     {

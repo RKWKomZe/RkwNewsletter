@@ -14,6 +14,7 @@ namespace RKW\RkwNewsletter\ViewHelpers\Backend;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
@@ -52,9 +53,19 @@ class HasBackendUserPermissionViewHelper extends AbstractViewHelper
         $topic = is_object($this->arguments['topic']) ? $this->arguments['topic'] : null;
         $backendUserId = intval($GLOBALS['BE_USER']->user['uid']);
         $approvalStage = intval($this->arguments['approvalStage']) ?: 1;
+        
+        /** @var \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $beUserAuthentication */
+        $beUserAuthentication = ($GLOBALS['BE_USER'] ?: null);
 
         if ($backendUserId) {
 
+            if (
+                ($beUserAuthentication instanceof BackendUserAuthentication)
+                && ($beUserAuthentication->isAdmin())
+            ){
+                return 1;
+            }
+            
             // first check if user is allowed by issue
             /** @var \RKW\RkwNewsletter\Domain\Model\BackendUser $backendUser */
             foreach ($issue->getNewsletter()->getApproval() as $backendUser) {

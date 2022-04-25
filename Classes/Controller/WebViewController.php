@@ -18,6 +18,7 @@ use RKW\RkwMailer\Domain\Model\QueueRecipient;
 use RKW\RkwBasics\Utility\GeneralUtility;
 use RKW\RkwNewsletter\Domain\Model\Issue;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 
 /**
@@ -39,14 +40,6 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @inject
      */
     protected $topicRepository;
-
-    /**
-     * FrontendUserRepository
-     *
-     * @var \RKW\RkwNewsletter\Domain\Repository\FrontendUserRepository
-     * @inject
-     */
-    protected $frontendUserRepository;
 
 
     /**
@@ -114,10 +107,10 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
         
         // convert topic-ids to objects
-        $topics = [];
+        $topics = new ObjectStorage();
         foreach ($topicsRaw as $topicId) {
             if ($topic = $this->topicRepository->findByIdentifier($topicId)) {
-                $topics[] = $topic;
+                $topics->attach($topic);
             }
         }
         

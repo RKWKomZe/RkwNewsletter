@@ -139,7 +139,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var \RKW\RkwNewsletter\Domain\Model\Pages
      */
-    protected $settingsPage = null;
+    protected $settingsPage;
 
     
     /**
@@ -159,11 +159,19 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
     
     /**
+     * dayForSending
+     *
+     * @var int
+     */
+    protected $dayForSending = 0;
+
+    
+    /**
      * approval
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\BackendUser>
      */
-    protected $approval = null;
+    protected $approval;
 
     
     /**
@@ -171,7 +179,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FrontendUserGroup>
      */
-    protected $usergroup = null;
+    protected $usergroup;
 
     
     /**
@@ -179,7 +187,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\Topic>
      */
-    protected $topic = null;
+    protected $topic;
 
     
     /**
@@ -187,7 +195,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\Issue>
      */
-    protected $issue = null;
+    protected $issue;
 
     
     /**
@@ -538,9 +546,9 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the settingsPage
      *
-     * @return \RKW\RkwNewsletter\Domain\Model\Pages $settingsPage
+     * @return \RKW\RkwNewsletter\Domain\Model\Pages|null $settingsPage
      */
-    public function getSettingsPage(): Pages
+    public function getSettingsPage()
     {
         return $this->settingsPage;
     }
@@ -601,6 +609,29 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setRythm(int $rythm): void
     {
         $this->rythm = $rythm;
+    }
+
+
+    /**
+     * Returns the dayForSending
+     *
+     * @return int $dayForSending
+     */
+    public function getDayForSending(): int
+    {
+        return $this->dayForSending;
+    }
+
+
+    /**
+     * Sets the dayForSending
+     *
+     * @param int $dayForSending
+     * @return void
+     */
+    public function setDayForSending(int $dayForSending): void
+    {
+        $this->dayForSending = $dayForSending;
     }
 
 

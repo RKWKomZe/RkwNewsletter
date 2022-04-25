@@ -39,5 +39,38 @@
         <newsletter>10</newsletter>
     </tx_rkwnewsletter_domain_model_topic>
 
-    
+
+    <pages>
+        <uid>10</uid>
+        <pid>1</pid>
+        <title>One</title>
+        <tx_rkwnewsletter_newsletter>10</tx_rkwnewsletter_newsletter>
+        <tx_rkwnewsletter_issue>10</tx_rkwnewsletter_issue>
+        <tx_rkwnewsletter_topic>10</tx_rkwnewsletter_topic>
+        <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <no_search>1</no_search>
+    </pages>
+
+    <pages>
+        <uid>11</uid>
+        <pid>1</pid>
+        <title>One</title>
+        <tx_rkwnewsletter_newsletter>10</tx_rkwnewsletter_newsletter>
+        <tx_rkwnewsletter_issue>10</tx_rkwnewsletter_issue>
+        <tx_rkwnewsletter_topic>11</tx_rkwnewsletter_topic>
+        <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <no_search>1</no_search>
+    </pages>
+
+    <pages>
+        <uid>12</uid>
+        <pid>1</pid>
+        <title>One</title>
+        <tx_rkwnewsletter_newsletter>10</tx_rkwnewsletter_newsletter>
+        <tx_rkwnewsletter_issue>10</tx_rkwnewsletter_issue>
+        <tx_rkwnewsletter_topic>12</tx_rkwnewsletter_topic>
+        <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <no_search>1</no_search>
+    </pages>
+
 </dataset>

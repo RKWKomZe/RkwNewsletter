@@ -108,7 +108,13 @@ class ApprovalManagerTest extends FunctionalTestCase
             1,
             [
                 'EXT:rkw_basics/Configuration/TypoScript/setup.typoscript',
+                'EXT:rkw_authors/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/setup.typoscript',
+                'EXT:rkw_newsletter/Configuration/TypoScript/setup.typoscript',
+                'EXT:rkw_basics/Configuration/TypoScript/constants.typoscript',
+                'EXT:rkw_authors/Configuration/TypoScript/constants.typoscript',
+                'EXT:rkw_mailer/Configuration/TypoScript/constants.typoscript',
+                'EXT:rkw_newsletter/Configuration/TypoScript/constants.typoscript',               
                 self::FIXTURE_PATH . '/Frontend/Configuration/Rootpage.typoscript',
             ]
         );

@@ -1,55 +1,57 @@
-{namespace rkwMailer=RKW\RkwMailer\ViewHelpers}
-{namespace rkwNewsletter=RKW\RkwNewsletter\ViewHelpers}
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:rkwMailer="http://typo3.org/ns/RKW/RkwMailer/ViewHelpers"
+    xmlns:rkwNewsletter="http://typo3.org/ns/RKW/RkwNewsletter/ViewHelpers"
+    data-namespace-typo3-fluid="true">
 
-<f:layout name="Email/{mailType}" />
+    <f:layout name="Email/{mailType}" />
 
-
-<!-- PLAINTEXT -->
-<f:section name="Plaintext">
-<rkwMailer:recipientSalutation queueRecipient="{queueRecipient}" prependText="<rkwMailer:frontend.translate key='templates_email_optInRequest.headline' languageKey='{queueRecipient.languageCode}' extensionName='rkwNewsletter' /> " appendText=","/>
-
-<rkwMailer:frontend.translate key="templates_email_optInRequest.text1" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter"  />
-
-<f:for each="<rkwNewsletter:getGroupedSubscribedTopics subscriptions='{registration.data.subscriptions}' />" as="topics" key="newsletter">
-– {newsletter}: <f:for each="{topics}" as="topic" iteration="iterator">{topic.name}<f:if condition="{iterator.isLast}"><f:else>, </f:else></f:if></f:for>
-</f:for>
-
-<rkwMailer:frontend.translate key="templates_email_optInRequest.text2" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter"  />
-
-<rkwMailer:frontend.translate key="templates_email_optInRequest.textOptIn" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />
-<rkwMailer:frontend.uri.action action="optIn" controller="Subscription" extensionName="rkwNewsletter" pluginName="Subscription" absolute="TRUE" pageUid="{pageUid}" additionalParams="{tx_rkwnewsletter_subscription: {token_yes: registration.tokenYes, user: registration.userSha1}}" section="rkw-newsletter" />
-
-<rkwMailer:frontend.translate key="templates_email_optInRequest.textOptOut" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />
-<rkwMailer:frontend.uri.action action="optIn" controller="Subscription" extensionName="rkwNewsletter" pluginName="Subscription" absolute="TRUE" pageUid="{pageUid}" additionalParams="{tx_rkwnewsletter_subscription: {token_no: registration.tokenNo, user: registration.userSha1}}" section="rkw-newsletter" />
-</f:section>
-
-<!-- HTML -->
-<f:section name="Html">
-    <h1><rkwMailer:recipientSalutation queueRecipient="{queueRecipient}" prependText="<rkwMailer:frontend.translate key='templates_email_optInRequest.headline' languageKey='{queueRecipient.languageCode}' extensionName='rkwNewsletter' /> " appendText=","/></h1>
-    <p>
-        <rkwMailer:frontend.translate key="templates_email_optInRequest.text1" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" /><br>
-    </p>
-
-    <ul>
+    <!-- PLAINTEXT -->
+    <f:section name="Plaintext"><rkwMailer:plaintextLineBreaks>
+        <rkwMailer:recipientSalutation queueRecipient="{queueRecipient}" prependText="<rkwMailer:frontend.translate key='templates_email_optInRequest.headline' languageKey='{queueRecipient.languageCode}' extensionName='rkwNewsletter' /> " appendText=","/>
+        \n\n
+        <rkwMailer:frontend.translate key="templates_email_optInRequest.text1" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter"  />
+        \n\n
         <f:for each="<rkwNewsletter:getGroupedSubscribedTopics subscriptions='{registration.data.subscriptions}' />" as="topics" key="newsletter">
-            <li>
-                <strong>{newsletter}:</strong>
-                <f:for each="{topics}" as="topic" iteration="iterator">
-                    {topic.name}<f:if condition="{iterator.isLast}"><f:else>, </f:else></f:if>
-                </f:for>
-            </li>
+        – {newsletter}: <f:for each="{topics}" as="topic" iteration="iterator">{topic.name}<f:if condition="{iterator.isLast}"><f:else>, </f:else></f:if></f:for>\n
         </f:for>
-    </ul>
+        \n\n
+        <rkwMailer:frontend.translate key="templates_email_optInRequest.text2" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter"  />
+        \n\n
+        <rkwMailer:frontend.translate key="templates_email_optInRequest.textOptIn" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />\n
+        <rkwMailer:frontend.uri.action action="optIn" controller="Subscription" extensionName="rkwNewsletter" pluginName="Subscription" absolute="TRUE" pageUid="{pageUid}" additionalParams="{tx_rkwnewsletter_subscription: {token_yes: registration.tokenYes, user: registration.userSha1}}" section="rkw-newsletter" />
+        \n\n
+        <rkwMailer:frontend.translate key="templates_email_optInRequest.textOptOut" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />\n
+        <rkwMailer:frontend.uri.action action="optIn" controller="Subscription" extensionName="rkwNewsletter" pluginName="Subscription" absolute="TRUE" pageUid="{pageUid}" additionalParams="{tx_rkwnewsletter_subscription: {token_no: registration.tokenNo, user: registration.userSha1}}" section="rkw-newsletter" />
+    </rkwMailer:plaintextLineBreaks></f:section>
 
-    <p>
-        <strong><rkwMailer:frontend.translate key="templates_email_optInRequest.text2" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" /></strong>
-    </p>
-    <p>
-        <rkwMailer:frontend.translate key="templates_email_optInRequest.textOptIn" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter"/><br>
-        <a href="<rkwMailer:frontend.uri.action action='optIn' controller='Subscription' extensionName='rkwNewsletter' pluginName='Subscription' absolute='TRUE' pageUid='{pageUid}' additionalParams='{tx_rkwnewsletter_subscription: {token_yes: registration.tokenYes, user: registration.userSha1}}' section='rkw-newsletter' />"><rkwMailer:frontend.translate key="templates_email_optInRequest.textOptInLinkLabel" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter"/></a>
-    </p>
-    <p>
-        <rkwMailer:frontend.translate key="templates_email_optInRequest.textOptOut" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" /><br>
-        <a href="<rkwMailer:frontend.uri.action action='optIn' controller='Subscription' extensionName='rkwNewsletter' pluginName='Subscription' absolute='TRUE' pageUid='{pageUid}' additionalParams='{tx_rkwnewsletter_subscription: {token_no: registration.tokenNo, user: registration.userSha1}}' section='rkw-newsletter' />"><rkwMailer:frontend.translate key="templates_email_optInRequest.textOptOutLinkLabel" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter"/></a>
-    </p>
-</f:section>
+    <!-- HTML -->
+    <f:section name="Html">
+        <h1><rkwMailer:recipientSalutation queueRecipient="{queueRecipient}" prependText="<rkwMailer:frontend.translate key='templates_email_optInRequest.headline' languageKey='{queueRecipient.languageCode}' extensionName='rkwNewsletter' /> " appendText=","/></h1>
+        <p>
+            <rkwMailer:frontend.translate key="templates_email_optInRequest.text1" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" /><br>
+        </p>
+    
+        <ul>
+            <f:for each="<rkwNewsletter:getGroupedSubscribedTopics subscriptions='{registration.data.subscriptions}' />" as="topics" key="newsletter">
+                <li>
+                    <strong>{newsletter}:</strong>
+                    <f:for each="{topics}" as="topic" iteration="iterator">
+                        {topic.name}<f:if condition="{iterator.isLast}"><f:else>, </f:else></f:if>
+                    </f:for>
+                </li>
+            </f:for>
+        </ul>
+    
+        <p>
+            <strong><rkwMailer:frontend.translate key="templates_email_optInRequest.text2" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" /></strong>
+        </p>
+        <p>
+            <rkwMailer:frontend.translate key="templates_email_optInRequest.textOptIn" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter"/><br>
+            <a href="<rkwMailer:frontend.uri.action action='optIn' controller='Subscription' extensionName='rkwNewsletter' pluginName='Subscription' absolute='TRUE' pageUid='{pageUid}' additionalParams='{tx_rkwnewsletter_subscription: {token_yes: registration.tokenYes, user: registration.userSha1}}' section='rkw-newsletter' />"><rkwMailer:frontend.translate key="templates_email_optInRequest.textOptInLinkLabel" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter"/></a>
+        </p>
+        <p>
+            <rkwMailer:frontend.translate key="templates_email_optInRequest.textOptOut" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" /><br>
+            <a href="<rkwMailer:frontend.uri.action action='optIn' controller='Subscription' extensionName='rkwNewsletter' pluginName='Subscription' absolute='TRUE' pageUid='{pageUid}' additionalParams='{tx_rkwnewsletter_subscription: {token_no: registration.tokenNo, user: registration.userSha1}}' section='rkw-newsletter' />"><rkwMailer:frontend.translate key="templates_email_optInRequest.textOptOutLinkLabel" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter"/></a>
+        </p>
+    </f:section>
+</html>

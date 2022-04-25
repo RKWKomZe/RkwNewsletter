@@ -31,35 +31,35 @@ class Approval extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var \RKW\RkwNewsletter\Domain\Model\Topic
      */
-    protected $topic = null;
+    protected $topic;
 
     /**
      * issue
      *
      * @var \RKW\RkwNewsletter\Domain\Model\Issue
      */
-    protected $issue = null;
+    protected $issue;
 
     /**
      * page
      *
      * @var \RKW\RkwNewsletter\Domain\Model\Pages
      */
-    protected $page = null;
+    protected $page;
 
     /**
      * allowedByUserStage1
      *
      * @var \RKW\RkwNewsletter\Domain\Model\BackendUser
      */
-    protected $allowedByUserStage1 = null;
+    protected $allowedByUserStage1;
 
     /**
      * allowedByUserStage2
      *
      * @var \RKW\RkwNewsletter\Domain\Model\BackendUser
      */
-    protected $allowedByUserStage2 = null;
+    protected $allowedByUserStage2;
 
     /**
      * allowedTstampStage1
@@ -103,13 +103,12 @@ class Approval extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $sentReminderTstampStage2 = 0;
 
-
     
     
     /**
      * Returns the topic
      *
-     * @return \RKW\RkwNewsletter\Domain\Model\Topic
+     * @return \RKW\RkwNewsletter\Domain\Model\Topic|null
      */
     public function getTopic()
     {
@@ -131,7 +130,7 @@ class Approval extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the issue
      *
-     * @return \RKW\RkwNewsletter\Domain\Model\Issue $issue
+     * @return \RKW\RkwNewsletter\Domain\Model\Issue|null $issue
      */
     public function getIssue()
     {
@@ -153,7 +152,7 @@ class Approval extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the pages
      *
-     * @return \RKW\RkwNewsletter\Domain\Model\Pages
+     * @return \RKW\RkwNewsletter\Domain\Model\Pages|null
      */
     public function getPage()
     {
@@ -175,7 +174,7 @@ class Approval extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the user.
      *
-     * @return \RKW\RkwNewsletter\Domain\Model\BackendUser
+     * @return \RKW\RkwNewsletter\Domain\Model\BackendUser|null
      */
     public function getAllowedByUserStage1()
     {
@@ -199,7 +198,7 @@ class Approval extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the user.
      *
-     * @return \RKW\RkwNewsletter\Domain\Model\BackendUser
+     * @return \RKW\RkwNewsletter\Domain\Model\BackendUser|null
      */
     public function getAllowedByUserStage2()
     {

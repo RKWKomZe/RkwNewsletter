@@ -44,7 +44,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var int
      */
-    protected $sysLanguageUid = 0;
+    protected $sysLanguageUid = -1;
 
     
     /**
@@ -92,7 +92,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwBasics\Domain\Model\FileReference>
      */
-    protected $image = null;
+    protected $image;
 
 
     /**
@@ -100,7 +100,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwAuthors\Domain\Model\Authors>
      */
-    protected $txRkwnewsletterAuthors = null;
+    protected $txRkwnewsletterAuthors;
 
 
     /**

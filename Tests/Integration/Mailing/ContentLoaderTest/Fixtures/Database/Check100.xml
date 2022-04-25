@@ -67,7 +67,7 @@
         <uid>101</uid>
         <pid>100</pid>
         <header>Content 70.3</header>
-        <sorting>10</sorting>
+        <sorting>3</sorting>
     </tt_content>
 
     <tt_content>
@@ -88,7 +88,7 @@
         <uid>104</uid>
         <pid>101</pid>
         <header>Content 71.3</header>
-        <sorting>10</sorting>
+        <sorting>3</sorting>
     </tt_content>
 
     <tt_content>

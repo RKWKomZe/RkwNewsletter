@@ -37,10 +37,12 @@
                             <rkwMailer:frontend.replace.rteLinks style="color:#E64415;"><f:format.raw>{content}</f:format.raw></rkwMailer:frontend.replace.rteLinks>
                         </f:then>
                         <f:else>
-                           <rkwMailer:frontend.translate 
-                               key="partials_newsletter_body_editorial_content.introduction" 
-                               languageKey="{queueRecipient.languageCode}" 
-                               extensionName="rkwNewsletter" />
+                            <p>
+                                <rkwMailer:frontend.translate 
+                                    key="partials_newsletter_body_editorial_content.introduction" 
+                                    languageKey="{queueRecipient.languageCode}" 
+                                    extensionName="rkwNewsletter" />
+                            </p>
                         </f:else>
                     </f:if>
                 </rkwMailer:frontend.replace.redirectLinks>

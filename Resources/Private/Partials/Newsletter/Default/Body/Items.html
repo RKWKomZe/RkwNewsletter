@@ -13,6 +13,9 @@
 
                 <f:if condition="{itemIterator.cycle} < {settings.maxContentItems}">
                     <f:then>
+                        <f:if condition="{itemIterator.isFirst}">
+                            <f:render partial="Body/Items/Separator" section="Plaintext" arguments="{_all}" />
+                        </f:if>
                         <f:render partial="Body/Items/Default" section="Plaintext" arguments="{_all}" />\n\n
                     </f:then>
                     <f:else>
@@ -38,7 +41,13 @@
                 
                 <f:if condition="{itemIterator.cycle} < {settings.maxContentItems}">
                     <f:then>
-                        <!-- normal -->
+                        
+                        <f:if condition="{itemIterator.isFirst}">
+                            <!-- separator -->
+                            <f:render partial="Body/Items/Separator" section="Html" arguments="{_all}" />
+                        </f:if>
+
+                        <!-- content -->
                         <f:render partial="Body/Items/Default" section="Html" arguments="{_all}" />
                     </f:then>
                     <f:else>

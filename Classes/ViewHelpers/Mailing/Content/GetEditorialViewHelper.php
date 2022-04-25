@@ -17,6 +17,7 @@ use RKW\RkwNewsletter\Mailing\ContentLoader;
 use RKW\RkwNewsletter\ViewHelpers\Mailing\AbstractViewHelper;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 
 /**
@@ -38,7 +39,7 @@ class GetEditorialViewHelper extends AbstractViewHelper
     public function initializeArguments()
     {
         parent::initializeArguments();
-        $this->registerArgument('topics', 'array', 'Array of topics to load contents for. (optional, default: all).', false, null);
+        $this->registerArgument('topics', ObjectStorage::class, 'ObjectStorage of topics to load contents for. (optional, default: all).', false, null);
 
     }
 

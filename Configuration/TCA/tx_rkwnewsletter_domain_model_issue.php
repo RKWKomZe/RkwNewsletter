@@ -177,7 +177,11 @@ return [
                 ],
             ],
         ],
-        
+        'sent_offset' => [
+            'config' => [
+                'type' => 'passthrough',
+            ],
+        ],
         'is_special' => [
             'config' => [
                 'type' => 'passthrough',
@@ -187,11 +191,6 @@ return [
             'config' => [
                 'type' => 'passthrough',
                 'foreign_table' => 'tx_rkwnewsletter_domain_model_newsletter',
-            ],
-        ],
-        'recipients' => [
-            'config' => [
-                'type' => 'passthrough',
             ],
         ],
         'queue_mail' => [

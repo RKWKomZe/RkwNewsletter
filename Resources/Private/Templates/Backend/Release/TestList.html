@@ -16,6 +16,9 @@
         <table class="tx-rkwnewsletter-list">
             <tr>
                 <th>
+                    <f:translate key="templates_backend_release_testList.id" />
+                </th>
+                <th>
                     <f:translate key="templates_backend_release_testList.title" />
                 </th>
                 <th>
@@ -31,8 +34,9 @@
 
 
             <f:for each="{issues}" as="issue">
-                <f:form action="test" name="issue" object="{issue}" >
+                <f:form action="testSend" name="issue" object="{issue}" >
                     <tr>
+                        <td>{issue.uid}</td>
                         <td><f:form.textfield name="title" value="{issue.title}" /></td>
                         <td><f:form.textfield name="emails" value="{backendUser.email}" /></td>
                         <td>

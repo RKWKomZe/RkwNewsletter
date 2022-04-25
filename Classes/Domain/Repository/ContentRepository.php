@@ -16,6 +16,7 @@ namespace RKW\RkwNewsletter\Domain\Repository;
 
 use RKW\RkwNewsletter\Domain\Model\Pages;
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
@@ -61,8 +62,7 @@ class ContentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query = $this->createQuery();
         $constraints = [
             $query->equals('pid', $page),
-            $query->equals('sysLanguageUid', $languageUid),
-            $query->logicalNot($query->equals('header', '')),
+            $query->equals('sysLanguageUid', $languageUid)
         ];
 
         if (! $includeEditorials) {
@@ -86,6 +86,46 @@ class ContentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $query->execute();
     }
 
+    
+    /**
+     * countByPagesAndLanguageUid
+     *
+     * @param array<\RKW\RkwNewsletter\Domain\Model\Pages> $pages
+     * @param int $languageUid
+     * @param bool $includeEditorials
+     * @return int
+     * @comment implicitly tested
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     */
+    public function countByPagesAndLanguage(
+        array $pages,
+        int $languageUid = 0,
+        bool $includeEditorials = false
+    ): int {
+
+        $query = $this->createQuery();
+        $constraints = [
+            $query->in('pid', $pages),
+            $query->equals('sysLanguageUid', $languageUid)
+        ];
+
+        if (! $includeEditorials) {
+            $constraints[] = $query->equals('txRkwnewsletterIsEditorial', 0);
+        }
+
+        $query->matching(
+            $query->logicalAnd($constraints)
+        );
+
+        $query->setOrderings(
+            array(
+                'sorting' => QueryInterface::ORDER_ASCENDING,
+            )
+        );
+
+        return $query->execute()->count();
+    }
+
 
     /**
      * findOneEditorialsByPagesAndLanguage
@@ -96,16 +136,15 @@ class ContentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @comment implicitly tested
      */
     public function findOneEditorialByPageAndLanguage(
-        Pages $pages,
+        Pages $page,
         int $languageUid = 0
     ) {
 
         $query = $this->createQuery();
         $query->matching(
             $query->logicalAnd(
-                $query->equals('pid', $pages),
+                $query->equals('pid', $page),
                 $query->equals('sysLanguageUid', $languageUid),
-                $query->logicalNot($query->equals('header', '')),
                 $query->equals('txRkwnewsletterIsEditorial', 1)
             )
         );

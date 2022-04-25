@@ -15,6 +15,7 @@ namespace RKW\RkwNewsletter\Tests\Integration\ViewHelpers\Mailing\Content;
  */
 
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -93,6 +94,9 @@ class GetEditorialViewHelperTest extends FunctionalTestCase
                 'EXT:rkw_basics/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/setup.typoscript',
+                'EXT:rkw_basics/Configuration/TypoScript/constants.typoscript',
+                'EXT:rkw_mailer/Configuration/TypoScript/constants.typoscript',
+                'EXT:rkw_newsletter/Configuration/TypoScript/constants.typoscript',
                 self::FIXTURE_PATH . '/Frontend/Configuration/Rootpage.typoscript',
             ]
         );
@@ -206,11 +210,15 @@ class GetEditorialViewHelperTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic */
         $topic = $this->topicRepository->findByUid(10);
 
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($topic);
+        
         $this->standAloneViewHelper->setTemplate('Check10.html');
         $this->standAloneViewHelper->assignMultiple(
             [
                 'issue' => $issue,
-                'topics' => [$topic]
+                'topics' => $objectStorage
             ]
         );
 
@@ -258,11 +266,15 @@ class GetEditorialViewHelperTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic */
         $topic = $this->topicRepository->findByUid(11);
 
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($topic);
+        
         $this->standAloneViewHelper->setTemplate('Check10.html');
         $this->standAloneViewHelper->assignMultiple(
             [
                 'issue' => $issue,
-                'topics' => [$topic]
+                'topics' => $objectStorage
             ]
         );
 

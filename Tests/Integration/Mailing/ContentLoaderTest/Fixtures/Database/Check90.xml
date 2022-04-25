@@ -14,7 +14,7 @@
         <uid>90</uid>
         <pid>0</pid>
         <newsletter>90</newsletter>
-        <pages>3</pages>
+        <pages>2</pages>
     </tx_rkwnewsletter_domain_model_issue>
     
     
@@ -37,7 +37,6 @@
         <pid>0</pid>
         <container_page>1</container_page>
         <newsletter>90</newsletter>
-        <is_special>1</is_special>
     </tx_rkwnewsletter_domain_model_topic>
 
     
@@ -68,7 +67,7 @@
         <pid>1</pid>
         <title>Two</title>
         <tx_rkwnewsletter_newsletter>90</tx_rkwnewsletter_newsletter>
-        <tx_rkwnewsletter_issue>90</tx_rkwnewsletter_issue>
+        <tx_rkwnewsletter_issue />
         <tx_rkwnewsletter_topic>92</tx_rkwnewsletter_topic>
         <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
         <no_search>1</no_search>

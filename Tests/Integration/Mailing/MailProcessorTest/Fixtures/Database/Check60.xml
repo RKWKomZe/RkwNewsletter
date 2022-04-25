@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+
+    <tx_rkwnewsletter_domain_model_newsletter>
+        <uid>60</uid>
+        <pid>0</pid>
+        <issue_title><![CDATA[Newsletter {M}/{Y}]]></issue_title>
+        <issue>1</issue>
+        <topic>2</topic>
+    </tx_rkwnewsletter_domain_model_newsletter>
+
+    
+    <tx_rkwnewsletter_domain_model_issue>
+        <uid>60</uid>
+        <pid>0</pid>
+        <newsletter>60</newsletter>
+        <title>Tester</title>
+    </tx_rkwnewsletter_domain_model_issue>
+
+    
+    <tx_rkwnewsletter_domain_model_topic>
+        <uid>60</uid>
+        <pid>0</pid>
+        <container_page>1</container_page>
+        <newsletter>60</newsletter>
+    </tx_rkwnewsletter_domain_model_topic>
+
+    <tx_rkwnewsletter_domain_model_topic>
+        <uid>61</uid>
+        <pid>0</pid>
+        <container_page>1</container_page>
+        <newsletter>60</newsletter>
+    </tx_rkwnewsletter_domain_model_topic>
+
+    
+    <fe_users>
+        <uid>60</uid>
+        <pid>0</pid>
+        <email>test1@rkw.de</email>
+        <tx_rkwnewsletter_subscription>60,61</tx_rkwnewsletter_subscription>
+    </fe_users>
+
+    <fe_users>
+        <uid>61</uid>
+        <pid>0</pid>
+        <email>test2@rkw.de</email>
+        <tx_rkwnewsletter_subscription>60</tx_rkwnewsletter_subscription>
+    </fe_users>
+
+    <fe_users>
+        <uid>62</uid>
+        <pid>0</pid>
+        <email>test3@rkw.de</email>
+        <tx_rkwnewsletter_subscription>61</tx_rkwnewsletter_subscription>
+    </fe_users>
+
+    <fe_users>
+        <uid>63</uid>
+        <pid>0</pid>
+        <email>test4@rkw.de</email>
+        <tx_rkwnewsletter_subscription>61</tx_rkwnewsletter_subscription>
+    </fe_users>
+
+    <fe_users>
+        <uid>64</uid>
+        <pid>0</pid>
+        <email>test5@rkw.de</email>
+        <tx_rkwnewsletter_subscription />
+    </fe_users>
+</dataset>

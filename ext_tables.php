@@ -16,7 +16,7 @@ call_user_func(
                 'management',		// Submodule key
                 '',					// Position
                 array(
-                    'Release' => 'testList, test, list, createIssueList, createIssue, approve, defer, sendList, sendConfirm, send',
+                    'Release' => 'confirmationList, approve, defer, testList, testSend, createIssueList, createIssue, sendList, sendConfirm, send',
                 ),
                 array(
                     'access' => 'user,group',

@@ -39,7 +39,7 @@ class GetContentsViewHelper extends AbstractViewHelper
     public function initializeArguments()
     {
         parent::initializeArguments();
-        $this->registerArgument('topics', 'array', 'Array of topics to load contents for. (optional, default: all).', false, null);
+        $this->registerArgument('topics', ObjectStorage::class, 'ObjectStorage of topics to load contents for. (optional, default: all).', false, null);
         $this->registerArgument('limit', 'int', 'Limits the amount of returned contents for each topic. (optional, default: all).', false, 0);
     }
 

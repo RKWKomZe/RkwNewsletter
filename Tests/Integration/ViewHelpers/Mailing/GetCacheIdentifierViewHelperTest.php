@@ -15,6 +15,7 @@ namespace RKW\RkwNewsletter\Tests\Integration\ViewHelpers\Mailing;
  */
 
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -93,6 +94,9 @@ class GetCacheIdentifierViewHelperTest extends FunctionalTestCase
                 'EXT:rkw_basics/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/setup.typoscript',
+                'EXT:rkw_basics/Configuration/TypoScript/constants.typoscript',
+                'EXT:rkw_mailer/Configuration/TypoScript/constants.typoscript',
+                'EXT:rkw_newsletter/Configuration/TypoScript/constants.typoscript',
                 self::FIXTURE_PATH . '/Frontend/Configuration/Rootpage.typoscript',
             ]
         );
@@ -152,11 +156,16 @@ class GetCacheIdentifierViewHelperTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic2 */
         $topic2 = $this->topicRepository->findByUid(11);
 
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($topic1);
+        $objectStorage->attach($topic2);
+
         $this->standAloneViewHelper->setTemplate('Check10.html');
         $this->standAloneViewHelper->assignMultiple(
             [
                 'issue' => $issue,
-                'topics' => [$topic1, $topic2]            
+                'topics' => $objectStorage        
             ]
         );
 
@@ -203,11 +212,16 @@ class GetCacheIdentifierViewHelperTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic2 */
         $topic2 = $this->topicRepository->findByUid(11);
 
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($topic2);
+        $objectStorage->attach($topic1);
+        
         $this->standAloneViewHelper->setTemplate('Check10.html');
         $this->standAloneViewHelper->assignMultiple(
             [
                 'issue' => $issue,
-                'topics' => [$topic2, $topic1]
+                'topics' => $objectStorage
             ]
         );
 
@@ -255,11 +269,16 @@ class GetCacheIdentifierViewHelperTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic2 */
         $topic2 = $this->topicRepository->findByUid(11);
 
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($topic2);
+        $objectStorage->attach($topic1);
+        
         $this->standAloneViewHelper->setTemplate('Check10.html');
         $this->standAloneViewHelper->assignMultiple(
             [
                 'issue' => $issue,
-                'topics' => [$topic2, $topic1],
+                'topics' => $objectStorage,
                 'limit' => 1
             ]
         );

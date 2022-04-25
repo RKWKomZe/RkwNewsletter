@@ -48,28 +48,28 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var \RKW\RkwNewsletter\Domain\Model\Pages
      */
-    protected $containerPage = null;
+    protected $containerPage;
 
     /**
      * newsletter
      *
      * @var \RKW\RkwNewsletter\Domain\Model\Newsletter
      */
-    protected $newsletter = null;
+    protected $newsletter;
 
     /**
      * approvalStage1
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\BackendUser>
      */
-    protected $approvalStage1 = null;
+    protected $approvalStage1;
 
     /**
      * approvalStage2
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\BackendUser>
      */
-    protected $approvalStage2 = null;
+    protected $approvalStage2;
 
        /**
      * isSpecial
@@ -154,7 +154,7 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the containerPage
      *
-     * @return \RKW\RkwNewsletter\Domain\Model\Pages $containerPage
+     * @return \RKW\RkwNewsletter\Domain\Model\Pages|null $containerPage
      */
     public function getContainerPage()
     {
@@ -175,7 +175,7 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the newsletter
      *
-     * @return \RKW\RkwNewsletter\Domain\Model\Newsletter $newsletter
+     * @return \RKW\RkwNewsletter\Domain\Model\Newsletter|null $newsletter
      */
     public function getNewsletter()
     {
@@ -308,6 +308,7 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->isSpecial = $isSpecial;
     }
 
+    
     /**
      * Returns the sorting
      *

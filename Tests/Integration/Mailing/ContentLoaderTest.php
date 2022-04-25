@@ -17,6 +17,7 @@ namespace RKW\RkwNewsletter\Tests\Integration\Mailing;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use RKW\RkwNewsletter\Domain\Model\Content;
 use RKW\RkwNewsletter\Domain\Model\Issue;
+use RKW\RkwNewsletter\Domain\Model\Pages;
 use RKW\RkwNewsletter\Domain\Model\Topic;
 use RKW\RkwNewsletter\Domain\Repository\ContentRepository;
 use RKW\RkwNewsletter\Mailing\ContentLoader;
@@ -24,6 +25,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use RKW\RkwNewsletter\Domain\Repository\IssueRepository;
 use RKW\RkwNewsletter\Domain\Repository\TopicRepository;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 
 /**
@@ -57,6 +59,11 @@ class ContentLoaderTest extends FunctionalTestCase
     protected $coreExtensionsToLoad = [ ];
 
 
+    /**
+     * @var \RKW\RkwNewsletter\Mailing\ContentLoader
+     */
+    private $subject;
+    
     /**
      * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository
      */
@@ -96,6 +103,9 @@ class ContentLoaderTest extends FunctionalTestCase
                 'EXT:rkw_basics/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/setup.typoscript',
+                'EXT:rkw_basics/Configuration/TypoScript/constants.typoscript',
+                'EXT:rkw_mailer/Configuration/TypoScript/constants.typoscript',
+                'EXT:rkw_newsletter/Configuration/TypoScript/constants.typoscript',                
                 self::FIXTURE_PATH . '/Frontend/Configuration/Rootpage.typoscript',
             ]
         );
@@ -110,11 +120,62 @@ class ContentLoaderTest extends FunctionalTestCase
         $this->topicRepository = $this->objectManager->get(TopicRepository::class);
 
         /** @var \RKW\RkwNewsletter\Domain\Repository\ContentRepository contentRepository */
-        $this->contentRepository = $this->objectManager->get(ContentRepository::class);        
+        $this->contentRepository = $this->objectManager->get(ContentRepository::class);
+
+        /** @var \RKW\RkwNewsletter\Mailing\ContentLoader $subject */
+        $this->subject = $this->objectManager->get(ContentLoader::class);
 
 
     }
     
+    //=============================================
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function setIssueSetsIssueAndTopics()
+    {
+        /**
+         * Scenario:
+         *
+         * Given two persisted newsletter-objects X and Y
+         * Given a persisted issue-object M that belongs to the newsletter-object X
+         * Given a persisted issue-object N that belongs to the newsletter-object Y
+         * Given three persisted topic-objects A, B, C that belong to the newsletter-object X
+         * Given a persisted topic-object D that belongs to the newsletter-object Y
+         * Given for topic-object A there is a page-object W that belongs to the issue-object M
+         * Given for topic-object B there is a page-object X that belongs to the issue-object M
+         * Given for topic-object C there is a page-object Y that belongs to the issue-object M
+         * Given for topic-object D there is a page-object Z that belongs to the issue-object N
+         * Given the issue-object N is set via setIssue before
+         * When method is called 
+         * Then getIssue returns the issue M that has been set
+         * Then getTopics returns three topics
+         * Then these topics are the topics A, B and C of the given issue M
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check110.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issueOne */
+        $issueOne = $this->issueRepository->findByUid(110);
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issueTwo */
+        $issueTwo = $this->issueRepository->findByUid(111);
+
+        $expectedTopics = [];
+        /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
+        foreach($issueOne->getPages() as $page) {
+            $expectedTopics[] = $page->getTxRkwnewsletterTopic();
+        }
+
+        $this->subject->setIssue($issueTwo);
+        $this->subject->setIssue($issueOne);
+        
+        self::assertEquals($issueOne, $this->subject->getIssue());
+        self::assertCount(3, $this->subject->getTopics());
+        self::assertEquals($expectedTopics, $this->subject->getTopics()->toArray());
+    }
+
     //=============================================
 
     /**
@@ -133,7 +194,8 @@ class ContentLoaderTest extends FunctionalTestCase
          * Given for topic-object A there is a page-object X that belongs to the current issue-object
          * Given for topic-object B there is a page-object Y that belongs to the current issue-object
          * Given for topic-object C there is a page-object Z that belongs to the current issue-object
-         * When method is called without calling setTopics, addTopic or removeTopic before
+         * Given the issue-object is set via setIssue before
+         * When method is called 
          * Then it returns an array
          * Then the array contains three key-value-pairs
          * Then the key of topic A contains the value 0
@@ -145,11 +207,9 @@ class ContentLoaderTest extends FunctionalTestCase
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(10);
-
-        /** @var \RKW\RkwNewsletter\Mailing\ContentLoader $subject */
-        $subject = $this->objectManager->get(ContentLoader::class, $issue);
-
-        $result = $subject->getOrdering();
+        
+        $this->subject->setIssue($issue);
+        $result = $this->subject->getOrdering();
 
         self::assertInternalType('array', $result);
         self::assertCount(3, $result);
@@ -159,12 +219,14 @@ class ContentLoaderTest extends FunctionalTestCase
 
     }
 
-    
+    //=============================================
+
+
     /**
      * @test
      * @throws \Exception
      */
-    public function getTopicsReturnsAllTopics()
+    public function getTopicsReturnsAllTopicsOfIssue()
     {
         /**
          * Scenario:
@@ -176,11 +238,11 @@ class ContentLoaderTest extends FunctionalTestCase
          * Given for topic-object A there is a page-object X that belongs to the current issue-object
          * Given for topic-object B there is a page-object Y that belongs to the current issue-object
          * Given for topic-object C there is a page-object Z that belongs to the current issue-object
-         * Given setTopics, addTopic or removeTopic are not called before
+         * Given the issue-object is set via setIssue before
          * When method is called 
-         * Then it returns an array
-         * Then the array contains three topic-objects
-         * Then topic D is not part of the array
+         * Then it returns an ObjectStorage
+         * Then the ObjectStorage contains three topic-objects
+         * Then topic D is not part of the ObjectStorage
          */
         
         $this->importDataSet(static::FIXTURE_PATH . '/Database/Check10.xml');
@@ -188,14 +250,13 @@ class ContentLoaderTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(10);
 
-        /** @var \RKW\RkwNewsletter\Mailing\ContentLoader $subject */
-        $subject = $this->objectManager->get(ContentLoader::class, $issue);
+        $this->subject->setIssue($issue);
+        $result = $this->subject->getTopics();
 
-        $result = $subject->getTopics();
-
-        self::assertInternalType('array', $result);
+        self::assertInstanceOf(ObjectStorage::class, $result);
         self::assertCount(3, $result);
-        
+
+        $result = $result->toArray();
         self::assertInstanceOf(Topic::class, $result[0]);
         self::assertInstanceOf(Topic::class, $result[1]);
         self::assertInstanceOf(Topic::class, $result[2]);
@@ -221,6 +282,7 @@ class ContentLoaderTest extends FunctionalTestCase
          * Given for topic-object A there is a page-object X that belongs to the current issue-object
          * Given for topic-object B there is a page-object Y that belongs to the current issue-object
          * Given for topic-object C there is a page-object Z that belongs to the current issue-object
+         * Given the issue-object is set via setIssue before
          * When the method is called with sorting-parameter with one topic-object and one issue-object
          * Then an exception is thrown
          * Then the exception is an instance of \RKW\RkwNewsletter\Exception
@@ -234,13 +296,17 @@ class ContentLoaderTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(10);
 
-        /** @var \RKW\RkwNewsletter\Mailing\ContentLoader $subject */
-        $subject = $this->objectManager->get(ContentLoader::class, $issue);
-
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic1 */
         $topic1 = $this->topicRepository->findByUid(10);
 
-        $subject->setTopics([$topic1, GeneralUtility::makeInstance(Issue::class)]);
+        $this->subject->setIssue($issue);
+        
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($topic1);
+        $objectStorage->attach(GeneralUtility::makeInstance(Issue::class));
+        
+        $this->subject->setTopics($objectStorage);
 
     }
 
@@ -260,6 +326,7 @@ class ContentLoaderTest extends FunctionalTestCase
          * Given for topic-object A there is a page-object X that belongs to the current issue-object
          * Given for topic-object B there is a page-object Y that belongs to the current issue-object
          * Given for topic-object C there is a page-object Z that belongs to the current issue-object
+         * Given the issue-object is set via setIssue before
          * When the method is called with two topic-objects in the order topic A/topic B
          * Then getSorting returns an array 
          * Then the array contains two key-value-pairs
@@ -271,17 +338,20 @@ class ContentLoaderTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(10);
 
-        /** @var \RKW\RkwNewsletter\Mailing\ContentLoader $subject */
-        $subject = $this->objectManager->get(ContentLoader::class, $issue);
-              
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic1 */
         $topic1 = $this->topicRepository->findByUid(10);
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic2 */
         $topic2 = $this->topicRepository->findByUid(11);
         
-        $subject->setTopics([$topic1, $topic2]);
-        $result = $subject->getOrdering();
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($topic1);
+        $objectStorage->attach($topic2);
+
+        $this->subject->setIssue($issue);
+        $this->subject->setTopics($objectStorage);
+        $result = $this->subject->getOrdering();
 
         self::assertInternalType('array', $result);
         self::assertCount(2, $result);
@@ -306,6 +376,7 @@ class ContentLoaderTest extends FunctionalTestCase
          * Given for topic-object A there is a page-object X that belongs to the current issue-object
          * Given for topic-object B there is a page-object Y that belongs to the current issue-object
          * Given for topic-object C there is a page-object Z that belongs to the current issue-object
+         * Given the issue-object is set via setIssue before
          * When method is called with two topic-objects in the order topic B/topic A
          * Then getSorting returns an array
          * Then the array contains two key-value-pairs
@@ -317,17 +388,20 @@ class ContentLoaderTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(10);
 
-        /** @var \RKW\RkwNewsletter\Mailing\ContentLoader $subject */
-        $subject = $this->objectManager->get(ContentLoader::class, $issue);
-
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic1 */
         $topic1 = $this->topicRepository->findByUid(10);
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic2 */
         $topic2 = $this->topicRepository->findByUid(11);
 
-        $subject->setTopics([$topic2, $topic1]);
-        $result = $subject->getOrdering();
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($topic2);
+        $objectStorage->attach($topic1);
+        
+        $this->subject->setIssue($issue);
+        $this->subject->setTopics($objectStorage);
+        $result = $this->subject->getOrdering();
 
         self::assertInternalType('array', $result);
         self::assertCount(2, $result);
@@ -353,6 +427,7 @@ class ContentLoaderTest extends FunctionalTestCase
          * Given for topic-object B there is a page-object Y that belongs to the current issue-object
          * Given for topic-object C there is a page-object Z that belongs to the current issue-object
          * Given topic-object C is marked as special topic
+         * Given the issue-object is set via setIssue before
          * When method is called with two topic-objects in the order topic B/topic A
          * Then getSorting returns an array
          * Then the array contains three key-value-pairs
@@ -365,17 +440,20 @@ class ContentLoaderTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(80);
 
-        /** @var \RKW\RkwNewsletter\Mailing\ContentLoader $subject */
-        $subject = $this->objectManager->get(ContentLoader::class, $issue);
-
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic1 */
         $topic1 = $this->topicRepository->findByUid(80);
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic2 */
         $topic2 = $this->topicRepository->findByUid(81);
 
-        $subject->setTopics([$topic2, $topic1]);
-        $result = $subject->getOrdering();
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($topic2);
+        $objectStorage->attach($topic1);
+        
+        $this->subject->setIssue($issue);
+        $this->subject->setTopics($objectStorage);
+        $result = $this->subject->getOrdering();
 
         self::assertInternalType('array', $result);
         self::assertCount(3, $result);
@@ -402,7 +480,8 @@ class ContentLoaderTest extends FunctionalTestCase
          * Given for topic-object B there is a page-object Y that belongs to the current issue-object
          * Given for topic-object C there is a page-object Z that belongs to the current issue-object
          * Given topic-object C is marked as special topic
-         * When method is called with two topic-objects in the order topic B/topic A/topic C
+         * Given the issue-object is set via setIssue before
+         * When the method is called with two topic-objects in the order topic B/topic A/topic C
          * Then getSorting returns an array
          * Then the array contains three key-value-pairs
          * Then the key of topic B contains the value 0
@@ -414,9 +493,6 @@ class ContentLoaderTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(80);
 
-        /** @var \RKW\RkwNewsletter\Mailing\ContentLoader $subject */
-        $subject = $this->objectManager->get(ContentLoader::class, $issue);
-
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic1 */
         $topic1 = $this->topicRepository->findByUid(80);
 
@@ -426,8 +502,15 @@ class ContentLoaderTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic2 */
         $topic3 = $this->topicRepository->findByUid(82);
 
-        $subject->setTopics([$topic2, $topic1, $topic3]);
-        $result = $subject->getOrdering();
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($topic2);
+        $objectStorage->attach($topic1);
+        $objectStorage->attach($topic3);
+        
+        $this->subject->setIssue($issue);
+        $this->subject->setTopics($objectStorage);
+        $result = $this->subject->getOrdering();
 
         self::assertInternalType('array', $result);
         self::assertCount(3, $result);
@@ -468,19 +551,21 @@ class ContentLoaderTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(10);
 
-        /** @var \RKW\RkwNewsletter\Mailing\ContentLoader $subject */
-        $subject = $this->objectManager->get(ContentLoader::class, $issue);
-
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic1 */
         $topic1 = $this->topicRepository->findByUid(10);
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic2 */
         $topic2 = $this->topicRepository->findByUid(11);
 
-        $subject->setTopics([$topic2]);
-        $subject->addTopic($topic1);
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($topic2);
         
-        $result = $subject->getOrdering();
+        $this->subject->setIssue($issue);
+        $this->subject->setTopics($objectStorage);
+        $this->subject->addTopic($topic1);
+        
+        $result = $this->subject->getOrdering();
 
         self::assertInternalType('array', $result);
         self::assertCount(2, $result);
@@ -519,19 +604,21 @@ class ContentLoaderTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(80);
 
-        /** @var \RKW\RkwNewsletter\Mailing\ContentLoader $subject */
-        $subject = $this->objectManager->get(ContentLoader::class, $issue);
-
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic1 */
         $topic1 = $this->topicRepository->findByUid(80);
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic2 */
         $topic2 = $this->topicRepository->findByUid(81);
 
-        $subject->setTopics([$topic2]);
-        $subject->addTopic($topic1);
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($topic2);
+        
+        $this->subject->setIssue($issue);
+        $this->subject->setTopics($objectStorage);
+        $this->subject->addTopic($topic1);
 
-        $result = $subject->getOrdering();
+        $result = $this->subject->getOrdering();
 
         self::assertInternalType('array', $result);
         self::assertCount(3, $result);
@@ -570,19 +657,22 @@ class ContentLoaderTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(10);
 
-        /** @var \RKW\RkwNewsletter\Mailing\ContentLoader $subject */
-        $subject = $this->objectManager->get(ContentLoader::class, $issue);
-
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic1 */
         $topic1 = $this->topicRepository->findByUid(10);
         
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic2 */
         $topic2 = $this->topicRepository->findByUid(11);
-        
-        $subject->setTopics([$topic2, $topic1]);
-        $subject->removeTopic($topic2);
 
-        $result = $subject->getOrdering();
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($topic2);
+        $objectStorage->attach($topic1);
+        
+        $this->subject->setIssue($issue);
+        $this->subject->setTopics($objectStorage);
+        $this->subject->removeTopic($topic2);
+
+        $result = $this->subject->getOrdering();
 
         self::assertInternalType('array', $result);
         self::assertCount(1, $result);
@@ -619,19 +709,22 @@ class ContentLoaderTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(80);
 
-        /** @var \RKW\RkwNewsletter\Mailing\ContentLoader $subject */
-        $subject = $this->objectManager->get(ContentLoader::class, $issue);
-
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic1 */
         $topic1 = $this->topicRepository->findByUid(80);
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic2 */
         $topic2 = $this->topicRepository->findByUid(81);
 
-        $subject->setTopics([$topic2, $topic1]);
-        $subject->removeTopic($topic2);
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($topic2);
+        $objectStorage->attach($topic1);
+        
+        $this->subject->setIssue($issue);
+        $this->subject->setTopics($objectStorage);
+        $this->subject->removeTopic($topic2);
 
-        $result = $subject->getOrdering();
+        $result = $this->subject->getOrdering();
 
         self::assertInternalType('array', $result);
         self::assertCount(2, $result);
@@ -645,7 +738,7 @@ class ContentLoaderTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function getContentsReturnsSortedContentsWithTopicBFirst()
+    public function getContentsReturnsSortedContents()
     {
         /**
          * Scenario:
@@ -664,6 +757,7 @@ class ContentLoaderTest extends FunctionalTestCase
          * Given the page-object Z contains three content-objects
          * Given one of the content-objects is an editorial
          * Given setTopics is called with two topic-objects in the order topic B/topic A
+         * Given the issue-object is set via setIssue before
          * When the method is called
          * Then an array of the size of five is returned
          * Then the items are instances of \RKW\RkwNewsletter\Domain\Model\Content
@@ -677,17 +771,20 @@ class ContentLoaderTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(20);
 
-        /** @var \RKW\RkwNewsletter\Mailing\ContentLoader $subject */
-        $subject = $this->objectManager->get(ContentLoader::class, $issue);
-
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic1 */
         $topic1 = $this->topicRepository->findByUid(20);
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic2 */
         $topic2 = $this->topicRepository->findByUid(21);
         
-        $subject->setTopics([$topic2, $topic1]);
-        $result = $subject->getContents();
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($topic2);
+        $objectStorage->attach($topic1);
+        
+        $this->subject->setIssue($issue);
+        $this->subject->setTopics($objectStorage);
+        $result = $this->subject->getContents();
         
         self::assertInternalType('array', $result);
         self::assertCount(5, $result);
@@ -714,158 +811,6 @@ class ContentLoaderTest extends FunctionalTestCase
         
     }
 
-    /**
-     * @test
-     * @throws \Exception
-     */
-    public function getContentsReturnsSortedContentsWithTopicAFirst()
-    {
-        /**
-         * Scenario:
-         *
-         * Given a persisted newsletter-object
-         * Given a persisted issue-object that belongs to the newsletter-object
-         * Given three persisted topic-objects A, B and C
-         * Given this topic-objects belong to the newsletter-object
-         * Given for topic-object A there is a page-object X that belongs to the current issue-object
-         * Given for topic-object B there is a page-object Y that belongs to the current issue-object
-         * Given for topic-object C there is a page-object Z that belongs to the current issue-object
-         * Given the page-object X contains four content-objects
-         * Given one of the content-objects is an editorial
-         * Given the page-object Y contains three content-objects
-         * Given one of the content-objects is an editorial
-         * Given the page-object Z contains three content-objects
-         * Given one of the content-objects is an editorial
-         * Given setTopics is called with two topic-objects in the order topic A/topic B
-         * When the method is called
-         * Then an array of the size of five is returned
-         * Then the items are instances of \RKW\RkwNewsletter\Domain\Model\Content
-         * Then the array starts with contents of topic A
-         * Then the array is ordered in zipper-method respecting the defined order of contents (database)
-         * Then the contents marked as editorial are ignored
-         * Then no contents of topic C are included
-         */
-        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check20.xml');
-
-        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
-        $issue = $this->issueRepository->findByUid(20);
-        
-        /** @var \RKW\RkwNewsletter\Mailing\ContentLoader $subject */
-        $subject = $this->objectManager->get(ContentLoader::class, $issue);
-
-        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic1 */
-        $topic1 = $this->topicRepository->findByUid(20);
-
-        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic2 */
-        $topic2 = $this->topicRepository->findByUid(21);
-
-        $subject->setTopics([$topic1, $topic2]);
-        $result = $subject->getContents();
-
-        self::assertInternalType('array', $result);
-        self::assertCount(5, $result);
-
-        $content = $result[0];
-        self::assertInstanceOf(Content::class, $content);
-        self::assertEquals('Content 20.2', $content->getHeader());
-
-        $content = $result[1];
-        self::assertInstanceOf(Content::class, $content);
-        self::assertEquals('Content 21.2', $content->getHeader());
-
-        $content = $result[2];
-        self::assertInstanceOf(Content::class, $content);
-        self::assertEquals('Content 20.3', $content->getHeader());
-
-        $content = $result[3];
-        self::assertInstanceOf(Content::class, $content);
-        self::assertEquals('Content 21.3', $content->getHeader());
-
-        $content = $result[4];
-        self::assertInstanceOf(Content::class, $content);
-        self::assertEquals('Content 20.4', $content->getHeader());
-    }
-
-
-    /**
-     * @test
-     * @throws \Exception
-     */
-    public function getContentsReturnsSortedContentsWithSpecialTopicFirst()
-    {
-        /**
-         * Scenario:
-         *
-         * Given a persisted newsletter-object
-         * Given a persisted issue-object that belongs to the newsletter-object
-         * Given three persisted topic-objects A, B and C
-         * Given this topic-objects belong to the newsletter-object
-         * Given for topic-object A there is a page-object X that belongs to the current issue-object
-         * Given for topic-object B there is a page-object Y that belongs to the current issue-object
-         * Given for topic-object C there is a page-object Z that belongs to the current issue-object
-         * Given the topic-object C is marked as a special topic
-         * Given the page-object X contains four content-objects
-         * Given one of the content-objects is an editorial
-         * Given the page-object Y contains three content-objects
-         * Given one of the content-objects is an editorial
-         * Given the page-object Z contains three content-objects
-         * Given one of the content-objects is an editorial
-         * Given setTopics is called with two topic-objects in the order topic A/topic B
-         * When the method is called
-         * Then an array of the size of seven is returned
-         * Then the items are instances of \RKW\RkwNewsletter\Domain\Model\Content
-         * Then the array starts with contents of topic C
-         * Then the array is ordered in zipper-method respecting the defined order of contents (database)
-         * Then the contents marked as editorial are ignored
-         */
-        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check90.xml');
-
-        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
-        $issue = $this->issueRepository->findByUid(90);
-
-        /** @var \RKW\RkwNewsletter\Mailing\ContentLoader $subject */
-        $subject = $this->objectManager->get(ContentLoader::class, $issue);
-
-        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic1 */
-        $topic1 = $this->topicRepository->findByUid(90);
-
-        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic2 */
-        $topic2 = $this->topicRepository->findByUid(91);
-
-        $subject->setTopics([$topic1, $topic2]);
-        $result = $subject->getContents();
-
-        self::assertInternalType('array', $result);
-        self::assertCount(7, $result);
-
-        $content = $result[0];
-        self::assertInstanceOf(Content::class, $content);
-        self::assertEquals('Content 92.2', $content->getHeader());
-
-        $content = $result[1];
-        self::assertInstanceOf(Content::class, $content);
-        self::assertEquals('Content 90.2', $content->getHeader());
-
-        $content = $result[2];
-        self::assertInstanceOf(Content::class, $content);
-        self::assertEquals('Content 91.2', $content->getHeader());
-
-        $content = $result[3];
-        self::assertInstanceOf(Content::class, $content);
-        self::assertEquals('Content 92.3', $content->getHeader());
-
-        $content = $result[4];
-        self::assertInstanceOf(Content::class, $content);
-        self::assertEquals('Content 90.3', $content->getHeader());
-
-        $content = $result[5];
-        self::assertInstanceOf(Content::class, $content);
-        self::assertEquals('Content 91.3', $content->getHeader());
-
-        $content = $result[6];
-        self::assertInstanceOf(Content::class, $content);
-        self::assertEquals('Content 90.4', $content->getHeader());
-    }
    
 
     /**
@@ -890,6 +835,7 @@ class ContentLoaderTest extends FunctionalTestCase
          * Given one of the content-objects is an editorial
          * Given the page-object Z contains three content-objects
          * Given one of the content-objects is an editorial
+         * Given the issue-object is set via setIssue before
          * Given setTopics is called with two topic-objects in the order topic B/topic A
          * When the method is called with limit = 1
          * Then an array of the size of two is returned
@@ -906,17 +852,20 @@ class ContentLoaderTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(20);
 
-        /** @var \RKW\RkwNewsletter\Mailing\ContentLoader $subject */
-        $subject = $this->objectManager->get(ContentLoader::class, $issue);
-
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic1 */
         $topic1 = $this->topicRepository->findByUid(20);
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic2 */
         $topic2 = $this->topicRepository->findByUid(21);
 
-        $subject->setTopics([$topic2, $topic1]);
-        $result = $subject->getContents(1);
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($topic2);
+        $objectStorage->attach($topic1);
+        
+        $this->subject->setIssue($issue);
+        $this->subject->setTopics($objectStorage);
+        $result = $this->subject->getContents(1);
 
         self::assertInternalType('array', $result);
         self::assertCount(2, $result);
@@ -930,12 +879,11 @@ class ContentLoaderTest extends FunctionalTestCase
         self::assertEquals('Content 20.2', $content->getHeader());
     }
 
-
     /**
      * @test
      * @throws \Exception
      */
-    public function getContentsReturnsAllTopics()
+    public function getContentsReturnsSortedContentsAndIgnoresEmptyTopics()
     {
         /**
          * Scenario:
@@ -947,61 +895,123 @@ class ContentLoaderTest extends FunctionalTestCase
          * Given for topic-object A there is a page-object X that belongs to the current issue-object
          * Given for topic-object B there is a page-object Y that belongs to the current issue-object
          * Given for topic-object C there is a page-object Z that belongs to the current issue-object
+         * Given the page-object X contains no content-objects
+         * Given the page-object Y contains three content-objects
+         * Given one of the content-objects is an editorial
+         * Given the page-object Z contains three content-objects
+         * Given one of the content-objects is an editorial
+         * Given the issue-object is set via setIssue before
+         * Given setTopics is called with two topic-objects in the order topic A/topic B
+         * When the method is called
+         * Then an array of the size of three is returned
+         * Then the items are instances of \RKW\RkwNewsletter\Domain\Model\Content
+         * Then the array contains only contents of topic B respecting the defined order of contents (database)
+         * Then the contents marked as editorial are ignored
+         * Then no contents of topic C are included
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check40.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(40);
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic1 */
+        $topic1 = $this->topicRepository->findByUid(40);
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic2 */
+        $topic2 = $this->topicRepository->findByUid(41);
+
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($topic2);
+        $objectStorage->attach($topic1);
+        
+        $this->subject->setIssue($issue);
+        $this->subject->setTopics($objectStorage);
+        $result = $this->subject->getContents();
+
+        self::assertInternalType('array', $result);
+        self::assertCount(3, $result);
+
+        $content = $result[0];
+        self::assertInstanceOf(Content::class, $content);
+        self::assertEquals('Content 40.2', $content->getHeader());
+
+        $content = $result[1];
+        self::assertInstanceOf(Content::class, $content);
+        self::assertEquals('Content 40.3', $content->getHeader());
+
+        $content = $result[2];
+        self::assertInstanceOf(Content::class, $content);
+        self::assertEquals('Content 40.4', $content->getHeader());
+    }
+    
+    
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function getContentsReturnsSortedContentsOfAllTopicsOfIssue()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object
+         * Given a persisted issue-object that belongs to the newsletter-object
+         * Given four persisted topic-objects A, B and C
+         * Given this topic-objects belong to the newsletter-object
+         * Given for topic-object A there is a page-object X that belongs to the current issue-object
+         * Given for topic-object B there is a page-object Y that belongs to the current issue-object
+         * Given for topic-object C there is a page-object Z that does NOT belong to the current issue-object
          * Given the page-object X contains four content-objects
          * Given one of the content-objects is an editorial
          * Given the page-object Y contains three content-objects
          * Given one of the content-objects is an editorial
          * Given the page-object Z contains three content-objects
          * Given one of the content-objects is an editorial
-         * Given setTopics, addTopic or removeTopic are not called before
+         * Given the issue-object is set via setIssue before
+         * Given addTopic is called with topic C before
          * When the method is called
          * Then an array of the size of five is returned
          * Then the items are instances of \RKW\RkwNewsletter\Domain\Model\Content
          * Then the array starts with contents of topic A
          * Then the array is ordered in zipper-method respecting the defined order of contents (database)
          * Then the contents marked as editorial are ignored
-         * Then no contents of topic C are included
+         * Then the contents of topic C are ignored
          */
-        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check20.xml');
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check90.xml');
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
-        $issue = $this->issueRepository->findByUid(20);
+        $issue = $this->issueRepository->findByUid(90);
 
-        /** @var \RKW\RkwNewsletter\Mailing\ContentLoader $subject */
-        $subject = $this->objectManager->get(ContentLoader::class, $issue);
-
-        $result = $subject->getContents();
+        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic */
+        $topic = $this->topicRepository->findByUid(92);
+        
+        $this->subject->setIssue($issue);
+        $this->subject->addTopic($topic);
+        $result = $this->subject->getContents();
 
         self::assertInternalType('array', $result);
-        self::assertCount(7, $result);
+        self::assertCount(5, $result);
 
         $content = $result[0];
         self::assertInstanceOf(Content::class, $content);
-        self::assertEquals('Content 20.2', $content->getHeader());
+        self::assertEquals('Content 90.2', $content->getHeader());
 
         $content = $result[1];
         self::assertInstanceOf(Content::class, $content);
-        self::assertEquals('Content 21.2', $content->getHeader());
+        self::assertEquals('Content 91.2', $content->getHeader());
 
         $content = $result[2];
         self::assertInstanceOf(Content::class, $content);
-        self::assertEquals('Content 22.2', $content->getHeader());
+        self::assertEquals('Content 90.3', $content->getHeader());
 
         $content = $result[3];
         self::assertInstanceOf(Content::class, $content);
-        self::assertEquals('Content 20.3', $content->getHeader());
+        self::assertEquals('Content 91.3', $content->getHeader());
 
         $content = $result[4];
         self::assertInstanceOf(Content::class, $content);
-        self::assertEquals('Content 21.3', $content->getHeader());
-
-        $content = $result[5];
-        self::assertInstanceOf(Content::class, $content);
-        self::assertEquals('Content 22.3', $content->getHeader());
-
-        $content = $result[6];
-        self::assertInstanceOf(Content::class, $content);
-        self::assertEquals('Content 20.4', $content->getHeader());
+        self::assertEquals('Content 90.4', $content->getHeader());
 
     }
 
@@ -1012,7 +1022,7 @@ class ContentLoaderTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function getFirstHeadlineReturnsFirstHeadlineTopicB()
+    public function getFirstHeadlineReturnsFirstHeadline()
     {
         /**
          * Scenario:
@@ -1030,6 +1040,7 @@ class ContentLoaderTest extends FunctionalTestCase
          * Given one of the content-objects is an editorial
          * Given the page-object Z contains three content-objects
          * Given one of the content-objects is an editorial
+         * Given the issue-object is set via setIssue before
          * Given setTopics is called with two topic-objects in the order topic B/topic A
          * When the method is called
          * Then a string is returned
@@ -1041,17 +1052,20 @@ class ContentLoaderTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(20);
 
-        /** @var \RKW\RkwNewsletter\Mailing\ContentLoader $subject */
-        $subject = $this->objectManager->get(ContentLoader::class, $issue);
-
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic1 */
         $topic1 = $this->topicRepository->findByUid(20);
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic2 */
         $topic2 = $this->topicRepository->findByUid(21);
 
-        $subject->setTopics([$topic2, $topic1]);
-        $result = $subject->getFirstHeadline();
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($topic2);
+        $objectStorage->attach($topic1);
+        
+        $this->subject->setIssue($issue);
+        $this->subject->setTopics($objectStorage);
+        $result = $this->subject->getFirstHeadline();
 
         self::assertInternalType('string', $result);
         self::assertEquals('Content 21.2', $result);
@@ -1063,7 +1077,7 @@ class ContentLoaderTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function getFirstHeadlineReturnsSecondHeadlineTopicBIfFirstEmpty()
+    public function getFirstHeadlineReturnsEmptyIfFirstIsEmpty()
     {
         /**
          * Scenario:
@@ -1081,19 +1095,16 @@ class ContentLoaderTest extends FunctionalTestCase
          * Given one of the content-objects is an editorial
          * Given the page-object Z contains three content-objects
          * Given one of the content-objects is an editorial
+         * Given the issue-object is set via setIssue before
          * Given setTopics is called with two topic-objects in the order topic B/topic A
          * When the method is called
          * Then a string is returned
-         * Then the string is the headline of the first content of topic B
-         * Then the contents marked as editorial are ignored
+         * Then the string is empty
          */
         $this->importDataSet(static::FIXTURE_PATH . '/Database/Check30.xml');
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(30);
-
-        /** @var \RKW\RkwNewsletter\Mailing\ContentLoader $subject */
-        $subject = $this->objectManager->get(ContentLoader::class, $issue);
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic1 */
         $topic1 = $this->topicRepository->findByUid(30);
@@ -1101,115 +1112,21 @@ class ContentLoaderTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic2 */
         $topic2 = $this->topicRepository->findByUid(31);
 
-        $subject->setTopics([$topic2, $topic1]);
-        $result = $subject->getFirstHeadline();
-
-        self::assertInternalType('string', $result);
-        self::assertEquals('Content 31.3', $result);
-
-    }
-
-    /**
-     * @test
-     * @throws \Exception
-     */
-    public function getFirstHeadlineReturnsEmptyIfNoHeadlinesTopicB()
-    {
-        /**
-         * Scenario:
-         *
-         * Given a persisted newsletter-object
-         * Given a persisted issue-object that belongs to the newsletter-object
-         * Given three persisted topic-objects A, B and C
-         * Given this topic-objects belong to the newsletter-object
-         * Given for topic-object A there is a page-object X that belongs to the current issue-object
-         * Given for topic-object B there is a page-object Y that belongs to the current issue-object
-         * Given for topic-object C there is a page-object Z that belongs to the current issue-object
-         * Given the page-object X contains four content-objects
-         * Given one of the content-objects is an editorial
-         * Given the page-object Y contains three content-objects
-         * Given one of the content-objects is an editorial
-         * Given the page-object Z contains three content-objects
-         * Given one of the content-objects is an editorial
-         * Given setTopics is called with two topic-objects in the order topic B/topic A
-         * When the method is called
-         * Then a string is returned
-         * Then the string is the headline of the first content of topic B
-         * Then the contents marked as editorial are ignored
-         */
-        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check40.xml');
-
-        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
-        $issue = $this->issueRepository->findByUid(40);
-
-        /** @var \RKW\RkwNewsletter\Mailing\ContentLoader $subject */
-        $subject = $this->objectManager->get(ContentLoader::class, $issue);
-
-        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic1 */
-        $topic1 = $this->topicRepository->findByUid(40);
-
-        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic2 */
-        $topic2 = $this->topicRepository->findByUid(41);
-
-        $subject->setTopics([$topic2, $topic1]);
-        $result = $subject->getFirstHeadline();
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($topic2);
+        $objectStorage->attach($topic1);
+        
+        $this->subject->setIssue($issue);
+        $this->subject->setTopics($objectStorage);
+        $result = $this->subject->getFirstHeadline();
 
         self::assertInternalType('string', $result);
         self::assertEmpty($result);
 
     }
 
-    /**
-     * @test
-     * @throws \Exception
-     */
-    public function getFirstHeadlineReturnsFirstHeadlineSpecialTopic()
-    {
-        /**
-         * Scenario:
-         *
-         * Given a persisted newsletter-object
-         * Given a persisted issue-object that belongs to the newsletter-object
-         * Given three persisted topic-objects A, B and C
-         * Given this topic-objects belong to the newsletter-object
-         * Given for topic-object A there is a page-object X that belongs to the current issue-object
-         * Given for topic-object B there is a page-object Y that belongs to the current issue-object
-         * Given for topic-object C there is a page-object Z that belongs to the current issue-object
-         * Given topic-object C is marked as special
-         * Given the page-object X contains four content-objects
-         * Given one of the content-objects is an editorial
-         * Given the page-object Y contains three content-objects
-         * Given one of the content-objects is an editorial
-         * Given the page-object Z contains three content-objects
-         * Given one of the content-objects is an editorial
-         * Given setTopics is called with two topic-objects in the order topic B/topic A
-         * When the method is called
-         * Then a string is returned
-         * Then the string is the headline of the first content of topic B
-         * Then the contents marked as editorial are ignored
-         */
-        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check90.xml');
-
-        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
-        $issue = $this->issueRepository->findByUid(90);
-
-        /** @var \RKW\RkwNewsletter\Mailing\ContentLoader $subject */
-        $subject = $this->objectManager->get(ContentLoader::class, $issue);
-
-        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic1 */
-        $topic1 = $this->topicRepository->findByUid(90);
-
-        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic2 */
-        $topic2 = $this->topicRepository->findByUid(91);
-
-        $subject->setTopics([$topic2, $topic1]);
-        $result = $subject->getFirstHeadline();
-
-        self::assertInternalType('string', $result);
-        self::assertEquals('Content 92.2', $result);
-
-    }
-
+    
 
     /**
      * @test
@@ -1233,6 +1150,7 @@ class ContentLoaderTest extends FunctionalTestCase
          * Given one of the content-objects is an editorial
          * Given the page-object Z contains three content-objects
          * Given one of the content-objects is an editorial
+         * Given the issue-object is set via setIssue before
          * Given setTopics is called with topic-object B only
          * When the method is called
          * Then a string is returned
@@ -1244,61 +1162,19 @@ class ContentLoaderTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(20);
 
-        /** @var \RKW\RkwNewsletter\Mailing\ContentLoader $subject */
-        $subject = $this->objectManager->get(ContentLoader::class, $issue);
-
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic2 */
         $topic2 = $this->topicRepository->findByUid(21);
 
-        $subject->setTopics([$topic2]);
-        $result = $subject->getFirstHeadline();
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($topic2);
+        
+        $this->subject->setIssue($issue);
+        $this->subject->setTopics($objectStorage);
+        $result = $this->subject->getFirstHeadline();
 
         self::assertInternalType('string', $result);
         self::assertEquals('Content 21.2', $result);
-
-    }
-
-
-    /**
-     * @test
-     * @throws \Exception
-     */
-    public function getFirstHeadlineReturnsFirstHeadlineOfFirstTopicInConfiguration()
-    {
-        /**
-         * Scenario:
-         *
-         * Given a persisted newsletter-object
-         * Given a persisted issue-object that belongs to the newsletter-object
-         * Given three persisted topic-objects A, B and C
-         * Given this topic-objects belong to the newsletter-object
-         * Given for topic-object A there is a page-object X that belongs to the current issue-object
-         * Given for topic-object B there is a page-object Y that belongs to the current issue-object
-         * Given for topic-object C there is a page-object Z that belongs to the current issue-object
-         * Given the page-object X contains four content-objects
-         * Given one of the content-objects is an editorial
-         * Given the page-object Y contains three content-objects
-         * Given one of the content-objects is an editorial
-         * Given the page-object Z contains three content-objects
-         * Given one of the content-objects is an editorial
-         * Given setTopics, addTopic or removeTopic are not called before
-         * When the method is called
-         * Then a string is returned
-         * Then the string is the headline of the first content of the first topic in the newsletter configuration
-         * Then the contents marked as editorial are ignored even if there is only one topic given
-         */
-        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check20.xml');
-
-        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
-        $issue = $this->issueRepository->findByUid(20);
-
-        /** @var \RKW\RkwNewsletter\Mailing\ContentLoader $subject */
-        $subject = $this->objectManager->get(ContentLoader::class, $issue);
-
-        $result = $subject->getFirstHeadline();
-
-        self::assertInternalType('string', $result);
-        self::assertEquals('Content 20.2', $result);
 
     }
 
@@ -1324,6 +1200,7 @@ class ContentLoaderTest extends FunctionalTestCase
          * Given that page-object B belongs to the topic-object A
          * Given a persisted content-object C
          * Given that content-object C belongs to the page-object B
+         * Given the issue-object is set via setIssue before
          * When the method is called with content-object C as parameter
          * Then the topic-object A is returned
          */
@@ -1335,10 +1212,8 @@ class ContentLoaderTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Content $content */
         $content = $this->contentRepository->findByUid(50);
 
-        /** @var \RKW\RkwNewsletter\Mailing\ContentLoader $subject */
-        $subject = $this->objectManager->get(ContentLoader::class, $issue);
-
-        $result = $subject->getTopicOfContent($content);
+        $this->subject->setIssue($issue);
+        $result = $this->subject->getTopicOfContent($content);
 
         self::assertInstanceOf(Topic::class, $result);
         self::assertEquals(50, $result->getUid());
@@ -1362,6 +1237,7 @@ class ContentLoaderTest extends FunctionalTestCase
          * Given that page-object does not belong to the topic-object A
          * Given a persisted content-object C
          * Given that content-object C belongs to the page-object B
+         * Given the issue-object is set via setIssue before
          * When the method is called with content-object C as parameter
          * Then null is returned
          */
@@ -1373,10 +1249,8 @@ class ContentLoaderTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Content $content */
         $content = $this->contentRepository->findByUid(60);
 
-        /** @var \RKW\RkwNewsletter\Mailing\ContentLoader $subject */
-        $subject = $this->objectManager->get(ContentLoader::class, $issue);
-
-        $result = $subject->getTopicOfContent($content);
+        $this->subject->setIssue($issue);
+        $result = $this->subject->getTopicOfContent($content);
 
         self::assertNull($result);
     }
@@ -1409,7 +1283,7 @@ class ContentLoaderTest extends FunctionalTestCase
          * Given that page-object R belongs to the topic-object B
          * Given the page-object R contains three content-objects
          * Given one of the content-objects is an editorial
-         * Given setTopics, addTopic or removeTopic are not called before
+         * Given the issue-object is set via setIssue before
          * When the method is called
          * Then null is returned
          */
@@ -1419,62 +1293,13 @@ class ContentLoaderTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(70);
 
-        /** @var \RKW\RkwNewsletter\Mailing\ContentLoader $subject */
-        $subject = $this->objectManager->get(ContentLoader::class, $issue);
-
-        $result = $subject->getEditorial();
+        $this->subject->setIssue($issue);
+        $result = $this->subject->getEditorial();
 
         self::assertNull($result);
     }
 
-    /**
-     * @test
-     * @throws \Exception
-     */
-    public function getEditorialReturnsContentIfSpecialTopicAndEditorial()
-    {
-        /**
-         * Scenario:
-         *
-         * Given a persisted newsletter-object X
-         * Given a persisted issue-object Y that belongs to the newsletter-object X
-         * Given a persisted topic-object A that belongs to the newsletter-object X
-         * Given a persisted topic-object B that belongs to the newsletter-object X
-         * Given topic-object B is marked as special
-         * Given a persisted page-object Q
-         * Given that page-object Q belongs to the newsletter-object X
-         * Given that page-object Q belongs to the issue-object Y
-         * Given that page-object Q belongs to the topic-object A
-         * Given the page-object Q contains four content-objects
-         * Given none of the content-objects is an editorial
-         * Given that page-object R belongs to the newsletter-object X
-         * Given that page-object R belongs to the issue-object Y
-         * Given that page-object R belongs to the topic-object B
-         * Given the page-object R contains three content-objects
-         * Given one of the content-objects is an editorial
-         * Given setTopics is called with an empty array before
-         * When the method is called
-         * Then an object of instance \RKW\RkwNewsletter\Domain\Model\Content is returned
-         * Then this object is the editorial of the given topic B
-         */
-
-        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check100.xml');
-
-        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
-        $issue = $this->issueRepository->findByUid(100);
-
-        /** @var \RKW\RkwNewsletter\Mailing\ContentLoader $subject */
-        $subject = $this->objectManager->get(ContentLoader::class, $issue);
-
-        $subject->setTopics([]);
-
-        /** @var \RKW\RkwNewsletter\Domain\Model\Content $result */
-        $result = $subject->getEditorial();
-
-        self::assertInstanceOf(Content::class, $result);
-        self::assertEquals(1, $result->getTxRkwnewsletterIsEditorial());
-        self::assertEquals('Content 71.1', $result->getHeader());
-    }
+    
     
     /**
      * @test
@@ -1500,6 +1325,7 @@ class ContentLoaderTest extends FunctionalTestCase
          * Given that page-object R belongs to the topic-object B
          * Given the page-object R contains three content-objects
          * Given one of the content-objects is an editorial
+         * Given the issue-object is set via setIssue before
          * Given setTopics is called before with topic A only
          * When the method is called
          * Then null is returned
@@ -1512,12 +1338,14 @@ class ContentLoaderTest extends FunctionalTestCase
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic1 */
         $topic1 = $this->topicRepository->findByUid(70);
-        
-        /** @var \RKW\RkwNewsletter\Mailing\ContentLoader $subject */
-        $subject = $this->objectManager->get(ContentLoader::class, $issue);
 
-        $subject->setTopics([$topic1]);
-        $result = $subject->getEditorial();
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($topic1);        
+        
+        $this->subject->setIssue($issue);
+        $this->subject->setTopics($objectStorage);
+        $result = $this->subject->getEditorial();
 
         self::assertNull($result);
     }
@@ -1547,6 +1375,7 @@ class ContentLoaderTest extends FunctionalTestCase
          * Given that page-object R belongs to the topic-object B
          * Given the page-object R contains three content-objects
          * Given one of the content-objects is an editorial
+         * Given the issue-object is set via setIssue before
          * Given setTopics is called before with topic B only
          * When the method is called
          * Then an object of instance \RKW\RkwNewsletter\Domain\Model\Content is returned
@@ -1561,23 +1390,359 @@ class ContentLoaderTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic1 */
         $topic1 = $this->topicRepository->findByUid(71);
 
-        /** @var \RKW\RkwNewsletter\Mailing\ContentLoader $subject */
-        $subject = $this->objectManager->get(ContentLoader::class, $issue);
-
-        $subject->setTopics([$topic1]);
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($topic1);
+        
+        $this->subject->setIssue($issue);
+        $this->subject->setTopics($objectStorage);
         
         /** @var \RKW\RkwNewsletter\Domain\Model\Content $result */
-        $result = $subject->getEditorial();
+        $result = $this->subject->getEditorial();
         
         self::assertInstanceOf(Content::class, $result);
         self::assertEquals(1, $result->getTxRkwnewsletterIsEditorial());
         self::assertEquals('Content 71.1', $result->getHeader());
     }
 
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function getEditorialReturnsContentIfSpecialTopicOnlyAndEditorial()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object X
+         * Given a persisted issue-object Y that belongs to the newsletter-object X
+         * Given a persisted topic-object A that belongs to the newsletter-object X
+         * Given a persisted topic-object B that belongs to the newsletter-object X
+         * Given topic-object B is marked as special
+         * Given a persisted page-object Q
+         * Given that page-object Q belongs to the newsletter-object X
+         * Given that page-object Q belongs to the issue-object Y
+         * Given that page-object Q belongs to the topic-object A
+         * Given the page-object Q contains four content-objects
+         * Given none of the content-objects is an editorial
+         * Given that page-object R belongs to the newsletter-object X
+         * Given that page-object R belongs to the issue-object Y
+         * Given that page-object R belongs to the topic-object B
+         * Given the page-object R contains three content-objects
+         * Given one of the content-objects is an editorial
+         * Given the issue-object is set via setIssue before
+         * Given setTopics is called with an empty ObjectStorage before (= no topics set)
+         * When the method is called
+         * Then an object of instance \RKW\RkwNewsletter\Domain\Model\Content is returned
+         * Then this object is the editorial of the given topic B
+         */
+
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check100.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(100);
+
+        $this->subject->setIssue($issue);
+        $this->subject->setTopics(new ObjectStorage());
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Content $result */
+        $result = $this->subject->getEditorial();
+
+        self::assertInstanceOf(Content::class, $result);
+        self::assertEquals(1, $result->getTxRkwnewsletterIsEditorial());
+        self::assertEquals('Content 71.1', $result->getHeader());
+    }
+
+
+    //=============================================
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function getPagesReturnsRelevantPagesInTopicOrder()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object X
+         * Given a persisted issue-object Y that belongs to the newsletter-object X
+         * Given a persisted topic-object A that belongs to the newsletter-object X
+         * Given a persisted topic-object B that belongs to the newsletter-object X
+         * Given a persisted topic-object C that belongs to the newsletter-object X
+         * Given a persisted page-object Q
+         * Given that page-object Q belongs to the newsletter-object X
+         * Given that page-object Q belongs to the issue-object Y
+         * Given that page-object Q belongs to the topic-object A
+         * Given that page-object R belongs to the newsletter-object X
+         * Given that page-object R belongs to the issue-object Y
+         * Given that page-object R belongs to the topic-object B
+         * Given that page-object S belongs to the newsletter-object X
+         * Given that page-object S belongs to the issue-object Y
+         * Given that page-object S belongs to the topic-object C 
+         * Given the issue-object is set via setIssue before
+         * Given setTopics is called with topic B/topic A
+         * When the method is called
+         * Then an array is returned
+         * Then this array contains two items of \RKW\RkwNewsletter\Domain\Model\Pages
+         * Then the first item is page R
+         * Then the second item is page Q
+         */
+
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check120.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(120);
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic1 */
+        $topic1 = $this->topicRepository->findByUid(120);
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic2 */
+        $topic2 = $this->topicRepository->findByUid(121);
+
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($topic2);
+        $objectStorage->attach($topic1);
+        
+        $this->subject->setIssue($issue);
+        $this->subject->setTopics($objectStorage);
+
+        /** @var array $result */
+        $result = $this->subject->getPages();
+
+        self::assertInternalType('array', $result);
+        self::assertCount(2, $result);
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
+        $page = $result[0];
+        self::assertInstanceOf(Pages::class, $page);
+        self::assertEquals(121 , $page->getUid());
+
+        $page = $result[1];
+        self::assertInstanceOf(Pages::class, $page);
+        self::assertEquals(120, $page->getUid());
+
+    }
+
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function getPagesReturnsEmptyArray()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object X
+         * Given a persisted issue-object Y that belongs to the newsletter-object X
+         * Given a persisted topic-object A that belongs to the newsletter-object X
+         * Given a persisted topic-object B that belongs to the newsletter-object X
+         * Given a persisted topic-object C that belongs to the newsletter-object X
+         * Given a persisted page-object Q
+         * Given that page-object Q belongs to the newsletter-object X
+         * Given that page-object Q belongs to the issue-object Y
+         * Given that page-object Q belongs to the topic-object A
+         * Given that page-object R belongs to the newsletter-object X
+         * Given that page-object R belongs to the issue-object Y
+         * Given that page-object R belongs to the topic-object B
+         * Given that page-object S belongs to the newsletter-object X
+         * Given that page-object S belongs to the issue-object Y
+         * Given that page-object S belongs to the topic-object C
+         * Given the issue-object is set via setIssue before
+         * Given setTopics is called with an empty ObjectStorage (=no topics set)
+         * When the method is called
+         * Then an array is returned
+         * Then this array is empty
+         */
+
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check120.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(120);
+
+        $this->subject->setIssue($issue);
+        $this->subject->setTopics(new ObjectStorage());
+
+        /** @var array $result */
+        $result = $this->subject->getPages();
+
+        self::assertInternalType('array', $result);
+        self::assertCount(0, $result);
+
+    }
     
+    
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function getPagesReturnsIgnoresPagesWithoutTopic()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object X
+         * Given a persisted issue-object Y that belongs to the newsletter-object X
+         * Given a persisted topic-object A that belongs to the newsletter-object X
+         * Given a persisted topic-object B that belongs to the newsletter-object X
+         * Given a persisted topic-object C that belongs to the newsletter-object X
+         * Given a persisted page-object Q
+         * Given that page-object Q belongs to the newsletter-object X
+         * Given that page-object Q belongs to the issue-object Y
+         * Given that page-object Q belongs to the topic-object A
+         * Given that page-object R belongs to the newsletter-object X
+         * Given that page-object R belongs to the issue-object Y
+         * Given that page-object R belongs to no topic-object
+         * Given that page-object S belongs to the newsletter-object X
+         * Given that page-object S belongs to the issue-object Y
+         * Given that page-object S belongs to the topic-object C
+         * Given the issue-object is set via setIssue before
+         * Given setTopics is called with topic B/topic A
+         * When the method is called
+         * Then an array is returned
+         * Then this array contains one item of \RKW\RkwNewsletter\Domain\Model\Pages
+         * Then this item is page Q
+         */
+
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check130.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(130);
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic1 */
+        $topic1 = $this->topicRepository->findByUid(130);
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic2 */
+        $topic2 = $this->topicRepository->findByUid(131);
+
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($topic2);
+        $objectStorage->attach($topic1);
+        
+        $this->subject->setIssue($issue);
+        $this->subject->setTopics($objectStorage);
+
+        /** @var array $result */
+        $result = $this->subject->getPages();
+
+        self::assertInternalType('array', $result);
+        self::assertCount(1, $result);
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
+        $page = $result[0];
+        self::assertInstanceOf(Pages::class, $page);
+        self::assertEquals(131 , $page->getUid());
+
+    }
+
     
     //=============================================
-    
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function hasContentReturnsTrue()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object X
+         * Given a persisted issue-object Y that belongs to the newsletter-object X
+         * Given a persisted topic-object A that belongs to the newsletter-object X
+         * Given a persisted topic-object B that belongs to the newsletter-object X
+         * Given a persisted page-object Q
+         * Given that page-object Q belongs to the newsletter-object X
+         * Given that page-object Q belongs to the issue-object Y
+         * Given that page-object Q belongs to the topic-object A
+         * Given the page-object Q contains four content-objects
+         * Given one of the content-objects is an editorial
+         * Given that page-object R belongs to the newsletter-object X
+         * Given that page-object R belongs to the issue-object Y
+         * Given that page-object R belongs to the topic-object B
+         * Given the page-object R contains one content-object
+         * Given this content-objects is an editorial
+         * Given the issue-object is set via setIssue before
+         * Given setTopics is called with topic B/topic A
+         * When the method is called
+         * Then true returned
+         */
+
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check140.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(140);
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic1 */
+        $topic1 = $this->topicRepository->findByUid(140);
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic2 */
+        $topic2 = $this->topicRepository->findByUid(141);
+
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($topic2);
+        $objectStorage->attach($topic1);
+        
+        $this->subject->setIssue($issue);
+        $this->subject->setTopics($objectStorage);
+
+        self::assertTrue($this->subject->hasContents());
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function hasContentReturnsFalseOnEditorialOnly()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object X
+         * Given a persisted issue-object Y that belongs to the newsletter-object X
+         * Given a persisted topic-object A that belongs to the newsletter-object X
+         * Given a persisted topic-object B that belongs to the newsletter-object X
+         * Given a persisted page-object Q
+         * Given that page-object Q belongs to the newsletter-object X
+         * Given that page-object Q belongs to the issue-object Y
+         * Given that page-object Q belongs to the topic-object A
+         * Given the page-object Q contains four content-objects
+         * Given one of the content-objects is an editorial
+         * Given that page-object R belongs to the newsletter-object X
+         * Given that page-object R belongs to the issue-object Y
+         * Given that page-object R belongs to the topic-object B
+         * Given the page-object R contains one content-object
+         * Given this content-object is an editorial
+         * Given the issue-object is set via setIssue before
+         * Given setTopics is called with topic B only
+         * When the method is called
+         * Then true returned
+         */
+
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check140.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(140);
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic2 */
+        $topic2 = $this->topicRepository->findByUid(141);
+
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($topic2);
+        
+        $this->subject->setIssue($issue);
+        $this->subject->setTopics($objectStorage);
+
+        self::assertFalse($this->subject->hasContents());
+    }
+
+
+    //=============================================
+
 
     /**
      * TearDown

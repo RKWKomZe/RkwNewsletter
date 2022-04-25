@@ -47,8 +47,6 @@ call_user_func(
         //=================================================================
         // Register Hooks
         //=================================================================
-        // $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass'][$extKey] = 'RKW\\RkwNewsletter\\Hooks\\DeleteCollectionPageOfReleaseHook';
-        // $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][$extKey] = 'RKW\\RkwNewsletter\\Hooks\\ReorderApprovalsOfChangedReleaseStatusHook';
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][$extKey] = 'RKW\\RkwNewsletter\\Hooks\\ResetNewsletterConfigOnPageCopyHook';
 
         //=================================================================
@@ -57,23 +55,23 @@ call_user_func(
         /**
          * @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher $signalSlotDispatcher
          */
-        $signalSlotDispatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\SignalSlot\\Dispatcher');
+        $signalSlotDispatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class);
         $signalSlotDispatcher->connect(
-            'RKW\\RkwRegistration\\Tools\\Registration',
+            \RKW\RkwRegistration\Tools\Registration::class,
             \RKW\RkwRegistration\Tools\Registration::SIGNAL_AFTER_CREATING_OPTIN_EXISTING_USER . 'RkwNewsletter',
-            'RKW\\RkwNewsletter\\Service\\RkwMailService',
+            \RKW\RkwNewsletter\Service\RkwMailService::class,
             'sendOptInRequest'
         );
         $signalSlotDispatcher->connect(
-            'RKW\\RkwRegistration\\Tools\\Registration',
+            \RKW\RkwRegistration\Tools\Registration::class,
             \RKW\RkwRegistration\Tools\Registration::SIGNAL_AFTER_CREATING_OPTIN_USER  . 'RkwNewsletter',
-            'RKW\\RkwNewsletter\\Service\\RkwMailService',
+            \RKW\RkwNewsletter\Service\RkwMailService::class,
             'sendOptInRequest'
         );
         $signalSlotDispatcher->connect(
-            'RKW\\RkwRegistration\\Tools\\Registration',
+            \RKW\RkwRegistration\Tools\Registration::class,
             \RKW\RkwRegistration\Tools\Registration::SIGNAL_AFTER_USER_REGISTER_GRANT . 'RkwNewsletter',
-            'RKW\\RkwNewsletter\\Controller\\SubscriptionController',
+            \RKW\RkwNewsletter\Controller\SubscriptionController::class,
             'saveSubscription'
         );
 
@@ -81,28 +79,21 @@ call_user_func(
         $signalSlotDispatcher->connect(
             \RKW\RkwNewsletter\Manager\ApprovalManager::class,
             \RKW\RkwNewsletter\Manager\ApprovalManager::SIGNAL_FOR_SENDING_MAIL_APPROVAL,
-            'RKW\\RkwNewsletter\\Service\\RkwMailService',
+            \RKW\RkwNewsletter\Service\RkwMailService::class,
             'sendMailAdminApproval'
         );
         $signalSlotDispatcher->connect(
             \RKW\RkwNewsletter\Manager\ApprovalManager::class,
             \RKW\RkwNewsletter\Manager\ApprovalManager::SIGNAL_FOR_SENDING_MAIL_APPROVAL_AUTOMATIC,
-            'RKW\\RkwNewsletter\\Service\\RkwMailService',
+            \RKW\RkwNewsletter\Service\RkwMailService::class,
             'sendMailAdminApprovalAutomatic'
         );
         $signalSlotDispatcher->connect(
             \RKW\RkwNewsletter\Manager\IssueManager::class,
             \RKW\RkwNewsletter\Manager\IssueManager::SIGNAL_FOR_SENDING_MAIL_RELEASE,
-            'RKW\\RkwNewsletter\\Service\\RkwMailService',
+            \RKW\RkwNewsletter\Service\RkwMailService::class,
             'sendMailAdminRelease'
         );
-        $signalSlotDispatcher->connect(
-            'RKW\\RkwNewsletter\\Controller\\ReleaseController',
-            \RKW\RkwNewsletter\Controller\ReleaseController::SIGNAL_FOR_SENDING_MAIL_TEST,
-            'RKW\\RkwNewsletter\\Service\\RkwMailService',
-            'sendTestMail'
-        );
-
 
         //=================================================================
         // Register Logger

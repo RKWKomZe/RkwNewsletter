@@ -8,16 +8,16 @@
             <f:for each="{issue.approvals}" as="approval">
                 <tr>
                     <th>
-                        <f:translate key="partials_backend_release_list_approvals.topic" />
+                        <f:translate key="partials_backend_release_approvals_details.topic" />
                     </th>
                     <th>
-                        <f:translate key="partials_backend_release_list_approvals.approvalUser" />
+                        <f:translate key="partials_backend_release_approvals_details.approvalUser" />
                     </th>
                     <th>
-                        <f:translate key="partials_backend_release_list_approvals.approvalTime" />
+                        <f:translate key="partials_backend_release_approvals_details.approvalTime" />
                     </th>
                      <th>
-                         <f:translate key="partials_backend_release_list_approvals.actions" />
+                         <f:translate key="partials_backend_release_approvals_details.actions" />
                      </th>
                 </tr>
                 <tr>
@@ -92,7 +92,7 @@
                         <f:format.date format="d-m-Y H:i:s">{approval.allowedTstampStage1}</f:format.date>
                     </f:then>
                     <f:else>
-                        <f:translate key="partials_backend_release_list_approvals.approvalPending" />
+                        <f:translate key="partials_backend_release_approvals_details.approvalPending" />
                     </f:else>
                 </f:if>
             </f:else>
@@ -111,7 +111,7 @@
                 <f:if condition="{rkwNewsletter:backend.hasBackendUserPermission(issue: '{issue}', topic: '{approval.topic}', approvalStage: '{stage}')}">
                     <f:then>
                         <f:link.action action="approve" arguments="{approval : approval}">
-                            &gt; <f:translate key="partials_backend_release_list_approvals.approve" />
+                            &gt; <f:translate key="partials_backend_release_approvals_details.approve" />
                         </f:link.action>
                     </f:then>
                     <f:else>
@@ -122,10 +122,10 @@
             <f:else>
                 <f:if condition="{stage} == 2 && !{approval.allowedTstampStage1}">
                     <f:then>
-                        <f:translate key="partials_backend_release_list_approvals.approvalStage1Pending" />
+                        <f:translate key="partials_backend_release_approvals_details.approvalStage1Pending" />
                     </f:then>
                     <f:else>
-                        <f:translate key="partials_backend_release_list_approvals.alreadyApproved" />
+                        <f:translate key="partials_backend_release_approvals_details.alreadyApproved" />
                     </f:else>
                 </f:if>
             </f:else>

@@ -15,6 +15,7 @@ namespace RKW\RkwNewsletter\Tests\Integration\ViewHelpers\Backend;
  */
 
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
+use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -93,6 +94,9 @@ class HasBackendUserPermissionViewHelperTest extends FunctionalTestCase
                 'EXT:rkw_basics/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/setup.typoscript',
+                'EXT:rkw_basics/Configuration/TypoScript/constants.typoscript',
+                'EXT:rkw_mailer/Configuration/TypoScript/constants.typoscript',
+                'EXT:rkw_newsletter/Configuration/TypoScript/constants.typoscript',
                 self::FIXTURE_PATH . '/Frontend/Configuration/Rootpage.typoscript',
             ]
         );
@@ -129,7 +133,7 @@ class HasBackendUserPermissionViewHelperTest extends FunctionalTestCase
          *
          * Given the ViewHelper is used in a template
          * Given a persisted newsletter-object
-         * Given a peristed issue-object that belongs to the newsletter-object
+         * Given a persisted issue-object that belongs to the newsletter-object
          * Given a persisted backend-user
          * Given that backend-user has the permission to release the issue
          * Given this backend-user is logged in
@@ -163,7 +167,7 @@ class HasBackendUserPermissionViewHelperTest extends FunctionalTestCase
          *
          * Given the ViewHelper is used in a template
          * Given a persisted newsletter-object
-         * Given a peristed issue-object that belongs to the newsletter-object
+         * Given a persisted issue-object that belongs to the newsletter-object
          * Given a persisted backend-user
          * Given that backend-user has the permission to release the issue
          * Given this backend-user is logged in
@@ -198,9 +202,9 @@ class HasBackendUserPermissionViewHelperTest extends FunctionalTestCase
          *
          * Given the ViewHelper is used in a template
          * Given a persisted newsletter-object A
-         * Given a peristed issue-object A that belongs to the newsletter-object A
+         * Given a persisted issue-object A that belongs to the newsletter-object A
          * Given a persisted newsletter-object B
-         * Given a peristed issue-object B that belongs to the newsletter-object B
+         * Given a persisted issue-object B that belongs to the newsletter-object B
          * Given a persisted backend-user
          * Given that backend-user has the permission to release newsletter B
          * Given this backend-user is logged in
@@ -238,7 +242,7 @@ class HasBackendUserPermissionViewHelperTest extends FunctionalTestCase
          *
          * Given the ViewHelper is used in a template
          * Given a persisted newsletter-object
-         * Given a peristed issue-object that belongs to the newsletter-object
+         * Given a persisted issue-object that belongs to the newsletter-object
          * Given a persisted topic-object that belongs to the newsletter-object
          * Given a persisted backend-user
          * Given that backend-user has not the permission to release the issue
@@ -282,7 +286,7 @@ class HasBackendUserPermissionViewHelperTest extends FunctionalTestCase
          *
          * Given the ViewHelper is used in a template
          * Given a persisted newsletter-object
-         * Given a peristed issue-object that belongs to the newsletter-object
+         * Given a persisted issue-object that belongs to the newsletter-object
          * Given a persisted topic-object that belongs to the newsletter-object
          * Given a persisted backend-user
          * Given that backend-user has not the permission to release the issue
@@ -326,10 +330,10 @@ class HasBackendUserPermissionViewHelperTest extends FunctionalTestCase
          *
          * Given the ViewHelper is used in a template
          * Given a persisted newsletter-object A
-         * Given a peristed issue-object A that belongs to the newsletter-object A
+         * Given a persisted issue-object A that belongs to the newsletter-object A
          * Given a persisted topic-object A that belongs to the newsletter-object A
          * Given a persisted newsletter-object A
-         * Given a peristed issue-object B that belongs to the newsletter-object B
+         * Given a persisted issue-object B that belongs to the newsletter-object B
          * Given a persisted topic-object B that belongs to the newsletter-object B
          * Given a persisted backend-user
          * Given that backend-user has not the permission to release the issue of newsletter A
@@ -361,6 +365,45 @@ class HasBackendUserPermissionViewHelperTest extends FunctionalTestCase
 
         self::assertEquals(0, trim($this->standAloneViewHelper->render()));
     }
+
+    /**
+     * @test
+     * @throws \Exception
+     * @throws \TYPO3\CMS\Fluid\View\Exception\InvalidTemplateResourceException
+     */
+    public function itReturnsTrueIfUserIsAdmin()
+    {
+        /**
+         * Scenario:
+         *
+         * Given the ViewHelper is used in a template
+         * Given a persisted newsletter-object
+         * Given a persisted issue-object that belongs to the newsletter-object
+         * Given a persisted backend-user
+         * Given that backend-user has no permissions for the issue or the approvals
+         * Given this backend-user is admin
+         * Given this backend-user is logged in
+         * When the ViewHelper is rendered
+         * Then the value 1 is rendered
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check50.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(50);
+
+        $GLOBALS['BE_USER'] = GeneralUtility::makeInstance(BackendUserAuthentication::class);
+        $GLOBALS['BE_USER']->user['uid'] = 50;
+        $GLOBALS['BE_USER']->user['admin'] = 1;
+
+        $this->standAloneViewHelper->setTemplate('Check50.html');
+        $this->standAloneViewHelper->assignMultiple(
+            ['issue' => $issue]
+        );
+
+
+        self::assertEquals(1, trim($this->standAloneViewHelper->render()));
+    }
+
 
 
     //=============================================

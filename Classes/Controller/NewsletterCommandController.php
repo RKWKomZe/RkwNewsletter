@@ -14,12 +14,11 @@ namespace RKW\RkwNewsletter\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
-use \RKW\RkwBasics\Helper\Common;
-use RKW\RkwNewsletter\Mailing\ContentLoader;
 use RKW\RkwNewsletter\Manager\ApprovalManager;
 use RKW\RkwNewsletter\Manager\IssueManager;
+use TYPO3\CMS\Core\Log\Logger;
 use TYPO3\CMS\Core\Log\LogLevel;
-use TYPO3\CMS\Core\Utility\DebugUtility;
+use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -37,14 +36,6 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
 {
 
     /**
-     * newsletterRepository
-     *
-     * @var \RKW\RkwNewsletter\Domain\Repository\NewsletterRepository
-     * @inject
-     */
-    protected $newsletterRepository;
-
-    /**
      * issueRepository
      *
      * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository
@@ -54,53 +45,18 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
 
 
     /**
-     * frontendUserRepository
+     * MailProcessor
      *
-     * @var \RKW\RkwNewsletter\Domain\Repository\FrontendUserRepository
+     * @var \RKW\RkwNewsletter\Mailing\MailProcessor
      * @inject
      */
-    protected $frontendUserRepository;
-
-
-    /**
-     * pagesRepository
-     *
-     * @var \RKW\RkwNewsletter\Domain\Repository\PagesRepository
-     * @inject
-     */
-    protected $pagesRepository;
-
-
-    /**
-     * ttContentRepository
-     *
-     * @var \RKW\RkwNewsletter\Domain\Repository\ContentRepository
-     * @inject
-     */
-    protected $ttContentRepository;
-
-
-    /**
-     * queueMailRepository
-     *
-     * @var \RKW\RkwMailer\Domain\Repository\QueueMailRepository
-     * @inject
-     */
-    protected $queueMailRepository;
-
-
+    protected $mailProcessor;
+    
+    
     /**
      * @var \TYPO3\CMS\Core\Log\Logger
      */
     protected $logger;
-
-
-    /**
-     * Debug switch
-     *
-     * @const string
-     */
-    const DEBUG_TIME = false;
 
 
     /**
@@ -113,7 +69,8 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
     public function processIssuesCommand(int $tolerance = 0, int $dayOfMonth = 15): void
     {
         try {
-
+            
+// $dayOfMonth = 1;
             /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
             
@@ -179,252 +136,50 @@ $settings['reminderApprovalStage3'] = 600;
 
     
     /**
-     * function buildNewsletter
      * builds final newsletter-emails and prepares them for sending
      *
      * @param int $newsletterLimit
      * @param int $recipientsPerNewsletterLimit
      * @param float $sleep how many seconds the script should sleep after each run
      * @return void
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      */
-    public function buildNewslettersCommand($newsletterLimit = 5, $recipientsPerNewsletterLimit = 10, $sleep = 60.0)
-    {
+    public function buildNewslettersCommand(
+        int $newsletterLimit = 5, 
+        int $recipientsPerNewsletterLimit = 10, 
+        float $sleep = 60.0
+    ) {
 
         try {
 
-            self::debugTime(__LINE__, __METHOD__);
-
             $issues = $this->issueRepository->findAllToSend($newsletterLimit);
-            $settings = $this->getSettings(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
-            $settingsDefault = $this->getSettings();
-
             if (count($issues)) {
 
                 /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
                 foreach ($issues as $issue) {
-                    self::debugTime(__LINE__, __METHOD__);
 
-                    // get newsletter
-                    $newsletter = $issue->getNewsletter();
+                    $this->mailProcessor->setIssue($issue);
+                    $this->mailProcessor->sendMails($recipientsPerNewsletterLimit);
 
-                    // 1. initialize mail service and check for an existing queue mail or set one
-                    /** @var \RKW\RkwMailer\Service\MailService $mailService */
-                    $mailService = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('RKW\\RkwMailer\\Service\\MailService');
-
-                    // if queueMail exists...
-                    if ($queueMail = $issue->getQueueMail()) {
-
-                        self::debugTime(__LINE__, __METHOD__);
-
-                        // load queueMail into MailService
-                        $mailService->setQueueMail($issue->getQueueMail());
-
-                        //  Go through recipients
-                        if (count($issue->getRecipients())) {
-
-                            /** @var \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser */
-                            $cnt = 0;
-                            foreach ($issue->getRecipients() as $frontendUserUid) {
-
-                                self::debugTime(__LINE__, __METHOD__);
-                            
-                                if (! $frontendUserUid) {
-                                    continue;
-                                }
-
-                                // load frontendUser
-                                if ($frontendUser = $this->frontendUserRepository->findByUid($frontendUserUid)) {
-
-                                    if (!$mailService->hasQueueRecipient($frontendUser->getEmail())) {
-
-                                        self::debugTime(__LINE__, __METHOD__);
-
-                                        // check if hash-value exists - may be relevant for imports via MySQL
-                                        if (!$frontendUser->getTxRkwnewsletterHash()) {
-                                            $hash = sha1($frontendUser->getUid() . $frontendUser->getEmail() . rand());
-                                            $frontendUser->setTxRkwnewsletterHash($hash);
-                                            $this->frontendUserRepository->update($frontendUser);
-
-                                            $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Set new newsletter-hash for frontendUser with uid=%s.', $frontendUser->getUid()));
-                                        }
-
-                                        self::debugTime(__LINE__, __METHOD__);
-
-                                        // get subscription and shuffle order
-                                        $subscribedTopics = $frontendUser->getTxRkwnewsletterSubscription()->toArray();
-                                        $topics = shuffle($subscribedTopics);
-
-                                        // get first content-element for subject
-                                        /** @var \RKW\RkwNewsletter\Mailing\ContentLoader $contentLoader */
-                                        $contentLoader = $this->objectManager->get(ContentLoader::class, $issue);
-                                        $contentLoader->setTopics($topics);
-                                        $firstHeadline = $contentLoader->getFirstHeadline();
-                                        $subject = ($firstHeadline ? ($issue->getTitle() . ' – ' . $firstHeadline) : $issue->getTitle());
-                                        
-                                        self::debugTime(__LINE__, __METHOD__);
-  
-                                        // add it to final list
-                                        $mailService->setTo(
-                                            $frontendUser,
-                                            array(
-                                                'marker'  => array(
-                                                    'issue'             => $issue,
-                                                    'topics'            => $topics,
-                                                    'hash'              => $frontendUser->getTxRkwnewsletterHash(),
-                                                    'settings'          => $settings['settings']
-                                                ),
-                                                'subject' => $subject,
-                                            ),
-                                            true
-                                        );
-
-                                        self::debugTime(__LINE__, __METHOD__);
-
-                                        //  remove recipient from temporary list!
-                                        $issue->removeRecipients($frontendUser);
-                                        $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Prepared newsletter-mails for recipient with uid=%s for issue with uid=%s of newsletter-configuration with id=%s.', $frontendUser->getUid(), $issue->getUid(), $newsletter->getUid()));
-                                    
-
-                                    } else {
-                                        //  remove recipient from temporary list!
-                                        $issue->removeRecipients($frontendUser);
-                                        $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::WARNING, sprintf('Recipient with uid=%s for issue with uid=%s of newsletter-configuration with id=%s has already been added as recipient.', $frontendUserUid, $issue->getUid(), $newsletter->getUid()));
-                                    }
-                                } else {
-
-                                    //  remove recipient from temporary list!
-                                    $issue->removeRecipients($frontendUser);
-                                    $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::WARNING, sprintf('Recipient with uid=%s for issue with uid=%s of newsletter-configuration with id=%s could not be found.', $frontendUserUid, $issue->getUid(), $newsletter->getUid()));
-                                }
-
-                                $cnt++;
-                                if ($cnt >= $recipientsPerNewsletterLimit) {
-                                    break;
-                                }
-                            }
-
-                            self::debugTime(__LINE__, __METHOD__);
-
-                            // if sending has already been started, this only adds the new users
-                            $mailService->send();
-                            $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Prepared newsletter-mails for %s recipients for issue with id=%s of newsletter-configuration with id=%s.', $cnt, $issue->getUid(), $newsletter->getUid()));
-                            usleep(intval($sleep * 1000000));
-
-                        } else {
-
-                            self::debugTime(__LINE__, __METHOD__);
-
-                            // newsletter has been completely submitted to rkw_mailer
-                            $issue->setSentTstamp(time());
-                            $issue->setStatus(4);
-
-                            // remove pipeline flag
-                            $queueMail = $mailService->getQueueMail();
-                            $queueMail->setPipeline(false);
-                            $this->queueMailRepository->update($queueMail);
-
-                            // set timestamp
-                            $newsletter->setLastSentTstamp($issue->getSentTstamp());
-                            $this->newsletterRepository->update($newsletter);
-
-                            $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Finished preparing newsletter-mail for issue with id=%s of newsletter-configuration with id=%s.', $issue->getUid(), $newsletter->getUid()));
-                        }
-
-                    // if queueMail does not exist we have to build it first!
-                    } else {
-
-                        self::debugTime(__LINE__, __METHOD__);
-
-                        // add all relevant recipients to the list of recipients of the issue
-                        if ($newsletter->getType() == 1) {
-                            $subscribers = $this->frontendUserRepository->findAllSubscribers();
-                        } else {
-                            $subscribers = $this->frontendUserRepository->findAllSubscribersByIssue($issue);
-                        }
-
-                        /** @var \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser */
-                        foreach ($subscribers as $frontendUser) {
-                            $issue->addRecipients($frontendUser);
-                        }
-
-                        self::debugTime(__LINE__, __METHOD__);
-
-                        // set properties for queueMail
-                        /** @var \RKW\RkwMailer\Domain\Model\QueueMail $queueMail */
-                        $queueMail = $mailService->getQueueMail();
-                        $queueMail->setType(1);
-                        $queueMail->setSettingsPid($newsletter->getSettingsPage()->getUid());
-                        $queueMail->setSubject($issue->getTitle());
-
-                        // use as pipeline, so sending may start before all recipients are set
-                        $queueMail->setPipeline(true);
-                        $queueMail->setCategory('rkwNewsletter');
-
-                        $queueMail->addLayoutPaths($settings['view']['newsletter']['layoutRootPaths']);
-                        $queueMail->addTemplatePaths($settings['view']['newsletter']['templateRootPaths']);
-                        $queueMail->addPartialPaths($settings['view']['newsletter']['partialRootPaths']);
-
-                        // add paths depending on template - including the default one!
-                        $layoutPaths = $settings['view']['newsletter']['layoutRootPaths'];
-                        if (is_array($layoutPaths)) {
-                            foreach ($layoutPaths as $path) {
-                                $path = trim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-                                $queueMail->addLayoutPath($path . 'Default');
-                                if ($issue->getNewsletter()->getTemplate() != 'Default') {
-                                    $queueMail->addLayoutPath($path . $issue->getNewsletter()->getTemplate());
-                                }
-                            }
-                        }
-
-                        $partialPaths = $settings['view']['newsletter']['partialRootPaths'];
-                        if (is_array($partialPaths)) {
-                            foreach ($partialPaths as $path) {
-                                $path = trim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-                                $queueMail->addPartialPath($path . 'Default');
-                                if ($issue->getNewsletter()->getTemplate() != 'Default') {
-                                    $queueMail->addPartialPath($path . $issue->getNewsletter()->getTemplate());
-                                }
-                            }
-                        }
-
-                        $queueMail->setPlaintextTemplate($issue->getNewsletter()->getTemplate());
-                        $queueMail->setHtmlTemplate($issue->getNewsletter()->getTemplate());
-
-                        // set mail params
-                        if ($issue->getNewsletter()->getReturnPath()) {
-                            $queueMail->setReturnPath($issue->getNewsletter()->getReturnPath());
-                        }
-                        if ($issue->getNewsletter()->getReplyMail()) {
-                            $queueMail->setReplyToAddress($issue->getNewsletter()->getReplyMail());
-                        }
-                        if ($issue->getNewsletter()->getSenderMail()) {
-                            $queueMail->setFromAddress($issue->getNewsletter()->getSenderMail());
-                        }
-                        if ($issue->getNewsletter()->getSenderName()) {
-                            $queueMail->setFromName($issue->getNewsletter()->getSenderName());
-                        }
-
-                        $this->queueMailRepository->update($queueMail);
-                        $issue->setQueueMail($queueMail);
-
-                        $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Set queueMail properties and markers for issue with id=%s of newsletter-configuration with id=%s.', $issue->getUid(), $newsletter->getUid()));
-                    }
-
-                    $this->issueRepository->update($issue);
-
-                    self::debugTime(__LINE__, __METHOD__);
+                    usleep(intval($sleep * 1000000));
                 }
 
             } else {
-                $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('No issues to sent.'));
+                $this->getLogger()->log(
+                    LogLevel::INFO,
+                    sprintf(
+                        'No issues to sent.'
+                    )
+                );
             }
 
-
         } catch (\Exception $e) {
-            $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::ERROR, sprintf('An unexpected error occurred while trying to process newsletters: %s', $e->getMessage()));
+            $this->getLogger()->log(
+                LogLevel::ERROR,
+                sprintf(
+                    'An unexpected error occurred while trying to process confirmations: %s',
+                    $e->getMessage()
+                )
+            );
         }
     }
 
@@ -434,15 +189,14 @@ $settings['reminderApprovalStage3'] = 600;
      *
      * @return \TYPO3\CMS\Core\Log\Logger
      */
-    protected function getLogger()
+    protected function getLogger(): Logger
     {
 
-        if (!$this->logger instanceof \TYPO3\CMS\Core\Log\Logger) {
-            $this->logger = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Log\\LogManager')->getLogger(__CLASS__);
+        if (!$this->logger instanceof Logger) {
+            $this->logger = GeneralUtility::makeInstance(LogManager::class)->getLogger(__CLASS__);
         }
 
         return $this->logger;
-        //===
     }
 
 
@@ -453,50 +207,9 @@ $settings['reminderApprovalStage3'] = 600;
      * @return array
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
-    protected function getSettings($which = ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS)
+    protected function getSettings(string $which = ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS): array
     {
-        return Common::getTyposcriptConfiguration('Rkwnewsletter', $which);
-        //===
+        return \RKW\RkwBasics\Utility\GeneralUtility::getTyposcriptConfiguration('Rkwnewsletter', $which);
     }
-
-
-    /**
-     * Debugs a SQL query from a QueryResult
-     *
-     * @param \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $queryResult
-     * @param boolean $explainOutput
-     * @return void
-     */
-    public function debugQuery(\TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $queryResult, $explainOutput = false)
-    {
-        $GLOBALS['TYPO3_DB']->debugOutput = 2;
-        if ($explainOutput) {
-            $GLOBALS['TYPO3_DB']->explainOutput = true;
-        }
-        $GLOBALS['TYPO3_DB']->store_lastBuiltQuery = true;
-        $queryResult->toArray();
-        \TYPO3\CMS\Extbase\Utility\DebuggerUtility::var_dump($GLOBALS['TYPO3_DB']->debug_lastBuiltQuery);
-
-        $GLOBALS['TYPO3_DB']->store_lastBuiltQuery = false;
-        $GLOBALS['TYPO3_DB']->explainOutput = false;
-        $GLOBALS['TYPO3_DB']->debugOutput = false;
-    }
-
-
-    /**
-     * Does debugging of runtime
-     *
-     * @param integer $line
-     * @param string  $function
-     */
-    private static function debugTime($line, $function)
-    {
-
-        if (self::DEBUG_TIME) {
-
-            $path = PATH_site . '/typo3temp/tx_rkwnewsletter_runtime.txt';
-            file_put_contents($path, microtime() . ' ' . $line . ' ' . $function . "\n", FILE_APPEND);
-        }
-    }
-
+    
 }
