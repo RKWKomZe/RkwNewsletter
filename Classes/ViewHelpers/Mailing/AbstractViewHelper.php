@@ -14,7 +14,7 @@ namespace RKW\RkwNewsletter\ViewHelpers\Mailing;
  */
 
 use RKW\RkwNewsletter\Domain\Model\Issue;
-use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper as CoreAbstractViewHelper;
 
 /**
  * AbstractViewHelper
@@ -24,7 +24,7 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-abstract class AbstractViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
+abstract class AbstractViewHelper extends CoreAbstractViewHelper
 {
 
     /**

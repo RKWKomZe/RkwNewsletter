@@ -15,7 +15,7 @@ namespace RKW\RkwNewsletter\ViewHelpers\Backend;
  */
 
 use RKW\RkwNewsletter\Domain\Model\Issue;
-use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * GetNonSpecialTopicsViewHelper

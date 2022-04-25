@@ -14,10 +14,10 @@ namespace RKW\RkwNewsletter\ViewHelpers\Backend;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use RKW\RkwNewsletter\Domain\Repository\FrontendUserRepository;
-use RKW\RkwNewsletter\Domain\Model\Newsletter;
-use RKW\RkwNewsletter\Domain\Model\Topic;
 
 /**
  * CountSubscriptionsViewHelper
@@ -27,7 +27,7 @@ use RKW\RkwNewsletter\Domain\Model\Topic;
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class CountSubscriptionsViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
+class CountSubscriptionsViewHelper extends AbstractViewHelper
 {
 
 

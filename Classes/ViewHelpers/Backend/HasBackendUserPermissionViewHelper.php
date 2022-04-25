@@ -15,7 +15,7 @@ namespace RKW\RkwNewsletter\ViewHelpers\Backend;
  */
 
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
-use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * HasBackendUserPermissionViewHelper
