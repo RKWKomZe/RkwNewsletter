@@ -532,7 +532,6 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
      * Builds issues for all due newsletters
      *
      * @param int $tolerance
-     * @param int $dayOfMonth
      * @param int $timestampNow
      * @return bool
      * @throws Exception
@@ -541,10 +540,10 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      * @throws \TYPO3\CMS\Core\Type\Exception\InvalidEnumerationValueException
      */
-    public function buildAllIssues (int $tolerance = 0, int $dayOfMonth = 15, int $timestampNow = 0): bool
+    public function buildAllIssues (int $tolerance = 0, int $timestampNow = 0): bool
     {
 
-        $newsletterList = $this->newsletterRepository->findAllToBuildIssue($tolerance, $dayOfMonth, $timestampNow);
+        $newsletterList = $this->newsletterRepository->findAllToBuildIssue($tolerance, $timestampNow);
         if (count($newsletterList)) {
 
             /** @var \RKW\RkwNewsletter\Domain\Model\Newsletter $newsletter */

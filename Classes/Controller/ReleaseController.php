@@ -310,14 +310,23 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
 
         // send mail
-        $this->mailProcessor->sendTestMails($emails);
-            
-        $this->addFlashMessage(
-            LocalizationUtility::translate(
-                'releaseController.message.testMailSent',
-                'rkw_newsletter'
-            )
-        );
+        if ($this->mailProcessor->sendTestMails($emails)) {
+            $this->addFlashMessage(
+                LocalizationUtility::translate(
+                    'releaseController.message.testMailSent',
+                    'rkw_newsletter'
+                )
+            );
+        } else {
+            $this->addFlashMessage(
+                LocalizationUtility::translate(
+                    'releaseController.error.testMail',
+                    'rkw_newsletter'
+                ),
+                '',
+                FlashMessage::ERROR
+            );
+        }
 
         $this->redirect('testList');
     }

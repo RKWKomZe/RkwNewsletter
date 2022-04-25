@@ -402,7 +402,7 @@ class MailProcessor
                         'topics'            => $this->contentLoader->getTopics(),
                         'settings'          => $settings['settings'],
                     ),
-                    'subject' => $this->getSubject(),
+                    'subject' => 'TEST: ' . $this->getSubject(),
                 ),
                 false
             );
@@ -474,8 +474,7 @@ class MailProcessor
                 }
             }
 
-            $this->mailService->send();
-            return true;
+            return $this->mailService->send();
         }
 
         // no subscribers left? Then end current sending!
@@ -541,8 +540,7 @@ class MailProcessor
                 }
             }
 
-            $this->mailService->send();
-            return true;
+            return $this->mailService->send();
         }
         
         $this->getLogger()->log(

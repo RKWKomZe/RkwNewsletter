@@ -47,19 +47,11 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
 
     /**
-     * introduction
-     *
-     * @var string
-     */
-    protected $introduction = '';
-
-
-    /**
      * author
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwAuthors\Domain\Model\Authors>
      */
-    protected $authors  = 0;
+    protected $authors;
 
 
     /**
@@ -117,13 +109,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $priority = 0;
     
-    
-    /**
-     * type
-     *
-     * @var int
-     */
-    protected $type = 0;
+
 
     
     /**
@@ -238,7 +224,6 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->approval = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
         $this->topic = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
         $this->issue = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
-        $this->authors = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
 
     }
     
@@ -286,56 +271,6 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setName(string $name): void
     {
         $this->name = $name;
-    }
-
-    
-    
-    /**
-     * Adds an Authors
-     *
-     * @param \RKW\RkwAuthors\Domain\Model\Authors $authors
-     * @return void
-     */
-    public function addAuthors(Authors $authors): void
-    {
-        $this->authors->attach($authors);
-    }
-
-    
-    /**
-     * Removes an Authors
-     *
-     * @param \RKW\RkwAuthors\Domain\Model\Authors $authorsToRemove The Authors to be removed
-     * @return void
-     */
-    public function removeAuthors(Authors $authorsToRemove): void
-    {
-        $this->authors->detach($authorsToRemove);
-    }
-
-    
-    /**
-     * Returns the authors
-     *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwAuthors\Domain\Model\Authors> $authors
-     * @api
-     */
-    public function getAuthors(): ObjectStorage
-    {
-        return $this->authors;
-    }
-    
-
-    /**
-     * Sets the authors
-     *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwAuthors\Domain\Model\Authors> $authors
-     * @return void
-     * @api
-     */
-    public function setAuthors(ObjectStorage $authors): void
-    {
-        $this->authors = $authors;
     }
     
     
@@ -496,30 +431,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->priority = $priority;
     }
     
-
-    /**
-     * Returns the type
-     *
-     * @return int $type
-     */
-    public function getType(): int
-    {
-        return $this->type;
-    }
-    
-
-    /**
-     * Sets the type
-     *
-     * @param int $type
-     * @return void
-     */
-    public function setType(int $type): void
-    {
-        $this->type = $type;
-    }
-    
-
+   
     /**
      * Returns the template
      *

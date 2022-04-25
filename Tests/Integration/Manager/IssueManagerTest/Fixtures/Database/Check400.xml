@@ -2,69 +2,69 @@
 <dataset>
 
     <tx_rkwnewsletter_domain_model_newsletter>
-        <uid>170</uid>
+        <uid>400</uid>
         <pid>0</pid>
         <issue_title><![CDATA[Newsletter {M}/{Y}]]></issue_title>
         <topic>2</topic>
-        <rythm>4</rythm>
+        <rythm>5</rythm>
     </tx_rkwnewsletter_domain_model_newsletter>
 
     <tx_rkwnewsletter_domain_model_newsletter>
-        <uid>171</uid>
+        <uid>401</uid>
         <pid>0</pid>
         <issue_title><![CDATA[Newsletter {M}/{Y}]]></issue_title>
         <topic>2</topic>
-        <rythm>4</rythm>
+        <rythm>5</rythm>
     </tx_rkwnewsletter_domain_model_newsletter>
     
     <tx_rkwnewsletter_domain_model_topic>
-        <uid>170</uid>
+        <uid>400</uid>
         <pid>0</pid>
-        <container_page>170</container_page>
-        <newsletter>170</newsletter>
+        <container_page>400</container_page>
+        <newsletter>400</newsletter>
     </tx_rkwnewsletter_domain_model_topic>
 
     <tx_rkwnewsletter_domain_model_topic>
-        <uid>171</uid>
+        <uid>401</uid>
         <pid>0</pid>
-        <container_page>171</container_page>
-        <newsletter>170</newsletter>
+        <container_page>401</container_page>
+        <newsletter>400</newsletter>
     </tx_rkwnewsletter_domain_model_topic>
 
     <tx_rkwnewsletter_domain_model_topic>
-        <uid>172</uid>
+        <uid>402</uid>
         <pid>0</pid>
-        <container_page>172</container_page>
-        <newsletter>171</newsletter>
+        <container_page>402</container_page>
+        <newsletter>401</newsletter>
     </tx_rkwnewsletter_domain_model_topic>
 
     <tx_rkwnewsletter_domain_model_topic>
-        <uid>173</uid>
+        <uid>403</uid>
         <pid>0</pid>
-        <container_page>173</container_page>
-        <newsletter>171</newsletter>
+        <container_page>403</container_page>
+        <newsletter>401</newsletter>
     </tx_rkwnewsletter_domain_model_topic>
 
     <pages>
-        <uid>170</uid>
+        <uid>400</uid>
         <pid>1</pid>
         <title>Container One</title>
     </pages>
 
     <pages>
-        <uid>171</uid>
+        <uid>401</uid>
         <pid>1</pid>
         <title>Container Two</title>
     </pages>
     
     <pages>
-        <uid>172</uid>
+        <uid>402</uid>
         <pid>1</pid>
         <title>Container One</title>
     </pages>
 
     <pages>
-        <uid>173</uid>
+        <uid>403</uid>
         <pid>1</pid>
         <title>Container Two</title>
     </pages>

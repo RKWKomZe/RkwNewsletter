@@ -14,9 +14,6 @@
 			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.name">
 				<source>Name configuration</source>
 			</trans-unit>
-            <trans-unit id="tx_rkwnewsletter_domain_model_newsletter.authors">
-                <source>Authors</source>
-            </trans-unit>
 			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.issue_title">
 				<source>Issue Title (e.g. "RKW Newsletter {M}/{Y}" will dynamically insert month and year)</source>
 			</trans-unit>
@@ -47,12 +44,6 @@
 			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.priority.low">
 				<source>Low</source>
 			</trans-unit>
-            <trans-unit id="tx_rkwnewsletter_domain_model_newsletter.type">
-                <source>Type</source>
-            </trans-unit>
-            <trans-unit id="tx_rkwnewsletter_domain_model_newsletter.type.special">
-                <source>Special-Newsletter (send to all)</source>
-            </trans-unit>
 			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.template">
 				<source>Template</source>
 			</trans-unit>
@@ -71,12 +62,18 @@
 			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.rythm.monthly">
 				<source>Monthly</source>
 			</trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_newsletter.rythm.bimonthly">
+                <source>Bi-Monthly</source>
+            </trans-unit>
 			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.rythm.quarterly">
 				<source>Quarterly</source>
 			</trans-unit>
-			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.rythm.yearly">
-				<source>Yearly</source>
-			</trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_newsletter.rythm.semiannually">
+                <source>Semi-Annually</source>
+            </trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_newsletter.day_for_sending">
+                <source>Day of Month for Mailing</source>
+            </trans-unit>    
 			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.approval">
 				<source>Final Approval for Sending</source>
 			</trans-unit>
@@ -175,7 +172,10 @@
 			</trans-unit>
             <trans-unit id="tx_rkwnewsletter_domain_model_issue.introduction">
                 <source>Editorial for more than one topic (overrides default text)</source>
-            </trans-unit>			
+            </trans-unit>	
+            <trans-unit id="tx_rkwnewsletter_domain_model_issue.authors">
+                <source>Authors</source>
+            </trans-unit>            		
 			<trans-unit id="tx_rkwnewsletter_domain_model_issue.status">
 				<source>Status</source>
 			</trans-unit>

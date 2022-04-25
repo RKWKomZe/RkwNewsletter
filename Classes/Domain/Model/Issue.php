@@ -14,6 +14,7 @@ namespace RKW\RkwNewsletter\Domain\Model;
  * The TYPO3 project - inspiring people to share!
  */
 
+use RKW\RkwAuthors\Domain\Model\Authors;
 use RKW\RkwMailer\Domain\Model\QueueMail;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
@@ -51,6 +52,14 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var string
      */
     protected $introduction = '';
+
+
+    /**
+     * author
+     *
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwAuthors\Domain\Model\Authors>
+     */
+    protected $authors;
     
     
     /**
@@ -156,6 +165,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->pages = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
         $this->approvals = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $this->authors = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
 
     }
 
@@ -228,7 +238,57 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->introduction = $introduction;
     }
 
-    
+
+    /**
+     * Adds an Authors
+     *
+     * @param \RKW\RkwAuthors\Domain\Model\Authors $authors
+     * @return void
+     */
+    public function addAuthors(Authors $authors): void
+    {
+        $this->authors->attach($authors);
+    }
+
+
+    /**
+     * Removes an Authors
+     *
+     * @param \RKW\RkwAuthors\Domain\Model\Authors $authorsToRemove The Authors to be removed
+     * @return void
+     */
+    public function removeAuthors(Authors $authorsToRemove): void
+    {
+        $this->authors->detach($authorsToRemove);
+    }
+
+
+    /**
+     * Returns the authors
+     *
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwAuthors\Domain\Model\Authors> $authors
+     * @api
+     */
+    public function getAuthors(): ObjectStorage
+    {
+        return $this->authors;
+    }
+
+
+    /**
+     * Sets the authors
+     *
+     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwAuthors\Domain\Model\Authors> $authors
+     * @return void
+     * @api
+     */
+    public function setAuthors(ObjectStorage $authors): void
+    {
+        $this->authors = $authors;
+    }
+
+
+
     /**
      * Returns the newsletter
      *

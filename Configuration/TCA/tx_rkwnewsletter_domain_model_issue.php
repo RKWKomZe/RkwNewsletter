@@ -8,15 +8,14 @@ return [
 		'crdate' => 'crdate',
 		'cruser_id' => 'cruser_id',
 		'dividers2tabs' => true,
-
-		'searchFields' => 'name, introduction, status, pages, newsletter, pages_approval, allowed_by_user, info_tstamp, reminder_tstamp, allowed_tstamp, sent_tstamp',
+		'searchFields' => 'name, introduction, authors, status, pages, newsletter, pages_approval, allowed_by_user, info_tstamp, reminder_tstamp, allowed_tstamp, sent_tstamp',
 		'iconfile' => 'EXT:rkw_newsletter/Resources/Public/Icons/tx_rkwnewsletter_domain_model_issue.gif'
 	],
 	'interface' => [
-		'showRecordFieldList' => 'title, introduction, status, sent_tstamp',
+		'showRecordFieldList' => 'title, introduction, authors, status, sent_tstamp',
 	],
 	'types' => [
-		'1' => ['showitem' => 'title, introduction, status, sent_tstamp'],
+		'1' => ['showitem' => 'title, introduction, authors, status, sent_tstamp'],
 	],
 	'palettes' => [
 		'1' => ['showitem' => ''],
@@ -43,6 +42,19 @@ return [
                 'enableRichtext' => true
             ],
         ],
+        'authors' => [
+            'exclude' => false,
+            'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_issue.authors',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectMultipleSideBySide',
+                'foreign_table' => 'tx_rkwauthors_domain_model_authors',
+                'foreign_table_where' => 'AND tx_rkwauthors_domain_model_authors.internal = 1 AND ((\'###PAGE_TSCONFIG_IDLIST###\' <> \'0\' AND FIND_IN_SET(tx_rkwauthors_domain_model_authors.pid,\'###PAGE_TSCONFIG_IDLIST###\')) OR (\'###PAGE_TSCONFIG_IDLIST###\' = \'0\')) AND tx_rkwauthors_domain_model_authors.sys_language_uid = ###REC_FIELD_sys_language_uid### ORDER BY tx_rkwauthors_domain_model_authors.last_name ASC',
+                'maxitems'      => 1,
+                'minitems'      => 0,
+                'size'          => 5,
+            ]
+        ],        
 		'status' => [
 			'exclude' => false,
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_issue.status',
