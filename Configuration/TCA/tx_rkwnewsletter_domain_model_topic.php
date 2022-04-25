@@ -18,10 +18,10 @@ return [
 		'iconfile' => 'EXT:rkw_newsletter/Resources/Public/Icons/tx_rkwnewsletter_domain_model_topic.gif'
 	],
 	'interface' => [
-		'showRecordFieldList' => 'hidden, name, approval_stage1, approval_stage2, container_page, primary_color, primary_color_editorial, secondary_color, secondary_color_editorial, is_special',
+		'showRecordFieldList' => 'hidden, name, approval_stage1, approval_stage2, container_page, is_special',
 	],
 	'types' => [
-		'1' => ['showitem' => 'name, approval_stage1, approval_stage2, container_page, primary_color, primary_color_editorial, secondary_color, secondary_color_editorial, is_special, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, hidden,--palette--;;1, starttime, endtime'],
+		'1' => ['showitem' => 'name, approval_stage1, approval_stage2, container_page, is_special, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, hidden,--palette--;;1, starttime, endtime'],
 	],
 	'palettes' => [
 		'1' => ['showitem' => ''],
@@ -130,55 +130,6 @@ return [
                 'softref' => 'typolink'
             ],
         ],
-
-        'primary_color' => [
-            'exclude' => false,
-            'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_topic.primary_color',
-            'config' => [
-                'type' => 'input',
-                'renderType' => 'colorpicker',
-                'size' => 10,
-                'eval' => 'trim,required',
-                'default' => '#e64415',
-            ],
-        ],
-
-        'primary_color_editorial' => [
-            'exclude' => false,
-            'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_topic.primary_color_editorial',
-            'config' => [
-                'type' => 'input',
-                'renderType' => 'colorpicker',
-                'size' => 10,
-                'eval' => 'trim,required',
-                'default' => '#e64415',
-            ],
-        ],
-
-        'secondary_color' => [
-            'exclude' => false,
-            'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_topic.secondary_color',
-            'config' => [
-                'type' => 'input',
-                'renderType' => 'colorpicker',
-                'size' => 10,
-                'eval' => 'trim,required',
-                'default' => '#333333',
-            ],
-        ],
-
-        'secondary_color_editorial' => [
-            'exclude' => false,
-            'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_topic.secondary_color_editorial',
-            'config' => [
-                'type' => 'input',
-                'renderType' => 'colorpicker',
-                'size' => 10,
-                'eval' => 'trim,required',
-                'default' => '#333333',
-            ],
-        ],
-
         'is_special' => [
             'exclude' => false,
             'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_topic.is_special',

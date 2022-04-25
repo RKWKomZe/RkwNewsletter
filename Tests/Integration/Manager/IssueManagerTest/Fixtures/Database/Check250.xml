@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+
+    <tx_rkwnewsletter_domain_model_newsletter>
+        <uid>250</uid>
+        <pid>0</pid>
+        <issue_title><![CDATA[Newsletter {M}/{Y}]]></issue_title>
+        <issue>1</issue>
+        <approval>250,251</approval>
+    </tx_rkwnewsletter_domain_model_newsletter>
+
+    <tx_rkwnewsletter_domain_model_issue>
+        <uid>250</uid>
+        <pid>0</pid>
+        <newsletter>250</newsletter>
+        <status>2</status>
+    </tx_rkwnewsletter_domain_model_issue>
+
+    <be_users>
+        <uid>250</uid>
+        <pid>1</pid>
+        <email>test</email>
+    </be_users>
+
+    <be_users>
+        <uid>251</uid>
+        <pid>1</pid>
+        <email>test1@rkw.de</email>
+    </be_users>
+</dataset>

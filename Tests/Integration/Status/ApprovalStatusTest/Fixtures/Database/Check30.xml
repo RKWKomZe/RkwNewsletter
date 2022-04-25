@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+
+    <tx_rkwnewsletter_domain_model_approval>
+        <uid>30</uid>
+        <pid>0</pid>
+        <issue>0</issue>
+        <allowed_tstamp_stage1>0</allowed_tstamp_stage1>
+        <allowed_tstamp_stage2>0</allowed_tstamp_stage2>
+    </tx_rkwnewsletter_domain_model_approval>
+</dataset>

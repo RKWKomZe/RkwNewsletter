@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+
+    <sys_file>
+        <uid>80</uid>
+        <pid>0</pid>
+        <type>0</type>
+        <storage>0</storage>
+        <extension>jpg</extension>
+        <mime_type>image/jpeg</mime_type>
+        <name>test.jpg</name>
+        <identifier>test.jpg</identifier>
+    </sys_file>
+    
+    <sys_file_reference>
+        <uid>80</uid>
+        <pid>0</pid>
+        <uid_local>80</uid_local>
+        <uid_foreign>80</uid_foreign>
+        <tablenames>pages</tablenames>
+        <fieldname>txRkwbasicsTeaserImage</fieldname>
+        <table_local>sys_file</table_local>
+    </sys_file_reference>
+    
+    <pages>
+        <uid>80</uid>
+        <pid>1</pid>
+        <title>Test-Title</title>
+        <tx_rkwbasics_teaser_image>1</tx_rkwbasics_teaser_image>
+    </pages>
+    
+    <tt_content>
+        <uid>80</uid>
+        <pid>1</pid>
+        <image>0</image>
+    </tt_content>
+
+    <tt_content>
+        <uid>81</uid>
+        <pid>1</pid>
+        <image>0</image>
+    </tt_content>
+</dataset>

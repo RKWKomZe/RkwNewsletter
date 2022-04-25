@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+
+    <tx_rkwnewsletter_domain_model_issue>
+        <uid>70</uid>
+        <pid>0</pid>
+        <status>4</status>
+        <pages>1</pages>
+    </tx_rkwnewsletter_domain_model_issue>
+
+    <tx_rkwnewsletter_domain_model_topic>
+        <uid>70</uid>
+        <pid>0</pid>
+    </tx_rkwnewsletter_domain_model_topic>
+
+    <tx_rkwnewsletter_domain_model_approval>
+        <uid>70</uid>
+        <pid>0</pid>
+        <issue>70</issue>
+        <topic>70</topic>
+        <allowed_tstamp_stage1>0</allowed_tstamp_stage1>
+        <allowed_tstamp_stage2>0</allowed_tstamp_stage2>
+        <sent_info_tstamp_stage1>0</sent_info_tstamp_stage1>
+        <sent_info_tstamp_stage2>0</sent_info_tstamp_stage2>
+        <sent_reminder_tstamp_stage1>0</sent_reminder_tstamp_stage1>
+        <sent_reminder_tstamp_stage2>0</sent_reminder_tstamp_stage2>
+    </tx_rkwnewsletter_domain_model_approval>
+
+    <pages>
+        <uid>70</uid>
+        <pid>1</pid>
+        <title>Use</title>
+        <doktype>1</doktype>
+        <tx_rkwnewsletter_newsletter>0</tx_rkwnewsletter_newsletter>
+        <tx_rkwnewsletter_topic>70</tx_rkwnewsletter_topic>
+        <tx_rkwnewsletter_issue>70</tx_rkwnewsletter_issue>
+    </pages>
+</dataset>

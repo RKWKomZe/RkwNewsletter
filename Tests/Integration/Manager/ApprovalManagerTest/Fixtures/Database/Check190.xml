@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+
+    <pages>
+        <uid>190</uid>
+        <pid>0</pid>
+        <tx_rkwnewsletter_issue>190</tx_rkwnewsletter_issue>
+        <tx_rkwnewsletter_topic>190</tx_rkwnewsletter_topic>
+    </pages>
+
+    <tx_rkwnewsletter_domain_model_issue>
+        <uid>190</uid>
+        <pid>0</pid>
+        <status>1</status>
+    </tx_rkwnewsletter_domain_model_issue>
+    
+    <tx_rkwnewsletter_domain_model_topic>
+        <uid>190</uid>
+        <pid>0</pid>
+        <container_page>0</container_page>
+        <newsletter>0</newsletter>
+        <approval_stage1>190</approval_stage1>
+        <approval_stage2>191</approval_stage2>
+    </tx_rkwnewsletter_domain_model_topic>
+
+    <tx_rkwnewsletter_domain_model_approval>
+        <uid>190</uid>
+        <pid>0</pid>
+        <issue>190</issue>
+        <topic>190</topic>
+        <page>190</page>
+        <allowed_tstamp_stage1>0</allowed_tstamp_stage1>
+        <allowed_tstamp_stage2>0</allowed_tstamp_stage2>
+        <sent_info_tstamp_stage1>1000</sent_info_tstamp_stage1>
+        <sent_info_tstamp_stage2>0</sent_info_tstamp_stage2>
+        <sent_reminder_tstamp_stage1>1000</sent_reminder_tstamp_stage1>
+        <sent_reminder_tstamp_stage2>0</sent_reminder_tstamp_stage2>
+    </tx_rkwnewsletter_domain_model_approval>
+
+    <be_users>
+        <uid>190</uid>
+        <pid>1</pid>
+        <email>test@rkw.de</email>
+    </be_users>
+
+    <be_users>
+        <uid>191</uid>
+        <pid>1</pid>
+        <email>test1@rkw.de</email>
+    </be_users>
+</dataset>

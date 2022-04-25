@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+
+    <tx_rkwnewsletter_domain_model_newsletter>
+        <uid>100</uid>
+        <pid>0</pid>
+        <issue_title><![CDATA[Newsletter {M}/{Y}]]></issue_title>
+        <topic>1</topic>
+    </tx_rkwnewsletter_domain_model_newsletter>
+
+    <tx_rkwnewsletter_domain_model_topic>
+        <uid>100</uid>
+        <pid>0</pid>
+        <container_page>0</container_page>
+        <newsletter>100</newsletter>
+    </tx_rkwnewsletter_domain_model_topic>
+
+    <pages>
+        <uid>100</uid>
+        <pid>1</pid>
+        <title>Container</title>
+    </pages>
+    
+    <pages>
+        <uid>101</uid>
+        <pid>1</pid>
+        <title>Use</title>
+        <doktype>1</doktype>
+        <tx_rkwnewsletter_newsletter>100</tx_rkwnewsletter_newsletter>
+        <tx_rkwnewsletter_topic>100</tx_rkwnewsletter_topic>
+        <tx_rkwbasics_teaser_image>1</tx_rkwbasics_teaser_image>
+    </pages>
+
+    <sys_file>
+        <uid>100</uid>
+        <pid>0</pid>
+        <type>0</type>
+        <storage>0</storage>
+        <extension>jpg</extension>
+        <mime_type>image/jpeg</mime_type>
+        <name>test.jpg</name>
+        <identifier>test.jpg</identifier>
+    </sys_file>
+    
+    <sys_file_reference>
+        <uid>100</uid>
+        <pid>0</pid>
+        <uid_local>100</uid_local>
+        <uid_foreign>101</uid_foreign>
+        <tablenames>pages</tablenames>
+        <fieldname>txRkwBasicsTeaserImage</fieldname>
+        <table_local>sys_file</table_local>
+    </sys_file_reference>
+
+</dataset>

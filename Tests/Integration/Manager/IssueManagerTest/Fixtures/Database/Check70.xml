@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+
+    <tx_rkwnewsletter_domain_model_newsletter>
+        <uid>70</uid>
+        <pid>0</pid>
+        <issue_title><![CDATA[Newsletter {M}/{Y}]]></issue_title>
+        <issue>1</issue>
+        <topic>1</topic>
+        <sys_language_uid>0</sys_language_uid>
+    </tx_rkwnewsletter_domain_model_newsletter>
+
+    <tx_rkwnewsletter_domain_model_issue>
+        <uid>70</uid>
+        <pid>0</pid>
+        <newsletter>70</newsletter>
+    </tx_rkwnewsletter_domain_model_issue>
+
+    <tx_rkwnewsletter_domain_model_topic>
+        <uid>70</uid>
+        <pid>0</pid>
+        <container_page>1</container_page>
+        <newsletter>70</newsletter>
+    </tx_rkwnewsletter_domain_model_topic>
+    
+    <tx_rkwauthors_domain_model_authors>
+        <uid>70</uid>
+        <pid>0</pid>
+    </tx_rkwauthors_domain_model_authors>
+
+    <tx_rkwauthors_pages_authors_mm>
+        <uid_local>71</uid_local>
+        <uid_foreign>70</uid_foreign>
+    </tx_rkwauthors_pages_authors_mm>
+    
+    <pages>
+        <uid>70</uid>
+        <pid>1</pid>
+        <title>Container</title>
+    </pages>
+
+    <pages>
+        <uid>71</uid>
+        <pid>1</pid>
+        <title>Test-Title</title>
+        <abstract>An abstract abstract</abstract>
+        <tx_rkwnewsletter_teaser_heading>Header</tx_rkwnewsletter_teaser_heading>
+        <tx_rkwnewsletter_teaser_text>Text</tx_rkwnewsletter_teaser_text>
+        <tx_rkwnewsletter_teaser_Link>http://www.google.de</tx_rkwnewsletter_teaser_Link>
+        <tx_rkwauthors_authorship>1</tx_rkwauthors_authorship>
+    </pages>
+</dataset>

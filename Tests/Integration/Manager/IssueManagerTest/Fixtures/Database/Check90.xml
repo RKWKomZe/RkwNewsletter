@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+
+    <tx_rkwnewsletter_domain_model_newsletter>
+        <uid>90</uid>
+        <pid>0</pid>
+        <issue_title><![CDATA[Newsletter {M}/{Y}]]></issue_title>
+        <topic>1</topic>
+    </tx_rkwnewsletter_domain_model_newsletter>
+
+    <tx_rkwnewsletter_domain_model_topic>
+        <uid>90</uid>
+        <pid>0</pid>
+        <container_page>0</container_page>
+        <newsletter>90</newsletter>
+    </tx_rkwnewsletter_domain_model_topic>
+
+    <pages>
+        <uid>90</uid>
+        <pid>1</pid>
+        <title>Container</title>
+    </pages>
+
+    <pages>
+        <uid>91</uid>
+        <pid>1</pid>
+        <title>Hidden</title>
+        <doktype>1</doktype>
+        <hidden>1</hidden>
+        <tx_rkwnewsletter_newsletter>90</tx_rkwnewsletter_newsletter>
+        <tx_rkwnewsletter_topic>90</tx_rkwnewsletter_topic>
+    </pages>
+
+    <pages>
+        <uid>92</uid>
+        <pid>1</pid>
+        <title>Excluded</title>
+        <doktype>1</doktype>
+        <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <tx_rkwnewsletter_newsletter>90</tx_rkwnewsletter_newsletter>
+        <tx_rkwnewsletter_topic>90</tx_rkwnewsletter_topic>
+    </pages>
+
+    <pages>
+        <uid>93</uid>
+        <pid>1</pid>
+        <title>Used</title>
+        <doktype>1</doktype>
+        <tx_rkwnewsletter_include_tstamp>1</tx_rkwnewsletter_include_tstamp>
+        <tx_rkwnewsletter_newsletter>90</tx_rkwnewsletter_newsletter>
+        <tx_rkwnewsletter_topic>90</tx_rkwnewsletter_topic>
+    </pages>
+
+    <pages>
+        <uid>94</uid>
+        <pid>1</pid>
+        <title>Used</title>
+        <doktype>1</doktype>
+        <tx_rkwnewsletter_include_tstamp>1</tx_rkwnewsletter_include_tstamp>
+        <tx_rkwnewsletter_newsletter>90</tx_rkwnewsletter_newsletter>
+        <tx_rkwnewsletter_topic>90</tx_rkwnewsletter_topic>
+    </pages>
+
+    <pages>
+        <uid>95</uid>
+        <pid>1</pid>
+        <title>Use One</title>
+        <doktype>1</doktype>
+        <tx_rkwnewsletter_newsletter>90</tx_rkwnewsletter_newsletter>
+        <tx_rkwnewsletter_topic>90</tx_rkwnewsletter_topic>
+    </pages>
+
+    <pages>
+        <uid>96</uid>
+        <pid>1</pid>
+        <title>Use Two</title>
+        <doktype>1</doktype>
+        <tx_rkwnewsletter_newsletter>90</tx_rkwnewsletter_newsletter>
+        <tx_rkwnewsletter_topic>90</tx_rkwnewsletter_topic>
+    </pages>
+    
+    <pages>
+        <uid>97</uid>
+        <pid>1</pid>
+        <title>Wrong Topic</title>
+        <tx_rkwnewsletter_newsletter>90</tx_rkwnewsletter_newsletter>
+        <tx_rkwnewsletter_topic>0</tx_rkwnewsletter_topic>
+    </pages>
+    
+</dataset>

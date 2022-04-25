@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+
+    <tx_rkwnewsletter_domain_model_newsletter>
+        <uid>180</uid>
+        <pid>0</pid>
+        <issue_title><![CDATA[Newsletter {M}/{Y}]]></issue_title>
+        <issue>1</issue>
+        <topic>2</topic>
+        <sender_name>Test</sender_name>
+        <sender_mail>test@testen.de</sender_mail>
+        <reply_mail>reply@testen.de</reply_mail>
+        <return_path>return@testen.de</return_path>
+        <settings_page>2</settings_page>
+    </tx_rkwnewsletter_domain_model_newsletter>
+    
+    
+    <tx_rkwnewsletter_domain_model_issue>
+        <uid>180</uid>
+        <pid>0</pid>
+        <newsletter>180</newsletter>
+        <pages>2</pages>
+        <title>Test</title>
+    </tx_rkwnewsletter_domain_model_issue>
+    
+    
+    <tx_rkwnewsletter_domain_model_topic>
+        <uid>180</uid>
+        <pid>0</pid>
+        <container_page>1</container_page>
+        <name>Topic 160</name>
+        <newsletter>180</newsletter>
+    </tx_rkwnewsletter_domain_model_topic>
+
+    <tx_rkwnewsletter_domain_model_topic>
+        <uid>181</uid>
+        <pid>0</pid>
+        <name>Topic 161</name>
+        <container_page>1</container_page>
+        <newsletter>180</newsletter>
+    </tx_rkwnewsletter_domain_model_topic>
+    
+    
+    <pages>
+        <uid>180</uid>
+        <pid>1</pid>
+        <title>One</title>
+        <tx_rkwnewsletter_newsletter>180</tx_rkwnewsletter_newsletter>
+        <tx_rkwnewsletter_issue>180</tx_rkwnewsletter_issue>
+        <tx_rkwnewsletter_topic>180</tx_rkwnewsletter_topic>
+        <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <no_search>1</no_search>
+    </pages>
+
+    <pages>
+        <uid>181</uid>
+        <pid>1</pid>
+        <title>One</title>
+        <tx_rkwnewsletter_newsletter>180</tx_rkwnewsletter_newsletter>
+        <tx_rkwnewsletter_issue>180</tx_rkwnewsletter_issue>
+        <tx_rkwnewsletter_topic>181</tx_rkwnewsletter_topic>
+        <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <no_search>1</no_search>
+    </pages>
+
+    <tt_content>
+        <uid>180</uid>
+        <pid>180</pid>
+        <header>Content 160.4</header>
+        <bodytext>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</bodytext>        
+        <sorting>4</sorting>
+    </tt_content>
+
+    <tt_content>
+        <uid>181</uid>
+        <pid>180</pid>
+        <header>Content 160.3</header>
+        <bodytext>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</bodytext>
+        <sorting>18</sorting>
+    </tt_content>
+
+    <tt_content>
+        <uid>182</uid>
+        <pid>180</pid>
+        <header>Content 160.2</header>
+        <bodytext>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</bodytext>
+        <sorting>2</sorting>
+    </tt_content>
+
+    <tt_content>
+        <uid>183</uid>
+        <pid>180</pid>
+        <header>Content 160.1</header>
+        <bodytext>Test the editorial 160</bodytext>
+        <sorting>1</sorting>
+        <tx_rkwnewsletter_is_editorial>1</tx_rkwnewsletter_is_editorial>
+    </tt_content>
+    
+    <tt_content>
+        <uid>184</uid>
+        <pid>181</pid>
+        <header>Content 161.3</header>
+        <bodytext>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</bodytext>
+        <sorting>18</sorting>
+    </tt_content>
+
+    <tt_content>
+        <uid>185</uid>
+        <pid>181</pid>
+        <header>Content 161.2</header>
+        <bodytext>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</bodytext>
+        <sorting>2</sorting>
+    </tt_content>
+
+    <tt_content>
+        <uid>186</uid>
+        <pid>181</pid>
+        <header>Content 161.1</header>
+        <bodytext>Test the editorial 161</bodytext>
+        <sorting>1</sorting>
+        <tx_rkwnewsletter_is_editorial>1</tx_rkwnewsletter_is_editorial>
+    </tt_content>
+    
+
+    <fe_users>
+        <uid>180</uid>
+        <pid>0</pid>
+        <email>test@teste.de</email>
+        <first_name>Clemens</first_name>
+        <last_name>Mustermann</last_name>
+        <tx_rkwregistration_gender>0</tx_rkwregistration_gender>
+        <tx_rkwnewsletter_subscription>180,161</tx_rkwnewsletter_subscription>
+        <tx_rkwnewsletter_hash>HashMeIfYouCan</tx_rkwnewsletter_hash>
+        <tx_rkwregistration_language_key>de</tx_rkwregistration_language_key>
+    </fe_users>
+    
+</dataset>

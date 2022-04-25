@@ -81,6 +81,9 @@
 			<trans-unit id="releaseController.message.testMailSent">
 				<source>Wohoo! The test-E-mail has been sent successfully.</source>
 			</trans-unit>
+            <trans-unit id="releaseController.message.issueCreated">
+                <source>Wohoo! A special edition was successfully created.</source>
+            </trans-unit>
 			<trans-unit id="releaseController.message.sendingStarted">
 				<source>Wohoo! The newsletter issue has been successfully released for dispatch..</source>
 			</trans-unit>
@@ -157,68 +160,23 @@
 			<!-- Backend Templates -->
 			<!-- ##################### -->
 			<!-- Templates/Backend/Release/List.html -->
-			<trans-unit id="templates_backend_release_list">
-				<source>Open Approvals for %s</source>
+			<trans-unit id="templates_backend_release_confirmationList">
+				<source>Open Approvals</source>
 			</trans-unit>
-			<trans-unit id="templates_backend_release_list.description">
-				<source>Here you will find all newsletters for which you still have to give editorial approval. Only when all approvals have been granted can the newsletter actually be sent.</source>
+			<trans-unit id="templates_backend_release_confirmationList.description">
+				<source>Here you will find all newsletters for which still an editorial approval is missing. Only when all approvals have been granted can the newsletter actually be sent.</source>
 			</trans-unit>
-			<trans-unit id="templates_backend_release_list.approvalsStage1">
+			<trans-unit id="templates_backend_release_confirmationList.approvalsStage1">
 				<source>Approvals Stage 1</source>
 			</trans-unit>
-			<trans-unit id="templates_backend_release_list.approvalsStage2">
+			<trans-unit id="templates_backend_release_confirmationList.approvalsStage2">
 				<source>Approvals Stage 2</source>
 			</trans-unit>
-			<trans-unit id="templates_backend_release_list.stage1">
+			<trans-unit id="templates_backend_release_confirmationList.startable">
+				<source>Issues ready to start</source>
+			</trans-unit>				
+			<trans-unit id="templates_backend_release_confirmationList.stage1">
 				<source>Stage 1</source>
-			</trans-unit>
-
-
-			<!-- Backend/Partials/Release/Issues.html -->
-			<trans-unit id="tx_rkwnewsletter_backend_partials_release_issues.title">
-				<source>Title</source>
-			</trans-unit>
-			<trans-unit id="tx_rkwnewsletter_backend_partials_release_issues.approvals">
-				<source>Approvals</source>
-			</trans-unit>
-			<trans-unit id="tx_rkwnewsletter_backend_partials_release_issues.globalActions">
-				<source>Global Actions</source>
-			</trans-unit>
-			<trans-unit id="tx_rkwnewsletter_backend_partials_release_issues.actions">
-				<source>Actions</source>
-			</trans-unit>
-            <trans-unit id="tx_rkwnewsletter_backend_partials_release_issues.deferIssue">
-				<source>Defer issue</source>
-			</trans-unit>
-			<trans-unit id="tx_rkwnewsletter_backend_partials_release_issues.noIssuesWaiting">
-				<source>No issue is waiting for release.</source>
-			</trans-unit>
-
-
-			<!-- Backend/Partials/Release/Approval.html -->
-			<trans-unit id="tx_rkwnewsletter_backend_partials_release_approval.topic">
-				<source>Topic</source>
-			</trans-unit>
-			<trans-unit id="tx_rkwnewsletter_backend_partials_release_approval.actions">
-				<source>Actions</source>
-			</trans-unit>
-			<trans-unit id="tx_rkwnewsletter_backend_partials_release_approval.approvalPending">
-				<source>Pending</source>
-			</trans-unit>
-			<trans-unit id="tx_rkwnewsletter_backend_partials_release_approval.approvalStage1Pending">
-				<source>Stage 1 still pending</source>
-			</trans-unit>
-			<trans-unit id="tx_rkwnewsletter_backend_partials_release_approval.alreadyApproved">
-				<source>Already Approved</source>
-			</trans-unit>
-			<trans-unit id="tx_rkwnewsletter_backend_partials_release_approval.approvalUser">
-				<source>User</source>
-			</trans-unit>
-            <trans-unit id="tx_rkwnewsletter_backend_partials_release_approval.approvalTime">
-                <source>Time</source>
-            </trans-unit>
-			<trans-unit id="tx_rkwnewsletter_backend_partials_release_approval.approve">
-				<source>Approve now</source>
 			</trans-unit>
 
 
@@ -227,27 +185,47 @@
 				<source>Test</source>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_testList.description">
-				<source>Here you will find all newsletter issues for which you are registered as the responsible editor. Here you can send a test to your e-mail address. You can decide whether the test mailing should cover all topics or only the topics for which you are registered as an editor.</source>
+				<source>Here you can initiate a test dispatch for newsletter issues that have not yet been sent to your e-mail address. You can decide whether the test mailing should include all or only selected topics.</source>
 			</trans-unit>
+            <trans-unit id="templates_backend_release_testList.id">
+                <source>ID</source>
+            </trans-unit>
 			<trans-unit id="templates_backend_release_testList.title">
 				<source>Subject (is prepended to automatically set subject)</source>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_testList.email">
 				<source>E-Mail</source>
 			</trans-unit>
-			<trans-unit id="templates_backend_release_testList.deliveryMyTopics">
-				<source>Test delivery single topics</source>
-			</trans-unit>
-			<trans-unit id="templates_backend_release_testList.deliveryAllTopics">
-				<source>Test delivery all topics</source>
+			<trans-unit id="templates_backend_release_testList.deliveryTopics">
+				<source>Topics for test delivery</source>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_testList.go">
 				<source>Go!</source>
 			</trans-unit>
-			<trans-unit id="templates_backend_release_testList.pleaseSelect">
-				<source>Please select</source>
+			<trans-unit id="templates_backend_release_testList.all">
+				<source>All</source>
 			</trans-unit>
+			
 
+	        <!-- Templates/Backend/Release/CreateIssueList.html -->
+            <trans-unit id="templates_backend_release_createIssueList">
+                <source>Create Special-Issue manually</source>
+            </trans-unit>
+            <trans-unit id="templates_backend_release_createIssueList.description">
+                <source>Here you can create a special edition for a newsletter that can be started outside the regular mailing cycle.</source>
+            </trans-unit>
+            <trans-unit id="templates_backend_release_createIssueList.title">
+                <source>Newsletter-Configuration</source>
+            </trans-unit>
+            <trans-unit id="templates_backend_release_createIssueList.topics">
+                <source>Topics for the special-edition</source>
+            </trans-unit>
+            <trans-unit id="templates_backend_release_createIssueList.go">
+                <source>Go!</source>
+            </trans-unit>
+            <trans-unit id="templates_backend_release_createIssueList.all">
+                <source>All</source>
+            </trans-unit>
 
 
             <!-- Templates/Backend/Release/sendList.html -->
@@ -257,6 +235,9 @@
 			<trans-unit id="templates_backend_release_sendList.description">
 				<source>Here you will find all newsletter issues which you can start as responsible editor.</source>
 			</trans-unit>
+            <trans-unit id="templates_backend_release_sendList.id">
+                <source>ID</source>
+            </trans-unit>
 			<trans-unit id="templates_backend_release_sendList.title">
 				<source>Subject (is prepended to automatically set subject)</source>
 			</trans-unit>
@@ -281,17 +262,14 @@
 			<trans-unit id="templates_backend_release_sendConfirm.description">
 				<source>Please confirm below the dispatch of the selected newsletter. Please also check the subject of the newsletter and adjust it if necessary. Please note that the dispatch is staggered, i.e. the recipients may receive the newsletter at different times.</source>
 			</trans-unit>
+            <trans-unit id="templates_backend_release_sendConfirm.id">
+                <source>ID</source>
+            </trans-unit>
 			<trans-unit id="templates_backend_release_sendConfirm.title">
 				<source>Subject (is prepended to automatically set subject)</source>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_sendConfirm.subscriptions">
 				<source>Subscription</source>
-			</trans-unit>
-			<trans-unit id="templates_backend_release_sendConfirm.subscriptionsAll">
-				<source>All</source>
-			</trans-unit>
-			<trans-unit id="templates_backend_release_sendConfirm.subscriptionsAmong">
-				<source>among them</source>
 			</trans-unit>
 			<trans-unit id="templates_backend_release_sendConfirm.go">
 				<source>I am sure: Go!</source>
@@ -301,22 +279,166 @@
 			</trans-unit>
 
 
+
+
+            <!-- ##################### -->
+			<!-- Backend Partials -->
+			<!-- ##################### -->
+            <!-- Partials/Backend/Release/Subscriptions.html -->
+            <trans-unit id="partials_backend_release_subscriptions.subscriptionsAll">
+                <source>All</source>
+                <target>Gesamt</target>
+            </trans-unit>
+            <trans-unit id="partials_backend_release_subscriptions.subscriptionsAmong">
+                <source>among them</source>
+                <target>darunter</target>
+            </trans-unit>
+
+
+			<!-- Partials/Backend/Release/Approvals.html -->
+            <trans-unit id="partials_backend_release_approvals.id">
+                <source>ID</source>
+            </trans-unit>
+			<trans-unit id="partials_backend_release_approvals.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="partials_backend_release_approvals.approvals">
+				<source>Approvals</source>
+			</trans-unit>
+			<trans-unit id="partials_backend_release_approvals.globalActions">
+				<source>Global Actions</source>
+			</trans-unit>
+			<trans-unit id="partials_backend_release_approvals.actions">
+				<source>Actions</source>
+			</trans-unit>
+            <trans-unit id="partials_backend_release_approvals.deferIssue">
+				<source>Defer issue</source>
+			</trans-unit>
+			<trans-unit id="partials_backend_release_approvals.noIssuesWaiting">
+				<source>No issue is waiting for release.</source>
+			</trans-unit>
+
+
+			<!-- Partials/Backend/Release/ReadyToStart.html -->
+            <trans-unit id="partials_backend_release_readyToStart.id">
+                <source>ID</source>
+            </trans-unit>
+            <trans-unit id="partials_backend_release_readyToStart.title">
+                <source>Title</source>
+            </trans-unit>
+            <trans-unit id="partials_backend_release_readyToStart.actions">
+                <source>Actions</source>
+            </trans-unit>
+            <trans-unit id="partials_backend_release_readyToStart.deferIssue">
+                <source>Defer issue</source>
+            </trans-unit>
+            <trans-unit id="partials_backend_release_readyToStart.noIssuesWaiting">
+                <source>No issue is are waiting for start.</source>
+            </trans-unit>
+
+
+			<!-- Partials/Backend/Release/List/Approval.html -->
+			<trans-unit id="partials_backend_release_approvals_details.topic">
+				<source>Topic</source>
+			</trans-unit>
+			<trans-unit id="partials_backend_release_approvals_details.actions">
+				<source>Actions</source>
+			</trans-unit>
+			<trans-unit id="partials_backend_release_approvals_details.approvalPending">
+				<source>Pending</source>
+			</trans-unit>
+			<trans-unit id="partials_backend_release_approvals_details.approvalStage1Pending">
+				<source>Stage 1 still pending</source>
+			</trans-unit>
+			<trans-unit id="partials_backend_release_approvals_details.alreadyApproved">
+				<source>Already Approved</source>
+			</trans-unit>
+			<trans-unit id="partials_backend_release_approvals_details.approvalUser">
+				<source>User</source>
+			</trans-unit>
+            <trans-unit id="partials_backend_release_approvals_details.approvalTime">
+                <source>Time</source>
+            </trans-unit>
+			<trans-unit id="partials_backend_release_approvals_details.approve">
+				<source>Approve now</source>
+			</trans-unit>
+
+
+
 			<!-- ##################### -->
 			<!-- Newsletter Templates -->
 			<!-- ##################### -->
-			<trans-unit id="partials_newsletter_main.headline">
+            <!-- Partials/Newsletter/*/Body.html -->
+			<trans-unit id="partials_newsletter_body.headline">
 				<source>Hello</source>
 			</trans-unit>
-			<trans-unit id="partials_newsletter_main.introduction">
+			<trans-unit id="partials_newsletter_body.fallback">
+				<source>Hello</source>
+			</trans-unit>
+			
+			
+			<!-- Partials/Newsletter/*/Body/Editorial/Content.html -->
+			<trans-unit id="partials_newsletter_body_editorial_content.introduction">
 				<source>below you will find news about projects, publications and events of the RKW Competence Center. We hope you enjoy reading the current issue of our newsletter!</source>
 			</trans-unit>
-            <trans-unit id="partials_newsletter_main.topics">
-                <source>You have subscribed to the following topics</source>
+			
+			
+            <!-- Partials/Newsletter/*/Body/Editorial/Contact.html -->
+            <trans-unit id="partials_newsletter_body_editorial_contact.contact">
+                <source>Contact:</source>
             </trans-unit>
-            <trans-unit id="partials_newsletter_main.topicChange">
-                <source>Change</source>
-            </trans-unit>
+            
 
+            <!-- Partials/Newsletter/*/Body/Items/Default/Contact.html -->
+            <trans-unit id="partials_newsletter_body_items_default_contact.contact">
+                <source>Contact:</source>
+            </trans-unit> 
+            
+            
+            <!-- Partials/Newsletter/*/Body/Items/Default/Contact.html -->
+            <trans-unit id="partials_newsletter_body_items_default_content.contact">
+                <source>Contact:</source>
+            </trans-unit> 
+            
+
+            <!-- Partials/Newsletter/*/Body/Items/Default/Separator.html -->
+            <trans-unit id="partials_newsletter_body_items_separator.headline">
+                <source>Recent topics</source>
+            </trans-unit>                
+                       
+		
+			<!-- Partials/Newsletter/*/Body/Items/More.html -->
+			<trans-unit id="partials_newsletter_body_items_more.readMore">
+				<source>Read more</source>
+				<target>Mehr lesen</target>
+			</trans-unit>
+			
+
+            <!-- Partials/Newsletter/*/Global/Header.html -->
+            <trans-unit id="partials_newsletter_global_header.problems1">
+                <source>Having problems with the presentation?</source>
+            </trans-unit>	
+            <trans-unit id="partials_newsletter_global_header.problems2">
+                <source>Click here</source>
+            </trans-unit>	   
+            
+
+			<!-- Partials/Newsletter/*/Global/Footer.html -->
+            <trans-unit id="partials_newsletter_global_footer.subscriptionHeadline">
+				<source>Your Subscription</source>
+			</trans-unit>			
+            <trans-unit id="partials_newsletter_global_footer.subscriptionTopics">
+				<source>You have subscribed to the following topics:</source>
+			</trans-unit>				
+            <trans-unit id="partials_newsletter_global_footer.subscriptionText">
+				<source>Are you interested in further topics or would you like to unsubscribe? No problem!</source>
+			</trans-unit>
+            <trans-unit id="partials_newsletter_global_footer.subscriptionLink">
+				<source>Click here to change your subscription.</source>
+			</trans-unit>
+            <trans-unit id="partials_newsletter_global_footer.specialTopic">
+				<source>Default</source>
+			</trans-unit>	
 
 
 			<!-- ##################### -->

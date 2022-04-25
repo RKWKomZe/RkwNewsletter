@@ -44,7 +44,7 @@ plugin.tx_rkwnewsletter {
         # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Pid for subscriptions
         subscriptionPid =
 
-        # cat=plugin.tx_rkwnewsletter//a; type=integer; label=TypeNum for webview of newsletter
+        # cat=plugin.tx_rkwnewsletter//a; type=integer; label=TypeNum for webview for newsletter
         webViewPageNum = 1536732477
 
         # cat=plugin.tx_rkwnewsletter//a; type=string; label=Required fields for subscription
@@ -55,7 +55,9 @@ plugin.tx_rkwnewsletter {
 
         # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Minimum teaser length
         maxTeaserLength = 900
-
+        
+        # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Maximum number of content items per newsletter-issue
+        maxContentItems = 10
 
         pages {
             # permissions for pages elements
@@ -114,7 +116,6 @@ plugin.tx_rkwnewsletter {
                 }
             }
         }
-
 	}
 }
 

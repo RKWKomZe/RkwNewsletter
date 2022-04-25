@@ -1,0 +1,8 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:rkwNewsletter="http://typo3.org/ns/RKW/RkwNewsletter/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+    <f:variable name="editorial" value="{rkwNewsletter:mailing.content.getEditorial(issue: issue, topics: topics)}" />
+    {editorial.header}
+    
+</html>
