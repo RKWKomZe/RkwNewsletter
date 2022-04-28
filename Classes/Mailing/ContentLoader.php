@@ -202,7 +202,7 @@ class ContentLoader
             return (bool) $this->contentRepository->countByPagesAndLanguage(
                 $pages,
                 ($this->issue->getNewsletter()? $this->issue->getNewsletter()->getSysLanguageUid(): 0),
-                false
+                true
             );
         }
 

@@ -1696,7 +1696,7 @@ class ContentLoaderTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function hasContentReturnsFalseOnEditorialOnly()
+    public function hasContentReturnsTrueOnEditorialOnly()
     {
         /**
          * Scenario:
@@ -1737,7 +1737,7 @@ class ContentLoaderTest extends FunctionalTestCase
         $this->subject->setIssue($issue);
         $this->subject->setTopics($objectStorage);
 
-        self::assertFalse($this->subject->hasContents());
+        self::assertTrue($this->subject->hasContents());
     }
 
 
