@@ -124,8 +124,9 @@ CREATE TABLE tx_rkwnewsletter_domain_model_issue (
 	info_tstamp int(11) unsigned DEFAULT '0',
 	reminder_tstamp int(11) unsigned DEFAULT '0',
 	release_tstamp int(11) unsigned DEFAULT '0',
+	start_tstamp int(11) unsigned DEFAULT '0',
 	sent_tstamp int(11) unsigned DEFAULT '0',
-	sent_offset int(11) unsigned DEFAULT '0',
+	recipients text NOT NULL,
 	is_special int(1) unsigned DEFAULT '0' NOT NULL,
 
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,

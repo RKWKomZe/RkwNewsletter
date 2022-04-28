@@ -74,13 +74,11 @@ class FrontendUserRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * findSubscriptionsByNewsletter
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Newsletter $newsletter
-     * @param int $offset
-     * @param int $limit
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      * @comment implicitly tested
      */
-    public function findSubscriptionsByNewsletter(Newsletter $newsletter, int $offset = 0, int $limit = 0): QueryResultInterface
+    public function findSubscriptionsByNewsletter(Newsletter $newsletter): QueryResultInterface
     {
 
         $query = $this->createQuery();
@@ -91,13 +89,6 @@ class FrontendUserRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             )
         );
 
-        if ($offset) {
-            $query->setOffset($offset);
-        }
-        if ($limit) {
-            $query->setLimit($limit);
-        }
-        
         // we take the uid here in order to be able to work with offset properly!
         $query->setOrderings(
             ['uid' => QueryInterface::ORDER_ASCENDING]
