@@ -99,22 +99,22 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
         try {
             
             $settings = $this->getSettings(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
-
+            
             /** @var  \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
 
             /** @var \RKW\RkwNewsletter\Manager\ApprovalManager $approvalManager */
             $approvalManager = $objectManager->get(ApprovalManager::class);
             $approvalManager->processAllConfirmations(
-                intval($settings['reminderApprovalStage1']),
-                intval($settings['reminderApprovalStage2']),
-                intval($settings['automaticApprovalStage1']),
-                intval($settings['automaticApprovalStage2'])
+                intval($settings['settings']['reminderApprovalStage1']),
+                intval($settings['settings']['reminderApprovalStage2']),
+                intval($settings['settings']['automaticApprovalStage1']),
+                intval($settings['settings']['automaticApprovalStage2'])
             );
 
             /** @var \RKW\RkwNewsletter\Manager\IssueManager $issueManager */
             $issueManager = $objectManager->get(IssueManager::class);
-            $issueManager->processAllConfirmations($settings['reminderApprovalStage3']);
+            $issueManager->processAllConfirmations(intval($settings['settings']['reminderApprovalStage3']));
 
         } catch (\Exception $e) {
             $this->getLogger()->log(

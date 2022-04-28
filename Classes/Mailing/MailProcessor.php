@@ -14,6 +14,7 @@ namespace RKW\RkwNewsletter\Mailing;
  * The TYPO3 project - inspiring people to share!
  */
 
+use RKW\RkwMailer\Utility\QueueMailUtility;
 use RKW\RkwNewsletter\Domain\Model\FrontendUser;
 use RKW\RkwNewsletter\Domain\Model\Issue;
 use RKW\RkwNewsletter\Exception;
@@ -392,7 +393,7 @@ class MailProcessor
                 [
                     'fistName' => 'Maxima',
                     'lastName' => 'Musterfrau',
-                    'tx_rkwregistration_gender' => 1,
+                    'txRkwregistrationGender' => 1,
                     'title' => 'Prof. Dr. Dr.',
                     'email' => $email
                 ],
@@ -474,8 +475,10 @@ class MailProcessor
                 }
             }
 
-            // will return true only when status = draft - and since it's called multiple times...
-            $this->mailService->send();
+            if ($this->mailService->getQueueMail()->getStatus() == QueueMailUtility::STATUS_DRAFT) {
+                return $this->mailService->send();
+            }
+            
             return true;
         }
 
