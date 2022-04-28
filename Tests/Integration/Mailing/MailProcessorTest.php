@@ -1566,6 +1566,7 @@ class MailProcessorTest extends FunctionalTestCase
          * Given a persisted issue-object Y that belongs to the newsletter-object X
          * Given a persisted topic-object A that belongs to the newsletter-object X
          * Given a persisted topic-object B that belongs to the newsletter-object X
+         * Given a persisted topic-object C that belongs to the newsletter-object X
          * Given topic B is marked as special
          * Given a persisted page-object Q
          * Given that page-object Q belongs to the newsletter-object X
@@ -1578,7 +1579,7 @@ class MailProcessorTest extends FunctionalTestCase
          * Given the page-object R contains three content-objects
          * Given one of the content-objects is an editorial
          * Given a persisted frontendUser
-         * Given that frontendUser has subscribed to topic A
+         * Given that frontendUser has subscribed to topic A and C
          * Given that frontendUser has a valid email set
          * Given the frontendUser has no names set
          * Given that frontendUser has a subscription-hash set
@@ -1589,8 +1590,8 @@ class MailProcessorTest extends FunctionalTestCase
          * Then a queueRecipient-object is created
          * Then the mailCache for plaintext contains all contents of topic B
          * Then the mailCache for html contains all contents of topic B
-         * Then the mailCache for plaintext does not contain the editorial of topic B
-         * Then the mailCache for html does not contain the editorial of topic B
+         * Then the mailCache for plaintext contains the editorial of topic B
+         * Then the mailCache for html contains the editorial of topic B
          */
         $this->importDataSet(static::FIXTURE_PATH . '/Database/Check240.xml');
 
@@ -1606,13 +1607,12 @@ class MailProcessorTest extends FunctionalTestCase
         /** @var \RKW\RkwMailer\Domain\Model\QueueRecipient $queueRecipient */
         $queueRecipient = $this->queueRecipientRepository->findByUid(1);
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
-        
 
-        self::assertNotContains(
+        self::assertContains(
             'Test the editorial 241',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertNotContains(
+        self::assertContains(
             'Test the editorial 241',
             $this->mailCache->getHtmlBody($queueRecipient)
         );

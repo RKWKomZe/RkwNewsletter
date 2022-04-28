@@ -86,6 +86,39 @@ class ContentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $query->execute();
     }
 
+
+    /**
+     * countByPageAndLanguageUid
+     *
+     * @param \RKW\RkwNewsletter\Domain\Model\Pages $page
+     * @param int $languageUid
+     * @param bool $includeEditorials
+     * @return int
+     * @comment implicitly tested
+     */
+    public function countByPageAndLanguage(
+        Pages $page,
+        int $languageUid = 0,
+        bool $includeEditorials = false
+    ): int {
+
+        $query = $this->createQuery();
+        $constraints = [
+            $query->equals('pid', $page),
+            $query->equals('sysLanguageUid', $languageUid)
+        ];
+
+        if (! $includeEditorials) {
+            $constraints[] = $query->equals('txRkwnewsletterIsEditorial', 0);
+        }
+
+        $query->matching(
+            $query->logicalAnd($constraints)
+        );
+        
+        return $query->execute()->count();
+    }
+    
     
     /**
      * countByPagesAndLanguageUid

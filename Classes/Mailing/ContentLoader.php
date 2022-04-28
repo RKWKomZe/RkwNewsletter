@@ -208,7 +208,36 @@ class ContentLoader
 
         return false;
     }
-        
+
+
+    /**
+     * Counts the topics with contents
+     *
+     * @return int
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     */
+    public function countTopicsWithContents (): int
+    {
+
+        $cnt = 0;
+        if ($pages = $this->getPages()) {
+            foreach ($pages as $page) {
+
+                // get contents for topic 
+                $contentCount = $this->contentRepository->countByPageAndLanguage(
+                    $page,
+                    ($this->issue->getNewsletter() ? $this->issue->getNewsletter()->getSysLanguageUid() : 0),
+                    false
+                );
+                
+                if ($contentCount) {
+                    $cnt++;
+                }
+            }
+        }
+
+        return $cnt;
+    }
 
     /**
      * Get all contents as a zip-merged array by topics
@@ -332,18 +361,18 @@ class ContentLoader
         return null;
     }
 
-    
 
     /**
      * Get editorial if content contains an editorial
      *
      * @return \RKW\RkwNewsletter\Domain\Model\Content|null
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      */
     public function getEditorial()
     {
         
-        // always empty if more than one topic is set
-        if (count($this->ordering) > 1) {
+        // always empty if we have more than one topic with contents
+        if ($this->countTopicsWithContents() > 1) {
             return null;
         }
 
