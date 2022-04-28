@@ -8,14 +8,14 @@ return [
 		'crdate' => 'crdate',
 		'cruser_id' => 'cruser_id',
 		'dividers2tabs' => true,
-		'searchFields' => 'name, introduction, authors, status, pages, newsletter, pages_approval, allowed_by_user, info_tstamp, reminder_tstamp, allowed_tstamp, sent_tstamp',
+		'searchFields' => 'name, introduction, authors, status, pages, newsletter, pages_approval, allowed_by_user, info_tstamp, reminder_tstamp, allowed_tstamp, start_tstamp, sent_tstamp',
 		'iconfile' => 'EXT:rkw_newsletter/Resources/Public/Icons/tx_rkwnewsletter_domain_model_issue.gif'
 	],
 	'interface' => [
-		'showRecordFieldList' => 'title, introduction, authors, status, sent_tstamp',
+		'showRecordFieldList' => 'title, introduction, authors, status, start_tstamp, sent_tstamp',
 	],
 	'types' => [
-		'1' => ['showitem' => 'title, introduction, authors, status, sent_tstamp'],
+		'1' => ['showitem' => 'title, introduction, authors, status, start_tstamp, sent_tstamp'],
 	],
 	'palettes' => [
 		'1' => ['showitem' => ''],
@@ -111,6 +111,18 @@ return [
                 'readOnly' => true
             ],
         ],
+        'start_tstamp' => [
+            'exclude' => false,
+            'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_issue.start_tstamp',
+            'config' => [
+                'type' => 'input',
+                'renderType' => 'inputDateTime',
+                'size' => 10,
+                'eval' => 'datetime',
+                'checkbox' => true,
+                'readOnly' => true
+            ],
+        ],        
         'sent_tstamp' => [
             'exclude' => false,
             'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_issue.sent_tstamp',
@@ -189,7 +201,7 @@ return [
                 ],
             ],
         ],
-        'sent_offset' => [
+        'recipients' => [
             'config' => [
                 'type' => 'passthrough',
             ],
@@ -211,5 +223,6 @@ return [
                 'foreign_table' => 'tx_rkwmailer_domain_model_queuemail',
             ],
         ],
+        
 	],
 ];

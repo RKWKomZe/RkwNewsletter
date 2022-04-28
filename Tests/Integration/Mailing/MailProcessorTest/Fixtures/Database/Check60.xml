@@ -7,6 +7,10 @@
         <issue_title><![CDATA[Newsletter {M}/{Y}]]></issue_title>
         <issue>1</issue>
         <topic>2</topic>
+        <sender_name>Test</sender_name>
+        <sender_mail>test@testen.de</sender_mail>
+        <reply_mail>reply@testen.de</reply_mail>
+        <return_path>return@testen.de</return_path>
     </tx_rkwnewsletter_domain_model_newsletter>
 
     
@@ -15,6 +19,7 @@
         <pid>0</pid>
         <newsletter>60</newsletter>
         <title>Tester</title>
+        <status>3</status>
     </tx_rkwnewsletter_domain_model_issue>
 
     

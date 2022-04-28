@@ -19,6 +19,7 @@ use RKW\RkwMailer\Cache\MailCache;
 use RKW\RkwMailer\Domain\Model\QueueRecipient;
 use RKW\RkwMailer\Domain\Repository\QueueMailRepository;
 use RKW\RkwMailer\Domain\Repository\QueueRecipientRepository;
+use RKW\RkwMailer\Utility\QueueMailUtility;
 use RKW\RkwNewsletter\Domain\Model\FrontendUser;
 use RKW\RkwNewsletter\Domain\Model\Issue;
 use RKW\RkwNewsletter\Domain\Model\Newsletter;
@@ -586,7 +587,7 @@ class MailProcessorTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function getSubscribersThrowsExceptionIfNoIssueSet()
+    public function setRecipientsThrowsExceptionIfNoIssueSet()
     {
         /**
          * Scenario:
@@ -601,30 +602,34 @@ class MailProcessorTest extends FunctionalTestCase
         static::expectException(\RKW\RkwNewsletter\Exception::class);
         static::expectExceptionCode(1650541235);
 
-        $this->subject->getSubscribers();
+        $this->subject->setRecipients();
     }
 
     /**
      * @test
      * @throws \Exception
      */
-    public function getSubscribersReturnsAllRecipients()
+    public function setRecipientsReturnsTrueAndAddsRecipients()
     {
         /**
          * Scenario:
          *
          * Given a persisted newsletter-object X
+         * Given that newsletter-object has all relevant mail-parameters set
          * Given a persisted issue-object Y that belongs to the newsletter-object X
+         * Given this issue-object Y has no startTstamp-property set
          * Given two topic-objects A and B that belong to the newsletter-object X
          * Given two frontendUser-objects K and L that have subscribed to the topic A
          * Given three frontendUser-objects K, M and N that have subscribed to the topic B
          * Given one frontendUser-objects P that has not subscribed to a topic
          * Given setIssue with the issue Y is called before
+         * Given the status of the queueMail-object of the mailService is DRAFT (default)
          * When method is called
-         * Then an instance of  \TYPO3\CMS\Extbase\Persistence\QueryResultInterface is returned
-         * Then this instance contains four objects of \RKW\RkwNewsletter\Domain\Model\FrontendUser
-         * Then this objects are the frontendUser K, L, M and N
-         * Then the offsetSent-Parameter of the issue Y in the database is set to four
+         * Then true is returned
+         * Then the recipients-property of the issue Y returns an array
+         * Then this array contains four items
+         * Then this array contains the ids of the frontendUsers K, L, M and N
+         * Then this recipient-list is persisted
          */
 
         $this->importDataSet(static::FIXTURE_PATH . '/Database/Check60.xml');
@@ -633,36 +638,74 @@ class MailProcessorTest extends FunctionalTestCase
         $issue = $this->issueRepository->findByUid(60);
         $this->subject->setIssue($issue);
         
-        $result = $this->subject->getSubscribers();
-        self::assertInstanceOf(QueryResultInterface::class, $result);
-        self::assertCount(4, $result);
+        self::assertTrue($this->subject->setRecipients());
+
+        // force TYPO3 to load objects new from database
+        $persistenceManager = $this->objectManager->get(PersistenceManager::class);
+        $persistenceManager->clearState();
         
-        $result = $result->toArray();
+        $result = $this->subject->getIssue()->getRecipients();
+        self::assertInternalType('array', $result);
+        self::assertCount(4, $result);
+      
+        self::assertEquals(60, $result[0]);
+        self::assertEquals(61, $result[1]);
+        self::assertEquals(62, $result[2]);
+        self::assertEquals(63, $result[3]);
+        
+    }
 
-        /** @var \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser */
-        $frontendUser = $result[0];
-        self::assertInstanceOf(FrontendUser::class, $frontendUser);
-        self::assertEquals(60, $frontendUser->getUid());
 
-        $frontendUser = $result[1];
-        self::assertInstanceOf(FrontendUser::class, $frontendUser);
-        self::assertEquals(61, $frontendUser->getUid());
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function setRecipientsReturnsTrueAndResetsRecipientList()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object X
+         * Given that newsletter-object has all relevant mail-parameters set
+         * Given a persisted issue-object Y that belongs to the newsletter-object X
+         * Given this issue-object Y has no startTstamp-property set
+         * Given two topic-objects A and B that belong to the newsletter-object X
+         * Given two frontendUser-objects K and L that have subscribed to the topic A
+         * Given three frontendUser-objects K, M and N that have subscribed to the topic B
+         * Given one frontendUser-objects P that has not subscribed to a topic
+         * Given setIssue with the issue Y is called before
+         * Given the status of the queueMail-object of the mailService is DRAFT (default)
+         * Given the method has been called before
+         * When method is called
+         * Then true is returned
+         * Then the recipients-property of the issue Y returns an array
+         * Then this array contains four items
+         * Then this array contains the ids of the frontendUsers K, L, M and N
+         * Then this recipient-list is persisted
+         */
 
-        $frontendUser = $result[2];
-        self::assertInstanceOf(FrontendUser::class, $frontendUser);
-        self::assertEquals(62, $frontendUser->getUid());
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check60.xml');
 
-        $frontendUser = $result[3];
-        self::assertInstanceOf(FrontendUser::class, $frontendUser);
-        self::assertEquals(63, $frontendUser->getUid());
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(60);
+        $this->subject->setIssue($issue);
+        $this->subject->setRecipients();
+
+        self::assertTrue($this->subject->setRecipients());
 
         // force TYPO3 to load objects new from database
         $persistenceManager = $this->objectManager->get(PersistenceManager::class);
         $persistenceManager->clearState();
 
-        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
-        $issue = $this->issueRepository->findByUid(60);
-        self::assertEquals(4, $issue->getSentOffset());
+        $result = $this->subject->getIssue()->getRecipients();
+        self::assertInternalType('array', $result);
+        self::assertCount(4, $result);
+
+        self::assertEquals(60, $result[0]);
+        self::assertEquals(61, $result[1]);
+        self::assertEquals(62, $result[2]);
+        self::assertEquals(63, $result[3]);
+
     }
 
 
@@ -670,97 +713,40 @@ class MailProcessorTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function getSubscribersRespectsLimitAndOffset()
+    public function setRecipientsReturnsFalseIfIssueAlreadyStartedWithSending()
     {
         /**
          * Scenario:
          *
          * Given a persisted newsletter-object X
+         * Given that newsletter-object has all relevant mail-parameters set
          * Given a persisted issue-object Y that belongs to the newsletter-object X
+         * Given this issue-object Y has the startTstamp-property set
          * Given two topic-objects A and B that belong to the newsletter-object X
          * Given two frontendUser-objects K and L that have subscribed to the topic A
          * Given three frontendUser-objects K, M and N that have subscribed to the topic B
          * Given one frontendUser-objects P that has not subscribed to a topic
          * Given setIssue with the issue Y is called before
-         * When method is called with limit 2
-         * Then an instance of \TYPO3\CMS\Extbase\Persistence\QueryResultInterface is returned
-         * Then this instance contains two objects of \RKW\RkwNewsletter\Domain\Model\FrontendUser
-         * Then this objects are the frontendUser K and L
-         * Then the offsetSent-Parameter of the issue Y in the database is set to two
-         * When method is called with limit 2 a second time
-         * Then an instance of \TYPO3\CMS\Extbase\Persistence\QueryResultInterface is returned
-         * Then this instance contains two objects of \RKW\RkwNewsletter\Domain\Model\FrontendUser
-         * Then this objects are the frontendUser M and N
-         * Then the offsetSent-Parameter of the issue Y in the database is set to four
-         * When method is called with limit 2 a third time
-         * Then an instance of \TYPO3\CMS\Extbase\Persistence\QueryResultInterface is returned
-         * Then this instance is empty
-         * Then the offsetSent-Parameter of the issue Y in the database is set to four
+         * Given the status of the queueMail-object is SENDING
+         * When method is called
+         * Then false is returned
+         * Then the recipients-property of the issue Y returns an array
+         * Then this array contains four items
+         * Then this array contains the ids of the frontendUsers K, L, M and N
+         * Then this recipient-list is persisted
          */
 
         $this->importDataSet(static::FIXTURE_PATH . '/Database/Check60.xml');
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(60);
+        $issue->setStartTstamp(time());
         $this->subject->setIssue($issue);
-
-        // --------------------------------
-        // First call
-        // --------------------------------
-        $result = $this->subject->getSubscribers(2);
-        self::assertInstanceOf(QueryResultInterface::class, $result);
-        self::assertCount(2, $result);
-
-        $result = $result->toArray();
-
-        /** @var \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser */
-        $frontendUser = $result[0];
-        self::assertInstanceOf(FrontendUser::class, $frontendUser);
-        self::assertEquals(60, $frontendUser->getUid());
-
-        $frontendUser = $result[1];
-        self::assertInstanceOf(FrontendUser::class, $frontendUser);
-        self::assertEquals(61, $frontendUser->getUid());
-
-        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
-        $issue = $this->issueRepository->findByUid(60);
-        self::assertEquals(2, $issue->getSentOffset());
-
-        // --------------------------------
-        // Second call
-        // --------------------------------
-        $result = $this->subject->getSubscribers(2);
-        self::assertInstanceOf(QueryResultInterface::class, $result);
-        self::assertCount(2, $result);
-
-        $result = $result->toArray();
-
-        /** @var \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser */
-        $frontendUser = $result[0];
-        self::assertInstanceOf(FrontendUser::class, $frontendUser);
-        self::assertEquals(62, $frontendUser->getUid());
-
-        $frontendUser = $result[1];
-        self::assertInstanceOf(FrontendUser::class, $frontendUser);
-        self::assertEquals(63, $frontendUser->getUid());
-
-        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
-        $issue = $this->issueRepository->findByUid(60);
-        self::assertEquals(4, $issue->getSentOffset());
-
-        // --------------------------------
-        // Third call
-        // --------------------------------
-        $result = $this->subject->getSubscribers(2);
-        self::assertInstanceOf(QueryResultInterface::class, $result);
-        self::assertCount(0, $result);
-
-        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
-        $issue = $this->issueRepository->findByUid(60);
-        self::assertEquals(4, $issue->getSentOffset());
+        
+        self::assertFalse($this->subject->setRecipients());
 
     }
-
+    
     //=============================================
     /**
      * @test
@@ -2240,6 +2226,9 @@ class MailProcessorTest extends FunctionalTestCase
         );
     }
     
+    
+    
+    
     //=============================================
     /**
      * @test
@@ -2283,18 +2272,32 @@ class MailProcessorTest extends FunctionalTestCase
          * Given that frontendUser 4 has a subscription-hash set
          * Given that frontendUser 4 has "de" set as language-key
          * Given setIssue with the issue Y is called before
+         * Given setRecipients is called before
          * When method is called with limit 2
          * Then true is returned
          * Then a new queueMail-object is created
          * Then two queueRecipient-object One and Two are created for the frontendUsers 1 and 2
          * Then the contents of topic A and B are rendered for the queueRecipient-object One
          * Then the contents of topic A only are rendered for the queueRecipient-object Two
-         * When method is called with limit 2 a second time
+         * Then the recipient-property of the issue-object contains an array with two items
+         * Then this items are the uids of the frontendUsers 3 and 4
+         * Then the startTstamp-property of the issue-object is set to the current time
+         * When method is called with limit 1 a second time
          * Then true is returned
          * Then the same queueMail-Object is used as before
-         * Then two queueRecipient-object Three and Four are created for the frontendUsers 3 and 4
-         * Then the contents of topic B are rendered for both the queueRecipient-objects
+         * Then one queueRecipient-object is created for the frontendUser 3
+         * Then the contents of topic B are rendered for the queueRecipient-object
+         * Then the recipient-property of the issue-object contains an array with one item
+         * Then this item is the uids of the frontendUser 4
+         * Then the startTstamp-property of the issue-object has the same value as before
          * When method is called with limit 2 a third time
+         * Then true is returned
+         * Then the same queueMail-Object is used as before
+         * Then one queueRecipient-object is created created for the frontendUser 4
+         * Then the contents of topic B are rendered for the queueRecipient-object
+         * Then the recipient-property of the issue-object contains an array with no items
+         * Then the startTstamp-property of the issue-object has the same value as before
+         * When method is called with limit 2 a fourth time
          * Then false is returned
          * Then the pipeline-property of the mailService is set to false
          * Then the status-property of the issue Y is set to STAGE_DONE
@@ -2312,6 +2315,7 @@ class MailProcessorTest extends FunctionalTestCase
         self::assertCount(0, $this->queueMailRepository->findAll());
                 
         $this->subject->setIssue($issue);
+        $this->subject->setRecipients();
 
         /** @var \RKW\RkwMailer\Domain\Model\QueueMail $queueMail */
         $queueMail = $this->subject->getMailService()->getQueueMail();
@@ -2321,7 +2325,6 @@ class MailProcessorTest extends FunctionalTestCase
         // --------------------------------
         self::assertTrue($this->subject->sendMails(2));
         self::assertEquals($queueMail->getUid(), $this->subject->getMailService()->getQueueMail()->getUid());
-
         self::assertCount(2, $this->queueRecipientRepository->findAll());
 
         /** @var \RKW\RkwMailer\Domain\Model\QueueRecipient $queueRecipient */
@@ -2366,13 +2369,22 @@ class MailProcessorTest extends FunctionalTestCase
             $this->mailCache->getHtmlBody($queueRecipient)
         );
 
+        $result = $this->subject->getIssue()->getRecipients();
+        self::assertInternalType('array', $result);
+        self::assertCount(2, $result);
+
+        self::assertEquals(232, $result[0]);
+        self::assertEquals(233, $result[1]);
+        
+        $startTimestamp = $this->subject->getIssue()->getStartTstamp();
+        self::assertGreaterThanOrEqual(time() - 5, $startTimestamp);
+
         // --------------------------------
         // Second call
         // --------------------------------
-        self::assertTrue($this->subject->sendMails(2));
+        self::assertTrue($this->subject->sendMails(1));
         self::assertEquals($queueMail->getUid(), $this->subject->getMailService()->getQueueMail()->getUid());
-
-        self::assertCount(4, $this->queueRecipientRepository->findAll());
+        self::assertCount(3, $this->queueRecipientRepository->findAll());
 
         /** @var \RKW\RkwMailer\Domain\Model\QueueRecipient $queueRecipient */
         $queueRecipient = $this->queueRecipientRepository->findByUid(3);
@@ -2395,6 +2407,20 @@ class MailProcessorTest extends FunctionalTestCase
             $this->mailCache->getHtmlBody($queueRecipient)
         );
 
+        $result = $this->subject->getIssue()->getRecipients();
+        self::assertInternalType('array', $result);
+        self::assertCount(1, $result);
+
+        self::assertEquals(233, $result[0]);
+        self::assertGreaterThanOrEqual($startTimestamp, $this->subject->getIssue()->getStartTstamp());
+        
+        // --------------------------------
+        // third call
+        // --------------------------------
+        self::assertTrue($this->subject->sendMails(2));
+        self::assertEquals($queueMail->getUid(), $this->subject->getMailService()->getQueueMail()->getUid());
+        self::assertCount(4, $this->queueRecipientRepository->findAll());
+
         /** @var \RKW\RkwMailer\Domain\Model\QueueRecipient $queueRecipient */
         $queueRecipient = $this->queueRecipientRepository->findByUid(4);
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
@@ -2415,9 +2441,15 @@ class MailProcessorTest extends FunctionalTestCase
             'Content 231.2',
             $this->mailCache->getHtmlBody($queueRecipient)
         );
-        
+
+        $result = $this->subject->getIssue()->getRecipients();
+        self::assertInternalType('array', $result);
+        self::assertCount(0, $result);
+        self::assertGreaterThanOrEqual($startTimestamp, $this->subject->getIssue()->getStartTstamp());
+
+
         // --------------------------------
-        // Third call
+        // Fourth call
         // --------------------------------
         self::assertFalse($this->subject->sendMails(2));
 

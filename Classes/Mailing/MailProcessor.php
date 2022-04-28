@@ -159,45 +159,59 @@ class MailProcessor
 
 
     /**
-     * Gets the recipients and updated offsetSent for issue
+     * Gets the recipients and adds them to issue
      *
-     * @param int $limit
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     * @return bool
      * @throws Exception
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      */
-    public function getSubscribers(int $limit = 0): QueryResultInterface
+    public function setRecipients(): bool
     {
 
         self::debugTime(__LINE__, __METHOD__);
         if (! $this->issue) {
             throw new Exception('No issue is set.', 1650541235);
         }
-        
-        /** @var \TYPO3\CMS\Extbase\Persistence\QueryResultInterface $recipients */
-        $recipients = $this->frontendUserRepository->findSubscriptionsByNewsletter(
-            $this->issue->getNewsletter(), 
-            $this->issue->getSentOffset(),
-            $limit
-        );
-        
-        // update offset-value
-        $this->issue->setSentOffset($this->issue->getSentOffset() + count($recipients->toArray()));
-        $this->issueRepository->update($this->issue);
-        $this->persistenceManager->persistAll();
+
+        // Check if not yet started!
+        if (! $this->issue->getStartTstamp()) {
+
+            // reset
+            $this->issue->setRecipients([]);
+            
+            /** @var \TYPO3\CMS\Extbase\Persistence\QueryResultInterface $recipients */
+            $subscribers = $this->frontendUserRepository->findSubscriptionsByNewsletter($this->issue->getNewsletter());
+            
+            /** @var \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser */
+            foreach ($subscribers as $frontendUser) {
+                $this->issue->addRecipient($frontendUser);
+            }
+            
+            $this->issueRepository->update($this->issue);
+            $this->persistenceManager->persistAll();
+
+            $this->getLogger()->log(
+                LogLevel::INFO,
+                sprintf('Added recipients to issue with id=%s.',
+                    $this->issue->getUid()
+                )
+            );
+            
+            self::debugTime(__LINE__, __METHOD__);
+            return true;
+        }
 
         $this->getLogger()->log(
             LogLevel::DEBUG,
-            sprintf('Fetched %s recipients for issue with id=%s.',
-                count($recipients->toArray()),
+            sprintf('No recipients added to issue with id=%s.',
                 $this->issue->getUid()
             )
         );
-
+        
         self::debugTime(__LINE__, __METHOD__);
-        return $recipients;
+        return false;
     }
 
 
@@ -395,7 +409,7 @@ class MailProcessor
                     'lastName' => 'Musterfrau',
                     'txRkwregistrationGender' => 1,
                     'title' => 'Prof. Dr. Dr.',
-                    'email' => $email
+                    'email' => $email,
                 ],
                 array(
                     'marker'  => array(
@@ -441,44 +455,60 @@ class MailProcessor
      * @return bool
      * @throws Exception
      * @throws \RKW\RkwMailer\Exception
-     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @throws \Exception
      */
     public function sendMails(int $limit = 0): bool
     {
         self::debugTime(__LINE__, __METHOD__);
-        if (! $this->issue) {
+        if (!$this->issue) {
             throw new Exception('No issue is set.', 1650636949);
         }
+
+        // set startTstamp - no matter what!
+        if (! $this->issue->getStartTstamp()) {
+            $this->issue->setStartTstamp(time());
+        }
         
-        if (
-            ($subscribers = $this->getSubscribers($limit))
-            && (count($subscribers))
-        ){
+        // work through recipients
+        if ($this->issue->getRecipients()) {
 
-            /** @var \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser */
-            foreach($subscribers as $frontendUser) {
+            $cnt = 0;
+            /** @var int $frontendUserUid */
+            foreach ($this->issue->getRecipients() as $frontendUserUid) {
 
-                try {
-                    $this->sendMail($frontendUser);
-                } catch (\Exception $e) {
-                    $this->getLogger()->log(
-                        LogLevel::ERROR,
-                        sprintf('Could not send issue with id=%s to recipient with id=%s. Reason: %s.',
-                            $this->issue->getUid(),
-                            $frontendUser->getUid(),
-                            $e->getMessage()                        
-                        )
-                    );
+                /** @var \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser */
+                if ($frontendUser = $this->frontendUserRepository->findByUid($frontendUserUid)) {
+    
+                    try {
+                        $this->sendMail($frontendUser);
+                    } catch (\Exception $e) {
+                        $this->getLogger()->log(
+                            LogLevel::ERROR,
+                            sprintf('Could not send issue with id=%s to recipient with id=%s. Reason: %s.',
+                                $this->issue->getUid(),
+                                $frontendUser->getUid(),
+                                $e->getMessage()
+                            )
+                        );
+                    }
+                }
+                
+                // remove userId from list - if it exists or not!
+                $this->issue->removeRecipientById($frontendUserUid);
+
+                $cnt++;
+                if ($cnt >= $limit) {
+                    break;
                 }
             }
 
-            if ($this->mailService->getQueueMail()->getStatus() == QueueMailUtility::STATUS_DRAFT) {
-                return $this->mailService->send();
-            }
-            
+            $this->issueRepository->update($this->issue);
+            $this->persistenceManager->persistAll();
+    
+            // send mail
+            $this->mailService->send();
             return true;
         }
 
@@ -677,6 +707,7 @@ class MailProcessor
         }
         self::debugTime(__LINE__, __METHOD__);
     }
+    
 
     /**
      * Returns logger instance

@@ -151,6 +151,7 @@ class NewsletterCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\Comm
                 foreach ($issues as $issue) {
 
                     $this->mailProcessor->setIssue($issue);
+                    $this->mailProcessor->setRecipients();
                     $this->mailProcessor->sendMails($recipientsPerNewsletterLimit);
 
                     usleep(intval($sleep * 1000000));

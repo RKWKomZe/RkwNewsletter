@@ -16,6 +16,7 @@ namespace RKW\RkwNewsletter\Domain\Model;
 
 use RKW\RkwAuthors\Domain\Model\Authors;
 use RKW\RkwMailer\Domain\Model\QueueMail;
+use RKW\RkwNewsletter\Exception;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
@@ -117,6 +118,14 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $releaseTstamp = 0;
 
+
+    /**
+     * startTstamp
+     *
+     * @var int
+     */
+    protected $startTstamp = 0;
+    
     
     /**
      * sentTstamp
@@ -127,11 +136,11 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     
     
     /**
-     * sentOffset
+     * recipients
      *
-     * @var int
+     * @var string
      */
-    protected $sentOffset = 0;
+    protected $recipients;
 
 
     /**
@@ -508,6 +517,29 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->releaseTstamp = $releaseTstamp;
     }
+    
+
+    /**
+     * Returns the startTstamp
+     *
+     * @return int $startTstamp
+     */
+    public function getStartTstamp(): int
+    {
+        return $this->startTstamp;
+    }
+
+    
+    /**
+     * Sets the start
+     *
+     * @param int $startTstamp
+     * @return void
+     */
+    public function setStartTstamp(int $startTstamp): void
+    {
+        $this->startTstamp = $startTstamp;
+    }
 
 
     /**
@@ -519,6 +551,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return $this->sentTstamp;
     }
+    
 
     /**
      * Sets the sent
@@ -531,28 +564,81 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->sentTstamp = $sentTstamp;
     }
 
-   
-    /**
-     * Returns the sentOffset
-     *
-     * @return int $sentOffset
-     */
-    public function getSentOffset(): int
-    {
-        return $this->sentOffset;
-    }
 
     /**
-     * Sets the sent
+     * Adds a recipient to the release
      *
-     * @param int $sentOffset
+     * @param \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser
      * @return void
+     * @api
      */
-    public function setSentOffset(int $sentOffset): void
+    public function addRecipient(FrontendUser $frontendUser): void
     {
-        $this->sentOffset = $sentOffset;
+        $recipients = $this->getRecipients();
+        $recipients[] = $frontendUser->getUid();
+        $this->setRecipients($recipients);
     }
 
+    
+    /**
+     * Removes a recipient from the issue
+     *
+     * @param \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser
+     * @return void
+     * @api
+     */
+    public function removeRecipient(FrontendUser $frontendUser): void
+    {
+        $recipients = $this->getRecipients();
+        if (false !== $key = array_search($frontendUser->getUid(), $recipients)) {
+            array_splice($recipients, $key, 1);
+            $this->setRecipients($recipients);
+        }
+    }
+    
+
+    /**
+     * Removes a recipient by id from the issue
+     *
+     * @param int $frontendUserId
+     * @return void
+     * @api
+     */
+    public function removeRecipientById(int $frontendUserId): void
+    {
+        $recipients = $this->getRecipients();
+        if (false !== $key = array_search($frontendUserId, $recipients)) {
+            array_splice($recipients, $key, 1);
+            $this->setRecipients($recipients);
+        }
+    }
+
+    /**
+     * Returns the recipient. Keep in mind that the property is called "recipients"
+     * although it can hold several pages.
+     *
+     * @return array
+     * @api
+     */
+    public function getRecipients(): array
+    {
+        return GeneralUtility::trimExplode(',', $this->recipients, true);
+    }
+
+    /**
+     * Sets the recipient. Keep in mind that the property is called "pages"
+     * although it can hold several pages.
+     *
+     * @param array $recipients
+     * @return void
+     * @api
+     */
+    public function setRecipients(array $recipients = []): void
+    {
+        $this->recipients = implode(',', $recipients);
+    }
+   
+    
     /**
      * Returns the isSpecial
      *

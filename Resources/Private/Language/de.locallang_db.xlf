@@ -283,6 +283,10 @@
 				<source>Issue Released</source>
 				<target state="translated">Ausgabe freigegeben am</target>
 			</trans-unit>
+			<trans-unit id="tx_rkwnewsletter_domain_model_issue.start_tstamp">
+				<source>Issue Started</source>
+				<target state="translated">Ausgabe startet am</target>
+			</trans-unit>			
 			<trans-unit id="tx_rkwnewsletter_domain_model_issue.sent_tstamp">
 				<source>Issue Sent</source>
 				<target state="translated">Ausgabe gesendet am</target>
