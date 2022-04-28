@@ -6,7 +6,7 @@
         <pid>0</pid>
         <issue_title><![CDATA[Newsletter {M}/{Y}]]></issue_title>
         <issue>1</issue>
-        <topic>2</topic>
+        <topic>3</topic>
         <sender_name>Test</sender_name>
         <sender_mail>test@testen.de</sender_mail>
         <reply_mail>reply@testen.de</reply_mail>
@@ -19,7 +19,7 @@
         <uid>240</uid>
         <pid>0</pid>
         <newsletter>240</newsletter>
-        <pages>2</pages>
+        <pages>3</pages>
         <title>Test</title>
     </tx_rkwnewsletter_domain_model_issue>
     
@@ -28,17 +28,25 @@
         <uid>240</uid>
         <pid>0</pid>
         <container_page>1</container_page>
-        <name>Topic 160</name>
+        <name>Topic 240</name>
         <newsletter>240</newsletter>
     </tx_rkwnewsletter_domain_model_topic>
 
     <tx_rkwnewsletter_domain_model_topic>
         <uid>241</uid>
         <pid>0</pid>
-        <name>Topic 161</name>
+        <name>Topic 241</name>
         <container_page>1</container_page>
         <newsletter>240</newsletter>
         <is_special>1</is_special>
+    </tx_rkwnewsletter_domain_model_topic>
+
+    <tx_rkwnewsletter_domain_model_topic>
+        <uid>242</uid>
+        <pid>0</pid>
+        <name>Topic 242</name>
+        <container_page>1</container_page>
+        <newsletter>240</newsletter>
     </tx_rkwnewsletter_domain_model_topic>
     
     
@@ -56,15 +64,26 @@
     <pages>
         <uid>241</uid>
         <pid>1</pid>
-        <title>One</title>
+        <title>Two</title>
         <tx_rkwnewsletter_newsletter>240</tx_rkwnewsletter_newsletter>
         <tx_rkwnewsletter_issue>240</tx_rkwnewsletter_issue>
         <tx_rkwnewsletter_topic>241</tx_rkwnewsletter_topic>
         <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
         <no_search>1</no_search>
     </pages>
-    
-    
+
+    <pages>
+        <uid>242</uid>
+        <pid>1</pid>
+        <title>Three</title>
+        <tx_rkwnewsletter_newsletter>240</tx_rkwnewsletter_newsletter>
+        <tx_rkwnewsletter_issue>240</tx_rkwnewsletter_issue>
+        <tx_rkwnewsletter_topic>242</tx_rkwnewsletter_topic>
+        <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <no_search>1</no_search>
+    </pages>
+
+
     <tt_content>
         <uid>244</uid>
         <pid>241</pid>
@@ -85,7 +104,7 @@
         <uid>246</uid>
         <pid>241</pid>
         <header>Content 241.1</header>
-        <bodytext>Test the editorial 161</bodytext>
+        <bodytext>Test the editorial 241</bodytext>
         <sorting>1</sorting>
         <tx_rkwnewsletter_is_editorial>1</tx_rkwnewsletter_is_editorial>
     </tt_content>
@@ -95,7 +114,7 @@
         <uid>240</uid>
         <pid>0</pid>
         <email>test@teste.de</email>
-        <tx_rkwnewsletter_subscription>240</tx_rkwnewsletter_subscription>
+        <tx_rkwnewsletter_subscription>240,242</tx_rkwnewsletter_subscription>
         <tx_rkwnewsletter_hash>HashMeIfYouCan</tx_rkwnewsletter_hash>
         <tx_rkwregistration_language_key>de</tx_rkwregistration_language_key>
     </fe_users>

@@ -1355,7 +1355,7 @@ class ContentLoaderTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function getEditorialReturnsContentIfOneTopicUsedAndEditorial()
+    public function getEditorialReturnsContentIfOneTopicUsedWithEditorial()
     {
         /**
          * Scenario:
@@ -1409,7 +1409,7 @@ class ContentLoaderTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function getEditorialReturnsContentIfSpecialTopicOnlyAndEditorial()
+    public function getEditorialReturnsContentIfSpecialTopicOnlyWithEditorial()
     {
         /**
          * Scenario:
@@ -1453,6 +1453,60 @@ class ContentLoaderTest extends FunctionalTestCase
         self::assertEquals('Content 71.1', $result->getHeader());
     }
 
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function getEditorialReturnsContentIfEmptyTopicAndSpecialTopicWithEditorial()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object X
+         * Given a persisted issue-object Y that belongs to the newsletter-object X
+         * Given a persisted topic-object A that belongs to the newsletter-object X
+         * Given a persisted topic-object B that belongs to the newsletter-object X
+         * Given topic-object B is marked as special
+         * Given a persisted page-object Q
+         * Given that page-object Q belongs to the newsletter-object X
+         * Given that page-object Q belongs to the issue-object Y
+         * Given that page-object Q belongs to the topic-object A
+         * Given the page-object Q contains no content-objects
+         * Given none of the content-objects is an editorial
+         * Given that page-object R belongs to the newsletter-object X
+         * Given that page-object R belongs to the issue-object Y
+         * Given that page-object R belongs to the topic-object B
+         * Given the page-object R contains three content-objects
+         * Given one of the content-objects is an editorial
+         * Given the issue-object is set via setIssue before
+         * Given setTopics is called with topic A only
+         * When the method is called
+         * Then an object of instance \RKW\RkwNewsletter\Domain\Model\Content is returned
+         * Then this object is the editorial of the given topic B
+         */
+
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check150.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(150);
+        
+        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic1 */
+        $topic1 = $this->topicRepository->findByUid(150);
+
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($topic1);
+        
+        $this->subject->setIssue($issue);
+        $this->subject->setTopics($objectStorage);
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Content $result */
+        $result = $this->subject->getEditorial();
+
+        self::assertInstanceOf(Content::class, $result);
+        self::assertEquals(1, $result->getTxRkwnewsletterIsEditorial());
+        self::assertEquals('Content 151.1', $result->getHeader());
+    }
 
     //=============================================
 
@@ -1743,6 +1797,155 @@ class ContentLoaderTest extends FunctionalTestCase
 
     //=============================================
 
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function countTopicsWithContentsReturnsOneForNormalContent ()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object X
+         * Given a persisted issue-object Y that belongs to the newsletter-object X
+         * Given a persisted topic-object A that belongs to the newsletter-object X
+         * Given a persisted topic-object B that belongs to the newsletter-object X
+         * Given a persisted page-object Q
+         * Given that page-object Q belongs to the newsletter-object X
+         * Given that page-object Q belongs to the issue-object Y
+         * Given that page-object Q belongs to the topic-object A
+         * Given the page-object Q contains four content-objects
+         * Given one of the content-objects is an editorial
+         * Given that page-object R belongs to the newsletter-object X
+         * Given that page-object R belongs to the issue-object Y
+         * Given that page-object R belongs to the topic-object B
+         * Given the page-object R contains one content-object
+         * Given this content-objects is an editorial
+         * Given the issue-object is set via setIssue before
+         * Given setTopics is called with topic B/topic A
+         * When the method is called
+         * Then one returned
+         */
+
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check140.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(140);
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic1 */
+        $topic1 = $this->topicRepository->findByUid(140);
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic2 */
+        $topic2 = $this->topicRepository->findByUid(141);
+
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($topic2);
+        $objectStorage->attach($topic1);
+
+        $this->subject->setIssue($issue);
+        $this->subject->setTopics($objectStorage);
+
+        self::assertEquals(1, $this->subject->countTopicsWithContents());
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function countTopicsWithContentsReturnsZeroForTopicWithEditorialOnly()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object X
+         * Given a persisted issue-object Y that belongs to the newsletter-object X
+         * Given a persisted topic-object A that belongs to the newsletter-object X
+         * Given a persisted topic-object B that belongs to the newsletter-object X
+         * Given a persisted page-object Q
+         * Given that page-object Q belongs to the newsletter-object X
+         * Given that page-object Q belongs to the issue-object Y
+         * Given that page-object Q belongs to the topic-object A
+         * Given the page-object Q contains four content-objects
+         * Given one of the content-objects is an editorial
+         * Given that page-object R belongs to the newsletter-object X
+         * Given that page-object R belongs to the issue-object Y
+         * Given that page-object R belongs to the topic-object B
+         * Given the page-object R contains one content-object
+         * Given this content-object is an editorial
+         * Given the issue-object is set via setIssue before
+         * Given setTopics is called with topic B only
+         * When the method is called
+         * Then true returned
+         */
+
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check140.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(140);
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic2 */
+        $topic2 = $this->topicRepository->findByUid(141);
+
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($topic2);
+
+        $this->subject->setIssue($issue);
+        $this->subject->setTopics($objectStorage);
+
+        self::assertEquals(0, $this->subject->countTopicsWithContents());
+    }
+    
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function countTopicsWithContentsReturnsOneForNonSetSpecialTopic()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object X
+         * Given a persisted issue-object Y that belongs to the newsletter-object X
+         * Given a persisted topic-object A that belongs to the newsletter-object X
+         * Given a persisted topic-object B that belongs to the newsletter-object X
+         * Given topic-object B is marked as special
+         * Given a persisted page-object Q
+         * Given that page-object Q belongs to the newsletter-object X
+         * Given that page-object Q belongs to the issue-object Y
+         * Given that page-object Q belongs to the topic-object A
+         * Given the page-object Q contains no content-objects
+         * Given that page-object R belongs to the newsletter-object X
+         * Given that page-object R belongs to the issue-object Y
+         * Given that page-object R belongs to the topic-object B
+         * Given the page-object R contains three content-objects
+         * Given one of the content-objects is an editorial
+         * Given the issue-object is set via setIssue before
+         * Given setTopics is called with topic A only
+         * When the method is called
+         * Then one is returned
+         */
+
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check150.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(150);
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic1 */
+        $topic1 = $this->topicRepository->findByUid(150);
+
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($topic1);
+
+        $this->subject->setIssue($issue);
+        $this->subject->setTopics($objectStorage);
+
+        self::assertEquals(1, $this->subject->countTopicsWithContents());
+    }
+    
+    //=============================================
 
     /**
      * TearDown

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+
+    <tx_rkwnewsletter_domain_model_newsletter>
+        <uid>150</uid>
+        <pid>0</pid>
+        <issue_title><![CDATA[Newsletter {M}/{Y}]]></issue_title>
+        <issue>1</issue>
+        <topic>2</topic>
+    </tx_rkwnewsletter_domain_model_newsletter>
+    
+    
+    <tx_rkwnewsletter_domain_model_issue>
+        <uid>150</uid>
+        <pid>0</pid>
+        <newsletter>150</newsletter>
+        <pages>2</pages>
+    </tx_rkwnewsletter_domain_model_issue>
+    
+    
+    <tx_rkwnewsletter_domain_model_topic>
+        <uid>150</uid>
+        <pid>0</pid>
+        <container_page>1</container_page>
+        <newsletter>150</newsletter>
+    </tx_rkwnewsletter_domain_model_topic>
+
+    <tx_rkwnewsletter_domain_model_topic>
+        <uid>151</uid>
+        <pid>0</pid>
+        <container_page>1</container_page>
+        <newsletter>150</newsletter>
+        <is_special>1</is_special>
+    </tx_rkwnewsletter_domain_model_topic>
+    
+    
+    <pages>
+        <uid>150</uid>
+        <pid>1</pid>
+        <title>One</title>
+        <tx_rkwnewsletter_newsletter>150</tx_rkwnewsletter_newsletter>
+        <tx_rkwnewsletter_issue>150</tx_rkwnewsletter_issue>
+        <tx_rkwnewsletter_topic>150</tx_rkwnewsletter_topic>
+        <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <no_search>1</no_search>
+    </pages>
+
+    <pages>
+        <uid>151</uid>
+        <pid>1</pid>
+        <title>One</title>
+        <tx_rkwnewsletter_newsletter>150</tx_rkwnewsletter_newsletter>
+        <tx_rkwnewsletter_issue>150</tx_rkwnewsletter_issue>
+        <tx_rkwnewsletter_topic>151</tx_rkwnewsletter_topic>
+        <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <no_search>1</no_search>
+    </pages>
+    
+    <tt_content>
+        <uid>154</uid>
+        <pid>151</pid>
+        <header>Content 151.3</header>
+        <sorting>3</sorting>
+    </tt_content>
+
+    <tt_content>
+        <uid>155</uid>
+        <pid>151</pid>
+        <header>Content 151.2</header>
+        <sorting>2</sorting>
+    </tt_content>
+
+    <tt_content>
+        <uid>156</uid>
+        <pid>151</pid>
+        <header>Content 151.1</header>
+        <sorting>1</sorting>
+        <tx_rkwnewsletter_is_editorial>1</tx_rkwnewsletter_is_editorial>
+    </tt_content>
+
+</dataset>
