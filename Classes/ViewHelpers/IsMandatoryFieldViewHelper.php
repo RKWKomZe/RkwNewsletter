@@ -16,6 +16,8 @@ use \RKW\RkwBasics\Helper\Common;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
+use RKW\RkwBasics\Utility\GeneralUtility;
 use \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
@@ -32,23 +34,40 @@ use \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
  */
 class IsMandatoryFieldViewHelper extends AbstractViewHelper
 {
+
     /**
-     * @param string $fieldName
+     * Initialize arguments.
+     *
+     * @throws \TYPO3Fluid\Fluid\Core\ViewHelper\Exception
+     */
+    public function initializeArguments()
+    {
+        parent::initializeArguments();
+        $this->registerArgument('fieldName', 'string', 'FieldName to check for', true);
+    }
+    
+    /**
      * @return boolean
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
-    public function render($fieldName)
+    public function render()
     {
+        $fieldName = $this->arguments['fieldName'];
 
-        $settings = Common::getTyposcriptConfiguration('Rkwnewsletter');
+        $settings = GeneralUtility::getTyposcriptConfiguration('Rkwnewsletter');
         $requiredFields = array('email');
         if ($settings['requiredFieldsSubscription']) {
-            $requiredFields = array_merge($requiredFields, \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $settings['requiredFieldsSubscription'], true));
+            $requiredFields = array_merge(
+                $requiredFields, 
+                GeneralUtility::trimExplode(
+                    ',', 
+                    $settings['requiredFieldsSubscription'], 
+                    true
+                )
+            );
         }
 
         return in_array($fieldName, $requiredFields);
-        //===
-
     }
 
 

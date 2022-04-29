@@ -13,6 +13,11 @@ namespace RKW\RkwNewsletter\ViewHelpers;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
+use RKW\RkwNewsletter\Domain\Model\Newsletter;
+use RKW\RkwNewsletter\Domain\Model\Topic;
+use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
@@ -27,16 +32,30 @@ use \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
  */
 class IsTopicInListViewHelper extends AbstractViewHelper
 {
+
+    /**
+     * Initialize arguments.
+     *
+     * @throws \TYPO3Fluid\Fluid\Core\ViewHelper\Exception
+     */
+    public function initializeArguments()
+    {
+        parent::initializeArguments();
+        $this->registerArgument('topicList', ObjectStorage::class, 'ObjectStorage with topics.', true);
+        $this->registerArgument('topic', Topic::class, 'Topic to check for', true);
+    }
+
+    
     /**
      * checks is user has subscribed to a topic
      *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage $topicList
-     * @param \RKW\RkwNewsletter\Domain\Model\Topic $topic
      * @return boolean
      */
-    public function render(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $topicList, \RKW\RkwNewsletter\Domain\Model\Topic $topic)
+    public function render()
     {
-
+        $topicList = $this->arguments['topicList'];
+        $topic = $this->arguments['topic'];
+        
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topicFromList */
         foreach ($topicList as $topicFromList) {
 
