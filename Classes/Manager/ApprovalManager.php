@@ -193,7 +193,7 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
             && ($backendUserId = intval($GLOBALS['BE_USER']->user['uid']))
         ) {
             /** @var \RKW\RkwNewsletter\Domain\Model\BackendUser $backendUser */
-            $backendUser = $this->backendUserRepository->findByUid(intval($backendUserId));
+            $backendUser = $this->backendUserRepository->findByUid($backendUserId);
         }
 
         if (ApprovalStatus::increaseStage($approval, $backendUser)) {

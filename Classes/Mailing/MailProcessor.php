@@ -15,6 +15,7 @@ namespace RKW\RkwNewsletter\Mailing;
  */
 
 use RKW\RkwMailer\Utility\QueueMailUtility;
+use RKW\RkwMailer\Validation\QueueMailValidator;
 use RKW\RkwNewsletter\Domain\Model\FrontendUser;
 use RKW\RkwNewsletter\Domain\Model\Issue;
 use RKW\RkwNewsletter\Exception;
@@ -70,15 +71,6 @@ class MailProcessor
      */
     protected $issueRepository;
 
-
-    /**
-     * persistenceManager
-     *
-     * @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager
-     * @inject
-     */
-    protected $persistenceManager;
-
     
     /**
      * @var \RKW\RkwNewsletter\Mailing\ContentLoader
@@ -93,7 +85,24 @@ class MailProcessor
      */
     protected $mailService;
 
+    /**
+     * QueueMailValidator
+     *
+     * @var \RKW\RkwMailer\Validation\QueueMailValidator
+     * @inject
+     */
+    protected $queueMailValidator;
 
+
+    /**
+     * persistenceManager
+     *
+     * @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager
+     * @inject
+     */
+    protected $persistenceManager;
+
+    
     /**
      * @var \TYPO3\CMS\Core\Log\Logger
      */
@@ -138,7 +147,11 @@ class MailProcessor
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue $issue
      * @return void
-     * @throws \RKW\RkwNewsletter\Exception
+     * @throws Exception
+     * @throws \RKW\RkwMailer\Exception
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      */
     public function setIssue(Issue $issue): void
     {
@@ -467,8 +480,22 @@ class MailProcessor
         }
 
         // set startTstamp - no matter what!
+        // persist queueMail on start to be able to start pipelining!
         if (! $this->issue->getStartTstamp()) {
+
             $this->issue->setStartTstamp(time());
+            $this->issue->setQueueMail($this->mailService->getQueueMail());
+            $this->issueRepository->update($this->issue);
+            $this->persistenceManager->persistAll();
+
+            $this->mailService->startPipelining();
+            
+            $this->getLogger()->log(
+                LogLevel::INFO,
+                sprintf('Started sending of issue with id=%s.',
+                    $this->issue->getUid()
+                )
+            );
         }
         
         // work through recipients
@@ -593,6 +620,7 @@ class MailProcessor
      * inits mailService
      *
      * @return void
+     * @throws \RKW\RkwNewsletter\Exception
      * @throws \RKW\RkwMailer\Exception
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
@@ -625,7 +653,6 @@ class MailProcessor
 
                 // set properties for queueMail
                 /** @var \RKW\RkwMailer\Domain\Model\QueueMail $queueMail */
-                $queueMail = $this->mailService->getQueueMail();
                 $this->mailService->getQueueMail()->setType(1);
                 $this->mailService->getQueueMail()->setSubject($this->issue->getTitle());
                 $this->mailService->getQueueMail()->setCategory('rkwNewsletter');
@@ -685,16 +712,12 @@ class MailProcessor
                 $this->mailService->getQueueMail()->setHtmlTemplate(                    
                     ($this->issue->getNewsletter()->getTemplate() ?: 'Default')
                 );
-
-                // only add issue and start pipelining if mail is released!!!
-                // do not do this in test-mode!
-                if (IssueStatus::getStage($this->issue) == IssueStatus::STAGE_SENDING) {
-                    $this->mailService->startPipelining();
-                    $this->issue->setQueueMail($queueMail);
-                    $this->issueRepository->update($this->issue);
-                    $this->persistenceManager->persistAll();
+                
+                // last but not least: check if queueMail has all configuration needed for sending
+                if (! $this->queueMailValidator->validate($this->mailService->getQueueMail())) {
+                    throw new Exception('Newsletter is missing essential configuration. Sending will not be possible.', 1651215173);
                 }
-
+                
                 $this->getLogger()->log(
                     LogLevel::DEBUG,
                     sprintf('Initialized mailService for issue with id=%s of newsletter-configuration with id=%s with new queueMail-object with id=%s.',

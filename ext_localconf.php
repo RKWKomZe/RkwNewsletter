@@ -102,7 +102,7 @@ call_user_func(
 
             // configuration for WARNING severity, including all
             // levels with higher severity (ERROR, CRITICAL, EMERGENCY)
-            \TYPO3\CMS\Core\Log\LogLevel::DEBUG => array(
+            \TYPO3\CMS\Core\Log\LogLevel::INFO => array(
                 // add a FileWriter
                 'TYPO3\\CMS\\Core\\Log\\Writer\\FileWriter' => array(
                     // configuration for the writer

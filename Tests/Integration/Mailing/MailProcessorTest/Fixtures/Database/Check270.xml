@@ -2,23 +2,19 @@
 <dataset>
 
     <tx_rkwnewsletter_domain_model_newsletter>
-        <uid>30</uid>
+        <uid>270</uid>
         <pid>0</pid>
         <issue_title><![CDATA[Newsletter {M}/{Y}]]></issue_title>
         <issue>1</issue>
-        <sender_name>Test</sender_name>
-        <sender_mail>test@testen.de</sender_mail>
-        <reply_mail>reply@testen.de</reply_mail>
-        <return_path>return@testen.de</return_path>
         <settings_page>2</settings_page>
     </tx_rkwnewsletter_domain_model_newsletter>
-    
+
     <tx_rkwnewsletter_domain_model_issue>
-        <uid>30</uid>
+        <uid>270</uid>
         <pid>0</pid>
-        <newsletter>30</newsletter>
+        <newsletter>270</newsletter>
         <title>Tester</title>
-        <status>2</status>
     </tx_rkwnewsletter_domain_model_issue>
-    
+
+
 </dataset>
