@@ -5,7 +5,7 @@
 	
 	<!-- PLAINTEXT -->
 	<f:section name="Plaintext">
-		<f:if condition="{topics}">
+		<f:if condition="{topics} && !{isWebView}">
 			##################################################\n
 			<rkwMailer:frontend.translate key="partials_newsletter_global_footer.subscriptionHeadline" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />\n
 			##################################################\n
@@ -34,7 +34,7 @@
 	
 	<!-- HTML -->
 	<f:section name="Html">
-		<f:if condition="{topics}">
+		<f:if condition="{topics} && !{isWebView}">
 			<tr>
 				<td style="padding-top:48px;">
 					<table cellpadding="0" cellspacing="0" border="0" style="width: 100%; font-family: 'Arial', sans-serif; font-size: 14px">
