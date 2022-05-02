@@ -199,13 +199,32 @@ class IssueManagerTest extends FunctionalTestCase
          *
          * Given a string with {M} placeholder
          * When the method is called
-         * Then the placeholder is replaced with the current year
+         * Then the placeholder is replaced with the current month
          */
 
         $result = $this->subject->replaceTitlePlaceholders('this month is {M}');
         self::assertEquals('this month is '. date('m'), $result);
     }
-    
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function replaceTitlePlaceholdersReplacesDay()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a string with {D} placeholder
+         * When the method is called
+         * Then the placeholder is replaced with the current day
+         */
+
+        $result = $this->subject->replaceTitlePlaceholders('this day is {D}');
+        self::assertEquals('this day is '. date('d'), $result);
+    }
+
     //=============================================
     
     /**

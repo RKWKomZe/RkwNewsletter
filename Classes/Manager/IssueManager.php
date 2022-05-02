@@ -114,6 +114,7 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function replaceTitlePlaceholders (string $title): string
     {
+        $title = str_replace("{D}", date("d", time()), $title);
         $title = str_replace("{M}", date("m", time()), $title);
         $title = str_replace("{Y}", date("Y", time()), $title);
 
