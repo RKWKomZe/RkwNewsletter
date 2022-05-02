@@ -108,11 +108,24 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         
         // convert topic-ids to objects
         $topics = new ObjectStorage();
-        foreach ($topicsRaw as $topicId) {
-            if ($topic = $this->topicRepository->findByIdentifier($topicId)) {
-                $topics->attach($topic);
+        if ($topicsRaw) {
+            foreach ($topicsRaw as $topicId) {
+                if ($topic = $this->topicRepository->findByIdentifier($topicId)) {
+                    $topics->attach($topic);
+                }
+            }
+            
+        } else {
+            foreach($issue->getPages() as $page) {
+
+                /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic */
+                if ($topic = $page->getTxRkwnewsletterTopic()) {
+                    $topics->attach($topic);
+                }
             }
         }
+        
+        
         
 
         // add paths depending on template of newsletter - including the default one!
