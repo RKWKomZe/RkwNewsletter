@@ -488,6 +488,7 @@ class MailProcessor
             $this->issueRepository->update($this->issue);
             $this->persistenceManager->persistAll();
 
+            $this->mailService->getQueueMail()->setType(1);
             $this->mailService->startPipelining();
             
             $this->getLogger()->log(
@@ -653,7 +654,6 @@ class MailProcessor
 
                 // set properties for queueMail
                 /** @var \RKW\RkwMailer\Domain\Model\QueueMail $queueMail */
-                $this->mailService->getQueueMail()->setType(1);
                 $this->mailService->getQueueMail()->setSubject($this->issue->getTitle());
                 $this->mailService->getQueueMail()->setCategory('rkwNewsletter');
                 if ($this->issue->getNewsletter()->getSettingsPage()) {

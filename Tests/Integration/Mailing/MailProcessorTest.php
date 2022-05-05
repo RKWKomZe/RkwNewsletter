@@ -274,7 +274,6 @@ class MailProcessorTest extends FunctionalTestCase
          * When method is called with the issue-object Y as parameter
          * Then a new queueMail-object is created
          * Then this new queueMail-object is added to the mailService
-         * Then the type-property of the queueMail-object is set to 1
          * Then the setSettingsPid-property of the queueMail-object is set to the value set in the newsletter-object X
          * Then the issue-property of the queueMail-object is set to the title-property of the issue-object Y
          * Then the category-property of the queueMail-object is set the value "rkwNewsletter"
@@ -295,7 +294,6 @@ class MailProcessorTest extends FunctionalTestCase
         $queueMail = $this->queueMailRepository->findByUid(1);
 
         self::assertEquals(1, $this->subject->getMailService()->getQueueMail()->getUid());
-        self::assertEquals(1, $queueMail->getType());
         self::assertEquals(2, $queueMail->getSettingsPid());
         self::assertEquals('rkwNewsletter', $queueMail->getCategory());
         self::assertEquals('return@testen.de', $queueMail->getReturnPath());
@@ -2284,6 +2282,35 @@ class MailProcessorTest extends FunctionalTestCase
         self::assertEquals(IssueStatus::STAGE_DONE, $issue->getStatus());
         self::assertGreaterThanOrEqual(time() - 5, $issue->getNewsletter()->getLastSentTstamp());
 
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function sendMailsSetsTypeOfMailService()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object X
+         * Given that newsletter-object has all relevant mail-parameters set
+         * Given a persisted issue-object Y that belongs to the newsletter-object X
+         * Given that issue has four fictive recipients in the recipient-property set
+         * Given setIssue with the issue Y is called before
+         * When the method is called with limit-parameter 2
+         * Then true is returned
+         * Then the type-property of the queueMail-object is set to 1
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check260.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(260);
+
+        $this->subject->setIssue($issue);
+
+        self::assertTrue($this->subject->sendMails(2));
+        self::assertEquals(1, $this->subject->getMailService()->getQueueMail()->getType());
     }
     
     
