@@ -282,8 +282,16 @@
 			<trans-unit id="fe_user.tx_rkwnewsletter_domain_model_subscription">
                 <source>Topics</source>
             </trans-unit>
-			<trans-unit id="fe_user.tx_rkwnewsletter_priority">
-                <source>Priority</source>
+
+
+            <!-- ##################################################### -->
+            <!-- Flexforms                                             -->
+            <!-- ##################################################### -->
+			<trans-unit id="flexform.subscription.general">
+                <source>General</source>
+            </trans-unit>            
+			<trans-unit id="flexform.subscription.newsletter">
+                <source>Newsletter for subscription</source>
             </trans-unit>
 		</body>
 	</file>

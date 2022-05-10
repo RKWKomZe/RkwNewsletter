@@ -4,25 +4,25 @@
 
     <!-- PLAINTEXT -->
     <f:section name="Plaintext">
-        <rkwMailer:frontend.replace.redirectLinks queueMail="{queueMail}" isPlaintext="true">
+        <rkwMailer:email.replace.redirectLinks queueMail="{queueMail}" isPlaintext="true">
             <f:if condition="{content}">
                 <f:then>
                     <f:format.stripTags>
-                        <rkwMailer:frontend.replace.rteLinks plaintextFormat="true">
+                        <rkwMailer:email.replace.rteLinks plaintextFormat="true">
                             <f:format.raw>
                                 <rkwMailer:plaintextLineBreaks convertLineBreaks="true">{content}</rkwMailer:plaintextLineBreaks>
                             </f:format.raw>
-                        </rkwMailer:frontend.replace.rteLinks>
+                        </rkwMailer:email.replace.rteLinks>
                     </f:format.stripTags>
                 </f:then>
                 <f:else>
-                    <rkwMailer:frontend.translate 
+                    <rkwMailer:email.translate 
                         key="partials_newsletter_body_editorial_content.introduction" 
                         languageKey="{queueRecipient.languageCode}" 
                         extensionName="rkwNewsletter" />
                 </f:else>
             </f:if>
-        </rkwMailer:frontend.replace.redirectLinks>\n\n
+        </rkwMailer:email.replace.redirectLinks>\n\n
     </f:section>
     
     
@@ -31,21 +31,21 @@
     <f:section name="Html">
         <tr>
             <td style="padding: 0 16px; line-height: 20px" class="prefix-fix wysiwyg-content">
-                <rkwMailer:frontend.replace.redirectLinks queueMail="{queueMail}">
+                <rkwMailer:email.replace.redirectLinks queueMail="{queueMail}">
                     <f:if condition="{content}">
                         <f:then>
-                            <rkwMailer:frontend.replace.rteLinks style="color:#E64415;"><f:format.raw>{content}</f:format.raw></rkwMailer:frontend.replace.rteLinks>
+                            <rkwMailer:email.replace.rteLinks style="color:#E64415;"><f:format.raw>{content}</f:format.raw></rkwMailer:email.replace.rteLinks>
                         </f:then>
                         <f:else>
                             <p>
-                                <rkwMailer:frontend.translate 
+                                <rkwMailer:email.translate 
                                     key="partials_newsletter_body_editorial_content.introduction" 
                                     languageKey="{queueRecipient.languageCode}" 
                                     extensionName="rkwNewsletter" />
                             </p>
                         </f:else>
                     </f:if>
-                </rkwMailer:frontend.replace.redirectLinks>
+                </rkwMailer:email.replace.redirectLinks>
             </td>
         </tr>
     </f:section>

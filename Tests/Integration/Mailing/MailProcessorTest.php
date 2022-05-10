@@ -307,14 +307,14 @@ class MailProcessorTest extends FunctionalTestCase
      * @test
      * @throws \Exception
      */
-    public function setIssueSetsTemplatePathsOfMailService()
+    public function setIssueSetsDefaultTemplatePathsOfMailService()
     {
         /**
          * Scenario:
          *
          * Given a persisted newsletter-object X
          * Given that newsletter-object has all basic configuration-parameters set
-         * Given that newsletter-object has a template set that is not the default-template
+         * Given that newsletter-object has no settingsPid set
          * Given a persisted issue-object Y that belongs to the newsletter-object X
          * Given that issue-object Y has no queueMail-object set
          * When method is called with the issue-object Y as parameter
@@ -326,9 +326,8 @@ class MailProcessorTest extends FunctionalTestCase
          * Then the partialPaths-property of the queueMail-object contains the basic partial-paths
          * Then the partialPaths-property of the queueMail-object contains the partial-path of the default-template
          * Then the partialPaths-property of the queueMail-object contains the partial-paths of the set template of mewsletter-object X
-         * Then the plaintextTemplate-property of the queueMail-object is set to the template set in the newsletter-object X
-         * Then the htmlTemplate-property of the queueMail-object is set to the template set in the newsletter-object X
          */
+        
         $this->importDataSet(static::FIXTURE_PATH . '/Database/Check20.xml');
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
@@ -336,19 +335,86 @@ class MailProcessorTest extends FunctionalTestCase
 
         $expectedLayoutPaths = [
             'EXT:rkw_newsletter/Resources/Private/Layouts/Newsletter',
-            '{$module.tx_rkwnewsletter.view.newsletter.layoutRootPath}',
+            '{$plugin.tx_rkwnewsletter.view.newsletter.layoutRootPath}',
             'EXT:rkw_newsletter/Resources/Private/Layouts/Newsletter/Default',
             'EXT:rkw_newsletter/Resources/Private/Layouts/Newsletter/Managementletter',
-            '{$module.tx_rkwnewsletter.view.newsletter.layoutRootPath}/Default',
-            '{$module.tx_rkwnewsletter.view.newsletter.layoutRootPath}/Managementletter'
+            '{$plugin.tx_rkwnewsletter.view.newsletter.layoutRootPath}/Default',
+            '{$plugin.tx_rkwnewsletter.view.newsletter.layoutRootPath}/Managementletter'
         ];
         $expectedPartialPaths = [
             'EXT:rkw_newsletter/Resources/Private/Partials/Newsletter',
-            '{$module.tx_rkwnewsletter.view.newsletter.partialRootPath}',
+            '{$plugin.tx_rkwnewsletter.view.newsletter.partialRootPath}',
             'EXT:rkw_newsletter/Resources/Private/Partials/Newsletter/Default',
             'EXT:rkw_newsletter/Resources/Private/Partials/Newsletter/Managementletter',
-            '{$module.tx_rkwnewsletter.view.newsletter.partialRootPath}/Default',
-            '{$module.tx_rkwnewsletter.view.newsletter.partialRootPath}/Managementletter'
+            '{$plugin.tx_rkwnewsletter.view.newsletter.partialRootPath}/Default',
+            '{$plugin.tx_rkwnewsletter.view.newsletter.partialRootPath}/Managementletter'
+        ];
+
+        $this->subject->setIssue($issue);
+
+        /** @var \RKW\RkwMailer\Domain\Model\QueueMail $queueMail */
+        $queueMail = $this->queueMailRepository->findByUid(1);
+
+        self::assertEquals(1, $this->subject->getMailService()->getQueueMail()->getUid());
+        self::assertEquals($expectedLayoutPaths, $queueMail->getLayoutPaths());
+        self::assertEquals($expectedPartialPaths, $queueMail->getPartialPaths());
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function setIssueSetsTemplatePathsOfMailServiceBasedOnSettingsPid()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object X
+         * Given that newsletter-object has all basic configuration-parameters set
+         * Given a persisted issue-object Y that belongs to the newsletter-object X
+         * Given that issue-object Y has no queueMail-object set
+         * When method is called with the issue-object Y as parameter
+         * Then a new queueMail-object is created
+         * Then this new queueMail-object is added to the mailService
+         * Then the layoutPaths-property of the queueMail-object contains the basic layout-paths
+         * Then the layoutPaths-property of the queueMail-object contains the layout-path of the default-template
+         * Then the layoutPaths-property of the queueMail-object contains the layout-paths of the set template of mewsletter-object X
+         * Then the partialPaths-property of the queueMail-object contains the basic partial-paths
+         * Then the partialPaths-property of the queueMail-object contains the partial-path of the default-template
+         * Then the partialPaths-property of the queueMail-object contains the partial-paths of the set template of mewsletter-object X
+         */
+        $this->importDataSet(self::FIXTURE_PATH .  '/Database/Check21.xml');
+        $this->setUpFrontendRootPage(
+            21,
+            [
+                'EXT:rkw_basics/Configuration/TypoScript/setup.typoscript',
+                'EXT:rkw_mailer/Configuration/TypoScript/setup.typoscript',
+                'EXT:rkw_newsletter/Configuration/TypoScript/setup.typoscript',
+                'EXT:rkw_basics/Configuration/TypoScript/constants.typoscript',
+                'EXT:rkw_mailer/Configuration/TypoScript/constants.typoscript',
+                'EXT:rkw_newsletter/Configuration/TypoScript/constants.typoscript',
+                self::FIXTURE_PATH . '/Frontend/Configuration/Page21.typoscript',
+            ]
+        );
+        
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(21);
+
+        $expectedLayoutPaths = [
+            'test/Resources/Private/Layouts/Newsletter',
+            '{$plugin.tx_rkwnewsletter.view.newsletter.layoutRootPath}',
+            'test/Resources/Private/Layouts/Newsletter/Default',
+            'test/Resources/Private/Layouts/Newsletter/Managementletter',
+            '{$plugin.tx_rkwnewsletter.view.newsletter.layoutRootPath}/Default',
+            '{$plugin.tx_rkwnewsletter.view.newsletter.layoutRootPath}/Managementletter'
+        ];
+        $expectedPartialPaths = [
+            'test/Resources/Private/Partials/Newsletter',
+            '{$plugin.tx_rkwnewsletter.view.newsletter.partialRootPath}',
+            'test/Resources/Private/Partials/Newsletter/Default',
+            'test/Resources/Private/Partials/Newsletter/Managementletter',
+            '{$plugin.tx_rkwnewsletter.view.newsletter.partialRootPath}/Default',
+            '{$plugin.tx_rkwnewsletter.view.newsletter.partialRootPath}/Managementletter'
         ];
 
         $this->subject->setIssue($issue);
@@ -396,6 +462,40 @@ class MailProcessorTest extends FunctionalTestCase
 
         self::assertEquals('Default', $queueMail->getHtmlTemplate());
         self::assertEquals('Default', $queueMail->getPlaintextTemplate());
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function setIssueSetsDefinedTemplate()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object X
+         * Given that newsletter-object has all basic configuration-parameters set
+         * Given that newsletter-object a template set that is not the default-template
+         * Given a persisted issue-object Y that belongs to the newsletter-object X
+         * Given that issue-object Y has no queueMail-object set
+         * When method is called with the issue-object Y as parameter
+         * Then a new queueMail-object is created
+         * Then this new queueMail-object is added to the mailService
+         * Then the plaintextTemplate-property of the queueMail-object is set to the default template
+         * Then the htmlTemplate-property of the queueMail-object is set to the default template
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check20.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(20);
+
+        $this->subject->setIssue($issue);
+
+        /** @var \RKW\RkwMailer\Domain\Model\QueueMail $queueMail */
+        $queueMail = $this->queueMailRepository->findByUid(1);
+
+        self::assertEquals('Managementletter', $queueMail->getHtmlTemplate());
+        self::assertEquals('Managementletter', $queueMail->getPlaintextTemplate());
     }
 
     /**

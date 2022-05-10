@@ -14,8 +14,7 @@ namespace RKW\RkwNewsletter\Mailing;
  * The TYPO3 project - inspiring people to share!
  */
 
-use RKW\RkwMailer\Utility\QueueMailUtility;
-use RKW\RkwMailer\Validation\QueueMailValidator;
+use RKW\RkwBasics\Utility\FrontendSimulatorUtility;
 use RKW\RkwNewsletter\Domain\Model\FrontendUser;
 use RKW\RkwNewsletter\Domain\Model\Issue;
 use RKW\RkwNewsletter\Exception;
@@ -26,7 +25,6 @@ use TYPO3\CMS\Core\Log\LogManager;
 use RKW\RkwBasics\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
-use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 /**
  * MailProcessor
@@ -108,6 +106,12 @@ class MailProcessor
      */
     protected $logger;
 
+
+    /**
+     * @var array
+     */
+    protected $settings = [];
+    
     
     /**
      * Gets the mailService
@@ -340,7 +344,7 @@ class MailProcessor
         }
         
         // load settings
-        $settings = $this->getSettings(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
+        $settings = $this->getSettings();
         
         // set topics according to subscription
         $this->setTopics($frontendUser->getTxRkwnewsletterSubscription());
@@ -410,7 +414,7 @@ class MailProcessor
         }
 
         // load settings
-        $settings = $this->getSettings(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
+        $settings = $this->getSettings();
 
         // check for contents!
         if ($this->contentLoader->hasContents()) {
@@ -649,16 +653,17 @@ class MailProcessor
                 
             } else {
                 
-                // load settings
-                $settings = $this->getSettings(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
-
+                // set settingsPid and load settings from there
+                $settings = $this->getSettings();
+                if ($this->issue->getNewsletter()->getSettingsPage()) {
+                    $this->mailService->getQueueMail()->setSettingsPid($this->issue->getNewsletter()->getSettingsPage()->getUid());
+                }
+                
                 // set properties for queueMail
                 /** @var \RKW\RkwMailer\Domain\Model\QueueMail $queueMail */
                 $this->mailService->getQueueMail()->setSubject($this->issue->getTitle());
                 $this->mailService->getQueueMail()->setCategory('rkwNewsletter');
-                if ($this->issue->getNewsletter()->getSettingsPage()) {
-                    $this->mailService->getQueueMail()->setSettingsPid($this->issue->getNewsletter()->getSettingsPage()->getUid());
-                }
+
 
                 // set mail params
                 if ($this->issue->getNewsletter()->getReturnPath()) {
@@ -674,6 +679,13 @@ class MailProcessor
                     $this->mailService->getQueueMail()->setReplyToName($this->issue->getNewsletter()->getSenderName());
                     $this->mailService->getQueueMail()->setFromName($this->issue->getNewsletter()->getSenderName());
                 }
+                
+                $this->mailService->getQueueMail()->setPlaintextTemplate(
+                    ($this->issue->getNewsletter()->getTemplate() ?: 'Default')
+                );
+                $this->mailService->getQueueMail()->setHtmlTemplate(
+                    ($this->issue->getNewsletter()->getTemplate() ?: 'Default')
+                );
 
                 $this->mailService->getQueueMail()->addLayoutPaths($settings['view']['newsletter']['layoutRootPaths']);
                 $this->mailService->getQueueMail()->addTemplatePaths($settings['view']['newsletter']['templateRootPaths']);
@@ -705,14 +717,11 @@ class MailProcessor
                         }
                     }
                 }
-
-                $this->mailService->getQueueMail()->setPlaintextTemplate(
-                    ($this->issue->getNewsletter()->getTemplate() ?: 'Default')
-                );
-                $this->mailService->getQueueMail()->setHtmlTemplate(                    
-                    ($this->issue->getNewsletter()->getTemplate() ?: 'Default')
-                );
                 
+                /**
+                 * @toDo: Add further template paths based on settingsPid 
+                 */
+
                 // last but not least: check if queueMail has all configuration needed for sending
                 if (! $this->queueMailValidator->validate($this->mailService->getQueueMail())) {
                     throw new Exception('Newsletter is missing essential configuration. Sending will not be possible.', 1651215173);
@@ -733,6 +742,34 @@ class MailProcessor
     
 
     /**
+     * Returns TYPO3 settings
+     *
+     * @param string $which Which type of settings will be loaded
+     * @return array
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
+     */
+    protected function getSettings(string $which = ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK): array
+    {
+        
+        $pid = 1;
+        if ($this->issue->getNewsletter()->getSettingsPage()) {
+            $pid = $this->issue->getNewsletter()->getSettingsPage()->getUid();
+        }
+        
+        if (isset($this->settings[$pid])) {
+            return $this->settings[$pid];
+        }
+        
+        FrontendSimulatorUtility::simulateFrontendEnvironment($pid);
+        $this->settings[$pid] = GeneralUtility::getTyposcriptConfiguration('Rkwnewsletter', $which);
+        FrontendSimulatorUtility::resetFrontendEnvironment();
+        
+        return $this->settings[$pid];
+    }
+
+
+
+    /**
      * Returns logger instance
      *
      * @return \TYPO3\CMS\Core\Log\Logger
@@ -747,20 +784,7 @@ class MailProcessor
         return $this->logger;
     }
 
-        
-    /**
-     * Returns TYPO3 settings
-     *
-     * @param string $which Which type of settings will be loaded
-     * @return array
-     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
-     */
-    protected function getSettings($which = ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS)
-    {
-        return GeneralUtility::getTyposcriptConfiguration('Rkwnewsletter', $which);
-    }
 
-    
     /**
      * Does debugging of runtime
      *

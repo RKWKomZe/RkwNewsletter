@@ -3,9 +3,23 @@ plugin.tx_rkwnewsletter {
         # cat=module.tx_rkwnewsletter//a; type=string; label=Default storage PID
         storagePid = 9999
     }
+    
+    view {
+        newsletter {
 
-    settings {
-        subscriptionPid = 2
+            layoutRootPaths {
+                0 = test/Resources/Private/Layouts/Newsletter
+                1 = {$plugin.tx_rkwnewsletter.view.newsletter.layoutRootPath}
+            }
+            templateRootPaths {
+                0 = test/Resources/Private/Templates/Newsletter
+                1 = {$plugin.tx_rkwnewsletter.view.newsletter.templateRootPath}
+            }
+            partialRootPaths {
+                0 = test/Resources/Private/Partials/Newsletter
+                1 = {$plugin.tx_rkwnewsletter.view.newsletter.partialRootPath}
+            }
+        }
     }
 }
 
@@ -14,8 +28,6 @@ module.tx_rkwnewsletter {
         # cat=module.tx_rkwnewsletter//a; type=string; label=Default storage PID
         storagePid = 9999
     }
-
-    // settings < plugin.tx_rkwnewsletter.settings
 }
 
 

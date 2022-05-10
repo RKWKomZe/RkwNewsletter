@@ -16,6 +16,7 @@ namespace RKW\RkwNewsletter\Domain\Repository;
 
 use RKW\RkwBasics\Helper\QueryTypo3;
 use TYPO3\CMS\Core\Utility\DebugUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
@@ -47,7 +48,7 @@ class NewsletterRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @param int $currentTime
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      * @throws \TYPO3\CMS\Core\Type\Exception\InvalidEnumerationValueException
-     * @comment only used in backend
+     * @comment only used by command controller
      */
     public function findAllToBuildIssue(int $tolerance = 0, int $currentTime = 0): QueryResultInterface
     {
@@ -101,18 +102,24 @@ class NewsletterRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
 
     /**
-     * Returns all newsletters by type
+     * Returns all newsletters and filter by given id-list
      *
-     * @param int $type
+     * @param string $idList
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     * @comment used for subscription
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      */
-    public function findAllByType(int $type = 0): QueryResultInterface
+    public function findAllForSubscription(string $idList = ''): QueryResultInterface
     {
 
         $query = $this->createQuery();
-        $query->matching(
-            $query->equals('type', $type)
-        );
+        
+        if ($idList) {
+            $query->matching(
+                $query->in('uid', GeneralUtility::trimExplode(',', $idList, true))
+            );
+        }
+ 
 
         return $query->execute();
     }
