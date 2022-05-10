@@ -6,20 +6,20 @@
     
     <!-- PLAINTEXT -->
     <f:section name="Plaintext"><rkwMailer:plaintextLineBreaks>
-        <rkwMailer:frontend.translate key="templates_backend_email_adminRelease.headline" languageKey="{backendUser.lang}" extensionName="rkwNewsletter" arguments="{0 : backendUser.realName}" />
+        <rkwMailer:email.translate key="templates_backend_email_adminRelease.headline" languageKey="{backendUser.lang}" extensionName="rkwNewsletter" arguments="{0 : backendUser.realName}" />
         \n\n
-        <rkwMailer:frontend.translate key="templates_backend_email_adminRelease.text1" languageKey="{backendUser.lang}" extensionName="rkwNewsletter" />
+        <rkwMailer:email.translate key="templates_backend_email_adminRelease.text1" languageKey="{backendUser.lang}" extensionName="rkwNewsletter" />
         \n\n
         {issue.uid} – {issue.title}
         \n\n
-        <rkwMailer:frontend.translate key="templates_backend_email_adminRelease.text2" languageKey="{backendUser.lang}" extensionName="rkwNewsletter"  />
+        <rkwMailer:email.translate key="templates_backend_email_adminRelease.text2" languageKey="{backendUser.lang}" extensionName="rkwNewsletter"  />
     </rkwMailer:plaintextLineBreaks></f:section>
     
     <!-- HTML -->
     <f:section name="Html">
-        <h1><rkwMailer:frontend.translate key="templates_backend_email_adminRelease.headline" languageKey="{backendUser.lang}" extensionName="rkwNewsletter" arguments="{0 : backendUser.realName}" /></h1>
-        <p><rkwMailer:frontend.translate key="templates_backend_email_adminRelease.text1" languageKey="{backendUser.lang}" extensionName="rkwNewsletter"  /></p>
+        <h1><rkwMailer:email.translate key="templates_backend_email_adminRelease.headline" languageKey="{backendUser.lang}" extensionName="rkwNewsletter" arguments="{0 : backendUser.realName}" /></h1>
+        <p><rkwMailer:email.translate key="templates_backend_email_adminRelease.text1" languageKey="{backendUser.lang}" extensionName="rkwNewsletter"  /></p>
         <p><em>{issue.uid} – {issue.title}</em></p>
-        <p><rkwMailer:frontend.translate key="templates_backend_email_adminRelease.text2" languageKey="{backendUser.lang}" extensionName="rkwNewsletter"  /></p>
+        <p><rkwMailer:email.translate key="templates_backend_email_adminRelease.text2" languageKey="{backendUser.lang}" extensionName="rkwNewsletter"  /></p>
     </f:section>
 </html>

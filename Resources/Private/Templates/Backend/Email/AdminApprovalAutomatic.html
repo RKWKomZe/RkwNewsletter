@@ -6,21 +6,21 @@
 
     <!-- PLAINTEXT -->
     <f:section name="Plaintext"><rkwMailer:plaintextLineBreaks>
-        <rkwMailer:frontend.translate key="templates_backend_email_adminApprovalAutomatic.headline" languageKey="{backendUser.lang}" extensionName="rkwNewsletter" arguments="{0 : backendUser.realName}" />
+        <rkwMailer:email.translate key="templates_backend_email_adminApprovalAutomatic.headline" languageKey="{backendUser.lang}" extensionName="rkwNewsletter" arguments="{0 : backendUser.realName}" />
         \n\n
-        <rkwMailer:frontend.translate key="templates_backend_email_adminApprovalAutomatic.text1" languageKey="{backendUser.lang}" extensionName="rkwNewsletter" />
+        <rkwMailer:email.translate key="templates_backend_email_adminApprovalAutomatic.text1" languageKey="{backendUser.lang}" extensionName="rkwNewsletter" />
         \n\n
-        {approval.issue.uid} – {approval.issue.title}: {approval.topic.name} (<rkwMailer:frontend.translate key="templates_backend_email_adminApprovalAutomatic.stage" languageKey="{backendUser.lang}" extensionName="rkwNewsletter"  /> {stage})
+        {approval.issue.uid} – {approval.issue.title}: {approval.topic.name} (<rkwMailer:email.translate key="templates_backend_email_adminApprovalAutomatic.stage" languageKey="{backendUser.lang}" extensionName="rkwNewsletter"  /> {stage})
         \n\n
-        <rkwMailer:frontend.translate key="templates_backend_email_adminApprovalAutomatic.text2" languageKey="{backendUser.lang}" extensionName="rkwNewsletter"  />
+        <rkwMailer:email.translate key="templates_backend_email_adminApprovalAutomatic.text2" languageKey="{backendUser.lang}" extensionName="rkwNewsletter"  />
     </rkwMailer:plaintextLineBreaks></f:section>
 
     <!-- HTML -->
     <f:section name="Html">
-        <h1><rkwMailer:frontend.translate key="templates_backend_email_adminApprovalAutomatic.headline" languageKey="{backendUser.lang}" extensionName="rkwNewsletter" arguments="{0 : backendUser.realName}" /></h1>
-        <p><rkwMailer:frontend.translate key="templates_backend_email_adminApprovalAutomatic.text1" languageKey="{backendUser.lang}" extensionName="rkwNewsletter"  /></p>
-        <p><em>{approval.issue.uid} – {approval.issue.title}: {approval.topic.name} (<rkwMailer:frontend.translate key="templates_backend_email_adminApprovalAutomatic.stage" languageKey="{backendUser.lang}" extensionName="rkwNewsletter"  /> {stage})</em></p>
-        <p><rkwMailer:frontend.translate key="templates_backend_email_adminApprovalAutomatic.text2" languageKey="{backendUser.lang}" extensionName="rkwNewsletter"  /></p>
+        <h1><rkwMailer:email.translate key="templates_backend_email_adminApprovalAutomatic.headline" languageKey="{backendUser.lang}" extensionName="rkwNewsletter" arguments="{0 : backendUser.realName}" /></h1>
+        <p><rkwMailer:email.translate key="templates_backend_email_adminApprovalAutomatic.text1" languageKey="{backendUser.lang}" extensionName="rkwNewsletter"  /></p>
+        <p><em>{approval.issue.uid} – {approval.issue.title}: {approval.topic.name} (<rkwMailer:email.translate key="templates_backend_email_adminApprovalAutomatic.stage" languageKey="{backendUser.lang}" extensionName="rkwNewsletter"  /> {stage})</em></p>
+        <p><rkwMailer:email.translate key="templates_backend_email_adminApprovalAutomatic.text2" languageKey="{backendUser.lang}" extensionName="rkwNewsletter"  /></p>
     </f:section>
 
 </html>

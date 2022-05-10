@@ -6,7 +6,7 @@
     <f:section name="Plaintext">
         <rkwMailer:recipientSalutation 
             queueRecipient="{queueRecipient}" 
-            prependText="{rkwMailer:frontend.translate(key:'partials_newsletter_body.headline', languageKey:'{queueRecipient.languageCode}', extensionName:'rkwNewsletter')} " 
+            prependText="{rkwMailer:email.translate(key:'partials_newsletter_body.headline', languageKey:'{queueRecipient.languageCode}', extensionName:'rkwNewsletter')} " 
             appendText="," />
         \n\n
         <rkwMailer:cache.renderCache queueMail="{queueMail}" isPlaintext="true" additionalIdentifier="{rkwNewsletter:mailing.getCacheIdentifier(issue:'{issue}', topics:'{topics}')}">
@@ -25,7 +25,7 @@
             <td style="padding: 0 16px; line-height: 20px">
                 <p style="margin: 24px 0 24px; font-size:24px; line-height: 28px">
                     <rkwMailer:recipientSalutation queueRecipient="{queueRecipient}" 
-                        prependText="{rkwMailer:frontend.translate(key:'partials_newsletter_body.headline', languageKey:'{queueRecipient.languageCode}', extensionName:'rkwNewsletter')} " 
+                        prependText="{rkwMailer:email.translate(key:'partials_newsletter_body.headline', languageKey:'{queueRecipient.languageCode}', extensionName:'rkwNewsletter')} " 
                         appendText="," />
                 </p>
             </td>

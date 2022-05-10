@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dataset>
 
+    <pages>
+        <uid>21</uid>
+        <pid>0</pid>
+        <title>Subpage</title>
+        <doktype>1</doktype>
+        <is_siteroot>1</is_siteroot>
+        <perms_everybody>15</perms_everybody>
+    </pages>
+    
     <tx_rkwnewsletter_domain_model_newsletter>
-        <uid>20</uid>
+        <uid>21</uid>
         <pid>0</pid>
         <issue_title><![CDATA[Newsletter {M}/{Y}]]></issue_title>
         <issue>1</issue>
@@ -10,13 +19,14 @@
         <sender_mail>test@testen.de</sender_mail>
         <reply_mail>reply@testen.de</reply_mail>
         <return_path>return@testen.de</return_path>
+        <settings_page>21</settings_page>
         <template>Managementletter</template>
     </tx_rkwnewsletter_domain_model_newsletter>
     
     <tx_rkwnewsletter_domain_model_issue>
-        <uid>20</uid>
+        <uid>21</uid>
         <pid>0</pid>
-        <newsletter>20</newsletter>
+        <newsletter>21</newsletter>
         <title>Tester</title>
     </tx_rkwnewsletter_domain_model_issue>
     

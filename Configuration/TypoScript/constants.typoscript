@@ -9,6 +9,17 @@ plugin.tx_rkwnewsletter {
 
 		# cat=plugin.tx_rkwnewsletter/file; type=string; label=Path to template partials (FE)
 		partialRootPath = EXT:rkw_newsletter/Resources/Private/Partials/
+		
+		newsletter {
+            # cat=module.tx_rkwnewsletter/file; type=string; label=Path to template root for newsletter
+            templateRootPath = EXT:rkw_newsletter/Resources/Private/Templates/Newsletter
+    
+            # cat=module.tx_rkwnewsletter/file; type=string; label=Path to template partials for newsletter
+            partialRootPath = EXT:rkw_newsletter/Resources/Private/Partials/Newsletter
+    
+            # cat=module.tx_rkwnewsletter/file; type=string; label=Path to template layouts for newsletter
+            layoutRootPath = EXT:rkw_newsletter/Resources/Private/Layouts/Newsletter
+        }
 	}
 	persistence {
 		# cat=plugin.tx_rkwnewsletter//a; type=string; label=Default storage PID
@@ -32,9 +43,6 @@ plugin.tx_rkwnewsletter {
 		# cat=plugin.tx_rkwnewsletter//a; type=integer; label=automatic approval of stage 2 after a certain time
 		automaticApprovalStage2 = 604800
 
-        # cat=plugin.tx_rkwnewsletter//a; type=boolean; label=Order topics randomly
-        randomTopicOrder = 1
-
 		# cat=plugin.tx_rkwnewsletter//a; type=integer; label=Pid of login mask
 		loginPid =
 
@@ -44,7 +52,7 @@ plugin.tx_rkwnewsletter {
         # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Pid for subscriptions
         subscriptionPid =
 
-        # cat=plugin.tx_rkwnewsletter//a; type=integer; label=TypeNum for webview for newsletter
+        # cat=plugin.tx_rkwnewsletter//a; type=integer; label=TypeNum for webview of newsletter
         webViewPageNum = 1536732477
 
         # cat=plugin.tx_rkwnewsletter//a; type=string; label=Required fields for subscription
@@ -134,17 +142,5 @@ module.tx_rkwnewsletter {
 
 		# cat=module.tx_rkwnewsletter/file; type=string; label=Path to template layouts (BE)
 		layoutRootPath = EXT:rkw_newsletter/Resources/Private/Layouts/Backend/
-
-
-        newsletter {
-            # cat=module.tx_rkwnewsletter/file; type=string; label=Path to template root for newsletter
-            templateRootPath = EXT:rkw_newsletter/Resources/Private/Templates/Newsletter
-
-            # cat=module.tx_rkwnewsletter/file; type=string; label=Path to template partials for newsletter
-            partialRootPath = EXT:rkw_newsletter/Resources/Private/Partials/Newsletter
-
-            # cat=module.tx_rkwnewsletter/file; type=string; label=Path to template layouts for newsletter
-            layoutRootPath = EXT:rkw_newsletter/Resources/Private/Layouts/Newsletter
-        }
 	}
 }

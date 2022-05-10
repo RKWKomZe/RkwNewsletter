@@ -4,16 +4,33 @@ defined('TYPO3_MODE') || die('Access denied.');
 call_user_func(
     function () {
         
+        $extensionKey = 'rkw_newsletter';
+        
         //=================================================================
-        // Register Plugin
+        // Register Plugins
         //=================================================================
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
-            'RKW.RkwNewsletter',
+            $extensionKey,
             'Subscription',
             'RKW Newsletter: Anmeldung'
         );
         
+        //=================================================================
+        // Add Flexforms
+        //=================================================================
+        // plugin signature: <extension key without underscores> '_' <plugin name in lowercase>
+        $pluginSignature = str_replace('_','', $extensionKey) . '_subscription';
+        $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
+        $fileName = 'FILE:EXT:rkw_newsletter/Configuration/FlexForms/Subscription.xml';
+
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
+            $pluginSignature,
+            $fileName
+        );
         
+        //=================================================================
+        // TCA Extension
+        //=================================================================
         $tmpCols = [
             'tx_rkwnewsletter_is_editorial' => [
                 'exclude' => true,
@@ -47,6 +64,8 @@ call_user_func(
             'tt_content',
             '--div--;LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tt_content.tx_rkwnewsletter;,tx_rkwnewsletter_is_editorial, tx_rkwnewsletter_authors'
         );
+        
+
 
     }
 );

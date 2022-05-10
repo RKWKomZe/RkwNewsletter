@@ -207,6 +207,7 @@
 				<source>Stage 2: Sent Reminder At</source>
 				<target state="translated">Stufe 2: Erinnerung gesendet am</target>
 			</trans-unit>
+			
 
             <!-- ##################################################### -->
             <!-- tx_rkwnewsletter_domain_model_issue                 -->
@@ -367,10 +368,20 @@
                 <source>Topics</source>
                 <target>Themen</target>
             </trans-unit>
-			<trans-unit id="fe_user.tx_rkwnewsletter_priority">
-                <source>Priority</source>
-                <target>Prioritär anschreiben</target>
+
+
+            <!-- ##################################################### -->
+            <!-- Flexforms                                             -->
+            <!-- ##################################################### -->
+			<trans-unit id="flexform.subscription.general">
+                <source>General</source>
+                <target>Allgemein</target>
+            </trans-unit>            
+			<trans-unit id="flexform.subscription.newsletter">
+                <source>Newsletter for subscription</source>
+                <target>Newsletter für Abonnement</target>
             </trans-unit>
+
 		</body>
 	</file>
 </xliff>
