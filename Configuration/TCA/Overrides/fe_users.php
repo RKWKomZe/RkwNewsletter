@@ -18,6 +18,7 @@ call_user_func(
                     'maxitems' => 9999,
                     'foreign_table' => 'tx_rkwnewsletter_domain_model_topic',
                     'foreign_table_where' => 'AND tx_rkwnewsletter_domain_model_topic.deleted = 0 AND tx_rkwnewsletter_domain_model_topic.hidden = 0',
+                    'itemsProcFunc' => 'RKW\RkwNewsletter\TCA\OptionLabels->getNewsletterTopicTitlesWithRootByUid',
                 ],
             ],
             'tx_rkwnewsletter_hash' => [
