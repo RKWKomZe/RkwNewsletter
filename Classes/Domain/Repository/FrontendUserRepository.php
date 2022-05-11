@@ -61,9 +61,8 @@ class FrontendUserRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             $query->contains('txRkwnewsletterSubscription', $topic)
         );
 
-        // we take the uid here in order to be able to work with offset properly!
         $query->setOrderings(
-            ['uid' => QueryInterface::ORDER_ASCENDING]
+            ['txRkwnewsletterPriority' => QueryInterface::ORDER_DESCENDING]
         );
         
         return $query->execute();
@@ -82,16 +81,28 @@ class FrontendUserRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     {
 
         $query = $this->createQuery();
-        $query->matching(
-            $query->logicalAnd(
-                $query->greaterThan('txRkwnewsletterSubscription', 0),
-                $query->in('txRkwnewsletterSubscription', $newsletter->getTopic())
-            )
-        );
-
-        // we take the uid here in order to be able to work with offset properly!
+        
+        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic */
+        $constrains = [];
+        foreach ($newsletter->getTopic() as $topic) {
+            $constrains[] = $query->contains('txRkwnewsletterSubscription', $topic);
+        }
+        
+        if ($constrains) {
+            $query->matching(
+                $query->logicalAnd(
+                    $query->greaterThan('txRkwnewsletterSubscription', 0),
+                    $query->logicalOr($constrains)
+                )
+            ); 
+        } else {
+            $query->matching(
+                $query->greaterThan('txRkwnewsletterSubscription', 0)
+            );
+        }      
+        
         $query->setOrderings(
-            ['uid' => QueryInterface::ORDER_ASCENDING]
+            ['txRkwnewsletterPriority' => QueryInterface::ORDER_DESCENDING]
         );
 
         return $query->execute();

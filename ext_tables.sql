@@ -145,6 +145,7 @@ CREATE TABLE tx_rkwnewsletter_domain_model_issue (
 CREATE TABLE fe_users (
   tx_rkwnewsletter_subscription varchar(255) DEFAULT '' NOT NULL,
   tx_rkwnewsletter_hash varchar(255) DEFAULT '' NOT NULL,
+  tx_rkwnewsletter_priority int(1) unsigned DEFAULT '0' NOT NULL,
 );
 
 
