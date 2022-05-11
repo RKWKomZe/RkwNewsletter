@@ -7,7 +7,7 @@ call_user_func(
         // extend "fe_users" TCA
         $tmpColsUser = [
             'tx_rkwnewsletter_subscription' => [
-                'exclude' => 0,
+                'exclude' => false,
                 'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:fe_user.tx_rkwnewsletter_domain_model_subscription',
                 'config' => [
                     'type' => 'select',
@@ -24,7 +24,15 @@ call_user_func(
                 'config' => [
                     'type' => 'passthrough',
                 ],
-            ]
+            ],
+            'tx_rkwnewsletter_priority' => [
+                'exclude' => false,
+                'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:fe_user.tx_rkwnewsletter_priority',
+                'config' => [
+                    'type' => 'check',
+                    'default' => 0,
+                ],
+            ],
         ];
         
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns(
@@ -32,7 +40,7 @@ call_user_func(
         );
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
             'fe_users',
-            '--div--;LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:pages.tx_rkwnewsletter;,tx_rkwnewsletter_subscription'
+            '--div--;LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:pages.tx_rkwnewsletter;,tx_rkwnewsletter_subscription, tx_rkwnewsletter_priority'
         );
     
     }

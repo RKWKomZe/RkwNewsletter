@@ -279,8 +279,11 @@
             <!-- ##################################################### -->
             <!-- fe_user                                               -->
             <!-- ##################################################### -->
-			<trans-unit id="fe_user.tx_rkwnewsletter_domain_model_subscription">
+			<trans-unit id="fe_user.tx_rkwnewsletter_subscription">
                 <source>Topics</source>
+            </trans-unit>
+            <trans-unit id="fe_user.tx_rkwnewsletter_priority">
+                <source>Priority</source>
             </trans-unit>
 
 

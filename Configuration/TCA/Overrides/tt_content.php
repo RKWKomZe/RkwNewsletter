@@ -37,6 +37,7 @@ call_user_func(
                 'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tt_content.tx_rkwnewsletter_is_editorial',
                 'config' => [
                     'type' => 'check',
+                    'default' => 0,
                 ],
             ],
         ];

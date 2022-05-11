@@ -13,6 +13,17 @@
         <return_path>return@testen.de</return_path>
     </tx_rkwnewsletter_domain_model_newsletter>
 
+    <tx_rkwnewsletter_domain_model_newsletter>
+        <uid>61</uid>
+        <pid>0</pid>
+        <issue_title><![CDATA[Newsletter {M}/{Y}]]></issue_title>
+        <issue>0</issue>
+        <topic>1</topic>
+        <sender_name>Test</sender_name>
+        <sender_mail>test@testen.de</sender_mail>
+        <reply_mail>reply@testen.de</reply_mail>
+        <return_path>return@testen.de</return_path>
+    </tx_rkwnewsletter_domain_model_newsletter>
     
     <tx_rkwnewsletter_domain_model_issue>
         <uid>60</uid>
@@ -37,19 +48,26 @@
         <newsletter>60</newsletter>
     </tx_rkwnewsletter_domain_model_topic>
 
+    <tx_rkwnewsletter_domain_model_topic>
+        <uid>62</uid>
+        <pid>0</pid>
+        <container_page>1</container_page>
+        <newsletter>61</newsletter>
+    </tx_rkwnewsletter_domain_model_topic>
+    
     
     <fe_users>
         <uid>60</uid>
         <pid>0</pid>
         <email>test1@rkw.de</email>
-        <tx_rkwnewsletter_subscription>60,61</tx_rkwnewsletter_subscription>
+        <tx_rkwnewsletter_subscription>62,60,61</tx_rkwnewsletter_subscription>
     </fe_users>
 
     <fe_users>
         <uid>61</uid>
         <pid>0</pid>
         <email>test2@rkw.de</email>
-        <tx_rkwnewsletter_subscription>60</tx_rkwnewsletter_subscription>
+        <tx_rkwnewsletter_subscription>62,60</tx_rkwnewsletter_subscription>
     </fe_users>
 
     <fe_users>
@@ -64,6 +82,7 @@
         <pid>0</pid>
         <email>test4@rkw.de</email>
         <tx_rkwnewsletter_subscription>61</tx_rkwnewsletter_subscription>
+        <tx_rkwnewsletter_priority>1</tx_rkwnewsletter_priority>
     </fe_users>
 
     <fe_users>
@@ -71,5 +90,12 @@
         <pid>0</pid>
         <email>test5@rkw.de</email>
         <tx_rkwnewsletter_subscription />
+    </fe_users>
+
+    <fe_users>
+        <uid>65</uid>
+        <pid>0</pid>
+        <email>test4@rkw.de</email>
+        <tx_rkwnewsletter_subscription>62</tx_rkwnewsletter_subscription>
     </fe_users>
 </dataset>

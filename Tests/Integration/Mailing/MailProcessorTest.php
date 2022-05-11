@@ -669,13 +669,18 @@ class MailProcessorTest extends FunctionalTestCase
          * Scenario:
          *
          * Given a persisted newsletter-object X
+         * Given a persisted newsletter-object Y
          * Given that newsletter-object has all relevant mail-parameters set
          * Given a persisted issue-object Y that belongs to the newsletter-object X
          * Given this issue-object Y has no startTstamp-property set
          * Given two topic-objects A and B that belong to the newsletter-object X
-         * Given two frontendUser-objects K and L that have subscribed to the topic A
+         * Given two topic-objects C and D that belong to the newsletter-object Y
+         * Given two frontendUser-objects K and L that have subscribed to the topic C at first
+         * Given two frontendUser-objects K and L that have subscribed to the topic A in the second step
          * Given three frontendUser-objects K, M and N that have subscribed to the topic B
+         * Given the frontendUser-object N has the priority-property set to true
          * Given one frontendUser-objects P that has not subscribed to a topic
+         * Given one frontendUser-objects Q that has subscribed to a topic C
          * Given setIssue with the issue Y is called before
          * Given the status of the queueMail-object of the mailService is DRAFT (default)
          * When method is called
@@ -683,6 +688,7 @@ class MailProcessorTest extends FunctionalTestCase
          * Then the recipients-property of the issue Y returns an array
          * Then this array contains four items
          * Then this array contains the ids of the frontendUsers K, L, M and N
+         * Then the frontendUser N is returned first
          * Then this recipient-list is persisted
          */
 
@@ -701,11 +707,11 @@ class MailProcessorTest extends FunctionalTestCase
         $result = $this->subject->getIssue()->getRecipients();
         self::assertInternalType('array', $result);
         self::assertCount(4, $result);
-      
-        self::assertEquals(60, $result[0]);
-        self::assertEquals(61, $result[1]);
-        self::assertEquals(62, $result[2]);
-        self::assertEquals(63, $result[3]);
+
+        self::assertEquals(63, $result[0]);
+        self::assertEquals(60, $result[1]);
+        self::assertEquals(61, $result[2]);
+        self::assertEquals(62, $result[3]);
         
     }
 
@@ -720,13 +726,18 @@ class MailProcessorTest extends FunctionalTestCase
          * Scenario:
          *
          * Given a persisted newsletter-object X
+         * Given a persisted newsletter-object Y
          * Given that newsletter-object has all relevant mail-parameters set
          * Given a persisted issue-object Y that belongs to the newsletter-object X
          * Given this issue-object Y has no startTstamp-property set
          * Given two topic-objects A and B that belong to the newsletter-object X
-         * Given two frontendUser-objects K and L that have subscribed to the topic A
+         * Given two topic-objects C and D that belong to the newsletter-object Y
+         * Given two frontendUser-objects K and L that have subscribed to the topic C at first
+         * Given two frontendUser-objects K and L that have subscribed to the topic A in the second step
          * Given three frontendUser-objects K, M and N that have subscribed to the topic B
+         * Given the frontendUser-object N has the priority-property set to true
          * Given one frontendUser-objects P that has not subscribed to a topic
+         * Given one frontendUser-objects Q that has subscribed to a topic C
          * Given setIssue with the issue Y is called before
          * Given the status of the queueMail-object of the mailService is DRAFT (default)
          * Given the method has been called before
@@ -735,6 +746,7 @@ class MailProcessorTest extends FunctionalTestCase
          * Then the recipients-property of the issue Y returns an array
          * Then this array contains four items
          * Then this array contains the ids of the frontendUsers K, L, M and N
+         * Then the frontendUser N is returned first
          * Then this recipient-list is persisted
          */
 
@@ -755,10 +767,10 @@ class MailProcessorTest extends FunctionalTestCase
         self::assertInternalType('array', $result);
         self::assertCount(4, $result);
 
-        self::assertEquals(60, $result[0]);
-        self::assertEquals(61, $result[1]);
-        self::assertEquals(62, $result[2]);
-        self::assertEquals(63, $result[3]);
+        self::assertEquals(63, $result[0]);
+        self::assertEquals(60, $result[1]);
+        self::assertEquals(61, $result[2]);
+        self::assertEquals(62, $result[3]);
 
     }
 
@@ -773,21 +785,22 @@ class MailProcessorTest extends FunctionalTestCase
          * Scenario:
          *
          * Given a persisted newsletter-object X
+         * Given a persisted newsletter-object Y
          * Given that newsletter-object has all relevant mail-parameters set
          * Given a persisted issue-object Y that belongs to the newsletter-object X
-         * Given this issue-object Y has the startTstamp-property set
+         * Given this issue-object Y has no startTstamp-property set
          * Given two topic-objects A and B that belong to the newsletter-object X
-         * Given two frontendUser-objects K and L that have subscribed to the topic A
+         * Given two topic-objects C and D that belong to the newsletter-object Y
+         * Given two frontendUser-objects K and L that have subscribed to the topic C at first
+         * Given two frontendUser-objects K and L that have subscribed to the topic A in the second step
          * Given three frontendUser-objects K, M and N that have subscribed to the topic B
+         * Given the frontendUser-object N has the priority-property set to true
          * Given one frontendUser-objects P that has not subscribed to a topic
+         * Given one frontendUser-objects Q that has subscribed to a topic C
          * Given setIssue with the issue Y is called before
          * Given the status of the queueMail-object is SENDING
          * When method is called
          * Then false is returned
-         * Then the recipients-property of the issue Y returns an array
-         * Then this array contains four items
-         * Then this array contains the ids of the frontendUsers K, L, M and N
-         * Then this recipient-list is persisted
          */
 
         $this->importDataSet(static::FIXTURE_PATH . '/Database/Check60.xml');

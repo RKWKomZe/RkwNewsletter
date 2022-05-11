@@ -41,6 +41,12 @@ class FrontendUser extends \RKW\RkwRegistration\Domain\Model\FrontendUser
      */
     protected $txRkwnewsletterHash = '';
 
+
+    /**
+     * @var bool txRkwnewsletterPriority
+     */
+    protected $txRkwnewsletterPriority = false;
+
     
     /**
      * __construct
@@ -143,4 +149,26 @@ class FrontendUser extends \RKW\RkwRegistration\Domain\Model\FrontendUser
     }
 
 
+    /**
+     * set the TxRkwnewsletterPriority
+     *
+     * @param bool $priority
+     * @return void
+     */
+
+    public function setTxRkwnewsletterPriority(bool $priority): void
+    {
+        $this->txRkwnewsletterPriority = $priority;
+    }
+
+    /**
+     * get the TxRkwnewsletterPriority
+     *
+     * @return bool
+     */
+    public function getTxRkwnewsletterPriority(): bool
+    {
+        return $this->txRkwnewsletterPriority;
+    }
+    
 }
