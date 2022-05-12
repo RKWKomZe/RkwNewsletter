@@ -223,7 +223,7 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
 
         $this->view->assignMultiple(
             array(
-                'newsletterList' => $this->newsletterRepository->findAllForSubscription($this->settings['newsletterList']),
+                'newsletterList' => $this->newsletterRepository->findAllForSubscription($this->settings['newsletterList']?: ''),
                 'topicList'      => $this->buildCleanedTopicList($topics),
                 'frontendUser'   => $frontendUser,
                 'terms'          => (bool)$terms,
@@ -420,7 +420,7 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
 
         $this->view->assignMultiple(
             array(
-                'newsletterList' => $this->newsletterRepository->findAllForSubscription($this->settings['newsletterList']),
+                'newsletterList' => $this->newsletterRepository->findAllForSubscription($this->settings['newsletterList']?: ''),
                 'topicList'      => $this->buildCleanedTopicList($topics),
                 'privacy'        => (bool)$privacy,
                 'frontendUser'   => $frontendUser,
