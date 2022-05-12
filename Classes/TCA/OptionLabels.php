@@ -71,7 +71,11 @@ class OptionLabels
     public static function getExtendedTopicName(\RKW\RkwNewsletter\Domain\Model\Topic $topic): string
     {
 
-        return $topic->getName() . ' (' . $topic->getNewsletter()->getName() . ')';
+        if ($topic->getNewsletter()) {
+            return $topic->getName() . ' (' . $topic->getNewsletter()->getName() . ')';
+        }
+
+        return $topic->getName();
 
     }
 
