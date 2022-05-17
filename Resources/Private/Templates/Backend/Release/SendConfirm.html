@@ -13,48 +13,49 @@
 
         <f:render partial="FlashMessages" arguments="{_all}" />
 
-        <table class="tx-rkwnewsletter-list">
-            <tr>
-                <th>
-                    <f:translate key="templates_backend_release_sendConfirm.id" />
-                </th>
-                <th>
-                    <f:translate key="templates_backend_release_sendConfirm.title" />
-                </th>
-                <th>
-                    <f:translate key="templates_backend_release_sendConfirm.subscriptions" />
-                </th>
-                <th>
-                    <f:translate key="templates_backend_release_sendConfirm.action"  />
-                </th>
-            </tr>
-
-            <f:form action="send" name="issue" object="{issue}" >
+        <f:if condition="{issues} && {rkwNewsletter:backend.hasBackendUserPermissionMultiple(issues: issues, allApprovals:'true')}">
+            <f:then>
+            <table class="tx-rkwnewsletter-list">
                 <tr>
-                    <td>{issue.uid}</td>
-                    <td><f:form.textfield name="title" value="{issue.title}" /></td>
-                    <td>
-                        <f:render partial="Release/Subscriptions" arguments="{issue : issue}" />
-                    </td>
-                    <td>
-                        <f:if condition="{rkwNewsletter:backend.hasBackendUserPermission(issue: '{issue}')}">
-                            <f:then>
+                    <th>
+                        <f:translate key="templates_backend_release_sendConfirm.id" />
+                    </th>
+                    <th>
+                        <f:translate key="templates_backend_release_sendConfirm.title" />
+                    </th>
+                    <th>
+                        <f:translate key="templates_backend_release_sendConfirm.subscriptions" />
+                    </th>
+                    <th>
+                        <f:translate key="templates_backend_release_sendConfirm.action"  />
+                    </th>
+                </tr>
+    
+                <f:if condition="{rkwNewsletter:backend.hasBackendUserPermission(issue: '{issue}')}">
+                    <f:form action="send" name="issue" object="{issue}" >
+                        <tr>
+                            <td>{issue.uid}</td>
+                            <td><f:form.textfield name="title" value="{issue.title}" /></td>
+                            <td>
+                                <f:render partial="Release/Subscriptions" arguments="{issue : issue}" />
+                            </td>
+                            <td>
                                 <f:link.action action="sendList" arguments="{issue : issue}">
                                     <f:translate key="templates_backend_release_sendConfirm.cancel"  />
                                 </f:link.action>
                                 <f:form.button type="submit" >
                                     <f:translate key="templates_backend_release_sendConfirm.go"  />
                                 </f:form.button>
-                            </f:then>
-                            <f:else>
-                                &ndash;
-                            </f:else>
-                        </f:if>
-                    </td>
-                </tr>
-            </f:form>
-        </table>
-
+                            </td>
+                        </tr>
+                    </f:form>
+                </f:if>
+            </table>
+        </f:then>
+        <f:else>
+            <f:translate key="templates_backend_release_sendConfirm.noIssuesWaiting" />
+        </f:else>
+        </f:if>        
 
     </f:section>
 </html>

@@ -12,10 +12,10 @@ return [
 		'iconfile' => 'EXT:rkw_newsletter/Resources/Public/Icons/tx_rkwnewsletter_domain_model_issue.gif'
 	],
 	'interface' => [
-		'showRecordFieldList' => 'title, introduction, authors, status, start_tstamp, sent_tstamp',
+		'showRecordFieldList' => 'title, introduction, authors, status, release_tstamp, start_tstamp, sent_tstamp',
 	],
 	'types' => [
-		'1' => ['showitem' => 'title, introduction, authors, status, start_tstamp, sent_tstamp'],
+		'1' => ['showitem' => 'title, introduction, authors, status, release_tstamp, start_tstamp, sent_tstamp'],
 	],
 	'palettes' => [
 		'1' => ['showitem' => ''],
@@ -56,7 +56,7 @@ return [
             ]
         ],        
 		'status' => [
-			'exclude' => false,
+			'exclude' => true,
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_issue.status',
 			'config' => [
 				'type' => 'select',
@@ -97,6 +97,7 @@ return [
                 'size' => 10,
                 'eval' => 'datetime',
                 'checkbox' => 1,
+                'readOnly' => true
             ],
         ],
         'release_tstamp' => [
