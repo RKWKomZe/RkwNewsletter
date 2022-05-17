@@ -216,9 +216,6 @@ class HasBackendUserPermissionViewHelperTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(20);
 
-        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic */
-        $topic = $this->topicRepository->findByUid(20);
-
         $GLOBALS['BE_USER']->user['uid'] = 20;
 
         $this->standAloneViewHelper->setTemplate('Check20.html');
@@ -235,7 +232,7 @@ class HasBackendUserPermissionViewHelperTest extends FunctionalTestCase
      * @throws \Exception
      * @throws \TYPO3\CMS\Fluid\View\Exception\InvalidTemplateResourceException
      */
-    public function itReturnsOneIfUserHasApprovalPermission()
+    public function itReturnsZeroIfUserHasApprovalPermissionForAnyTopicOnReleaseOnly()
     {
         /**
          * Scenario:
@@ -243,12 +240,52 @@ class HasBackendUserPermissionViewHelperTest extends FunctionalTestCase
          * Given the ViewHelper is used in a template
          * Given a persisted newsletter-object
          * Given a persisted issue-object that belongs to the newsletter-object
-         * Given a persisted topic-object that belongs to the newsletter-object
+         * Given a persisted topic-object A that belongs to the newsletter-object
          * Given a persisted backend-user
          * Given that backend-user has not the permission to release the issue
-         * Given that backend-user has the permission to approve the topic on approvalsStage 1
+         * Given that backend-user has the permission to approve the topic A on approvalsStage 1
          * Given this backend-user is logged in
-         * When the ViewHelper is rendered with approvalStage-parameter = 1
+         * When the ViewHelper is rendered without any topic- or stage-parameter
+         * Then the value 0 is rendered
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check70.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(70);
+
+        $GLOBALS['BE_USER']->user['uid'] = 70;
+
+        $this->standAloneViewHelper->setTemplate('Check70.html');
+        $this->standAloneViewHelper->assignMultiple(
+            [
+                'issue' => $issue,
+            ]
+        );
+
+        self::assertEquals(0, trim($this->standAloneViewHelper->render()));
+    }
+
+
+
+    /**
+     * @test
+     * @throws \Exception
+     * @throws \TYPO3\CMS\Fluid\View\Exception\InvalidTemplateResourceException
+     */
+    public function itReturnsOneIfUserHasApprovalPermissionForSpecificTopic()
+    {
+        /**
+         * Scenario:
+         *
+         * Given the ViewHelper is used in a template
+         * Given a persisted newsletter-object
+         * Given a persisted issue-object that belongs to the newsletter-object
+         * Given a persisted topic-object A that belongs to the newsletter-object
+         * Given a persisted backend-user
+         * Given that backend-user has not the permission to release the issue
+         * Given that backend-user has the permission to approve the topic A on approvalsStage 1
+         * Given this backend-user is logged in
+         * When the ViewHelper is rendered with approvalStage-parameter = 1 and topic-parameter = topic A
          * Then the value 1 is rendered
          */
         $this->importDataSet(static::FIXTURE_PATH . '/Database/Check30.xml');
@@ -279,6 +316,45 @@ class HasBackendUserPermissionViewHelperTest extends FunctionalTestCase
      * @throws \Exception
      * @throws \TYPO3\CMS\Fluid\View\Exception\InvalidTemplateResourceException
      */
+    public function itReturnsOneIfUserHasApprovalPermissionForAnyTopic()
+    {
+        /**
+         * Scenario:
+         *
+         * Given the ViewHelper is used in a template
+         * Given a persisted newsletter-object
+         * Given a persisted issue-object that belongs to the newsletter-object
+         * Given a persisted topic-object A that belongs to the newsletter-object
+         * Given a persisted backend-user
+         * Given that backend-user has not the permission to release the issue
+         * Given that backend-user has the permission to approve the topic A on approvalsStage 1
+         * Given this backend-user is logged in
+         * When the ViewHelper is rendered without any topic- or stage-parameter, but with allApprovals-parameter = true
+         * Then the value 1 is rendered
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check60.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(60);
+
+        $GLOBALS['BE_USER']->user['uid'] = 60;
+
+        $this->standAloneViewHelper->setTemplate('Check60.html');
+        $this->standAloneViewHelper->assignMultiple(
+            [
+                'issue' => $issue,
+            ]
+        );
+
+        self::assertEquals(1, trim($this->standAloneViewHelper->render()));
+    }
+
+
+    /**
+     * @test
+     * @throws \Exception
+     * @throws \TYPO3\CMS\Fluid\View\Exception\InvalidTemplateResourceException
+     */
     public function itReturnsZeroIfUserHasApprovalPermissionOnAnotherStage()
     {
         /**
@@ -287,12 +363,12 @@ class HasBackendUserPermissionViewHelperTest extends FunctionalTestCase
          * Given the ViewHelper is used in a template
          * Given a persisted newsletter-object
          * Given a persisted issue-object that belongs to the newsletter-object
-         * Given a persisted topic-object that belongs to the newsletter-object
+         * Given a persisted topic-object A that belongs to the newsletter-object
          * Given a persisted backend-user
          * Given that backend-user has not the permission to release the issue
-         * Given that backend-user has the permission to approve the topic on approvalsStage 1
+         * Given that backend-user has the permission to approve the topic A on approvalsStage 1
          * Given this backend-user is logged in
-         * When the ViewHelper is rendered with approvalStage-parameter = 2
+         * When the ViewHelper is rendered with approvalStage-parameter = 2 and topic-parameter = topic A
          * Then the value 0 is rendered
          */
         $this->importDataSet(static::FIXTURE_PATH . '/Database/Check30.xml');
@@ -338,9 +414,9 @@ class HasBackendUserPermissionViewHelperTest extends FunctionalTestCase
          * Given a persisted backend-user
          * Given that backend-user has not the permission to release the issue of newsletter A
          * Given that backend-user has not the permission to release the issue of newsletter B
-         * Given that backend-user has the permission to approve the topic on approvalsStage 1 for newsletter B
+         * Given that backend-user has the permission to approve the topic B on approvalsStage 1 for newsletter B
          * Given this backend-user is logged in
-         * When the ViewHelper is rendered with issue A as parameter and approvalStage = 1 as parameter
+         * When the ViewHelper is rendered with issue A as parameter and approvalStage = 1 as parameter and topic-parameter = topic B
          * Then the value 0 is rendered
          */
         $this->importDataSet(static::FIXTURE_PATH . '/Database/Check40.xml');

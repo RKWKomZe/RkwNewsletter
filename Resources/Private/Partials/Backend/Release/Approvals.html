@@ -3,7 +3,7 @@
     data-namespace-typo3-fluid="true">
 
 
-    <f:if condition="{issues}">
+    <f:if condition="{issues} && {rkwNewsletter:backend.hasBackendUserPermissionMultiple(issues: issues, allApprovals:'true')}">
         <f:then>
             <table class="tx-rkwnewsletter-list">
                 <tr>

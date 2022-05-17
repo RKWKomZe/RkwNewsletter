@@ -14,8 +14,8 @@ namespace RKW\RkwNewsletter\ViewHelpers\Backend;
  * The TYPO3 project - inspiring people to share!
  */
 
-use RKW\RkwNewsletter\Domain\Model\Issue;
 use RKW\RkwNewsletter\Domain\Model\Topic;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 /**
  * HasBackendUserPermissionViewHelper
@@ -25,7 +25,7 @@ use RKW\RkwNewsletter\Domain\Model\Topic;
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class HasBackendUserPermissionViewHelper extends AbstractHasBackendUserPermissionViewHelper
+class HasBackendUserPermissionMultipleViewHelper extends AbstractHasBackendUserPermissionViewHelper
 {
 
     /**
@@ -36,27 +36,32 @@ class HasBackendUserPermissionViewHelper extends AbstractHasBackendUserPermissio
     public function initializeArguments()
     {
         parent::initializeArguments();
-        $this->registerArgument('issue', Issue::class, 'Check permissions for this issue.', true);
+        $this->registerArgument('issues', QueryResultInterface::class, 'Check permissions for this list of issues.', true);
         $this->registerArgument('topic', Topic::class, 'Check permissions for this topic (optional).', false, null);
         $this->registerArgument('approvalStage', 'int', 'Approval level to check. (optional, default:1)', false, null);
         $this->registerArgument('allApprovals', 'bool', 'Check for all approval, regardless on which topic or stage. (optional, default: false)', false, false);
-
     }
 
 
     /**
-     * checks if backendUser can approve/release at a given level
+     * Checks if backendUser can approve/release at any given level of the issue-list
      *
      * @return int
      */
     public function render(): int
     {
-        $issue = $this->arguments['issue'];
+        $issues = $this->arguments['issues'];
         $topic = is_object($this->arguments['topic']) ? $this->arguments['topic'] : null;
         $approvalStage = intval($this->arguments['approvalStage']) ?: 1;
         $allApprovals = boolval($this->arguments['allApprovals']);
-
-        return intval(self::checkPermissions($issue, $allApprovals, $topic, $approvalStage));        
+        
+        foreach ($issues as $issue) {
+            if (self::checkPermissions($issue, $allApprovals, $topic, $approvalStage)) {
+                return 1;
+            }
+        }
+        
+        return 0;
     }
 
 }
