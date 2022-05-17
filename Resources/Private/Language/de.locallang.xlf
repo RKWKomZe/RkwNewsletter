@@ -264,7 +264,11 @@
 				<source>- All -</source>
 				<target>- Alle -</target>
 			</trans-unit>
-			
+            <trans-unit id="templates_backend_release_testList.noIssuesWaiting">
+                <source>No issue is waiting for test-sending.</source>
+                <target>Keine Ausgabe für Test-Versand.</target>
+            </trans-unit>
+            
 			
 			<!-- Templates/Backend/Release/CreateIssueList.html -->
             <trans-unit id="templates_backend_release_createIssueList">
@@ -326,7 +330,10 @@
 				<source>Go!</source>
 				<target>Los!</target>
 			</trans-unit>
-
+            <trans-unit id="templates_backend_release_sendList.noIssuesWaiting">
+                <source>No issue is waiting for sending.</source>
+                <target>Keine Ausgabe wartet auf Versand.</target>
+            </trans-unit>
 
 
             <!-- Templates/Backend/Release/sendConfirm.html -->
@@ -358,6 +365,10 @@
 				<source>Cancel</source>
 				<target>Abbrechen</target>
 			</trans-unit>
+            <trans-unit id="templates_backend_release_sendConfirm.noIssuesWaiting">
+                <source>No issue is waiting for sending.</source>
+                <target>Keine Ausgabe wartet auf Versand.</target>
+            </trans-unit>
 
 
             <!-- ##################### -->

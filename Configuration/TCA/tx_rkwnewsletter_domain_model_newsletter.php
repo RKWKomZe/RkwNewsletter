@@ -314,6 +314,7 @@ return [
                 'internal_type' => 'db',
                 'foreign_table' => 'tx_rkwnewsletter_domain_model_issue',
                 'foreign_field' => 'newsletter',
+                'foreign_default_sortby' => 'status',
                 'show_thumbs' =>  true,
                 'minitems' => 0,
                 'maxitems' => 9999,

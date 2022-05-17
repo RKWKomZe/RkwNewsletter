@@ -13,51 +13,58 @@
 
         <f:render partial="FlashMessages" arguments="{_all}" />
 
-        <table class="tx-rkwnewsletter-list">
-            <tr>
-                <th>
-                    <f:translate key="templates_backend_release_testList.id" />
-                </th>
-                <th>
-                    <f:translate key="templates_backend_release_testList.title" />
-                </th>
-                <th>
-                    <f:translate key="templates_backend_release_testList.email" />
-                </th>
-                <th>
-                    <f:translate key="templates_backend_release_testList.deliveryTopics" />
-                </th>
-                <th>
-                    &nbsp;
-                </th>
-            </tr>
-
-
-            <f:for each="{issues}" as="issue">
-                <f:form action="testSend" name="issue" object="{issue}" >
+        <f:if condition="{issues} && {rkwNewsletter:backend.hasBackendUserPermissionMultiple(issues: issues, allApprovals:'true')}">
+            <f:then>
+                <table class="tx-rkwnewsletter-list">
                     <tr>
-                        <td>{issue.uid}</td>
-                        <td><f:form.textfield name="title" value="{issue.title}" /></td>
-                        <td><f:form.textfield name="emails" value="{backendUser.email}" /></td>
-                        <td>
-                            <f:form.select  name="topic"
-                                options="{rkwNewsletter:backend.getNonSpecialTopics(issue: issue)}"
-                                optionValueField="uid"
-                                optionLabelField="name"
-                                prependOptionValue="0"
-                                prependOptionLabel="{f:translate(key:'templates_backend_release_testList.all')}"
-                            />
-                        </td>
-                        <td>
-                            <f:form.button type="submit">
-                                <f:translate key="templates_backend_release_testList.go"  />
-                            </f:form.button>
-                        </td>
+                        <th>
+                            <f:translate key="templates_backend_release_testList.id" />
+                        </th>
+                        <th>
+                            <f:translate key="templates_backend_release_testList.title" />
+                        </th>
+                        <th>
+                            <f:translate key="templates_backend_release_testList.email" />
+                        </th>
+                        <th>
+                            <f:translate key="templates_backend_release_testList.deliveryTopics" />
+                        </th>
+                        <th>
+                            &nbsp;
+                        </th>
                     </tr>
-                </f:form>
-            </f:for>
-        </table>
-
+                    
+                    <f:for each="{issues}" as="issue">
+                        <f:if condition="{rkwNewsletter:backend.hasBackendUserPermission(issue: '{issue}', allApprovals:'true')}">
+                            <f:form action="testSend" name="issue" object="{issue}" >
+                                <tr>
+                                    <td>{issue.uid}</td>
+                                    <td><f:form.textfield name="title" value="{issue.title}" /></td>
+                                    <td><f:form.textfield name="emails" value="{backendUser.email}" /></td>
+                                    <td>
+                                        <f:form.select  name="topic"
+                                            options="{rkwNewsletter:backend.getNonSpecialTopics(issue: issue)}"
+                                            optionValueField="uid"
+                                            optionLabelField="name"
+                                            prependOptionValue="0"
+                                            prependOptionLabel="{f:translate(key:'templates_backend_release_testList.all')}"
+                                        />
+                                    </td>
+                                    <td>
+                                        <f:form.button type="submit">
+                                            <f:translate key="templates_backend_release_testList.go"  />
+                                        </f:form.button>
+                                    </td>
+                                </tr>
+                            </f:form>
+                        </f:if>
+                    </f:for>
+                </table>
+            </f:then>
+            <f:else>
+                <f:translate key="templates_backend_release_testList.noIssuesWaiting" />
+            </f:else>
+        </f:if>
 
     </f:section>
 </html>

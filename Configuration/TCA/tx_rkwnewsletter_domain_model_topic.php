@@ -89,7 +89,6 @@ return [
 				'eval' => 'trim'
 			],
 		],
-
 		'approval_stage1' => [
 			'exclude' => false,
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_topic.approval_stage1',
@@ -118,7 +117,6 @@ return [
 				'foreign_table_where' => 'AND be_users.deleted = 0 AND be_users.disable = 0 ORDER BY be_users.username',
 			],
 		],
-
         'container_page' => [
             'exclude' => false,
             'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xl:tx_rkwnewsletter_domain_model_topic.container_page',
@@ -135,14 +133,12 @@ return [
                 'type' => 'check'
             ],
         ],
-
         'newsletter' => [
             'config' => [
                 'type' => 'passthrough',
                 'foreign_table' => 'tx_rkwnewsletter_domain_model_newsletter',
             ],
         ],
-
         'sorting' => [
             'config' => [
                 'type' => 'passthrough',
