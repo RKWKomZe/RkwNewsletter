@@ -155,7 +155,31 @@ class ContentLoader
      */
     public function setTopics (ObjectStorage $topics): void 
     {
-        $this->topics = $topics;
+        // reset topics 
+        $this->topics = GeneralUtility::makeInstance(ObjectStorage::class);
+        
+        // add the given ones 
+        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic */
+        foreach($topics as $topic) {
+            
+            // check if topic belongs to current newsletter-configuration before we add it
+            if ($this->issue->getNewsletter()->getTopic()->contains($topic)) {
+                
+                $this->topics->attach($topic);
+                
+            } else {
+                
+                $this->getLogger()->log(
+                    LogLevel::DEBUG,
+                    sprintf(
+                        'Topic with id=%s does not belong to issue with id=%s and is ignored.',
+                        $topic->getUid(),
+                        $this->issue->getUid()
+                    )
+                );
+            }
+        }
+
         $this->updateOrdering();
     }
 
@@ -169,8 +193,24 @@ class ContentLoader
      */
     public function addTopic (Topic $topic): void
     {
-        $this->topics->attach($topic);
-        $this->updateOrdering();
+        // check if topic belongs to current newsletter-configuration before we add it
+        if ($this->issue->getNewsletter()->getTopic()->contains($topic)) {
+            
+            $this->topics->attach($topic);
+            $this->updateOrdering();
+            
+        } else {
+            
+            $this->getLogger()->log(
+                LogLevel::DEBUG,
+                sprintf(
+                    'Topic with id=%s does not belong to issue with id=%s and is ignored.',
+                    $topic->getUid(),
+                    $this->issue->getUid()
+                )
+            );
+        }
+        
     }
 
 
@@ -490,8 +530,7 @@ class ContentLoader
             $this->ordering[$topic->getUid()] = $cnt;
             $cnt++;
         }
-
-
+        
         $this->getLogger()->log(
             LogLevel::DEBUG,
             sprintf(

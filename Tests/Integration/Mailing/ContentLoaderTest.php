@@ -267,7 +267,7 @@ class ContentLoaderTest extends FunctionalTestCase
     //=============================================
 
     /**
-     * @test
+     * @comment: not needed anymore!
      * @throws \Exception
      */
     public function setTopicsThrowsException()
@@ -521,6 +521,64 @@ class ContentLoaderTest extends FunctionalTestCase
 
     }
 
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function setTopicsIgnoresTopicsOfOtherNewsletters()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object X
+         * Given a persisted newsletter-object Y
+         * Given a persisted issue-object K that belongs to the newsletter-object X
+         * Given a persisted issue-object L that belongs to the newsletter-object Y
+         * Given two persisted topic-objects A and B that belong to the the newsletter-object X
+         * Given one persisted topic-object C that belongs to the the newsletter-object Y
+         * Given for topic-object A there is a page-object X that belongs to the current issue-object K
+         * Given for topic-object B there is a page-object Y that belongs to the current issue-object K
+         * Given for topic-object C there is a page-object Z that belongs to the current issue-object L
+         * Given the issue-object is set via setIssue before
+         * When the method is called with three topic-objects in the order topic B/topic A/topic C
+         * Then getSorting returns an array
+         * Then the array contains two key-value-pairs
+         * Then the key of topic B contains the value 0
+         * Then the key of topic A contains the value 1
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check160.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(160);
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic1 */
+        $topic1 = $this->topicRepository->findByUid(160);
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic2 */
+        $topic2 = $this->topicRepository->findByUid(161);
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic3 */
+        $topic3 = $this->topicRepository->findByUid(162);
+
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($topic2);
+        $objectStorage->attach($topic1);
+        $objectStorage->attach($topic3);
+
+        $this->subject->setIssue($issue);
+        $this->subject->setTopics($objectStorage);
+        $result = $this->subject->getOrdering();
+        
+        self::assertInternalType('array', $result);
+        self::assertCount(2, $result);
+        self::assertEquals(0, $result[161]);
+        self::assertEquals(1, $result[160]);
+
+
+    }
+    
+
     //=============================================
 
     /**
@@ -626,6 +684,64 @@ class ContentLoaderTest extends FunctionalTestCase
         self::assertEquals(1, $result[81]);
         self::assertEquals(2, $result[80]);
         
+    }
+
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function addTopicIgnoresTopicOfOtherNewsletters()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted newsletter-object X
+         * Given a persisted newsletter-object Y
+         * Given a persisted issue-object K that belongs to the newsletter-object X
+         * Given a persisted issue-object L that belongs to the newsletter-object Y
+         * Given two persisted topic-objects A and B that belong to the the newsletter-object X
+         * Given one persisted topic-object C that belongs to the the newsletter-object Y
+         * Given for topic-object A there is a page-object X that belongs to the current issue-object K
+         * Given for topic-object B there is a page-object Y that belongs to the current issue-object K
+         * Given for topic-object C there is a page-object Z that belongs to the current issue-object L
+         * Given the issue-object is set via setIssue before
+         * Given setTopics is called with topic-objects B and A
+         * When the method is called with topic-object C
+         * Then getSorting returns an array
+         * Then the array contains two key-value-pairs
+         * Then the key of topic B contains the value 0
+         * Then the key of topic A contains the value 1
+         */
+        $this->importDataSet(static::FIXTURE_PATH . '/Database/Check160.xml');
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
+        $issue = $this->issueRepository->findByUid(160);
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic1 */
+        $topic1 = $this->topicRepository->findByUid(160);
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic2 */
+        $topic2 = $this->topicRepository->findByUid(161);
+
+        /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic3 */
+        $topic3 = $this->topicRepository->findByUid(162);
+
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($topic2);
+        $objectStorage->attach($topic1);
+
+        $this->subject->setIssue($issue);
+        $this->subject->setTopics($objectStorage);
+
+        $this->subject->addTopic($topic3);
+        $result = $this->subject->getOrdering();
+
+        self::assertInternalType('array', $result);
+        self::assertCount(2, $result);
+        self::assertEquals(0, $result[161]);
+        self::assertEquals(1, $result[160]);
     }
     
     //=============================================
