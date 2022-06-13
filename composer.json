@@ -23,12 +23,12 @@
         }
     ],
     "require": {
-        "php": ">=5.6",
-        "typo3/cms-core": "~7.6.0 || ~8.7.0",
-        "rkw/rkw-basics": "~8.7.80",
-        "rkw/rkw-authors": "~8.7.0",
-        "rkw/rkw-mailer": "~9.5.9",
-        "rkw/rkw-registration": "~8.7.0"
+        "php": ">=7.4.",
+        "typo3/cms-core": "~9.5.0",
+        "rkw/rkw-basics": "~9.5.0 || dev-feature/upgrade9.5",
+        "rkw/rkw-authors": "~9.5.0 || dev-feature/upgrade9.5",
+        "rkw/rkw-mailer": "~9.5.9 || dev-feature/upgrade9.5",
+        "rkw/rkw-registration": "~9.5.0 || dev-feature/upgrade9.5"
     },
     "autoload": {
         "psr-4": {
