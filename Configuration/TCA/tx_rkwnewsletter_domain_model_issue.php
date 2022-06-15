@@ -9,7 +9,12 @@ return [
 		'cruser_id' => 'cruser_id',
 		'dividers2tabs' => true,
 		'searchFields' => 'name, introduction, authors, status, pages, newsletter, pages_approval, allowed_by_user, info_tstamp, reminder_tstamp, allowed_tstamp, start_tstamp, sent_tstamp',
-		'iconfile' => 'EXT:rkw_newsletter/Resources/Public/Icons/tx_rkwnewsletter_domain_model_issue.gif'
+		'iconfile' => 'EXT:rkw_newsletter/Resources/Public/Icons/tx_rkwnewsletter_domain_model_issue.gif',
+
+        // @toDo: only needed for TYPO3 8.7
+        'security' => [
+            'ignoreRootLevelRestriction' => true,
+        ],
 	],
 	'interface' => [
 		'showRecordFieldList' => 'title, introduction, authors, status, release_tstamp, start_tstamp, sent_tstamp',
@@ -54,7 +59,7 @@ return [
                 'minitems'      => 0,
                 'size'          => 5,
             ]
-        ],        
+        ],
 		'status' => [
 			'exclude' => true,
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_issue.status',
@@ -123,7 +128,7 @@ return [
                 'checkbox' => true,
                 'readOnly' => true
             ],
-        ],        
+        ],
         'sent_tstamp' => [
             'exclude' => false,
             'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_issue.sent_tstamp',
@@ -224,6 +229,6 @@ return [
                 'foreign_table' => 'tx_rkwmailer_domain_model_queuemail',
             ],
         ],
-        
+
 	],
 ];
