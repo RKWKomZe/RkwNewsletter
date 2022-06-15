@@ -13,7 +13,7 @@
 
         <f:render partial="FlashMessages" arguments="{_all}" />
 
-        <f:if condition="{issues} && {rkwNewsletter:backend.hasBackendUserPermissionMultiple(issues: issues, allApprovals:'true')}">
+        <f:if condition="{issue}">
             <f:then>
             <table class="tx-rkwnewsletter-list">
                 <tr>
@@ -30,7 +30,7 @@
                         <f:translate key="templates_backend_release_sendConfirm.action"  />
                     </th>
                 </tr>
-    
+
                 <f:if condition="{rkwNewsletter:backend.hasBackendUserPermission(issue: '{issue}')}">
                     <f:form action="send" name="issue" object="{issue}" >
                         <tr>
@@ -55,7 +55,7 @@
         <f:else>
             <f:translate key="templates_backend_release_sendConfirm.noIssuesWaiting" />
         </f:else>
-        </f:if>        
+        </f:if>
 
     </f:section>
 </html>
