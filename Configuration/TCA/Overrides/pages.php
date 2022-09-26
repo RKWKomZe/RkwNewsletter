@@ -2,7 +2,7 @@
 defined('TYPO3_MODE') || die('Access denied.');
 
 call_user_func(
-    
+
     function () {
         $tmpColsPages = [
             'tx_rkwnewsletter_newsletter'     => [
@@ -135,14 +135,8 @@ call_user_func(
                 'config'      => [
                     'type'       => 'input',
                     'renderType' => 'inputDateTime',
-                    'size'       => 13,
-                    'eval'       => 'datetime',
-                    'checkbox'   => 0,
+                    'eval'       => 'datetime,int',
                     'default'    => 0,
-                    'readOnly'   => true,
-                    'range'      => [
-                        'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y')),
-                    ],
                 ],
             ],
         ];
