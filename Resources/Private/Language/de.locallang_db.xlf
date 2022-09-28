@@ -339,7 +339,7 @@
 			</trans-unit>
 			<trans-unit id="pages.tx_rkwnewsletter_include_tstamp">
 				<source>Included in Newsletter</source>
-				<target state="translated">In einer Newsletter-Ausgabe verwendet am</target>
+				<target state="translated">In einer Newsletter-Ausgabe verwendet am (sofern nicht gesetzt, wird diese Seite im nächsten Newsletter als Beitrag berücksichtigt werden)</target>
 			</trans-unit>
 
 
