@@ -28,7 +28,8 @@ $EM_CONF[$_EXTKEY] = [
 			'rkw_basics' => '8.7.80-8.7.99',
             'rkw_authors' => '8.7.0-8.7.99',
 			'rkw_mailer' => '9.5.9-9.5.99',
-            'rkw_registration' => '8.7.0-8.7.99'
+            'rkw_registration' => '8.7.0-8.7.99',
+            'sr_freecap' => '2.4.6-2.4.99'
 		],
 		'conflicts' => [
 		],

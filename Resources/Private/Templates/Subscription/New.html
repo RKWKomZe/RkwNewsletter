@@ -1,6 +1,7 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
     xmlns:rkwNewsletter="http://typo3.org/ns/RKW/RkwNewsletter/ViewHelpers"
     xmlns:rkwRegistration="http://typo3.org/ns/RKW/RkwRegistration/ViewHelpers"
+    xmlns:rkwBasics="http://typo3.org/ns/RKW/RkwBasics/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
     <f:layout name="Default" />
@@ -53,6 +54,8 @@
                             <rkwRegistration:privacyText textVersion="newsletter" />
                         </label>
                     </div>
+
+                    <f:render partial="Subscription/CaptchaElement" />
 
                     <p class="flex space-start btn-list">
                         <f:form.submit class="btn btn--primary" value='<f:translate key="templates_subscription_new.subscribe" />' />
