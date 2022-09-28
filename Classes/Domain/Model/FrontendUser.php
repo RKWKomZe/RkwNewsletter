@@ -27,6 +27,11 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  */
 class FrontendUser extends \RKW\RkwRegistration\Domain\Model\FrontendUser
 {
+    /**
+     * @var string
+     * @validate \SJBR\SrFreecap\Validation\Validator\CaptchaValidator
+     */
+    protected $captchaResponse;
 
     /**
      * Holds the subscriptions
@@ -47,7 +52,7 @@ class FrontendUser extends \RKW\RkwRegistration\Domain\Model\FrontendUser
      */
     protected $txRkwnewsletterPriority = false;
 
-    
+
     /**
      * __construct
      */
@@ -72,6 +77,25 @@ class FrontendUser extends \RKW\RkwRegistration\Domain\Model\FrontendUser
     protected function initStorageObjects(): void
     {
         $this->txRkwnewsletterSubscription = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+    }
+
+    /**
+     * Sets the captchaResponse
+     *
+     * @param string $captchaResponse
+     * @return void
+     */
+    public function setCaptchaResponse($captchaResponse) {
+        $this->captchaResponse = $captchaResponse;
+    }
+
+    /**
+     * Getter for captchaResponse
+     *
+     * @return string
+     */
+    public function getCaptchaResponse() {
+        return $this->captchaResponse;
     }
 
     /**
@@ -170,5 +194,5 @@ class FrontendUser extends \RKW\RkwRegistration\Domain\Model\FrontendUser
     {
         return $this->txRkwnewsletterPriority;
     }
-    
+
 }
