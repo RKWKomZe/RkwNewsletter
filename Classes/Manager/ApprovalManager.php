@@ -34,18 +34,18 @@ use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
  */
 class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
 {
-    
-   
+
+
     /**
      * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $issueRepository;
 
-    
+
     /**
      * @var \RKW\RkwNewsletter\Domain\Repository\ApprovalRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $approvalRepository;
 
@@ -53,15 +53,15 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
 
     /**
      * @var \RKW\RkwNewsletter\Domain\Repository\BackendUserRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $backendUserRepository;
-    
+
     /**
      * PersistenceManager
      *
      * @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $persistenceManager;
 
@@ -70,17 +70,17 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
      * Signal Slot Dispatcher
      *
      * @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $signalSlotDispatcher;
 
 
     /**
      * @var \RKW\RkwNewsletter\Permissions\PagePermissions
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $pagePermissions;
-    
+
     /**
      * Signal name for use in ext_localconf.php
      *
@@ -88,7 +88,7 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
      */
     const SIGNAL_FOR_SENDING_MAIL_APPROVAL = 'sendMailApproval';
 
-    
+
     /**
      * Signal name for use in ext_localconf.php
      *
@@ -128,7 +128,7 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
                 $issue->getUid()
             )
         );
-        
+
         return $approval;
     }
 
@@ -144,7 +144,7 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
     {
 
         $stage = ApprovalStatus::getStage($approval);
-        
+
         if (ApprovalStatus::increaseLevel($approval)) {
             $this->approvalRepository->update($approval);
             $this->persistenceManager->persistAll();
@@ -227,11 +227,11 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
 
     /**
      * Get the email-recipients for the approval based in the current stage
-     * 
+     *
      * @param Approval $approval
      * @return array
      */
-    public function getMailRecipients (Approval $approval): array 
+    public function getMailRecipients (Approval $approval): array
     {
 
         $mailRecipients = [];
@@ -239,7 +239,7 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
 
         if ($stage == ApprovalStatus::STAGE1) {
             if (count($approval->getTopic()->getApprovalStage1()) > 0) {
-                
+
                 /** @var \RKW\RkwNewsletter\Domain\Model\BackendUser $beUser */
                 foreach ($approval->getTopic()->getApprovalStage1()->toArray() as $beUser) {
                     if (GeneralUtility::validEmail($beUser->getEmail())) {
@@ -248,16 +248,16 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
                 }
             }
         }
-        
+
         if ($stage == ApprovalStatus::STAGE2) {
             if (count($approval->getTopic()->getApprovalStage2()) > 0) {
-                
+
                 /** @var \RKW\RkwNewsletter\Domain\Model\BackendUser $beUser */
                 foreach ($approval->getTopic()->getApprovalStage2()->toArray() as $beUser) {
                     if (GeneralUtility::validEmail($beUser->getEmail())) {
                         $mailRecipients[] = $beUser;
                     }
-                }            
+                }
             }
         }
 
@@ -270,16 +270,16 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
                 $stage
             )
         );
-        
+
         return $mailRecipients;
     }
 
 
-    
+
 
     /**
      * Send info-mails or reminder-mails for outstanding confirmations
-     * 
+     *
      * @param \RKW\RkwNewsletter\Domain\Model\Approval $approval
      * @return int
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException
@@ -297,7 +297,7 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
             (count($recipients = $this->getMailRecipients($approval)))
             && ($stage != ApprovalStatus::STAGE_DONE)
         ){
-            
+
             if ($level != ApprovalStatus::LEVEL_DONE) {
 
                 // Signal for e.g. E-Mails
@@ -318,7 +318,7 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
                 );
 
                 return 1;
-                
+
             } else {
 
                 // Signal for e.g. E-Mails
@@ -339,7 +339,7 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
                 );
 
                 return 2;
-            }                        
+            }
         }
 
         $this->getLogger()->log(
@@ -374,7 +374,7 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
 
             $this->increaseLevel($approval);
             $this->pagePermissions->setPermissions($approval->getPage());
-            
+
             return true;
         }
 
@@ -383,7 +383,7 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
         // in that case we increase the stage
         $this->increaseStage($approval);
         $this->pagePermissions->setPermissions($approval->getPage());
-        
+
         return false;
     }
 
@@ -401,6 +401,7 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     public function processAllConfirmations (
         int $toleranceLevel1,
@@ -431,10 +432,10 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
                 count($approvalList)
             )
         );
-        
+
         return count($approvalList);
     }
-    
+
 
     /**
      * Returns logger instance

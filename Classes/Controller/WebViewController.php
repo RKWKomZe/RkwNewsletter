@@ -36,7 +36,7 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * topicRepository
      *
      * @var \RKW\RkwNewsletter\Domain\Repository\TopicRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $topicRepository;
 
@@ -45,7 +45,7 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * QueueMailRepository
      *
      * @var \RKW\RkwMailer\Domain\Repository\QueueMailRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $queueMailRepository;
 
@@ -53,7 +53,7 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * QueueRecipientRepository
      *
      * @var \RKW\RkwMailer\Domain\Repository\QueueRecipientRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $queueRecipientRepository;
 
@@ -61,7 +61,7 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     /**
      * action show
      *
-     * @ignorevalidation $issue
+     * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("issue")
      * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
      * @param array $topicsRaw
      * @param string $hash
@@ -71,7 +71,7 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     public function showAction(Issue $issue, array $topicsRaw = [], string $hash = '')
     {
-        
+
         $queueMailId = 0;
         $queueRecipientId = 0;
 
@@ -83,7 +83,7 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         if (isset($rkwMailerParams['uid'])) {
             $queueRecipientId = intval($rkwMailerParams['uid']);
         }
-        
+
         // set default recipient based on FE-language settings – just in case
         /** @var \RKW\RkwMailer\Domain\Model\QueueRecipient $queueRecipient */
         $queueRecipient = GeneralUtility::makeInstance(QueueRecipient::class);
@@ -104,7 +104,7 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 )
             );
         }
-        
+
         // convert topic-ids to objects
         $topics = new ObjectStorage();
         if ($topicsRaw) {
@@ -113,7 +113,7 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                     $topics->attach($topic);
                 }
             }
-            
+
         } else {
             foreach($issue->getPages() as $page) {
 
@@ -126,10 +126,10 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
         // add paths depending on template of newsletter - including the default one!
         $settings = GeneralUtility::getTyposcriptConfiguration(
-            'Rkwnewsletter', 
+            'Rkwnewsletter',
             ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK
         );
-        
+
         $layoutPaths = $settings['view']['newsletter']['layoutRootPaths'];
         $layoutPathsNew = [];
         if (is_array($layoutPaths)) {

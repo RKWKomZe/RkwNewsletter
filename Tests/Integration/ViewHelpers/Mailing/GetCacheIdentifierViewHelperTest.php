@@ -82,7 +82,7 @@ class GetCacheIdentifierViewHelperTest extends FunctionalTestCase
      * Setup
      * @throws \Exception
      */
-    protected function setUp()
+    protected function setUp(): void
     {
 
         parent::setUp();
@@ -165,13 +165,13 @@ class GetCacheIdentifierViewHelperTest extends FunctionalTestCase
         $this->standAloneViewHelper->assignMultiple(
             [
                 'issue' => $issue,
-                'topics' => $objectStorage        
+                'topics' => $objectStorage
             ]
         );
 
 
         self::assertEquals(
-            '10_10-11_0', 
+            '10_10-11_0',
             trim($this->standAloneViewHelper->render())
         );
     }
@@ -216,7 +216,7 @@ class GetCacheIdentifierViewHelperTest extends FunctionalTestCase
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($topic2);
         $objectStorage->attach($topic1);
-        
+
         $this->standAloneViewHelper->setTemplate('Check10.html');
         $this->standAloneViewHelper->assignMultiple(
             [
@@ -227,13 +227,13 @@ class GetCacheIdentifierViewHelperTest extends FunctionalTestCase
 
 
         self::assertEquals(
-            '10_11-10_0', 
+            '10_11-10_0',
             trim($this->standAloneViewHelper->render())
         );
     }
 
-    
-    
+
+
     /**
      * @test
      * @throws \Exception
@@ -273,7 +273,7 @@ class GetCacheIdentifierViewHelperTest extends FunctionalTestCase
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($topic2);
         $objectStorage->attach($topic1);
-        
+
         $this->standAloneViewHelper->setTemplate('Check10.html');
         $this->standAloneViewHelper->assignMultiple(
             [
@@ -288,7 +288,7 @@ class GetCacheIdentifierViewHelperTest extends FunctionalTestCase
             trim($this->standAloneViewHelper->render())
         );
     }
-    
+
     /**
      * @test
      * @throws \Exception
@@ -336,7 +336,7 @@ class GetCacheIdentifierViewHelperTest extends FunctionalTestCase
     /**
      * TearDown
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
     }

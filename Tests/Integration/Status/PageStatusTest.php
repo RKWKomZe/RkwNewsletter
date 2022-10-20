@@ -84,7 +84,7 @@ class PageStatusTest extends FunctionalTestCase
      * Setup
      * @throws \Exception
      */
-    protected function setUp()
+    protected function setUp(): void
     {
 
         parent::setUp();
@@ -112,7 +112,7 @@ class PageStatusTest extends FunctionalTestCase
         $this->subject = $this->objectManager->get(PageStatus::class);
 
     }
-    
+
 
     //=============================================
 
@@ -165,7 +165,7 @@ class PageStatusTest extends FunctionalTestCase
          * Given a persisted topic-object
          * Given a persisted page-object
          * Given that page-object belongs to the issue-object
-         * Given that page-object belongs to the topic-object 
+         * Given that page-object belongs to the topic-object
          * Given a persisted approval-object
          * Given that approval-object belongs to the issue-object
          * Given that approval-object belongs to the topic-object
@@ -198,7 +198,7 @@ class PageStatusTest extends FunctionalTestCase
          * Given a persisted topic-object
          * Given a persisted page-object
          * Given that page-object belongs to the issue-object
-         * Given that page-object belongs to the topic-object 
+         * Given that page-object belongs to the topic-object
          * Given a persisted approval-object
          * Given that approval-object belongs to the issue-object
          * Given that approval-object belongs to the topic-object
@@ -231,7 +231,7 @@ class PageStatusTest extends FunctionalTestCase
          * Given a persisted topic-object
          * Given a persisted page-object
          * Given that page-object belongs to the issue-object
-         * Given that page-object belongs to the topic-object 
+         * Given that page-object belongs to the topic-object
          * Given a persisted approval-object
          * Given that approval-object belongs to the issue-object
          * Given that approval-object belongs to the topic-object
@@ -248,8 +248,8 @@ class PageStatusTest extends FunctionalTestCase
 
         self::assertEquals($this->subject::RELEASE, $this->subject::getStage($page));
     }
-    
-    
+
+
 
     /**
      * @test
@@ -351,8 +351,8 @@ class PageStatusTest extends FunctionalTestCase
 
         self::assertEquals($this->subject::DONE, $this->subject::getStage($page));
     }
-    
-    
+
+
     //=============================================
 
     /**
@@ -447,17 +447,17 @@ class PageStatusTest extends FunctionalTestCase
         $topic = $this->topicRepository->findByUid(100);
 
         self::assertInstanceOf(
-            \RKW\RkwNewsletter\Domain\Model\Approval::class, 
+            \RKW\RkwNewsletter\Domain\Model\Approval::class,
             $this->subject::getApproval($issue, $topic)
         );
     }
-    
+
     //=============================================
 
     /**
      * TearDown
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
     }

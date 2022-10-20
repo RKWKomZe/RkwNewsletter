@@ -83,7 +83,7 @@ class GetTopicNameViewHelperTest extends FunctionalTestCase
      * Setup
      * @throws \Exception
      */
-    protected function setUp()
+    protected function setUp(): void
     {
 
         parent::setUp();
@@ -147,7 +147,7 @@ class GetTopicNameViewHelperTest extends FunctionalTestCase
          * Then a string is returned
          * Then the name of topic-object A is returned
          */
-       
+
         $this->importDataSet(static::FIXTURE_PATH . '/Database/Check10.xml');
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
@@ -160,12 +160,12 @@ class GetTopicNameViewHelperTest extends FunctionalTestCase
         $this->standAloneViewHelper->assignMultiple(
             [
                 'issue' => $issue,
-                'content' => $content       
+                'content' => $content
             ]
         );
 
         $result = trim($this->standAloneViewHelper->render());
-        self::assertInternalType('string', $result);
+        self::assertIsString( $result);
         self::assertEquals('Topic 10', $result);
     }
 
@@ -221,7 +221,7 @@ class GetTopicNameViewHelperTest extends FunctionalTestCase
     /**
      * TearDown
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
     }

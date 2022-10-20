@@ -11,7 +11,7 @@ return [
 		'searchFields' => 'name, introduction, authors, status, pages, newsletter, pages_approval, allowed_by_user, info_tstamp, reminder_tstamp, allowed_tstamp, start_tstamp, sent_tstamp',
 		'iconfile' => 'EXT:rkw_newsletter/Resources/Public/Icons/tx_rkwnewsletter_domain_model_issue.gif',
 
-        // @toDo: only needed for TYPO3 8.7
+        // @todo only needed for TYPO3 8.7
         'security' => [
             'ignoreRootLevelRestriction' => true,
         ],

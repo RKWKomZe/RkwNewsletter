@@ -25,7 +25,7 @@ use \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
  * @copyright Rkw Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- * @toDo: rework and write tests
+ * @todo rework and write tests
  */
 class GetGroupedSubscribedTopicsViewHelper extends AbstractViewHelper
 {
@@ -41,13 +41,13 @@ class GetGroupedSubscribedTopicsViewHelper extends AbstractViewHelper
         $this->registerArgument('subscriptions', ObjectStorage::class, 'ObjectStorage with subscriptions.', true);
     }
 
-    
+
     /**
      * returns a grouped list of topics
      *
      * @return array
      */
-    public function render()
+    public function render(): array
     {
 
         $subscriptions = $this->arguments['subscriptions'];

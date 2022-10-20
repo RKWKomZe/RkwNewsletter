@@ -47,39 +47,39 @@ class MailProcessor
      * frontendUserRepository
      *
      * @var \RKW\RkwNewsletter\Domain\Repository\FrontendUserRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $frontendUserRepository;
 
-    
+
     /**
      * newsletterRepository
      *
      * @var \RKW\RkwNewsletter\Domain\Repository\NewsletterRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $newsletterRepository;
-    
-    
+
+
     /**
      * issueRepository
      *
      * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $issueRepository;
 
-    
+
     /**
      * @var \RKW\RkwNewsletter\Mailing\ContentLoader
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $contentLoader;
 
 
     /**
      * @var \RKW\RkwMailer\Service\MailService
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $mailService;
 
@@ -87,7 +87,7 @@ class MailProcessor
      * QueueMailValidator
      *
      * @var \RKW\RkwMailer\Validation\QueueMailValidator
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $queueMailValidator;
 
@@ -96,11 +96,11 @@ class MailProcessor
      * persistenceManager
      *
      * @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $persistenceManager;
 
-    
+
     /**
      * @var \TYPO3\CMS\Core\Log\Logger
      */
@@ -111,8 +111,8 @@ class MailProcessor
      * @var array
      */
     protected $settings = [];
-    
-    
+
+
     /**
      * Gets the mailService
      *
@@ -134,7 +134,7 @@ class MailProcessor
         return $this->contentLoader;
     }
 
-    
+
     /**
      * Gets the issue
      *
@@ -163,11 +163,11 @@ class MailProcessor
         if ($issue->_isNew()) {
             throw new Exception('Issue-object has to be persisted.', 1650541236);
         }
-        
+
         if (! $issue->getNewsletter()) {
             throw new Exception('No newsletter-object for this issue set.', 1650541234);
         }
-        
+
         $this->issue = $issue;
         $this->contentLoader->setIssue($issue);
         $this->init();
@@ -197,15 +197,15 @@ class MailProcessor
 
             // reset
             $this->issue->setRecipients([]);
-            
+
             /** @var \TYPO3\CMS\Extbase\Persistence\QueryResultInterface $recipients */
             $subscribers = $this->frontendUserRepository->findSubscriptionsByNewsletter($this->issue->getNewsletter());
-            
+
             /** @var \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser */
             foreach ($subscribers as $frontendUser) {
                 $this->issue->addRecipient($frontendUser);
             }
-            
+
             $this->issueRepository->update($this->issue);
             $this->persistenceManager->persistAll();
 
@@ -215,7 +215,7 @@ class MailProcessor
                     $this->issue->getUid()
                 )
             );
-            
+
             self::debugTime(__LINE__, __METHOD__);
             return true;
         }
@@ -226,7 +226,7 @@ class MailProcessor
                 $this->issue->getUid()
             )
         );
-        
+
         self::debugTime(__LINE__, __METHOD__);
         return false;
     }
@@ -250,10 +250,10 @@ class MailProcessor
             $frontendUser->setTxRkwnewsletterHash($hash);
             $this->frontendUserRepository->update($frontendUser);
             $this->persistenceManager->persistAll();
-            
+
             $this->getLogger()->log(
-                LogLevel::DEBUG, 
-                sprintf('Generated subscription-hash for frontendUser with uid=%s.', 
+                LogLevel::DEBUG,
+                sprintf('Generated subscription-hash for frontendUser with uid=%s.',
                     $frontendUser->getUid()
                 )
             );
@@ -263,7 +263,7 @@ class MailProcessor
         return $frontendUser->getTxRkwnewsletterHash();
     }
 
-    
+
     /**
      * Sets the subscribed topics and shuffles them
      *
@@ -277,24 +277,24 @@ class MailProcessor
         if (! $this->issue) {
             throw new Exception('No issue is set.', 1650549470);
         }
-        
+
         // if no topic-parameter given, we take the existing and shuffle them!
         if (!$topics) {
             $topics = $this->contentLoader->getTopics();
         }
-        
+
         // shuffle order and set it as reference for contentLoader
         $topicsArray = $topics->toArray();
         shuffle($topicsArray);
-                
+
         $topicsShuffled = new ObjectStorage();
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topics */
         foreach ($topicsArray as $topic) {
             $topicsShuffled->attach($topic);
         }
-        
+
         $this->contentLoader->setTopics($topicsShuffled);
-                
+
         $this->getLogger()->log(
             LogLevel::DEBUG,
             sprintf('Set shuffled topics for issue with id=%s.',
@@ -342,16 +342,16 @@ class MailProcessor
         if (! $this->issue) {
             throw new Exception('No issue is set.', 1650608449);
         }
-        
+
         // load settings
         $settings = $this->getSettings();
-        
+
         // set topics according to subscription
         $this->setTopics($frontendUser->getTxRkwnewsletterSubscription());
-        
+
         // check for contents!
         if ($this->contentLoader->hasContents()) {
-            
+
             // send email via mailService
             $result = $this->mailService->setTo(
                 $frontendUser,
@@ -377,7 +377,7 @@ class MailProcessor
                         $this->issue->getUid()
                     )
                 );
-                
+
                 return true;
             }
         }
@@ -388,9 +388,9 @@ class MailProcessor
                 $frontendUser->getUid(),
                 $this->issue->getUid()
             )
-        );               
+        );
 
-        return false;        
+        return false;
     }
 
 
@@ -494,7 +494,7 @@ class MailProcessor
 
             $this->mailService->getQueueMail()->setType(1);
             $this->mailService->startPipelining();
-            
+
             $this->getLogger()->log(
                 LogLevel::INFO,
                 sprintf('Started sending of issue with id=%s.',
@@ -502,7 +502,7 @@ class MailProcessor
                 )
             );
         }
-        
+
         // work through recipients
         if ($this->issue->getRecipients()) {
 
@@ -512,7 +512,7 @@ class MailProcessor
 
                 /** @var \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser */
                 if ($frontendUser = $this->frontendUserRepository->findByUid($frontendUserUid)) {
-    
+
                     try {
                         $this->sendMail($frontendUser);
                     } catch (\Exception $e) {
@@ -526,7 +526,7 @@ class MailProcessor
                         );
                     }
                 }
-                
+
                 // remove userId from list - if it exists or not!
                 $this->issue->removeRecipientById($frontendUserUid);
 
@@ -538,7 +538,7 @@ class MailProcessor
 
             $this->issueRepository->update($this->issue);
             $this->persistenceManager->persistAll();
-    
+
             // send mail
             $this->mailService->send();
             return true;
@@ -547,11 +547,11 @@ class MailProcessor
         // no subscribers left? Then end current sending!
         // remove pipeline flag
         $this->mailService->stopPipelining();
-        
+
         // set status and timestamp
         $this->issue->setSentTstamp(time());
         $this->issue->setStatus(IssueStatus::STAGE_DONE);
-        
+
         // set timestamp to newsletter
         $this->issue->getNewsletter()->setLastSentTstamp($this->issue->getSentTstamp());
         $this->newsletterRepository->update($this->issue->getNewsletter());
@@ -609,7 +609,7 @@ class MailProcessor
 
             return $this->mailService->send();
         }
-        
+
         $this->getLogger()->log(
             LogLevel::INFO,
             sprintf('Finished test-sending of issue with id=%s.',
@@ -650,15 +650,15 @@ class MailProcessor
                         $this->mailService->getQueueMail()->getUid()
                     )
                 );
-                
+
             } else {
-                
+
                 // set settingsPid and load settings from there
                 $settings = $this->getSettings();
                 if ($this->issue->getNewsletter()->getSettingsPage()) {
                     $this->mailService->getQueueMail()->setSettingsPid($this->issue->getNewsletter()->getSettingsPage()->getUid());
                 }
-                
+
                 // set properties for queueMail
                 /** @var \RKW\RkwMailer\Domain\Model\QueueMail $queueMail */
                 $this->mailService->getQueueMail()->setSubject($this->issue->getTitle());
@@ -679,7 +679,7 @@ class MailProcessor
                     $this->mailService->getQueueMail()->setReplyToName($this->issue->getNewsletter()->getSenderName());
                     $this->mailService->getQueueMail()->setFromName($this->issue->getNewsletter()->getSenderName());
                 }
-                
+
                 $this->mailService->getQueueMail()->setPlaintextTemplate(
                     ($this->issue->getNewsletter()->getTemplate() ?: 'Default')
                 );
@@ -717,16 +717,16 @@ class MailProcessor
                         }
                     }
                 }
-                
+
                 /**
-                 * @toDo: Add further template paths based on settingsPid 
+                 * @todo Add further template paths based on settingsPid
                  */
 
                 // last but not least: check if queueMail has all configuration needed for sending
                 if (! $this->queueMailValidator->validate($this->mailService->getQueueMail())) {
                     throw new Exception('Newsletter is missing essential configuration. Sending will not be possible.', 1651215173);
                 }
-                
+
                 $this->getLogger()->log(
                     LogLevel::DEBUG,
                     sprintf('Initialized mailService for issue with id=%s of newsletter-configuration with id=%s with new queueMail-object with id=%s.',
@@ -739,7 +739,7 @@ class MailProcessor
         }
         self::debugTime(__LINE__, __METHOD__);
     }
-    
+
 
     /**
      * Returns TYPO3 settings
@@ -750,20 +750,20 @@ class MailProcessor
      */
     protected function getSettings(string $which = ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK): array
     {
-        
+
         $pid = 1;
         if ($this->issue->getNewsletter()->getSettingsPage()) {
             $pid = $this->issue->getNewsletter()->getSettingsPage()->getUid();
         }
-        
+
         if (isset($this->settings[$pid])) {
             return $this->settings[$pid];
         }
-        
+
         FrontendSimulatorUtility::simulateFrontendEnvironment($pid);
         $this->settings[$pid] = GeneralUtility::getTyposcriptConfiguration('Rkwnewsletter', $which);
         FrontendSimulatorUtility::resetFrontendEnvironment();
-        
+
         return $this->settings[$pid];
     }
 
@@ -796,7 +796,7 @@ class MailProcessor
 
         if (GeneralUtility::getApplicationContext()->isDevelopment()) {
 
-            $path = PATH_site . '/typo3temp/var/logs/tx_rkwnewsletter_runtime.txt';
+            $path = \TYPO3\CMS\Core\Core\Environment::getPublicPath() . '/typo3temp/var/logs/tx_rkwnewsletter_runtime.txt';
             file_put_contents($path, microtime() . ' ' . $line . ' ' . $function . "\n", FILE_APPEND);
         }
     }

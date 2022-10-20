@@ -74,7 +74,7 @@ class GetNonSpecialTopicsViewHelperTest extends FunctionalTestCase
      * Setup
      * @throws \Exception
      */
-    protected function setUp()
+    protected function setUp(): void
     {
 
         parent::setUp();
@@ -124,7 +124,7 @@ class GetNonSpecialTopicsViewHelperTest extends FunctionalTestCase
          * Given a persisted newsletter-object
          * Given a persisted issue-object that belongs to the newsletter-object
          * Given three topics A, B, C that belong to the newsletter-object
-         * Given three persisted page-objects 
+         * Given three persisted page-objects
          * Given each of the page-objects belongs to the newsletter-object
          * Given each of the page-objects belongs to the issue-object
          * Given each of the page-objects belongs to another of the three topic-objects
@@ -153,7 +153,7 @@ class GetNonSpecialTopicsViewHelperTest extends FunctionalTestCase
     /**
      * TearDown
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
     }

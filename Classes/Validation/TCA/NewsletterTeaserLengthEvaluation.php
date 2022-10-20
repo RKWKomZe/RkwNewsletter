@@ -17,7 +17,7 @@ namespace RKW\RkwNewsletter\Validation\TCA;
  * The TYPO3 project - inspiring people to share!
  */
 
-use \RKW\RkwBasics\Helper\Common;
+use RKW\RkwBasics\Utility\GeneralUtility as Common;
 use RKW\RkwBasics\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
@@ -43,7 +43,7 @@ class NewsletterTeaserLengthEvaluation
      *
      * @return string JavaScript code for client side validation/evaluation
      */
-    public function returnFieldJS(): string 
+    public function returnFieldJS(): string
     {
         return 'return value;';
     }
@@ -57,7 +57,7 @@ class NewsletterTeaserLengthEvaluation
      * @return string Evaluated field value
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
-    public function evaluateFieldValue($value, $is_in, &$set): string 
+    public function evaluateFieldValue($value, $is_in, &$set): string
     {
 
         $settings = $this->getSettings();
@@ -93,7 +93,7 @@ class NewsletterTeaserLengthEvaluation
                 );
                 $messageQueue->addMessage($message);
             }
-            
+
             if (
                 ($settings['maxTeaserLength'])
                 && ($strLength  > intval($settings['maxTeaserLength']))
@@ -116,7 +116,7 @@ class NewsletterTeaserLengthEvaluation
 
             }
         }
-        
+
         return $value;
     }
 
@@ -126,7 +126,7 @@ class NewsletterTeaserLengthEvaluation
      * @param array $parameters Array with key 'value' containing the field value from the database
      * @return string Evaluated field value
      */
-    public function deevaluateFieldValue(array $parameters): string 
+    public function deevaluateFieldValue(array $parameters): string
     {
         return $parameters['value'];
     }

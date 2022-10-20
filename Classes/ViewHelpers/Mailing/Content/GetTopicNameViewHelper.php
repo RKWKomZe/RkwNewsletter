@@ -47,9 +47,8 @@ class GetTopicNameViewHelper extends AbstractViewHelper
      * Gets the contents of the given issue and respects given topics
      *
      * @return string
-     * @throws \RKW\RkwNewsletter\Exception
       */
-    public function render():string
+    public function render(): string
     {
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
@@ -57,18 +56,18 @@ class GetTopicNameViewHelper extends AbstractViewHelper
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Content $content */
         $content = $this->arguments['content'];
-                            
+
         /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        
+
         /** @var \RKW\RkwNewsletter\Mailing\ContentLoader $contentLoader */
         $contentLoader = $objectManager->get(ContentLoader::class, $issue);
-        
+
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic */
         if ($topic = $contentLoader->getTopicOfContent($content)) {
-            return $topic->getName(); 
+            return $topic->getName();
         }
-        
+
         return '';
     }
 }

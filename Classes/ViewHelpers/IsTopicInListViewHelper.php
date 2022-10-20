@@ -28,7 +28,7 @@ use \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
  * @copyright Rkw Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- * @toDo: rework and write tests
+ * @todo rework and write tests
  */
 class IsTopicInListViewHelper extends AbstractViewHelper
 {
@@ -45,17 +45,17 @@ class IsTopicInListViewHelper extends AbstractViewHelper
         $this->registerArgument('topic', Topic::class, 'Topic to check for', true);
     }
 
-    
+
     /**
      * checks is user has subscribed to a topic
      *
      * @return boolean
      */
-    public function render()
+    public function render(): bool
     {
         $topicList = $this->arguments['topicList'];
         $topic = $this->arguments['topic'];
-        
+
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topicFromList */
         foreach ($topicList as $topicFromList) {
 
@@ -65,8 +65,6 @@ class IsTopicInListViewHelper extends AbstractViewHelper
             }
         }
 
-
         return false;
-        //===
     }
 }

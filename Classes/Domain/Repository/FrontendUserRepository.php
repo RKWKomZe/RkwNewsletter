@@ -30,7 +30,7 @@ use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class FrontendUserRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
+class FrontendUserRepository extends AbstractRepository
 {
 
     /**
@@ -40,6 +40,7 @@ class FrontendUserRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     public function initializeObject()
     {
+        parent::initializeObject();
         $this->defaultQuerySettings = $this->objectManager->get(Typo3QuerySettings::class);
         $this->defaultQuerySettings->setRespectStoragePage(false);
     }
@@ -51,7 +52,7 @@ class FrontendUserRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @param \RKW\RkwNewsletter\Domain\Model\Topic $topic
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
-     * @comment implicitly tested
+     * comment: implicitly tested
      */
     public function findSubscriptionsByTopic(Topic $topic): QueryResultInterface
     {
@@ -64,7 +65,7 @@ class FrontendUserRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query->setOrderings(
             ['txRkwnewsletterPriority' => QueryInterface::ORDER_DESCENDING]
         );
-        
+
         return $query->execute();
     }
 
@@ -75,32 +76,32 @@ class FrontendUserRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @param \RKW\RkwNewsletter\Domain\Model\Newsletter $newsletter
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
-     * @comment implicitly tested
+     * comment: implicitly tested
      */
     public function findSubscriptionsByNewsletter(Newsletter $newsletter): QueryResultInterface
     {
 
         $query = $this->createQuery();
-        
+
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic */
         $constrains = [];
         foreach ($newsletter->getTopic() as $topic) {
             $constrains[] = $query->contains('txRkwnewsletterSubscription', $topic);
         }
-        
+
         if ($constrains) {
             $query->matching(
                 $query->logicalAnd(
                     $query->greaterThan('txRkwnewsletterSubscription', 0),
                     $query->logicalOr($constrains)
                 )
-            ); 
+            );
         } else {
             $query->matching(
                 $query->greaterThan('txRkwnewsletterSubscription', 0)
             );
-        }      
-        
+        }
+
         $query->setOrderings(
             ['txRkwnewsletterPriority' => QueryInterface::ORDER_DESCENDING]
         );
@@ -108,16 +109,16 @@ class FrontendUserRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $query->execute();
     }
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -138,7 +139,7 @@ class FrontendUserRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
         return $query->execute()->getFirst();
     }
-    
+
 
 
 }

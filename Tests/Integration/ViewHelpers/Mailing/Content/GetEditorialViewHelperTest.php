@@ -82,7 +82,7 @@ class GetEditorialViewHelperTest extends FunctionalTestCase
      * Setup
      * @throws \Exception
      */
-    protected function setUp()
+    protected function setUp(): void
     {
 
         parent::setUp();
@@ -120,7 +120,7 @@ class GetEditorialViewHelperTest extends FunctionalTestCase
 
     }
 
-   
+
 
 
     /**
@@ -213,7 +213,7 @@ class GetEditorialViewHelperTest extends FunctionalTestCase
         /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($topic);
-        
+
         $this->standAloneViewHelper->setTemplate('Check10.html');
         $this->standAloneViewHelper->assignMultiple(
             [
@@ -269,7 +269,7 @@ class GetEditorialViewHelperTest extends FunctionalTestCase
         /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($topic);
-        
+
         $this->standAloneViewHelper->setTemplate('Check10.html');
         $this->standAloneViewHelper->assignMultiple(
             [
@@ -288,7 +288,7 @@ class GetEditorialViewHelperTest extends FunctionalTestCase
     /**
      * TearDown
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
     }

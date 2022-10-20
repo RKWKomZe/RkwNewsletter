@@ -26,7 +26,7 @@ config.tx_extbase.persistence {
                 }
             }
         }
-        
+
         #===============================================
 
         RKW\RkwNewsletter\Domain\Model\Content {
@@ -51,6 +51,9 @@ config.tx_extbase.persistence {
         }
 
         RKW\RkwNewsletter\Domain\Model\FrontendUser {
+
+            // storage for new records in cross-extension-context
+            newRecordStoragePid = {$plugin.tx_rkwregistration.persistence.storagePid}
             mapping {
                 tableName = fe_users
             }
@@ -90,7 +93,7 @@ plugin.tx_rkwnewsletter {
             0 = EXT:rkw_newsletter/Resources/Private/Partials/
             1 = {$plugin.tx_rkwnewsletter.view.partialRootPath}
         }
-        
+
         newsletter {
             layoutRootPaths {
                 0 = EXT:rkw_newsletter/Resources/Private/Layouts/Newsletter
@@ -108,6 +111,13 @@ plugin.tx_rkwnewsletter {
 	}
 	persistence {
 		storagePid = {$plugin.tx_rkwnewsletter.persistence.storagePid}
+		  classes {
+       RKW\RkwNewsletter\Domain\Model\FrontendUser {
+        newRecordStoragePid = 618
+       }
+   RKW\RkwRegistration\Domain\Model\FrontendUser {
+        newRecordStoragePid = 618
+       }
 	}
 
 	settings {

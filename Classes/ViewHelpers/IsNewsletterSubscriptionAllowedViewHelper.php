@@ -27,7 +27,7 @@ use \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
  * @copyright Rkw Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- * @toDo: rework and write tests
+ * @todo rework and write tests
  */
 class IsNewsletterSubscriptionAllowedViewHelper extends AbstractViewHelper
 {
@@ -50,11 +50,11 @@ class IsNewsletterSubscriptionAllowedViewHelper extends AbstractViewHelper
      *
      * @return boolean
      */
-    public function render()
+    public function render(): bool
     {
         $newsletter = $this->arguments['newsletter'];
         $frontendUser = $this->arguments['frontendUser'];
-        
+
         // if newsletter has no restrictions
         if (!$newsletter->getUsergroup()->toArray()) {
             return true;

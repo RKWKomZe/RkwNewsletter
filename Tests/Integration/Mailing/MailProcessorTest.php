@@ -83,7 +83,7 @@ class MailProcessorTest extends FunctionalTestCase
      * @var \RKW\RkwMailer\Domain\Repository\QueueRecipientRepository
      */
     private $queueRecipientRepository;
-    
+
     /**
      * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository
      */
@@ -103,7 +103,7 @@ class MailProcessorTest extends FunctionalTestCase
      * @var \RKW\RkwNewsletter\Domain\Repository\BackendUserRepository
      */
     private $backendUserRepository;
-    
+
     /**
      * @var \RKW\RkwMailer\Cache\MailCache
      */
@@ -120,7 +120,7 @@ class MailProcessorTest extends FunctionalTestCase
      * Setup
      * @throws \Exception
      */
-    protected function setUp()
+    protected function setUp(): void
     {
 
         parent::setUp();
@@ -153,7 +153,7 @@ class MailProcessorTest extends FunctionalTestCase
 
         /** @var \RKW\RkwNewsletter\Domain\Repository\TopicRepository topicRepository */
         $this->topicRepository = $this->objectManager->get(TopicRepository::class);
-        
+
         /** @var \RKW\RkwNewsletter\Domain\Repository\FrontendUserRepository frontendUserRepository */
         $this->frontendUserRepository = $this->objectManager->get(FrontendUserRepository::class);
 
@@ -165,8 +165,8 @@ class MailProcessorTest extends FunctionalTestCase
 
         $this->mailCache = $this->objectManager->get(MailCache::class);
     }
-   
-    
+
+
     //=============================================
 
     /**
@@ -186,7 +186,7 @@ class MailProcessorTest extends FunctionalTestCase
          */
         static::expectException(\RKW\RkwNewsletter\Exception::class);
         static::expectExceptionCode(1650541234);
-        
+
         $this->importDataSet(static::FIXTURE_PATH . '/Database/Check40.xml');
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
@@ -219,7 +219,7 @@ class MailProcessorTest extends FunctionalTestCase
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = GeneralUtility::makeInstance(Issue::class);
-        
+
         /** @var \RKW\RkwNewsletter\Domain\Model\Newsletter $newsletter */
         $newsletter = GeneralUtility::makeInstance(Newsletter::class);
         $issue->setNewsletter($newsletter);
@@ -250,14 +250,14 @@ class MailProcessorTest extends FunctionalTestCase
         static::expectExceptionCode(1651215173);
 
         $this->importDataSet(static::FIXTURE_PATH . '/Database/Check270.xml');
-        
+
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(270);
 
         $this->subject->setIssue($issue);
 
     }
-    
+
     /**
      * @test
      * @throws \Exception
@@ -327,7 +327,7 @@ class MailProcessorTest extends FunctionalTestCase
          * Then the partialPaths-property of the queueMail-object contains the partial-path of the default-template
          * Then the partialPaths-property of the queueMail-object contains the partial-paths of the set template of mewsletter-object X
          */
-        
+
         $this->importDataSet(static::FIXTURE_PATH . '/Database/Check20.xml');
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
@@ -396,7 +396,7 @@ class MailProcessorTest extends FunctionalTestCase
                 self::FIXTURE_PATH . '/Frontend/Configuration/Page21.typoscript',
             ]
         );
-        
+
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(21);
 
@@ -440,7 +440,7 @@ class MailProcessorTest extends FunctionalTestCase
          *
          * Given a persisted newsletter-object X
          * Given that newsletter-object has all basic configuration-parameters set
-         * Given that newsletter-object has no template set 
+         * Given that newsletter-object has no template set
          * Given a persisted issue-object Y that belongs to the newsletter-object X
          * Given that issue-object Y has no queueMail-object set
          * When method is called with the issue-object Y as parameter
@@ -529,8 +529,8 @@ class MailProcessorTest extends FunctionalTestCase
         self::assertEquals(1, $this->subject->getMailService()->getQueueMail()->getUid());
         self::assertEquals(0, $queueMail->getPipeline());
     }
-    
-    
+
+
     /**
      * @test
      * @throws \Exception
@@ -697,22 +697,22 @@ class MailProcessorTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(60);
         $this->subject->setIssue($issue);
-        
+
         self::assertTrue($this->subject->setRecipients());
 
         // force TYPO3 to load objects new from database
         $persistenceManager = $this->objectManager->get(PersistenceManager::class);
         $persistenceManager->clearState();
-        
+
         $result = $this->subject->getIssue()->getRecipients();
-        self::assertInternalType('array', $result);
+        self::assertIsArray( $result);
         self::assertCount(4, $result);
 
         self::assertEquals(63, $result[0]);
         self::assertEquals(60, $result[1]);
         self::assertEquals(61, $result[2]);
         self::assertEquals(62, $result[3]);
-        
+
     }
 
 
@@ -764,7 +764,7 @@ class MailProcessorTest extends FunctionalTestCase
         $persistenceManager->clearState();
 
         $result = $this->subject->getIssue()->getRecipients();
-        self::assertInternalType('array', $result);
+        self::assertIsArray( $result);
         self::assertCount(4, $result);
 
         self::assertEquals(63, $result[0]);
@@ -809,11 +809,11 @@ class MailProcessorTest extends FunctionalTestCase
         $issue = $this->issueRepository->findByUid(60);
         $issue->setStartTstamp(time());
         $this->subject->setIssue($issue);
-        
+
         self::assertFalse($this->subject->setRecipients());
 
     }
-    
+
     //=============================================
     /**
      * @test
@@ -835,12 +835,12 @@ class MailProcessorTest extends FunctionalTestCase
 
         /** @var \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser */
         $frontendUser = $this->frontendUserRepository->findByUid(70);
-        
+
         $result = $this->subject->getSubscriptionHash($frontendUser);
-        
-        self::assertInternalType('string', $result);
+
+        self::assertIsString( $result);
         self::assertEquals('testhash', $result);
-        
+
     }
 
     /**
@@ -873,7 +873,7 @@ class MailProcessorTest extends FunctionalTestCase
 
         /** @var \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser */
         $frontendUser = $this->frontendUserRepository->findByUid(80);
-        
+
         self::assertEquals($result, $frontendUser->getTxRkwnewsletterHash());
 
     }
@@ -889,7 +889,7 @@ class MailProcessorTest extends FunctionalTestCase
          * Scenario:
          *
          * Given setIssue is not called before
-         * When method is called 
+         * When method is called
          * Then an exception is thrown
          * Then the exception is an instance of \RKW\RkwNewsletter\Exception
          * Then the exception has the code 1650549470
@@ -897,11 +897,11 @@ class MailProcessorTest extends FunctionalTestCase
 
         static::expectException(\RKW\RkwNewsletter\Exception::class);
         static::expectExceptionCode(1650549470);
-   
+
         $this->subject->setTopics(new ObjectStorage());
 
     }
-    
+
     /**
      * @test
      * @throws \Exception
@@ -936,7 +936,7 @@ class MailProcessorTest extends FunctionalTestCase
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($topic1);
         $objectStorage->attach($topic2);
-        
+
         $this->subject->setIssue($issue);
         $this->subject->setTopics($objectStorage);
 
@@ -1011,9 +1011,9 @@ class MailProcessorTest extends FunctionalTestCase
         self::assertCount(0, $topics);
 
     }
-    
+
     //=============================================
-    
+
     /**
      * @test
      * @throws \Exception
@@ -1038,12 +1038,12 @@ class MailProcessorTest extends FunctionalTestCase
 
         /** @var \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser */
         $frontendUser = $this->frontendUserRepository->findByUid(110);
-    
+
         $this->subject->getSubject($frontendUser);
 
     }
 
-  
+
     /**
      * @test
      * @throws \Exception
@@ -1071,7 +1071,7 @@ class MailProcessorTest extends FunctionalTestCase
          * Given one of the content-objects is an editorial
          * Given setIssue with the issue Y is called before
          * Given setTopics is called with topic B before
-         * When method is called 
+         * When method is called
          * Then a string is returned
          * Then this string begins with the issue-title
          * Then this string ends with the headline of the first content of topic B which is no editorial
@@ -1087,7 +1087,7 @@ class MailProcessorTest extends FunctionalTestCase
         /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($topic);
-        
+
         $this->subject->setIssue($issue);
         $this->subject->setTopics($objectStorage);
 
@@ -1126,7 +1126,7 @@ class MailProcessorTest extends FunctionalTestCase
         $this->subject->sendMail($frontendUser);
 
     }
-    
+
 
     /**
      * @test
@@ -1163,7 +1163,7 @@ class MailProcessorTest extends FunctionalTestCase
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(120);
-        
+
         /** @var \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser */
         $frontendUser = $this->frontendUserRepository->findByUid(120);
 
@@ -1311,19 +1311,19 @@ class MailProcessorTest extends FunctionalTestCase
 
         $this->subject->setIssue($issue);
         self::assertTrue($this->subject->sendMail($frontendUser));
-        
+
         /** @var \RKW\RkwMailer\Domain\Model\QueueRecipient $queueRecipient */
         $queueRecipient = $this->queueRecipientRepository->findByUid(1);
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
-        
+
         $marker = $queueRecipient->getMarker();
-        self::assertInternalType('array', $marker);
+        self::assertIsArray( $marker);
         self::assertCount(4, $marker);
 
         self::assertEquals('RKW_MAILER_NAMESPACES RKW\RkwNewsletter\Domain\Model\Issue:150', $marker['issue']);
         self::assertEquals('RKW_MAILER_NAMESPACES_ARRAY RKW\RkwNewsletter\Domain\Model\Topic:151', $marker['topics']);
         self::assertEquals('HashMeIfYouCan', $marker['hash']);
-        self::assertInternalType('array', $marker['settings']);
+        self::assertIsArray( $marker['settings']);
         self::assertEquals('302400', $marker['settings']['reminderApprovalStage1']);
 
     }
@@ -1363,12 +1363,12 @@ class MailProcessorTest extends FunctionalTestCase
          * When method is called with the frontendUser as parameter
          * Then false is returned
          * Then a queueRecipient-object is created
-         * Then the mailCache for plaintext contains the default editorial 
+         * Then the mailCache for plaintext contains the default editorial
          * Then the mailCache for html contains the default editorial
          * Then the mailCache for plaintext does not contain the editorial of topic A
          * Then the mailCache for html does not contain  the editorial of topic A
          * Then the mailCache for plaintext does not contain the editorial of topic B
-         * Then the mailCache for html does not contain the editorial of topic B   
+         * Then the mailCache for html does not contain the editorial of topic B
          */
         $this->importDataSet(static::FIXTURE_PATH . '/Database/Check160.xml');
 
@@ -1384,31 +1384,31 @@ class MailProcessorTest extends FunctionalTestCase
         /** @var \RKW\RkwMailer\Domain\Model\QueueRecipient $queueRecipient */
         $queueRecipient = $this->queueRecipientRepository->findByUid(1);
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
-        
-        self::assertContains(
-            'untenstehend finden Sie Neuigkeiten zu Projekten, Veröffentlichungen und Veranstaltungen des RKW Kompetenzzentrums', 
+
+        self::assertStringContainsString(
+            'untenstehend finden Sie Neuigkeiten zu Projekten, Veröffentlichungen und Veranstaltungen des RKW Kompetenzzentrums',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'untenstehend finden Sie Neuigkeiten zu Projekten, Veröffentlichungen und Veranstaltungen des RKW Kompetenzzentrums',
             $this->mailCache->getHtmlBody($queueRecipient)
         );
-        self::assertNotContains(
+        self::assertStringNotContainsString(
             'Test the editorial 160',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertNotContains(
+        self::assertStringNotContainsString(
             'Test the editorial 160',
             $this->mailCache->getHtmlBody($queueRecipient)
         );
-        self::assertNotContains(
+        self::assertStringNotContainsString(
             'Test the editorial 161',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertNotContains(
+        self::assertStringNotContainsString(
             'Test the editorial 161',
             $this->mailCache->getHtmlBody($queueRecipient)
-        );        
+        );
     }
 
 
@@ -1467,19 +1467,19 @@ class MailProcessorTest extends FunctionalTestCase
         $queueRecipient = $this->queueRecipientRepository->findByUid(1);
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
 
-        self::assertNotContains(
+        self::assertStringNotContainsString(
             'untenstehend finden Sie Neuigkeiten zu Projekten, Veröffentlichungen und Veranstaltungen des RKW Kompetenzzentrums',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertNotContains(
+        self::assertStringNotContainsString(
             'untenstehend finden Sie Neuigkeiten zu Projekten, Veröffentlichungen und Veranstaltungen des RKW Kompetenzzentrums',
             $this->mailCache->getHtmlBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Test the editorial 170',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Test the editorial 170',
             $this->mailCache->getHtmlBody($queueRecipient)
         );
@@ -1527,7 +1527,7 @@ class MailProcessorTest extends FunctionalTestCase
          * Then the mailCache for plaintext contains all contents of topic B
          * Then the mailCache for html contains all contents of topic B
          * Then the mailCache for plaintext does not contain the editorial of topic B
-         * Then the mailCache for html does not contain the editorial of topic B 
+         * Then the mailCache for html does not contain the editorial of topic B
          */
         $this->importDataSet(static::FIXTURE_PATH . '/Database/Check160.xml');
 
@@ -1544,65 +1544,65 @@ class MailProcessorTest extends FunctionalTestCase
         $queueRecipient = $this->queueRecipientRepository->findByUid(1);
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
 
-        self::assertContains(
+        self::assertStringContainsString(
             '',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertNotContains(
+        self::assertStringNotContainsString(
             'Test the editorial 160',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertNotContains(
+        self::assertStringNotContainsString(
             'Test the editorial 160',
             $this->mailCache->getHtmlBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Content 160.2',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Content 160.2',
             $this->mailCache->getHtmlBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Content 160.3',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Content 160.3',
             $this->mailCache->getHtmlBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Content 160.4',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Content 160.4',
             $this->mailCache->getHtmlBody($queueRecipient)
-        );        
-        
+        );
 
-        self::assertNotContains(
+
+        self::assertStringNotContainsString(
             'Test the editorial 161',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertNotContains(
+        self::assertStringNotContainsString(
             'Test the editorial 161',
             $this->mailCache->getHtmlBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Content 161.2',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Content 161.2',
             $this->mailCache->getHtmlBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Content 161.3',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Content 161.3',
             $this->mailCache->getHtmlBody($queueRecipient)
         );
@@ -1665,27 +1665,27 @@ class MailProcessorTest extends FunctionalTestCase
         $queueRecipient = $this->queueRecipientRepository->findByUid(1);
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
 
-        self::assertContains(
+        self::assertStringContainsString(
             'Test the editorial 241',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Test the editorial 241',
             $this->mailCache->getHtmlBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Content 241.2',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Content 241.2',
             $this->mailCache->getHtmlBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Content 241.3',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Content 241.3',
             $this->mailCache->getHtmlBody($queueRecipient)
         );
@@ -1748,27 +1748,27 @@ class MailProcessorTest extends FunctionalTestCase
         $queueRecipient = $this->queueRecipientRepository->findByUid(1);
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
 
-        self::assertContains(
+        self::assertStringContainsString(
             'Sie haben folgende Themen abonniert',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Sie haben folgende Themen abonniert',
             $this->mailCache->getHtmlBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Topic 160',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Topic 160',
             $this->mailCache->getHtmlBody($queueRecipient)
-        );     
-        self::assertContains(
+        );
+        self::assertStringContainsString(
             'Topic 161',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Topic 161',
             $this->mailCache->getHtmlBody($queueRecipient)
         );
@@ -1829,20 +1829,20 @@ class MailProcessorTest extends FunctionalTestCase
         $queueRecipient = $this->queueRecipientRepository->findByUid(1);
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
 
-         self::assertContains(
+         self::assertStringContainsString(
              'http%3A%2F%2Fwww.rkw-kompetenzzentrum.rkw.local%2Findex.php%3Fid%3D2%26',
              $this->mailCache->getPlaintextBody($queueRecipient)
          );
-        self::assertContains(
+        self::assertStringContainsString(
             'http%3A%2F%2Fwww.rkw-kompetenzzentrum.rkw.local%2Findex.php%3Fid%3D2%26',
             $this->mailCache->getHtmlBody($queueRecipient)
         );
-    
-        self::assertContains(
+
+        self::assertStringContainsString(
             '%26tx_rkwnewsletter_subscription%255Bhash%255D%3DHashMeIfYouCan',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             '%26tx_rkwnewsletter_subscription%255Bhash%255D%3DHashMeIfYouCan',
             $this->mailCache->getHtmlBody($queueRecipient)
         );
@@ -1901,11 +1901,11 @@ class MailProcessorTest extends FunctionalTestCase
         $queueRecipient = $this->queueRecipientRepository->findByUid(1);
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
 
-        self::assertContains(
+        self::assertStringContainsString(
             'Hallo,',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Hallo,',
             $this->mailCache->getHtmlBody($queueRecipient)
         );
@@ -1966,16 +1966,16 @@ class MailProcessorTest extends FunctionalTestCase
         $queueRecipient = $this->queueRecipientRepository->findByUid(1);
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
 
-        self::assertContains(
+        self::assertStringContainsString(
             'Herr Mustermann,',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Herr Mustermann,',
             $this->mailCache->getHtmlBody($queueRecipient)
         );
     }
-    
+
     //=============================================
 
 
@@ -2046,11 +2046,11 @@ class MailProcessorTest extends FunctionalTestCase
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic */
         $topic = $this->topicRepository->findByUid(200);
-        
+
         /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($topic);
-        
+
         $this->subject->setIssue($issue);
         $this->subject->setTopics($objectStorage);
 
@@ -2089,7 +2089,7 @@ class MailProcessorTest extends FunctionalTestCase
          * When method is called with a valid email-address as parameter
          * Then true is returned
          */
-        
+
         $this->importDataSet(static::FIXTURE_PATH . '/Database/Check210.xml');
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
@@ -2101,12 +2101,12 @@ class MailProcessorTest extends FunctionalTestCase
         /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($topic);
-        
+
         $this->subject->setIssue($issue);
         $this->subject->setTopics($objectStorage);
 
         self::assertTrue($this->subject->sendTestMail('test@rkw.de'));
-        
+
     }
 
     /**
@@ -2154,7 +2154,7 @@ class MailProcessorTest extends FunctionalTestCase
 
         $this->subject->setIssue($issue);
         $this->subject->setTopics($objectStorage);
-        
+
         self::assertFalse($this->subject->sendTestMail('test'));
 
     }
@@ -2216,13 +2216,13 @@ class MailProcessorTest extends FunctionalTestCase
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
 
         $marker = $queueRecipient->getMarker();
-        self::assertInternalType('array', $marker);
+        self::assertIsArray( $marker);
         self::assertCount(3, $marker);
 
         self::assertEquals('RKW_MAILER_NAMESPACES RKW\RkwNewsletter\Domain\Model\Issue:210', $marker['issue']);
         self::assertEquals('RKW_MAILER_NAMESPACES_ARRAY RKW\RkwNewsletter\Domain\Model\Topic:211', $marker['topics']);
         self::assertNull($marker['hash']);
-        self::assertInternalType('array', $marker['settings']);
+        self::assertIsArray( $marker['settings']);
         self::assertEquals('302400', $marker['settings']['reminderApprovalStage1']);
 
     }
@@ -2286,18 +2286,18 @@ class MailProcessorTest extends FunctionalTestCase
             $this->subject->getMailService()->getQueueMail(),
             $queueRecipient
         );
-        
-        self::assertContains(
+
+        self::assertStringContainsString(
             'Hallo Prof. Dr. Dr. Musterfrau,',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Hallo Prof. Dr. Dr. Musterfrau,',
             $this->mailCache->getHtmlBody($queueRecipient)
         );
     }
-    
-    
+
+
     //=============================================
 
 
@@ -2336,11 +2336,11 @@ class MailProcessorTest extends FunctionalTestCase
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(260);
-        
+
         self::assertGreaterThanOrEqual(time() - 5, $issue->getStartTstamp());
         self::assertEquals(0, $issue->getSentTstamp());
     }
-    
+
     /**
      * @test
      * @throws \Exception
@@ -2389,7 +2389,7 @@ class MailProcessorTest extends FunctionalTestCase
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(260);
-        
+
         self::assertGreaterThanOrEqual(time() - 5, $issue->getStartTstamp());
         self::assertGreaterThanOrEqual(time() - 5, $issue->getSentTstamp());
         self::assertEquals(IssueStatus::STAGE_DONE, $issue->getStatus());
@@ -2425,8 +2425,8 @@ class MailProcessorTest extends FunctionalTestCase
         self::assertTrue($this->subject->sendMails(2));
         self::assertEquals(1, $this->subject->getMailService()->getQueueMail()->getType());
     }
-    
-    
+
+
     /**
      * @test
      * @throws \Exception
@@ -2536,8 +2536,8 @@ class MailProcessorTest extends FunctionalTestCase
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(260);
-        
-        self::assertInternalType('array', $issue->getRecipients());
+
+        self::assertIsArray( $issue->getRecipients());
         self::assertCount(2, $issue->getRecipients());
 
         // --------------------------------
@@ -2551,8 +2551,8 @@ class MailProcessorTest extends FunctionalTestCase
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(260);
-        
-        self::assertInternalType('array', $issue->getRecipients());
+
+        self::assertIsArray( $issue->getRecipients());
         self::assertCount(0, $issue->getRecipients());
     }
 
@@ -2616,7 +2616,7 @@ class MailProcessorTest extends FunctionalTestCase
 
     }
 
-    
+
 
     /**
      * @test
@@ -2682,10 +2682,10 @@ class MailProcessorTest extends FunctionalTestCase
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(230);
-        
+
         /** @var \RKW\RkwMailer\Domain\Model\QueueMail $queueMail */
         self::assertCount(0, $this->queueMailRepository->findAll());
-                
+
         $this->subject->setIssue($issue);
         $this->subject->setRecipients();
 
@@ -2698,41 +2698,41 @@ class MailProcessorTest extends FunctionalTestCase
         /** @var \RKW\RkwMailer\Domain\Model\QueueRecipient $queueRecipient */
         $queueRecipient = $this->queueRecipientRepository->findByUid(1);
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
-        
-        self::assertContains(
+
+        self::assertStringContainsString(
             'Content 230.2',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Content 230.2',
             $this->mailCache->getHtmlBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Content 231.2',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Content 231.2',
             $this->mailCache->getHtmlBody($queueRecipient)
-        );        
-        
+        );
+
         /** @var \RKW\RkwMailer\Domain\Model\QueueRecipient $queueRecipient */
         $queueRecipient = $this->queueRecipientRepository->findByUid(2);
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
 
-        self::assertContains(
+        self::assertStringContainsString(
             'Content 230.2',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Content 230.2',
             $this->mailCache->getHtmlBody($queueRecipient)
         );
-        self::assertNotContains(
+        self::assertStringNotContainsString(
             'Content 231.2',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertNotContains(
+        self::assertStringNotContainsString(
             'Content 231.2',
             $this->mailCache->getHtmlBody($queueRecipient)
         );
@@ -2747,23 +2747,23 @@ class MailProcessorTest extends FunctionalTestCase
         $queueRecipient = $this->queueRecipientRepository->findByUid(3);
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
 
-        self::assertNotContains(
+        self::assertStringNotContainsString(
             'Content 230.2',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertNotContains(
+        self::assertStringNotContainsString(
             'Content 230.2',
             $this->mailCache->getHtmlBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Content 231.2',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Content 231.2',
             $this->mailCache->getHtmlBody($queueRecipient)
         );
-        
+
         // --------------------------------
         // third call
         // --------------------------------
@@ -2774,19 +2774,19 @@ class MailProcessorTest extends FunctionalTestCase
         $queueRecipient = $this->queueRecipientRepository->findByUid(4);
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
 
-        self::assertNotContains(
+        self::assertStringNotContainsString(
             'Content 230.2',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertNotContains(
+        self::assertStringNotContainsString(
             'Content 230.2',
             $this->mailCache->getHtmlBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Content 231.2',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Content 231.2',
             $this->mailCache->getHtmlBody($queueRecipient)
         );
@@ -2795,13 +2795,13 @@ class MailProcessorTest extends FunctionalTestCase
         // Fourth call
         // --------------------------------
         self::assertFalse($this->subject->sendMails(2));
-        
+
     }
 
     //=============================================
 
-    
-    
+
+
     /**
      * @test
      * @throws \Exception
@@ -2827,7 +2827,7 @@ class MailProcessorTest extends FunctionalTestCase
          * Given that page-object R belongs to the topic-object B
          * Given the page-object R contains three content-objects
          * Given one of the content-objects is an editorial
-         * Given setIssue with the issue Y is called before         
+         * Given setIssue with the issue Y is called before
          * Given setTopic with topic B is called before
          * Given three email-addresses
          * Given one of the three email-addresses is invalid
@@ -2868,20 +2868,20 @@ class MailProcessorTest extends FunctionalTestCase
             $this->subject->getMailService()->getQueueMail(),
             $queueRecipient
         );
-        
-        self::assertNotContains(
+
+        self::assertStringNotContainsString(
             'Content 230.2',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertNotContains(
+        self::assertStringNotContainsString(
             'Content 230.2',
             $this->mailCache->getHtmlBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Content 231.2',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Content 231.2',
             $this->mailCache->getHtmlBody($queueRecipient)
         );
@@ -2895,24 +2895,24 @@ class MailProcessorTest extends FunctionalTestCase
             $this->subject->getMailService()->getQueueMail(),
             $queueRecipient
         );
-        
-        self::assertNotContains(
+
+        self::assertStringNotContainsString(
             'Content 230.2',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertNotContains(
+        self::assertStringNotContainsString(
             'Content 230.2',
             $this->mailCache->getHtmlBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Content 231.2',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Content 231.2',
             $this->mailCache->getHtmlBody($queueRecipient)
         );
-        
+
         self::assertEquals(false, $this->subject->getMailService()->getQueueMail()->getPipeline());
         self::assertNotEquals(IssueStatus::STAGE_DONE, $issue->getStatus());
         self::assertEquals(0, $issue->getSentTstamp());
@@ -2920,12 +2920,12 @@ class MailProcessorTest extends FunctionalTestCase
     }
 
     //=============================================
-    
+
 
     /**
      * TearDown
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->mailCache->clearCache();
         parent::tearDown();

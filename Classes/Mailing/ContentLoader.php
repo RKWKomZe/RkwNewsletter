@@ -34,19 +34,19 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  */
 class ContentLoader
 {
-    
+
     /**
      * @var \RKW\RkwNewsletter\Domain\Model\Issue
      */
     protected $issue;
-    
-    
+
+
     /**
      * @var array
      */
     protected $ordering = [];
 
-    
+
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage
      */
@@ -55,27 +55,27 @@ class ContentLoader
 
     /**
      * @var \RKW\RkwNewsletter\Domain\Repository\ContentRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $contentRepository;
 
 
     /**
      * @var \RKW\RkwNewsletter\Domain\Repository\PagesRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $pagesRepository;
 
-    
+
     /**
      * @var \TYPO3\CMS\Core\Log\Logger
      */
     protected $logger;
-    
+
 
     /**
      * Constructor
-     * 
+     *
      * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue $issue
      * @return void
      * @throws \RKW\RkwNewsletter\Exception
@@ -86,7 +86,7 @@ class ContentLoader
         $this->setIssue($issue);
     }
 
-    
+
     /**
      * Gets the issue
      *
@@ -118,7 +118,7 @@ class ContentLoader
                 $topics->attach($topic);
             }
         }
-        
+
         $this->setTopics($topics);
     }
 
@@ -144,31 +144,31 @@ class ContentLoader
     {
         return $this->topics;
     }
-    
-    
+
+
     /**
-     * Sets the topics 
+     * Sets the topics
      *
      * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\Topic> $topics
      * @return void
      * @throws \RKW\RkwNewsletter\Exception
      */
-    public function setTopics (ObjectStorage $topics): void 
+    public function setTopics (ObjectStorage $topics): void
     {
-        // reset topics 
+        // reset topics
         $this->topics = GeneralUtility::makeInstance(ObjectStorage::class);
-        
-        // add the given ones 
+
+        // add the given ones
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic */
         foreach($topics as $topic) {
-            
+
             // check if topic belongs to current newsletter-configuration before we add it
             if ($this->issue->getNewsletter()->getTopic()->contains($topic)) {
-                
+
                 $this->topics->attach($topic);
-                
+
             } else {
-                
+
                 $this->getLogger()->log(
                     LogLevel::DEBUG,
                     sprintf(
@@ -195,12 +195,12 @@ class ContentLoader
     {
         // check if topic belongs to current newsletter-configuration before we add it
         if ($this->issue->getNewsletter()->getTopic()->contains($topic)) {
-            
+
             $this->topics->attach($topic);
             $this->updateOrdering();
-            
+
         } else {
-            
+
             $this->getLogger()->log(
                 LogLevel::DEBUG,
                 sprintf(
@@ -210,7 +210,7 @@ class ContentLoader
                 )
             );
         }
-        
+
     }
 
 
@@ -227,8 +227,8 @@ class ContentLoader
         $this->updateOrdering();
     }
 
-    
-    
+
+
     /**
      * Checks if contents are available for the given topics
      *
@@ -237,7 +237,7 @@ class ContentLoader
      */
     public function hasContents (): bool
     {
-        
+
         if ($pages = $this->getPages()) {
             return (bool) $this->contentRepository->countByPagesAndLanguage(
                 $pages,
@@ -263,13 +263,13 @@ class ContentLoader
         if ($pages = $this->getPages()) {
             foreach ($pages as $page) {
 
-                // get contents for topic 
+                // get contents for topic
                 $contentCount = $this->contentRepository->countByPageAndLanguage(
                     $page,
                     ($this->issue->getNewsletter() ? $this->issue->getNewsletter()->getSysLanguageUid() : 0),
                     false
                 );
-                
+
                 if ($contentCount) {
                     $cnt++;
                 }
@@ -281,7 +281,7 @@ class ContentLoader
 
     /**
      * Get all contents as a zip-merged array by topics
-     * 
+     *
      * @param int limit
      * @return array
      */
@@ -293,19 +293,19 @@ class ContentLoader
         $contents = [];
         foreach ($this->getPages() as $page) {
 
-            // get contents for topic 
+            // get contents for topic
             $contentsOfTopic = $this->contentRepository->findByPageAndLanguage(
                 $page,
                 ($this->issue->getNewsletter()? $this->issue->getNewsletter()->getSysLanguageUid(): 0),
                 $limit,
                 false
             )->toArray();
-            
+
             // set contents to key according to desired order - this is already given via getPages()
             if ($contentsOfTopic) {
                 $contents[] = $contentsOfTopic;
             }
-            
+
             $this->getLogger()->log(
                 LogLevel::DEBUG,
                 sprintf(
@@ -326,11 +326,11 @@ class ContentLoader
         if (is_array($result)) {
             return $result;
         }
-        
+
         return [];
     }
 
-    
+
     /**
      * Get first headline
      *
@@ -354,7 +354,7 @@ class ContentLoader
                 false
             )->getFirst();
 
-            
+
             if ($content) {
 
                 $this->getLogger()->log(
@@ -371,7 +371,7 @@ class ContentLoader
 
             return '';
         }
-        
+
         $this->getLogger()->log(
             LogLevel::DEBUG,
             sprintf(
@@ -379,7 +379,7 @@ class ContentLoader
                 $this->issue->getUid()
             )
         );
-        
+
         return '';
     }
 
@@ -410,7 +410,7 @@ class ContentLoader
      */
     public function getEditorial()
     {
-        
+
         // always empty if we have more than one topic with contents
         if ($this->countTopicsWithContents() > 1) {
             return null;
@@ -428,10 +428,10 @@ class ContentLoader
                 ($this->issue->getNewsletter()? $this->issue->getNewsletter()->getSysLanguageUid(): 0)
             );
         }
-  
+
         return null;
     }
-    
+
 
     /**
      * Get the relevant pages based on set topics
@@ -456,28 +456,28 @@ class ContentLoader
                 $pages[$this->ordering[$topic->getUid()]] = $page;
             }
         }
-        
+
         ksort($pages);
         return $pages;
     }
-    
-    
+
+
     /**
      * Updates the ordering
-     * 
+     *
      * @return void
      * @throws \RKW\RkwNewsletter\Exception
      */
     protected function updateOrdering (): void
     {
-        
+
         // reset
         $this->ordering = [];
         $newTopics = new ObjectStorage();
-        
+
         // Always include special topics and set them at the beginning of the array
         if ($this->issue->getNewsletter()) {
-            
+
             /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic */
             foreach ($this->issue->getNewsletter()->getTopic() as $topic) {
                 if (
@@ -497,29 +497,29 @@ class ContentLoader
                 }
             }
         }
-        
+
         // combine old with new, because we can't do an array_unshift to add topic at position 0
         if (count($newTopics->toArray())) {
             foreach ($this->topics as $topic) {
-                
+
                 if (! $topic instanceof Topic) {
                     throw new Exception(
                         'Only instances of \RKW\RkwNewsletter\Domain\Model\Topic are allowed here.',
                         1649840507
                     );
                 }
-                
+
                 $newTopics->attach($topic);
             }
-            
+
             $this->topics = $newTopics;
         }
-               
+
         // get ordering in separate array based on topic-order
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic */
         $cnt = 0;
         foreach ($this->topics as $topic) {
-            
+
             if (! $topic instanceof Topic) {
                 throw new Exception(
                     'Only instances of \RKW\RkwNewsletter\Domain\Model\Topic are allowed here.',
@@ -530,7 +530,7 @@ class ContentLoader
             $this->ordering[$topic->getUid()] = $cnt;
             $cnt++;
         }
-        
+
         $this->getLogger()->log(
             LogLevel::DEBUG,
             sprintf(
@@ -556,5 +556,5 @@ class ContentLoader
 
         return $this->logger;
     }
-    
+
 }
