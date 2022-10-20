@@ -28,7 +28,8 @@
         "rkw/rkw-basics": "~9.5.0 || dev-feature/upgrade9.5",
         "rkw/rkw-authors": "~9.5.0 || dev-feature/upgrade9.5",
         "rkw/rkw-mailer": "~9.5.9 || dev-feature/upgrade9.5",
-        "rkw/rkw-registration": "~9.5.0 || dev-feature/upgrade9.5"
+        "rkw/rkw-registration": "~9.5.0 || dev-feature/upgrade9.5",
+		"sjbr/sr-freecap": "~2.5"
     },
     "autoload": {
         "psr-4": {
