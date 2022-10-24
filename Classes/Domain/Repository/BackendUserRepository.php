@@ -23,7 +23,7 @@ namespace RKW\RkwNewsletter\Domain\Repository;
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class BackendUserRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
+class BackendUserRepository extends AbstractRepository
 {
 
 }

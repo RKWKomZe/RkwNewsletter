@@ -2,7 +2,7 @@
 
 namespace RKW\RkwNewsletter\ViewHelpers;
 
-use \RKW\RkwBasics\Helper\Common;
+use RKW\RkwBasics\Utility\GeneralUtility as Common;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -30,7 +30,7 @@ use \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
  * @copyright Rkw Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- * @toDo: rework and write tests
+ * @todo rework and write tests
  */
 class IsMandatoryFieldViewHelper extends AbstractViewHelper
 {
@@ -45,12 +45,12 @@ class IsMandatoryFieldViewHelper extends AbstractViewHelper
         parent::initializeArguments();
         $this->registerArgument('fieldName', 'string', 'FieldName to check for', true);
     }
-    
+
     /**
      * @return boolean
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
-    public function render()
+    public function render(): bool
     {
         $fieldName = $this->arguments['fieldName'];
 
@@ -58,10 +58,10 @@ class IsMandatoryFieldViewHelper extends AbstractViewHelper
         $requiredFields = array('email');
         if ($settings['requiredFieldsSubscription']) {
             $requiredFields = array_merge(
-                $requiredFields, 
+                $requiredFields,
                 GeneralUtility::trimExplode(
-                    ',', 
-                    $settings['requiredFieldsSubscription'], 
+                    ',',
+                    $settings['requiredFieldsSubscription'],
                     true
                 )
             );

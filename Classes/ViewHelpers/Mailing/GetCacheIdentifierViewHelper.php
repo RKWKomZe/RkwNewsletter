@@ -13,7 +13,6 @@ namespace RKW\RkwNewsletter\ViewHelpers\Mailing;
  * The TYPO3 project - inspiring people to share!
  */
 
-use RKW\RkwNewsletter\Domain\Model\Issue;
 use RKW\RkwNewsletter\Mailing\ContentLoader;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -68,7 +67,7 @@ class GetCacheIdentifierViewHelper extends AbstractViewHelper
         if ($topics) {
             $contentLoader->setTopics($topics);
         }
-        
+
         // get topic-ordering
         $ordering = $contentLoader->getOrdering();
         return $issue->getUid() . '_' . implode('-', array_keys($ordering)) . '_' . $limit;

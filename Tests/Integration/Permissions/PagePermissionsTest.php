@@ -63,7 +63,7 @@ class PagePermissionsTest extends FunctionalTestCase
      */
     private $objectManager;
 
-    
+
     /**
      * @var \RKW\RkwNewsletter\Domain\Repository\PagesRepository
      */
@@ -74,7 +74,7 @@ class PagePermissionsTest extends FunctionalTestCase
      * Setup
      * @throws \Exception
      */
-    protected function setUp()
+    protected function setUp(): void
     {
 
         parent::setUp();
@@ -100,8 +100,8 @@ class PagePermissionsTest extends FunctionalTestCase
         $this->subject = $this->objectManager->get(PagePermissions::class);
 
     }
-    
-        
+
+
     //=============================================
 
     /**
@@ -225,12 +225,12 @@ class PagePermissionsTest extends FunctionalTestCase
         // force TYPO3 to load objects new from database
         $persistenceManager = $this->objectManager->get(PersistenceManager::class);
         $persistenceManager->clearState();
-        
+
         $page = $this->pagesRepository->findByUid(10);
         self::assertEquals(31, $page->getPermsUser());
         self::assertEquals(16, $page->getPermsGroup());
         self::assertEquals(1, $page->getPermsEverybody());
-        
+
     }
 
     /**
@@ -275,7 +275,7 @@ class PagePermissionsTest extends FunctionalTestCase
         $persistenceManager = $this->objectManager->get(PersistenceManager::class);
         $persistenceManager->clearState();
 
-        $page = $this->pagesRepository->findByUid(10);        
+        $page = $this->pagesRepository->findByUid(10);
         self::assertEquals(35, $page->getPermsUserId());
         self::assertEquals(38, $page->getPermsGroupId());
     }
@@ -437,7 +437,7 @@ class PagePermissionsTest extends FunctionalTestCase
     /**
      * TearDown
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
     }

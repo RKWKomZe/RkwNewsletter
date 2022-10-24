@@ -82,7 +82,7 @@ class GetContentsViewHelperTest extends FunctionalTestCase
      * Setup
      * @throws \Exception
      */
-    protected function setUp()
+    protected function setUp(): void
     {
 
         parent::setUp();
@@ -168,17 +168,17 @@ class GetContentsViewHelperTest extends FunctionalTestCase
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($topic1);
         $objectStorage->attach($topic2);
-        
+
         $this->standAloneViewHelper->setTemplate('Check10.html');
         $this->standAloneViewHelper->assignMultiple(
             [
                 'issue' => $issue,
-                'topics' => $objectStorage         
+                'topics' => $objectStorage
             ]
         );
 
         self::assertEquals(
-            'Content 10.2,Content 11.2,Content 10.3,Content 11.3,Content 10.4', 
+            'Content 10.2,Content 11.2,Content 10.3,Content 11.3,Content 10.4',
             trim($this->standAloneViewHelper->render())
         );
     }
@@ -231,7 +231,7 @@ class GetContentsViewHelperTest extends FunctionalTestCase
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($topic2);
         $objectStorage->attach($topic1);
-        
+
         $this->standAloneViewHelper->setTemplate('Check10.html');
         $this->standAloneViewHelper->assignMultiple(
             [
@@ -242,7 +242,7 @@ class GetContentsViewHelperTest extends FunctionalTestCase
 
 
         self::assertEquals(
-            'Content 11.2,Content 10.2,Content 11.3,Content 10.3,Content 10.4', 
+            'Content 11.2,Content 10.2,Content 11.3,Content 10.3,Content 10.4',
             trim($this->standAloneViewHelper->render())
         );
     }
@@ -271,7 +271,7 @@ class GetContentsViewHelperTest extends FunctionalTestCase
          * Given one of the content-objects is an editorial
          * Given the page-object Z contains three content-objects
          * Given one of the content-objects is an editorial
-         * When the ViewHelper is rendered with topic-parameter topic A/topic B 
+         * When the ViewHelper is rendered with topic-parameter topic A/topic B
          * Then a list of seven contents is rendered
          * Then the list contains only the given topics of the issue
          * Then the list starts with contents of topic c
@@ -285,7 +285,7 @@ class GetContentsViewHelperTest extends FunctionalTestCase
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic1 */
         $topic1 = $this->topicRepository->findByUid(20);
-        
+
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic2 */
         $topic2 = $this->topicRepository->findByUid(21);
 
@@ -293,7 +293,7 @@ class GetContentsViewHelperTest extends FunctionalTestCase
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($topic1);
         $objectStorage->attach($topic2);
-        
+
         $this->standAloneViewHelper->setTemplate('Check20.html');
         $this->standAloneViewHelper->assignMultiple(
             [
@@ -355,7 +355,7 @@ class GetContentsViewHelperTest extends FunctionalTestCase
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($topic2);
         $objectStorage->attach($topic1);
-        
+
         $this->standAloneViewHelper->setTemplate('Check10.html');
         $this->standAloneViewHelper->assignMultiple(
             [
@@ -370,7 +370,7 @@ class GetContentsViewHelperTest extends FunctionalTestCase
             trim($this->standAloneViewHelper->render())
         );
     }
-    
+
     /**
      * @test
      * @throws \Exception
@@ -425,7 +425,7 @@ class GetContentsViewHelperTest extends FunctionalTestCase
     /**
      * TearDown
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
     }

@@ -70,8 +70,8 @@ class ApprovalStatusTest extends FunctionalTestCase
      * @var \RKW\RkwNewsletter\Domain\Repository\BackendUserRepository
      */
     private $backendUserRepository;
-    
-    
+
+
     /**
      * @var \TYPO3\CMS\Extbase\Object\ObjectManager
      */
@@ -83,7 +83,7 @@ class ApprovalStatusTest extends FunctionalTestCase
      * Setup
      * @throws \Exception
      */
-    protected function setUp()
+    protected function setUp(): void
     {
 
         parent::setUp();
@@ -484,7 +484,7 @@ class ApprovalStatusTest extends FunctionalTestCase
 
         $result = $this->subject->increaseLevel($approval);
         self::assertTrue($result);
-        
+
         self::assertGreaterThan(0, $approval->getSentInfoTstampStage2());
         self::assertEquals(0, $approval->getSentReminderTstampStage2());
 
@@ -703,13 +703,13 @@ class ApprovalStatusTest extends FunctionalTestCase
         self::assertFalse($result);
 
     }
-    
+
 
     //=============================================
     /**
      * TearDown
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
     }

@@ -1,5 +1,7 @@
 <?php
+
 namespace RKW\RkwNewsletter\Domain\Repository;
+
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -13,28 +15,32 @@ namespace RKW\RkwNewsletter\Domain\Repository;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
- * TopicRepository
+ * AbstractRepository
  *
- * @author Maximilian Fäßler <maximilian@faesslerweb.de>
  * @author Steffen Kroggel <developer@steffenkroggel.de>
  * @copyright Rkw Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class TopicRepository extends AbstractRepository
+class AbstractRepository  extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
 
-    /*
-     * initializeObject
+    /**
+     * Set the extensionName explicitly in configurationManager in order to make
+     * storagePid work in CLI-context and with the test-framework
+     *
+     * @return void
      */
     public function initializeObject()
     {
-        parent::initializeObject();
-        $this->defaultQuerySettings = $this->objectManager->get(Typo3QuerySettings::class);
-        $this->defaultQuerySettings->setRespectStoragePage(false);
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $configurationManager = $objectManager->get(ConfigurationManager::class);
+        $configurationManager->setConfiguration(['extensionName' => 'Rkwnewsletter']);
     }
 
 }

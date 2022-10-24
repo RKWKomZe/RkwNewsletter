@@ -26,11 +26,12 @@ use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
+class PagesRepository extends AbstractRepository
 {
 
     public function initializeObject()
     {
+        parent::initializeObject();
         $querySettings = $this->objectManager->get(Typo3QuerySettings::class);
         $querySettings->setRespectStoragePage(false);
     }
@@ -38,10 +39,10 @@ class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
     /**
      * findByTopicNotIncluded
-     * 
+     *
      * @param \RKW\RkwNewsletter\Domain\Model\Topic $topic
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
-     * @comment implicitly tested
+     * comment: implicitly tested
      */
     public function findByTopicNotIncluded(\RKW\RkwNewsletter\Domain\Model\Topic $topic): QueryResultInterface
     {
@@ -61,5 +62,5 @@ class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
         return $query->execute();
     }
-    
+
 }

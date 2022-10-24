@@ -28,7 +28,7 @@ use \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
  * @copyright Rkw Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- * @toDo: rework and write tests
+ * @todo rework and write tests
  */
 class IsTopicSubscribedViewHelper extends AbstractViewHelper
 {
@@ -50,11 +50,11 @@ class IsTopicSubscribedViewHelper extends AbstractViewHelper
      *
      * @return boolean
      */
-    public function render()
+    public function render(): bool
     {
         $frontendUser = $this->arguments['frontendUser'];
         $topic = $this->arguments['topic'];
-        
+
         if ($frontendUser) {
 
             /** @var \RKW\RkwNewsletter\Domain\Model\Topic $userTopic */

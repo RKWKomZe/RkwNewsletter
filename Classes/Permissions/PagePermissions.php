@@ -36,7 +36,7 @@ class PagePermissions
 
     /**
      * @var \RKW\RkwNewsletter\Domain\Repository\PagesRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $pagesRepository;
 
@@ -45,7 +45,7 @@ class PagePermissions
      * PersistenceManager
      *
      * @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $persistenceManager;
 
@@ -67,7 +67,7 @@ class PagePermissions
         if (! $settings) {
             $settings = $this->getPermissionSettings();
         }
-        
+
         $userGroupIdNames = [
             'userId',
             'groupId',
@@ -104,11 +104,11 @@ class PagePermissions
                 $update = true;
             }
         }
-        
+
         if ($update) {
             $this->pagesRepository->update($page);
             $this->persistenceManager->persistAll();
-            
+
             $this->getLogger()->log(
                 LogLevel::INFO,
                 sprintf(
@@ -140,8 +140,8 @@ class PagePermissions
 
         return true;
     }
-    
-  
+
+
     /**
      * Returns permission-settings
      *
@@ -151,10 +151,10 @@ class PagePermissions
     public function getPermissionSettings(): array
     {
         $settings = GeneralUtility::getTyposcriptConfiguration(
-            'Rkwnewsletter', 
+            'Rkwnewsletter',
             ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS
         );
-        
+
         return $settings['pages']['permissions'] ?: [];
     }
 

@@ -62,8 +62,8 @@ class IssueStatusTest extends FunctionalTestCase
      * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository
      */
     private $issueRepository;
-    
-    
+
+
     /**
      * @var \TYPO3\CMS\Extbase\Object\ObjectManager
      */
@@ -75,7 +75,7 @@ class IssueStatusTest extends FunctionalTestCase
      * Setup
      * @throws \Exception
      */
-    protected function setUp()
+    protected function setUp(): void
     {
 
         parent::setUp();
@@ -128,8 +128,8 @@ class IssueStatusTest extends FunctionalTestCase
 
         self::assertEquals($this->subject::STAGE_DRAFT, $this->subject::getStage($issue));
     }
-    
-   
+
+
 
     /**
      * @test
@@ -351,7 +351,7 @@ class IssueStatusTest extends FunctionalTestCase
          * Then true is returned
          * Then the status of the issue-object is set to $this->subject::STAGE_APPROVAL
          * Then the releaseTstamp-property is not set
-         * Then the sentTstamp-property is not set 
+         * Then the sentTstamp-property is not set
          */
 
         $this->importDataSet(self::FIXTURE_PATH . '/Database/Check10.xml');
@@ -363,7 +363,7 @@ class IssueStatusTest extends FunctionalTestCase
         self::assertTrue($result);
         self::assertEquals($this->subject::STAGE_APPROVAL, $issue->getStatus());
         self::assertEquals(0, $issue->getReleaseTstamp());
-        self::assertEquals(0, $issue->getSentTstamp());        
+        self::assertEquals(0, $issue->getSentTstamp());
     }
 
     /**
@@ -601,14 +601,14 @@ class IssueStatusTest extends FunctionalTestCase
 
         self::assertFalse($this->subject::increaseLevel($issue));
     }
-    
+
     //=============================================
     /**
      * TearDown
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
     }
-    
+
 }
