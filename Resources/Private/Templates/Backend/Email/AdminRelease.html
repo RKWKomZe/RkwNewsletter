@@ -3,9 +3,9 @@
     data-namespace-typo3-fluid="true">
 
     <f:layout name="Email/{mailType}" />
-    
+
     <!-- PLAINTEXT -->
-    <f:section name="Plaintext"><rkwMailer:plaintextLineBreaks>
+    <f:section name="Plaintext"><rkwMailer:email.plaintextLineBreaks>
         <rkwMailer:email.translate key="templates_backend_email_adminRelease.headline" languageKey="{backendUser.lang}" extensionName="rkwNewsletter" arguments="{0 : backendUser.realName}" />
         \n\n
         <rkwMailer:email.translate key="templates_backend_email_adminRelease.text1" languageKey="{backendUser.lang}" extensionName="rkwNewsletter" />
@@ -13,8 +13,8 @@
         {issue.uid} – {issue.title}
         \n\n
         <rkwMailer:email.translate key="templates_backend_email_adminRelease.text2" languageKey="{backendUser.lang}" extensionName="rkwNewsletter"  />
-    </rkwMailer:plaintextLineBreaks></f:section>
-    
+    </rkwMailer:email.plaintextLineBreaks></f:section>
+
     <!-- HTML -->
     <f:section name="Html">
         <h1><rkwMailer:email.translate key="templates_backend_email_adminRelease.headline" languageKey="{backendUser.lang}" extensionName="rkwNewsletter" arguments="{0 : backendUser.realName}" /></h1>

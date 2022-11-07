@@ -11,11 +11,11 @@
         <f:format.stripTags>
             <rkwMailer:email.replace.rteLinks plaintextFormat="true">
                 <f:format.raw>
-                    <rkwMailer:plaintextLineBreaks convertLineBreaks="true">{content.bodytext}</rkwMailer:plaintextLineBreaks>
+                    <rkwMailer:email.plaintextLineBreaks convertLineBreaks="true">{content.bodytext}</rkwMailer:email.plaintextLineBreaks>
                 </f:format.raw>
             </rkwMailer:email.replace.rteLinks>
         </f:format.stripTags>
-        
+
         <f:if condition="{content.headerLink}">
         \n\n
         >> <rkwMailer:email.uri.typolink parameter='{content.headerLink}' />
@@ -23,10 +23,10 @@
     </f:section>
 
 
-    
+
     <!-- HTML all other items -->
     <f:section name="Html">
-    
+
         <table cellspacing="0" cellpadding="0" style="width: 100%; font-family: 'Arial', sans-serif; font-size: 14px">
 
             <!-- badge -->
@@ -35,7 +35,7 @@
                     <f:render partial="Body/Items/Default/Badge" section="Html" arguments="{_all}" />
                 </td>
             </tr>
-            
+
             <!-- headline -->
             <tr>
                 <td style="padding: 12px 16px 0; line-height: 24px">
@@ -53,7 +53,7 @@
                     </f:if>
                 </td>
             </tr>
-    
+
             <!-- image -->
             <tr>
                 <td style="padding-top: 11px">
@@ -62,7 +62,7 @@
                     </f:if>
                 </td>
             </tr>
-    
+
             <!-- copyright -->
             <f:if condition="{content.image} && {content.image.0.originalResource.properties.tx_rkwbasics_source}">
                 <tr>
@@ -73,14 +73,14 @@
                     </td>
                 </tr>
             </f:if>
-    
+
             <!-- content -->
             <tr>
                 <td class="prefix-fix wysiwyg-content" style="padding: 11px 16px {f:if(condition: '{content.headerLink}', then: '0', else: '24px')}; line-height: 22px">
                     <rkwMailer:email.replace.rteLinks style="color:#E64415;"><f:format.raw>{content.bodytext}</f:format.raw></rkwMailer:email.replace.rteLinks>
                 </td>
             </tr>
-    
+
             <!-- link -->
             <f:if condition="{content.headerLink}">
                 <tr>
@@ -89,18 +89,18 @@
                     </td>
                 </tr>
             </f:if>
-    
+
             <!-- contact headline -->
             <f:if condition="{content.txRkwnewsletterAuthors}">
                 <tr>
                     <td style="padding: 0 16px">
                         <p style="margin: 0; padding: 23px 0 0; border-top: 1px solid #000; color: #333; font-size: 12px; font-weight:bold">
                             <rkwMailer:email.translate key="partials_newsletter_body_items_default_content.contact" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />
-                        </p>                
+                        </p>
                     </td>
                 </tr>
             </f:if>
         </table>
-    
+
     </f:section>
 </html>

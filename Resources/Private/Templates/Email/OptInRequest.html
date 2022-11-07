@@ -6,8 +6,8 @@
     <f:layout name="Email/{mailType}" />
 
     <!-- PLAINTEXT -->
-    <f:section name="Plaintext"><rkwMailer:plaintextLineBreaks>
-        <rkwMailer:recipientSalutation queueRecipient="{queueRecipient}" prependText="<rkwMailer:email.translate key='templates_email_optInRequest.headline' languageKey='{queueRecipient.languageCode}' extensionName='rkwNewsletter' /> " appendText=","/>
+    <f:section name="Plaintext"><rkwMailer:email.plaintextLineBreaks>
+        <rkwMailer:email.recipientSalutation queueRecipient="{queueRecipient}" prependText="<rkwMailer:email.translate key='templates_email_optInRequest.headline' languageKey='{queueRecipient.languageCode}' extensionName='rkwNewsletter' /> " appendText=","/>
         \n\n
         <rkwMailer:email.translate key="templates_email_optInRequest.text1" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter"  />
         \n\n
@@ -22,11 +22,11 @@
         \n\n
         <rkwMailer:email.translate key="templates_email_optInRequest.textOptOut" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />\n
         <rkwMailer:email.uri.action action="optIn" controller="Subscription" extensionName="rkwNewsletter" pluginName="Subscription" absolute="true" pageUid="{pageUid}" additionalParams="{tx_rkwnewsletter_subscription: {token: optIn.tokenNo, tokenUser: optIn.tokenUser}}" section="rkw-newsletter" />
-    </rkwMailer:plaintextLineBreaks></f:section>
+    </rkwMailer:email.plaintextLineBreaks></f:section>
 
     <!-- HTML -->
     <f:section name="Html">
-        <h1><rkwMailer:recipientSalutation queueRecipient="{queueRecipient}" prependText="<rkwMailer:email.translate key='templates_email_optInRequest.headline' languageKey='{queueRecipient.languageCode}' extensionName='rkwNewsletter' /> " appendText=","/></h1>
+        <h1><rkwMailer:email.recipientSalutation queueRecipient="{queueRecipient}" prependText="<rkwMailer:email.translate key='templates_email_optInRequest.headline' languageKey='{queueRecipient.languageCode}' extensionName='rkwNewsletter' /> " appendText=","/></h1>
         <p>
             <rkwMailer:email.translate key="templates_email_optInRequest.text1" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" /><br>
         </p>
