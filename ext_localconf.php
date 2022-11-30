@@ -52,15 +52,15 @@ call_user_func(
          */
         $signalSlotDispatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class);
         $signalSlotDispatcher->connect(
-            \RKW\RkwRegistration\Registration\FrontendUser\AbstractRegistration::class,
-            \RKW\RkwRegistration\Registration\FrontendUser\AbstractRegistration::SIGNAL_AFTER_CREATING_OPTIN . 'RkwNewsletter',
+            RKW\RkwRegistration\Registration\AbstractRegistration::class,
+            \RKW\RkwRegistration\Registration\AbstractRegistration::SIGNAL_AFTER_CREATING_OPTIN . 'RkwNewsletter',
             \RKW\RkwNewsletter\Service\RkwMailService::class,
             'sendOptInRequest'
         );
 
         $signalSlotDispatcher->connect(
-            \RKW\RkwRegistration\Registration\FrontendUser\AbstractRegistration::class,
-            \RKW\RkwRegistration\Registration\FrontendUser\AbstractRegistration::SIGNAL_AFTER_REGISTRATION_COMPLETED . 'RkwNewsletter',
+            RKW\RkwRegistration\Registration\AbstractRegistration::class,
+            \RKW\RkwRegistration\Registration\AbstractRegistration::SIGNAL_AFTER_REGISTRATION_COMPLETED . 'RkwNewsletter',
             \RKW\RkwNewsletter\Controller\SubscriptionController::class,
             'saveSubscription'
         );

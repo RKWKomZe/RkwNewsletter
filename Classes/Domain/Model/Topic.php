@@ -21,7 +21,7 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  *
  * @author Maximilian Fäßler <maximilian@faesslerweb.de>
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
@@ -85,7 +85,7 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $sorting = 0;
 
-    
+
     /**
      * __construct
      */
@@ -133,7 +133,7 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the shortDescription
      *
-     * @return string 
+     * @return string
      */
     public function getShortDescription(): string
     {
@@ -308,7 +308,7 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->isSpecial = $isSpecial;
     }
 
-    
+
     /**
      * Returns the sorting
      *

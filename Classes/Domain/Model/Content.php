@@ -23,14 +23,14 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  *
  * @author Maximilian Fäßler <maximilian@faesslerweb.de>
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
- 
-    
+
+
     /**
      * crdate
      *
@@ -38,7 +38,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $crdate = 0;
 
-    
+
     /**
      * sysLanguageUid
      *
@@ -46,7 +46,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $sysLanguageUid = -1;
 
-    
+
     /**
      * header
      *
@@ -54,7 +54,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $header = '';
 
-    
+
     /**
      * headerLink
      *
@@ -62,7 +62,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $headerLink = '';
 
-    
+
     /**
      * bodytext
      *
@@ -70,7 +70,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $bodytext = '';
 
-    
+
     /**
      * cType
      *
@@ -78,7 +78,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $contentType = 'textpic';
 
-    
+
     /**
      * imageCols
      *
@@ -86,7 +86,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $imageCols = 0;
 
-    
+
     /**
      * Image
      *
@@ -110,7 +110,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $txRkwnewsletterIsEditorial = false;
 
-    
+
     /**
      * __construct
      */
@@ -147,7 +147,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->uid;
     }
 
-    
+
     /**
      * Sets the uid
      *
@@ -159,7 +159,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->uid = $uid;
     }
 
-    
+
     /**
      * Returns the crdate
      *
@@ -170,7 +170,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->crdate;
     }
 
-    
+
     /**
      * Sets the crdate
      *
@@ -192,7 +192,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->sysLanguageUid;
     }
 
-    
+
     /**
      * Sets the sysLanguageUid
      *
@@ -204,7 +204,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->sysLanguageUid = $sysLanguageUid;
     }
 
-    
+
     /**
      * Returns the header
      *
@@ -237,7 +237,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->headerLink;
     }
 
-    
+
     /**
      * Sets the headerLink
      *
@@ -260,7 +260,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->bodytext;
     }
 
-    
+
     /**
      * Sets the bodytext
      *
@@ -272,7 +272,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->bodytext = $bodytext;
     }
 
-    
+
     /**
      * Returns the contentType
      *
@@ -283,7 +283,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->contentType;
     }
 
-    
+
     /**
      * Sets the contentType
      *
@@ -295,7 +295,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->contentType = $contentType;
     }
 
-    
+
     /**
      * Returns the imageCols
      *
@@ -306,7 +306,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->imageCols;
     }
 
-    
+
     /**
      * Sets the imageCols
      *
@@ -320,7 +320,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
 
     /**
-     * Adds an image 
+     * Adds an image
      *
      * @param \RKW\RkwBasics\Domain\Model\FileReference $image
      * @return void
@@ -331,7 +331,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->image->attach($image);
     }
 
-    
+
     /**
      * Removes an image
      *
@@ -344,7 +344,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->image->detach($image);
     }
 
-    
+
     /**
      * Returns the images
      *
@@ -355,7 +355,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return $this->image;
     }
-    
+
 
     /**
      * Sets the images
@@ -382,7 +382,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->txRkwnewsletterAuthors->attach($txRkwnewsletterAuthors);
     }
 
-    
+
     /**
      * Removes a txRkwnewsletterAuthors
      *
@@ -395,7 +395,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->txRkwnewsletterAuthors->detach($txRkwnewsletterAuthors);
     }
 
-    
+
     /**
      * Returns the txRkwnewsletterAuthors
      *
@@ -407,7 +407,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->txRkwnewsletterAuthors;
     }
 
-    
+
     /**
      * Sets the txRkwnewsletterAuthors
      *
@@ -420,7 +420,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->txRkwnewsletterAuthors = $txRkwnewsletterAuthors;
     }
 
-    
+
     /**
      * Returns the uid
      *
@@ -431,7 +431,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->txRkwnewsletterIsEditorial;
     }
 
-    
+
     /**
      * Sets the uid
      *

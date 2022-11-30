@@ -21,7 +21,7 @@ use RKW\RkwNewsletter\Domain\Model\Topic;
  * HasBackendUserPermissionViewHelper
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
@@ -56,7 +56,7 @@ class HasBackendUserPermissionViewHelper extends AbstractHasBackendUserPermissio
         $approvalStage = intval($this->arguments['approvalStage']) ?: 1;
         $allApprovals = boolval($this->arguments['allApprovals']);
 
-        return intval(self::checkPermissions($issue, $allApprovals, $topic, $approvalStage));        
+        return intval(self::checkPermissions($issue, $allApprovals, $topic, $approvalStage));
     }
 
 }

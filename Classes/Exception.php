@@ -19,7 +19,7 @@ namespace RKW\RkwNewsletter;
  *
  * @author Maximilian Fäßler <maximilian@faesslerweb.de>
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */

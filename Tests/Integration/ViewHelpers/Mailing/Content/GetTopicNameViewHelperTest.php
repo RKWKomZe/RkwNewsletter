@@ -16,19 +16,17 @@ namespace RKW\RkwNewsletter\Tests\Integration\ViewHelpers\Mailing\Content;
 
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use RKW\RkwNewsletter\Domain\Repository\ContentRepository;
-use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use RKW\RkwNewsletter\Domain\Repository\IssueRepository;
-use RKW\RkwNewsletter\Domain\Repository\TopicRepository;
 
 
 /**
  * GetTopicNameViewHelperTest
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwMailer
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */

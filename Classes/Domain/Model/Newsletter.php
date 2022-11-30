@@ -23,7 +23,7 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  *
  * @author Maximilian Fäßler <maximilian@faesslerweb.de>
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
@@ -37,7 +37,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $sysLanguageUid = -1;
 
-    
+
     /**
      * name
      *
@@ -61,7 +61,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $issueTitle = '';
 
-    
+
     /**
      * senderName
      *
@@ -69,7 +69,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $senderName = '';
 
-    
+
     /**
      * senderMail
      *
@@ -77,7 +77,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $senderMail = '';
 
-    
+
     /**
      * replyName
      *
@@ -85,7 +85,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $replyName = '';
 
-    
+
     /**
      * replyMail
      *
@@ -93,7 +93,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $replyMail = '';
 
-    
+
     /**
      * returnPath
      *
@@ -101,17 +101,17 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $returnPath = '';
 
-    
+
     /**
      * priority
      *
      * @var int
      */
     protected $priority = 0;
-    
 
 
-    
+
+
     /**
      * template
      *
@@ -119,7 +119,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $template = '';
 
-    
+
     /**
      * settingsPage
      *
@@ -127,7 +127,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $settingsPage;
 
-    
+
     /**
      * format
      *
@@ -135,7 +135,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $format = 0;
 
-    
+
     /**
      * rythm
      *
@@ -143,7 +143,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $rythm = 0;
 
-    
+
     /**
      * dayForSending
      *
@@ -151,7 +151,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $dayForSending = 0;
 
-    
+
     /**
      * approval
      *
@@ -159,7 +159,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $approval;
 
-    
+
     /**
      * usergroup
      *
@@ -167,7 +167,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $usergroup;
 
-    
+
     /**
      * topic
      *
@@ -175,7 +175,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $topic;
 
-    
+
     /**
      * issue
      *
@@ -183,7 +183,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $issue;
 
-    
+
     /**
      * lastSentTstamp
      *
@@ -191,7 +191,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $lastSentTstamp = 0;
 
-    
+
     /**
      * lastIssueTstamp
      *
@@ -209,7 +209,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->initStorageObjects();
     }
 
-    
+
     /**
      * Initializes all ObjectStorage properties
      * Do not modify this method!
@@ -226,7 +226,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->issue = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
 
     }
-    
+
 
     /**
      * Returns the sysLanguageUid
@@ -238,7 +238,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->sysLanguageUid;
     }
 
-    
+
     /**
      * Sets the sysLanguageUid
      *
@@ -250,7 +250,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->sysLanguageUid = $sysLanguageUid;
     }
 
-    
+
     /**
      * Returns the name
      *
@@ -261,7 +261,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->name;
     }
 
-    
+
     /**
      * Sets the name
      *
@@ -272,8 +272,8 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->name = $name;
     }
-    
-    
+
+
     /**
      * Returns the issueTitle
      *
@@ -284,7 +284,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->issueTitle;
     }
 
-    
+
     /**
      * Sets the issueTitle
      *
@@ -296,7 +296,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->issueTitle = $issueTitle;
     }
 
-    
+
     /**
      * Returns the senderName
      *
@@ -307,7 +307,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->senderName;
     }
 
-    
+
     /**
      * Sets the senderName
      *
@@ -329,7 +329,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->senderMail;
     }
 
-    
+
     /**
      * Sets the senderMail
      *
@@ -340,7 +340,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->senderMail = $senderMail;
     }
-    
+
 
     /**
      * Returns the replyName
@@ -352,7 +352,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->replyName;
     }
 
-    
+
     /**
      * Sets the replyName
      *
@@ -385,7 +385,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->replyMail = $replyMail;
     }
 
-    
+
     /**
      * Returns the returnPath
      *
@@ -396,7 +396,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->returnPath;
     }
 
-    
+
     /**
      * Sets the returnPath
      *
@@ -407,7 +407,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->returnPath = $returnPath;
     }
-    
+
 
     /**
      * Returns the priority
@@ -419,7 +419,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->priority;
     }
 
-    
+
     /**
      * Sets the priority
      *
@@ -430,8 +430,8 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->priority = $priority;
     }
-    
-   
+
+
     /**
      * Returns the template
      *
@@ -442,7 +442,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->template;
     }
 
-    
+
     /**
      * Sets the template
      *
@@ -453,7 +453,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->template = $template;
     }
-    
+
 
     /**
      * Returns the settingsPage
@@ -464,7 +464,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return $this->settingsPage;
     }
-    
+
 
     /**
      * Sets the settingsPage
@@ -477,7 +477,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->settingsPage = $settingsPage;
     }
 
-    
+
     /**
      * Returns the format
      *
@@ -488,7 +488,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->format;
     }
 
-    
+
     /**
      * Sets the format
      *
@@ -511,7 +511,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->rythm;
     }
 
-    
+
     /**
      * Sets the rythm
      *
@@ -559,7 +559,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->approval->attach($backendUser);
     }
 
-    
+
     /**
      * Removes a backend user from the newsletter
      *
@@ -572,7 +572,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->approval->detach($backendUser);
     }
 
-    
+
     /**
      * Returns the backend user.
      *
@@ -584,7 +584,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->approval;
     }
 
-    
+
     /**
      * Sets the backend user.
      *
@@ -597,7 +597,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->approval = $backendUser;
     }
 
-    
+
     /**
      * Adds a usergroup to the newsletter
      *
@@ -610,7 +610,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->usergroup->attach($usergroup);
     }
 
-    
+
     /**
      * Removes a usergroup from the newsletter
      *
@@ -623,7 +623,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->usergroup->detach($usergroup);
     }
 
-    
+
     /**
      * Returns the usergroups. Keep in mind that the property is called "usergroup"
      * although it can hold several usergroups.
@@ -636,7 +636,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->usergroup;
     }
 
-    
+
     /**
      * Sets the usergroups. Keep in mind that the property is called "usergroup"
      * although it can hold several usergroups.
@@ -650,7 +650,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->usergroup = $usergroup;
     }
 
-    
+
     /**
      * Adds a topic to the newsletter
      *
@@ -675,7 +675,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->topic->detach($topic);
     }
 
-    
+
     /**
      * Returns the topic. Keep in mind that the property is called "topic"
      * although it can hold several topic.
@@ -688,7 +688,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->topic;
     }
 
-    
+
     /**
      * Sets the topic. Keep in mind that the property is called "topic"
      * although it can hold several topic.
@@ -702,7 +702,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->topic = $topic;
     }
 
-    
+
     /**
      * Adds a issue to the newsletter
      *
@@ -727,7 +727,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->issue->detach($issue);
     }
 
-    
+
     /**
      * Returns the issue. Keep in mind that the property is called "issue"
      * although it can hold several issue.
@@ -740,7 +740,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->issue;
     }
 
-    
+
     /**
      * Sets the issue. Keep in mind that the property is called "issue"
      * although it can hold several issue.
@@ -765,7 +765,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->lastSentTstamp;
     }
 
-    
+
     /**
      * Sets the lastSentTstamp
      *
@@ -776,7 +776,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->lastSentTstamp = $lastSentTstamp;
     }
-    
+
 
     /**
      * Returns the lastIssueTstamp
@@ -788,7 +788,7 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->lastIssueTstamp;
     }
 
-    
+
     /**
      * Sets the lastIssueTstamp
      *

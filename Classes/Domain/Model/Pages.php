@@ -21,7 +21,7 @@ use RKW\RkwBasics\Domain\Model\FileReference;
  *
  * @author Maximilian Fäßler <maximilian@faesslerweb.de>
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
@@ -34,7 +34,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
      */
     protected $permsUserId = 0;
 
-    
+
     /**
      * permsGroupId
      *
@@ -42,7 +42,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
      */
     protected $permsGroupId = 0;
 
-    
+
     /**
      * permsUser
      *
@@ -50,7 +50,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
      */
     protected $permsUser = 0;
 
-    
+
     /**
      * permsGroup
      *
@@ -58,7 +58,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
      */
     protected $permsGroup = 0;
 
-    
+
     /**
      * permsEverybody
      *
@@ -66,7 +66,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
      */
     protected $permsEverybody = 0;
 
-   
+
     /**
      * txRkwnewsletterNewsletter
      *
@@ -97,7 +97,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
      */
     protected $txRkwnewsletterExclude = false;
 
-    
+
     /**
      * txRkwnewsletterTeaserHeading
      *
@@ -105,7 +105,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
      */
     protected $txRkwnewsletterTeaserHeading = '';
 
-    
+
     /**
      * txRkwnewsletterTeaserText
      *
@@ -113,7 +113,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
      */
     protected $txRkwnewsletterTeaserText = '';
 
-    
+
     /**
      * txRkwnewsletterTeaserImage
      *
@@ -121,7 +121,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
      */
     protected $txRkwnewsletterTeaserImage;
 
-    
+
     /**
      * txRkwnewsletterTeaserLink
      *
@@ -129,7 +129,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
      */
     protected $txRkwnewsletterTeaserLink = '';
 
-    
+
     /**
      * txRkwnewsletterIncludeTstamp
      *
@@ -137,7 +137,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
      */
     protected $txRkwnewsletterIncludeTstamp = 0;
 
-    
+
     /**
      * Returns the permsUserId
      *
@@ -148,7 +148,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
         return $this->permsUserId;
     }
 
-    
+
     /**
      * Sets the permsUserId
      *
@@ -160,7 +160,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
         $this->permsUserId = $permsUserId;
     }
 
-    
+
     /**
      * Returns the permsGroupId
      *
@@ -171,7 +171,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
         return $this->permsGroupId;
     }
 
-    
+
     /**
      * Sets the permsGroupId
      *
@@ -183,7 +183,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
         $this->permsGroupId = $permsGroupId;
     }
 
-    
+
     /**
      * Returns the permsUser
      *
@@ -194,7 +194,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
         return $this->permsUser;
     }
 
-    
+
     /**
      * Sets the permsUser
      *
@@ -206,7 +206,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
         $this->permsUser = $permsUser;
     }
 
-    
+
     /**
      * Returns the permsGroup
      *
@@ -217,7 +217,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
         return $this->permsGroup;
     }
 
-    
+
     /**
      * Sets the permsGroup
      *
@@ -229,7 +229,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
         $this->permsGroup = $permsGroup;
     }
 
-    
+
     /**
      * Returns the permsEverybody
      *
@@ -240,7 +240,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
         return $this->permsEverybody;
     }
 
-    
+
     /**
      * Sets the permsEverybody
      *
@@ -251,8 +251,8 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
     {
         $this->permsEverybody = $permsEverybody;
     }
-    
-    
+
+
     /**
      * Returns the newsletter
      *
@@ -263,7 +263,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
         return $this->txRkwnewsletterNewsletter;
     }
 
-    
+
     /**
      * Sets the newsletter
      *
@@ -275,7 +275,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
         $this->txRkwnewsletterNewsletter = $txRkwnewsletterNewsletter;
     }
 
-    
+
     /**
      * Returns the topic
      *
@@ -286,7 +286,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
         return $this->txRkwnewsletterTopic;
     }
 
-    
+
     /**
      * Sets the topic
      *
@@ -308,7 +308,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
     {
         return $this->txRkwnewsletterIssue;
     }
-  
+
 
     /**
      * Returns the txRkwnewsletterExclude
@@ -320,7 +320,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
         return $this->txRkwnewsletterExclude;
     }
 
-    
+
     /**
      * Sets the txRkwnewsletterExclude
      *
@@ -332,7 +332,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
         $this->txRkwnewsletterExclude = $txRkwnewsletterExclude;
     }
 
-    
+
     /**
      * Returns the txRkwnewsletterTeaserHeading
      *
@@ -343,7 +343,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
         return $this->txRkwnewsletterTeaserHeading;
     }
 
-    
+
     /**
      * Sets the txRkwnewsletterTeaserHeading
      *
@@ -355,7 +355,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
         $this->txRkwnewsletterTeaserHeading = $txRkwnewsletterTeaserHeading;
     }
 
-    
+
     /**
      * Returns the txRkwnewsletterTeaserText
      *
@@ -377,7 +377,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
         $this->txRkwnewsletterTeaserText = $txRkwnewsletterTeaserText;
     }
 
-    
+
     /**
      * Returns the image
      *
@@ -388,7 +388,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
         return $this->txRkwnewsletterTeaserImage;
     }
 
-    
+
     /**
      * Sets the image
      *
@@ -400,7 +400,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
         $this->txRkwnewsletterTeaserImage = $image;
     }
 
-    
+
     /**
      * Returns the txRkwnewsletterTeaserLink
      *
@@ -411,7 +411,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
         return $this->txRkwnewsletterTeaserLink;
     }
 
-    
+
     /**
      * Sets the txRkwnewsletterTeaserLink
      *
@@ -423,7 +423,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
         $this->txRkwnewsletterTeaserLink = $txRkwnewsletterTeaserLink;
     }
 
-    
+
     /**
      * Returns the txRkwnewsletterIncludeTstamp
      *
@@ -434,7 +434,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
         return $this->txRkwnewsletterIncludeTstamp;
     }
 
-    
+
     /**
      * Sets the txRkwnewsletterIncludeTstamp
      *

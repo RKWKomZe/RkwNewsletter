@@ -19,13 +19,13 @@ namespace RKW\RkwNewsletter\Domain\Model;
  *
  * @author Maximilian Fäßler <maximilian@faesslerweb.de>
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class Approval extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
-    
+
     /**
      * topic
      *
@@ -103,8 +103,8 @@ class Approval extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $sentReminderTstampStage2 = 0;
 
-    
-    
+
+
     /**
      * Returns the topic
      *
@@ -263,7 +263,7 @@ class Approval extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the sentInfoTstampStage1
      *
-     * @return int 
+     * @return int
      */
     public function getSentInfoTstampStage1(): int
     {
@@ -284,7 +284,7 @@ class Approval extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the sentInfoTstampStage2
      *
-     * @return int 
+     * @return int
      */
     public function getSentInfoTstampStage2(): int
     {
@@ -305,7 +305,7 @@ class Approval extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the sentReminderTstampStage1
      *
-     * @return int 
+     * @return int
      */
     public function getSentReminderTstampStage1(): int
     {
@@ -326,7 +326,7 @@ class Approval extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the sendReminderomailStage2
      *
-     * @return int 
+     * @return int
      */
     public function getSentReminderTstampStage2(): int
     {

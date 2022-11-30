@@ -23,7 +23,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
  * AbstractHasBackendUserPermissionViewHelper
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
@@ -32,7 +32,7 @@ abstract class AbstractHasBackendUserPermissionViewHelper extends AbstractViewHe
 
     /**
      * Checks permissions
-     * 
+     *
      * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
      * @param \RKW\RkwNewsletter\Domain\Model\Topic|null $topic
      * @param int $approvalStage
@@ -42,7 +42,7 @@ abstract class AbstractHasBackendUserPermissionViewHelper extends AbstractViewHe
     protected static function checkPermissions(
         Issue $issue,
         bool $allApprovals = false,
-        Topic $topic = null, 
+        Topic $topic = null,
         int $approvalStage = 1
     ): bool {
 
@@ -80,7 +80,7 @@ abstract class AbstractHasBackendUserPermissionViewHelper extends AbstractViewHe
                     }
                 }
 
-            // check if any approval-permissions match!    
+            // check if any approval-permissions match!
             } else if ($allApprovals) {
 
                 foreach([1,2] as $stage) {

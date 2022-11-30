@@ -132,7 +132,6 @@ plugin.tx_rkwnewsletter {
         randomTopicOrder = {$plugin.tx_rkwnewsletter.settings.randomTopicOrder}
 
 		loginPid = {$plugin.tx_rkwnewsletter.settings.loginPid}
-        termsPid = {$plugin.tx_rkwnewsletter.settings.termsPid}
         subscriptionPid = {$plugin.tx_rkwnewsletter.settings.subscriptionPid}
 
         webViewPageNum = {$plugin.tx_rkwnewsletter.settings.webViewPageNum}

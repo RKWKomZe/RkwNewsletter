@@ -160,10 +160,6 @@
                <source>Upps, unfortunately something went wrong. Please contact our support.</source>
                <target><![CDATA[Upps, da ist leider etwas schief gelaufen. Bitte wenden Sie sich an unseren <a href="mailto:service@rkw.de">Support</a>.]]></target>
             </trans-unit>
-            <trans-unit id="subscriptionController.error.acceptTerms">
-				<source>You have to accept our terms and conditions.</source>
-				<target>Das muss leider sein: Bitte akzeptieren Sie unsere allgemeinen Nutzungsbedingungen, um sich anmelden zu können.</target>
-            </trans-unit>
             <trans-unit id="subscriptionController.error.notIdentified">
 				<source>Upps, it seems that we have not been able to identify you via the link used. You may already have cancelled your subscription. Would you like to sign up again?</source>
 				<target>Upps, es scheint als haben wir Sie über den verwendeten Link nicht identifizieren können. Möglicherweise haben Sie Ihr Abonnement bereits beendet. Möchten Sie sich erneut anmelden?</target>

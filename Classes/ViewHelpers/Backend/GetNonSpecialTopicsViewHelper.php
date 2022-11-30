@@ -21,7 +21,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
  * GetNonSpecialTopicsViewHelper
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
@@ -63,7 +63,7 @@ class GetNonSpecialTopicsViewHelper extends AbstractViewHelper
                 }
             }
         }
-        
+
         return $finalTopics;
     }
 }

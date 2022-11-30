@@ -21,7 +21,7 @@ use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
  * HasBackendUserPermissionViewHelper
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
@@ -54,13 +54,13 @@ class HasBackendUserPermissionMultipleViewHelper extends AbstractHasBackendUserP
         $topic = is_object($this->arguments['topic']) ? $this->arguments['topic'] : null;
         $approvalStage = intval($this->arguments['approvalStage']) ?: 1;
         $allApprovals = boolval($this->arguments['allApprovals']);
-        
+
         foreach ($issues as $issue) {
             if (self::checkPermissions($issue, $allApprovals, $topic, $approvalStage)) {
                 return 1;
             }
         }
-        
+
         return 0;
     }
 

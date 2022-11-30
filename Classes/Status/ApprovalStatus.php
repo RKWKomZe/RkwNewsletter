@@ -21,7 +21,7 @@ use RKW\RkwNewsletter\Domain\Model\BackendUser;
  * ApprovalStatus
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
@@ -41,7 +41,7 @@ class ApprovalStatus
      * @var int
      */
     const STAGE_DONE = 3;
-    
+
 
     /**
      * @var int
@@ -58,20 +58,20 @@ class ApprovalStatus
      */
     const LEVEL_DONE = 3;
 
-    
+
     /**
      * Returns current stage of the approval based on timestamps
-     * 
+     *
      * @param \RKW\RkwNewsletter\Domain\Model\Approval $approval
      * @return int
      */
     public static function getStage (Approval $approval): int
     {
-        
+
         if ($approval->getAllowedTstampStage2()) {
 
             return self::STAGE_DONE;
-            
+
         } else if ($approval->getAllowedTstampStage1()) {
 
             return self::STAGE2;
@@ -80,7 +80,7 @@ class ApprovalStatus
         return self::STAGE1;
     }
 
-   
+
 
     /**
      * Returns current mail-status of the approval based on timestamps
@@ -99,7 +99,7 @@ class ApprovalStatus
             ) {
                 return self::LEVEL1;
             }
-            
+
             if ($approval->getSentReminderTstampStage1() < 1) {
                 return self::LEVEL2;
             }
@@ -118,11 +118,11 @@ class ApprovalStatus
                 return self::LEVEL2;
             }
         }
-        
+
         return self::LEVEL_DONE;
     }
 
-    
+
     /**
      * Increases the current stage
      *
@@ -152,11 +152,11 @@ class ApprovalStatus
             $approval->setAllowedTstampStage2(time());
             $update = true;
         }
-        
+
         return $update;
     }
-    
-    
+
+
     /**
      * Increases the level of the current stage
      *

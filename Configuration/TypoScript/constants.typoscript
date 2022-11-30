@@ -46,9 +46,6 @@ plugin.tx_rkwnewsletter {
 		# cat=plugin.tx_rkwnewsletter//a; type=integer; label=Pid of login mask
 		loginPid =
 
-        # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Pid of terms
-        termsPid =
-
         # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Pid for subscriptions
         subscriptionPid =
 

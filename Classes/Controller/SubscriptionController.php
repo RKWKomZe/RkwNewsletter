@@ -14,7 +14,7 @@ namespace RKW\RkwNewsletter\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
-use RKW\RkwRegistration\Registration\FrontendUser\FrontendUserRegistration;
+use RKW\RkwRegistration\Registration\FrontendUserRegistration;
 use RKW\RkwRegistration\Utility\FrontendUserUtility;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -26,7 +26,7 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  *
  * @author Maximilian Fäßler <maximilian@faesslerweb.de>
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
@@ -197,17 +197,13 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      *
      * @param \RKW\RkwNewsletter\Domain\Model\FrontendUser|null $frontendUser
      * @param array $topics
-     * @param integer $terms
-     * @param integer $privacy
      * @return void
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      */
     public function newAction(
         \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser = null,
-        array $topics = [],
-        int $terms = 0,
-        int$privacy = 0
+        array $topics = []
     ): void {
 
         // FE-User may be logged in
@@ -227,9 +223,7 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
             array(
                 'newsletterList' => $this->newsletterRepository->findAllForSubscription($this->settings['newsletterList']?: ''),
                 'topicList'      => $this->buildCleanedTopicList($topics),
-                'frontendUser'   => $frontendUser,
-                'terms'          => (bool)$terms,
-                'privacy'        => (bool)$privacy,
+                'frontendUser'   => $frontendUser
             )
         );
     }
@@ -240,8 +234,6 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      *
      * @param \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser
      * @param array $topics
-     * @param integer $terms
-     * @param integer $privacy
      * @return void
      * @throws \RKW\RkwRegistration\Exception
      * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
@@ -254,44 +246,16 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      * @throws \TYPO3\CMS\Extbase\Persistence\Generic\Exception\NotImplementedException
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
      * @TYPO3\CMS\Extbase\Annotation\Validate("\RKW\RkwNewsletter\Validation\FormValidator", param="frontendUser")
+     * @TYPO3\CMS\Extbase\Annotation\Validate("\RKW\RkwRegistration\Validation\Consent\TermsValidator", param="frontendUser")
+     * @TYPO3\CMS\Extbase\Annotation\Validate("\RKW\RkwRegistration\Validation\Consent\PrivacyValidator", param="frontendUser")
+     * @TYPO3\CMS\Extbase\Annotation\Validate("\RKW\RkwRegistration\Validation\Consent\MarketingValidator", param="frontendUser")
      */
     public function createAction(
         \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser,
-        array $topics = [],
-        int $terms = 0,
-        int $privacy = 0
+        array $topics = []
     ): void {
-
-        // check if terms are checked
-        if (
-            ($frontendUser->_isNew())
-            && (!$terms)
-        ) {
-
-            $this->addFlashMessage(
-                LocalizationUtility::translate(
-                    'subscriptionController.error.acceptTerms',
-                    'rkw_newsletter'
-                ),
-                '',
-                AbstractMessage::ERROR
-            );
-
-            $this->forward('new', null, null, $this->request->getArguments());
-        }
-
-        if (!$privacy) {
-            $this->addFlashMessage(
-                LocalizationUtility::translate(
-                    'registrationController.error.accept_privacy',
-                    'rkw_registration'
-                ),
-                '',
-                AbstractMessage::ERROR
-            );
-            $this->forward('new', null, null, $this->request->getArguments());
-        }
 
         /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $subscriptions */
         $subscriptions = $this->buildCleanedTopicList($topics);
@@ -320,7 +284,7 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
             // get all changed properties and save them in the opt-in
             $frontendUserArray = FrontendUserUtility::convertObjectToArray($frontendUser, true); // take array to reduce size in the database
 
-            /** @var \RKW\RkwRegistration\Registration\FrontendUser\FrontendUserRegistration $registration */
+            /** @var \RKW\RkwRegistration\Registration\FrontendUserRegistration $registration */
             $registration = $this->objectManager->get(FrontendUserRegistration::class);
             $registration->setFrontendUserOptInUpdate($frontendUser)
                 ->setFrontendUser($frontendUser)
@@ -354,7 +318,7 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
                 }
                 $this->frontendUserRepository->update($frontendUser);
 
-                \RKW\RkwRegistration\DataProtection\PrivacyHandler::addPrivacyData(
+                \RKW\RkwRegistration\DataProtection\ConsentHandler::add(
                     $this->request,
                     $this->getFrontendUser(),
                     $subscriptions,
@@ -449,6 +413,7 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      * @throws \TYPO3\CMS\Extbase\Persistence\Generic\Exception\NotImplementedException
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
      */
     public function updateAction(array $topics = array(), int $privacy = 0)
     {
@@ -546,7 +511,7 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
         ) {
 
             // register new user or simply send opt-in to existing user
-            /** @var \RKW\RkwRegistration\Registration\FrontendUser\FrontendUserRegistration $registration */
+            /** @var \RKW\RkwRegistration\Registration\FrontendUserRegistration $registration */
             $registration = $this->objectManager->get(FrontendUserRegistration::class);
             $registration->setFrontendUser($frontendUser)
                 ->setData($subscriptions)
@@ -572,7 +537,7 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
                 $frontendUser->setTxRkwnewsletterSubscription($subscriptions);
                 $this->frontendUserRepository->update($frontendUser);
 
-                \RKW\RkwRegistration\DataProtection\PrivacyHandler::addPrivacyData(
+                \RKW\RkwRegistration\DataProtection\ConsentHandler::add(
                     $this->request,
                     $this->getFrontendUser(),
                     $subscriptions,
@@ -642,7 +607,7 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      */
     public function optInAction(string $tokenUser, string $token): void
     {
-        /** @var \RKW\RkwRegistration\Registration\FrontendUser\FrontendUserRegistration $registration */
+        /** @var \RKW\RkwRegistration\Registration\FrontendUserRegistration $registration */
         $registration = $this->objectManager->get(FrontendUserRegistration::class);
         $result = $registration->setFrontendUserToken($tokenUser)
             ->setCategory('rkwNewsletter')
