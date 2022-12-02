@@ -14,7 +14,7 @@ namespace RKW\RkwNewsletter\Permissions;
  * The TYPO3 project - inspiring people to share!
  */
 
-use RKW\RkwBasics\Utility\GeneralUtility;
+use Madj2k\CoreExtended\Utility\GeneralUtility;
 use RKW\RkwNewsletter\Domain\Model\Pages;
 use RKW\RkwNewsletter\Status\PageStatus;
 use TYPO3\CMS\Core\Log\Logger;
@@ -150,7 +150,7 @@ class PagePermissions
      */
     public function getPermissionSettings(): array
     {
-        $settings = GeneralUtility::getTyposcriptConfiguration(
+        $settings = GeneralUtility::getTypoScriptConfiguration(
             'Rkwnewsletter',
             ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS
         );

@@ -2,7 +2,7 @@
 
 namespace RKW\RkwNewsletter\ViewHelpers;
 
-use RKW\RkwBasics\Utility\GeneralUtility as Common;
+use Madj2k\CoreExtended\Utility\GeneralUtility as Common;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -17,7 +17,7 @@ use RKW\RkwBasics\Utility\GeneralUtility as Common;
  * The TYPO3 project - inspiring people to share!
  */
 
-use RKW\RkwBasics\Utility\GeneralUtility;
+use Madj2k\CoreExtended\Utility\GeneralUtility;
 use \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
@@ -54,7 +54,7 @@ class IsMandatoryFieldViewHelper extends AbstractViewHelper
     {
         $fieldName = $this->arguments['fieldName'];
 
-        $settings = GeneralUtility::getTyposcriptConfiguration('Rkwnewsletter');
+        $settings = GeneralUtility::getTypoScriptConfiguration('Rkwnewsletter');
         $requiredFields = array('email');
         if ($settings['requiredFieldsSubscription']) {
             $requiredFields = array_merge(

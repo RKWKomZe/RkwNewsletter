@@ -14,7 +14,7 @@ namespace RKW\RkwNewsletter\Domain\Repository;
  * The TYPO3 project - inspiring people to share!
  */
 
-use RKW\RkwBasics\Helper\QueryTypo3;
+use Madj2k\CoreExtended\Utility\QueryUtility;
 use TYPO3\CMS\Core\Utility\DebugUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
@@ -93,8 +93,8 @@ class NewsletterRepository extends AbstractRepository
                     AND (DAY(FROM_UNIXTIME(' . ($currentTime + $tolerance) . ')) >= day_for_sending)
                 )
             )' .
-            QueryTypo3::getWhereClauseForEnableFields('tx_rkwnewsletter_domain_model_newsletter') .
-            QueryTypo3::getWhereClauseForVersioning('tx_rkwnewsletter_domain_model_newsletter');
+            QueryTypo3::getWhereClauseEnabled('tx_rkwnewsletter_domain_model_newsletter') .
+            QueryTypo3::getWhereClauseVersioning('tx_rkwnewsletter_domain_model_newsletter');
 
         $query = $this->createQuery();
         $query->statement($statement);

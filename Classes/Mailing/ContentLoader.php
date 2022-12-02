@@ -319,7 +319,7 @@ class ContentLoader
 
         // now mix topics together - pass array-items as separate parameters to arrayZipMerge
         $result = call_user_func_array(
-            '\RKW\RkwBasics\Utility\GeneralUtility::arrayZipMerge',
+            '\Madj2k\CoreExtended\Utility\GeneralUtility::arrayZipMerge',
             $contents
         );
 

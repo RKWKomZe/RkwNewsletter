@@ -2,7 +2,7 @@
 
 namespace RKW\RkwNewsletter\Validation;
 
-use RKW\RkwBasics\Utility\GeneralUtility;
+use Madj2k\CoreExtended\Utility\GeneralUtility;
 use RKW\RkwRegistration\Utility\FrontendUserUtility;
 use TYPO3\CMS\Extbase\Error\Error;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -44,7 +44,7 @@ class FormValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractVali
         $isValid = true;
 
         // get required fields of user
-        $settings = GeneralUtility::getTyposcriptConfiguration('Rkwnewsletter');
+        $settings = GeneralUtility::getTypoScriptConfiguration('Rkwnewsletter');
         $requiredFields = array('email');
         if ($settings['requiredFieldsSubscription']) {
             $requiredFields = array_merge($requiredFields, \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $settings['requiredFieldsSubscription'], true));

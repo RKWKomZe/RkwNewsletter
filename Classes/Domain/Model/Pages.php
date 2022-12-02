@@ -14,7 +14,7 @@ namespace RKW\RkwNewsletter\Domain\Model;
  * The TYPO3 project - inspiring people to share!
  */
 
-use RKW\RkwBasics\Domain\Model\FileReference;
+use Madj2k\CoreExtended\Domain\Model\FileReference;
 
 /**
  * Pages
@@ -117,7 +117,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
     /**
      * txRkwnewsletterTeaserImage
      *
-     * @var \RKW\RkwBasics\Domain\Model\FileReference
+     * @var \Madj2k\CoreExtended\Domain\Model\FileReference
      */
     protected $txRkwnewsletterTeaserImage;
 
@@ -381,7 +381,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
     /**
      * Returns the image
      *
-     * @return \RKW\RkwBasics\Domain\Model\FileReference|null $txRkwnewsletterTeaserImage
+     * @return \Madj2k\CoreExtended\Domain\Model\FileReference|null $txRkwnewsletterTeaserImage
      */
     public function getTxRkwnewsletterTeaserImage()
     {
@@ -392,7 +392,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
     /**
      * Sets the image
      *
-     * @param \RKW\RkwBasics\Domain\Model\FileReference $txRkwnewsletterTeaserImage
+     * @param \Madj2k\CoreExtended\Domain\Model\FileReference $txRkwnewsletterTeaserImage
      * @return void
      */
     public function setTxRkwnewsletterTeaserImage(FileReference $image): void

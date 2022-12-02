@@ -15,8 +15,8 @@ namespace RKW\RkwNewsletter\Tests\Integration\Manager;
  */
 
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
-use RKW\RkwBasics\Domain\Model\FileReference;
-use RKW\RkwBasics\Domain\Repository\FileReferenceRepository;
+use Madj2k\CoreExtended\Domain\Model\FileReference;
+use Madj2k\CoreExtended\Domain\Repository\FileReferenceRepository;
 use RKW\RkwNewsletter\Domain\Model\Content;
 use RKW\RkwNewsletter\Domain\Model\Issue;
 use RKW\RkwNewsletter\Domain\Model\Newsletter;
@@ -113,7 +113,7 @@ class IssueManagerTest extends FunctionalTestCase
 
 
     /**
-     * @var \RKW\RkwBasics\Domain\Repository\FileReferenceRepository
+     * @var \Madj2k\CoreExtended\Domain\Repository\FileReferenceRepository
      */
     private $fileReferenceRepository;
 
@@ -732,13 +732,13 @@ class IssueManagerTest extends FunctionalTestCase
          */
         $this->importDataSet(static::FIXTURE_PATH . '/Database/Check80.xml');
 
-        /** @var \RKW\RkwBasics\Domain\Model\FileReference $fileReferenceSource */
+        /** @var \Madj2k\CoreExtended\Domain\Model\FileReference $fileReferenceSource */
         $fileReferenceSource = $this->fileReferenceRepository->findByUid(80);
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Content $content */
         $content = $this->contentRepository->findByUid(80);
 
-        /** @var \RKW\RkwBasics\Domain\Model\FileReference $fileReference */
+        /** @var \Madj2k\CoreExtended\Domain\Model\FileReference $fileReference */
         $fileReference = $this->subject->createFileReference($fileReferenceSource, $content);
 
         self::assertInstanceOf(FileReference::class, $fileReference);

@@ -324,7 +324,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
      */
     protected function getSettings(string $which = ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS): array
     {
-        return \RKW\RkwBasics\Utility\GeneralUtility::getTyposcriptConfiguration('Rkwnewsletter', $which);
+        return \Madj2k\CoreExtended\Utility\GeneralUtility::getTypoScriptConfiguration('Rkwnewsletter', $which);
     }
 
 

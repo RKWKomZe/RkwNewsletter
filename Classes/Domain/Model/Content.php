@@ -15,7 +15,7 @@ namespace RKW\RkwNewsletter\Domain\Model;
  */
 
 use RKW\RkwAuthors\Domain\Model\Authors;
-use RKW\RkwBasics\Domain\Model\FileReference;
+use Madj2k\CoreExtended\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
@@ -90,7 +90,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Image
      *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwBasics\Domain\Model\FileReference>
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Madj2k\CoreExtended\Domain\Model\FileReference>
      */
     protected $image;
 
@@ -322,7 +322,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Adds an image
      *
-     * @param \RKW\RkwBasics\Domain\Model\FileReference $image
+     * @param \Madj2k\CoreExtended\Domain\Model\FileReference $image
      * @return void
      * @api
      */
@@ -335,7 +335,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Removes an image
      *
-     * @param \RKW\RkwBasics\Domain\Model\FileReference $image
+     * @param \Madj2k\CoreExtended\Domain\Model\FileReference $image
      * @return void
      * @api
      */
@@ -348,7 +348,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the images
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwBasics\Domain\Model\FileReference> An object storage containing the backend user
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Madj2k\CoreExtended\Domain\Model\FileReference> An object storage containing the backend user
      * @api
      */
     public function getImage(): ObjectStorage
@@ -360,7 +360,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Sets the images
      *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwBasics\Domain\Model\FileReference> $image
+     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Madj2k\CoreExtended\Domain\Model\FileReference> $image
      * @return void
      * @api
      */

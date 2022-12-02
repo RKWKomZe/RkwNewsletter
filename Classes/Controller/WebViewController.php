@@ -15,7 +15,7 @@ namespace RKW\RkwNewsletter\Controller;
  */
 
 use RKW\RkwMailer\Domain\Model\QueueRecipient;
-use RKW\RkwBasics\Utility\GeneralUtility;
+use Madj2k\CoreExtended\Utility\GeneralUtility;
 use RKW\RkwNewsletter\Domain\Model\Issue;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
@@ -125,7 +125,7 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
 
         // add paths depending on template of newsletter - including the default one!
-        $settings = GeneralUtility::getTyposcriptConfiguration(
+        $settings = GeneralUtility::getTypoScriptConfiguration(
             'Rkwnewsletter',
             ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK
         );

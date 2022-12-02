@@ -17,8 +17,8 @@ namespace RKW\RkwNewsletter\Validation\TCA;
  * The TYPO3 project - inspiring people to share!
  */
 
-use RKW\RkwBasics\Utility\GeneralUtility as Common;
-use RKW\RkwBasics\Utility\GeneralUtility;
+use Madj2k\CoreExtended\Utility\GeneralUtility as Common;
+use Madj2k\CoreExtended\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
@@ -141,7 +141,7 @@ class NewsletterTeaserLengthEvaluation
      */
     protected function getSettings(string $which = ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS): array
     {
-        return GeneralUtility::getTyposcriptConfiguration('Rkwnewsletter', $which);
+        return GeneralUtility::getTypoScriptConfiguration('Rkwnewsletter', $which);
     }
 
 

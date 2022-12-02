@@ -1,7 +1,7 @@
 <?php
 namespace RKW\RkwNewsletter\Manager;
 
-use RKW\RkwBasics\Domain\Model\FileReference;
+use Madj2k\CoreExtended\Domain\Model\FileReference;
 use RKW\RkwNewsletter\Domain\Model\Approval;
 use RKW\RkwNewsletter\Domain\Model\Content;
 use RKW\RkwNewsletter\Domain\Model\Issue;
@@ -68,7 +68,7 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
 
 
     /**
-     * @var \RKW\RkwBasics\Domain\Repository\FileReferenceRepository
+     * @var \Madj2k\CoreExtended\Domain\Repository\FileReferenceRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $fileReferenceRepository;
@@ -280,9 +280,9 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
     /**
      * Creates a file reference for a content based on page-properties
      *
-     * @param \RKW\RkwBasics\Domain\Model\FileReference $fileReferenceSource
+     * @param \Madj2k\CoreExtended\Domain\Model\FileReference $fileReferenceSource
      * @param \RKW\RkwNewsletter\Domain\Model\Content $content
-     * @return \RKW\RkwBasics\Domain\Model\FileReference
+     * @return \Madj2k\CoreExtended\Domain\Model\FileReference
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      */
     public function createFileReference(FileReference $fileReferenceSource, Content $content): FileReference
@@ -296,7 +296,7 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
         $beUserTemp = $GLOBALS['BE_USER'];
         $GLOBALS['BE_USER'] = $backendUserAuthentication;
 
-        /** @var \RKW\RkwBasics\Domain\Model\FileReference $fileReference */
+        /** @var \Madj2k\CoreExtended\Domain\Model\FileReference $fileReference */
         $fileReference = GeneralUtility::makeInstance(FileReference::class);
         $fileReference->setOriginalResource($fileReferenceSource->getOriginalResource());
         $fileReference->setFile($fileReferenceSource->getFile());
@@ -350,7 +350,7 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
 
                 // optional: add image
                 try {
-                    /** @var \RKW\RkwBasics\Domain\Model\FileReference $fileReference */
+                    /** @var \Madj2k\CoreExtended\Domain\Model\FileReference $fileReference */
                     $fileReference = $sourcePage->getTxRkwnewsletterTeaserImage() ?: ($sourcePage->getTxRkwbasicsTeaserImage() ?: null);
                     if ($fileReference) {
                         $this->createFileReference($fileReference, $content);

@@ -14,7 +14,7 @@ namespace RKW\RkwNewsletter\Mailing;
  * The TYPO3 project - inspiring people to share!
  */
 
-use RKW\RkwBasics\Utility\FrontendSimulatorUtility;
+use Madj2k\CoreExtended\Utility\FrontendSimulatorUtility;
 use RKW\RkwNewsletter\Domain\Model\FrontendUser;
 use RKW\RkwNewsletter\Domain\Model\Issue;
 use RKW\RkwNewsletter\Exception;
@@ -22,7 +22,7 @@ use RKW\RkwNewsletter\Status\IssueStatus;
 use TYPO3\CMS\Core\Log\Logger;
 use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\Log\LogManager;
-use RKW\RkwBasics\Utility\GeneralUtility;
+use Madj2k\CoreExtended\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
@@ -761,7 +761,7 @@ class MailProcessor
         }
 
         FrontendSimulatorUtility::simulateFrontendEnvironment($pid);
-        $this->settings[$pid] = GeneralUtility::getTyposcriptConfiguration('Rkwnewsletter', $which);
+        $this->settings[$pid] = GeneralUtility::getTypoScriptConfiguration('Rkwnewsletter', $which);
         FrontendSimulatorUtility::resetFrontendEnvironment();
 
         return $this->settings[$pid];
