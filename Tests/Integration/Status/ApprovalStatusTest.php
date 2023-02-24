@@ -38,15 +38,17 @@ class ApprovalStatusTest extends FunctionalTestCase
      */
     const FIXTURE_PATH = __DIR__ . '/ApprovalStatusTest/Fixtures';
 
+
     /**
      * @var string[]
      */
     protected $testExtensionsToLoad = [
-        'typo3conf/ext/rkw_basics',
+        'typo3conf/ext/core_extended',
         'typo3conf/ext/rkw_authors',
         'typo3conf/ext/rkw_mailer',
         'typo3conf/ext/rkw_newsletter'
     ];
+
 
     /**
      * @var string[]
@@ -55,28 +57,27 @@ class ApprovalStatusTest extends FunctionalTestCase
 
 
     /**
-     * @var \RKW\RkwNewsletter\Status\ApprovalStatus
+     * @var \RKW\RkwNewsletter\Status\ApprovalStatus|null
      */
-    private $subject;
+    private ?ApprovalStatus $subject = null;
 
 
     /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\ApprovalRepository
+     * @var \RKW\RkwNewsletter\Domain\Repository\ApprovalRepository|null
      */
-    private $approvalRepository;
+    private ?ApprovalRepository $approvalRepository = null;
 
 
     /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\BackendUserRepository
+     * @var \RKW\RkwNewsletter\Domain\Repository\BackendUserRepository|null
      */
-    private $backendUserRepository;
+    private ?BackendUserRepository $backendUserRepository = null;
 
 
     /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     * @var \TYPO3\CMS\Extbase\Object\ObjectManager|null
      */
-    private $objectManager;
-
+    private ?ObjectManager $objectManager = null;
 
 
     /**
@@ -92,11 +93,11 @@ class ApprovalStatusTest extends FunctionalTestCase
         $this->setUpFrontendRootPage(
             1,
             [
-                'EXT:rkw_basics/Configuration/TypoScript/setup.typoscript',
+                'EXT:core_extended/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_authors/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/setup.typoscript',
-                'EXT:rkw_basics/Configuration/TypoScript/constants.typoscript',
+                'EXT:core_extended/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_authors/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/constants.typoscript',
@@ -113,7 +114,6 @@ class ApprovalStatusTest extends FunctionalTestCase
     }
 
     //=============================================
-
 
     /**
      * @test
@@ -139,6 +139,7 @@ class ApprovalStatusTest extends FunctionalTestCase
         self::assertEquals($this->subject::STAGE_DONE, $this->subject::getStage($approval));
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -162,6 +163,7 @@ class ApprovalStatusTest extends FunctionalTestCase
 
         self::assertEquals($this->subject::STAGE2, $this->subject::getStage($approval));
     }
+
 
     /**
      * @test
@@ -188,6 +190,7 @@ class ApprovalStatusTest extends FunctionalTestCase
     }
 
     //=============================================
+
     /**
      * @test
      * @throws \Exception
@@ -213,6 +216,7 @@ class ApprovalStatusTest extends FunctionalTestCase
         self::assertEquals($this->subject::LEVEL1, $this->subject::getLevel($approval));
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -237,6 +241,7 @@ class ApprovalStatusTest extends FunctionalTestCase
 
         self::assertEquals($this->subject::LEVEL2, $this->subject::getLevel($approval));
     }
+
 
     /**
      * @test
@@ -289,6 +294,7 @@ class ApprovalStatusTest extends FunctionalTestCase
         self::assertEquals($this->subject::LEVEL1, $this->subject::getLevel($approval));
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -314,6 +320,7 @@ class ApprovalStatusTest extends FunctionalTestCase
         self::assertEquals($this->subject::LEVEL2, $this->subject::getLevel($approval));
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -338,6 +345,7 @@ class ApprovalStatusTest extends FunctionalTestCase
 
         self::assertEquals($this->subject::LEVEL_DONE, $this->subject::getLevel($approval));
     }
+
 
     /**
      * @test
@@ -397,6 +405,7 @@ class ApprovalStatusTest extends FunctionalTestCase
         self::assertGreaterThan(0, $approval->getSentInfoTstampStage1());
         self::assertEquals(0, $approval->getSentReminderTstampStage1());
     }
+
 
     /**
      * @test
@@ -487,8 +496,8 @@ class ApprovalStatusTest extends FunctionalTestCase
 
         self::assertGreaterThan(0, $approval->getSentInfoTstampStage2());
         self::assertEquals(0, $approval->getSentReminderTstampStage2());
-
     }
+
 
     /**
      * @test
@@ -579,6 +588,7 @@ class ApprovalStatusTest extends FunctionalTestCase
         self::assertGreaterThan(0, $approval->getAllowedTstampStage1());
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -642,6 +652,7 @@ class ApprovalStatusTest extends FunctionalTestCase
         self::assertGreaterThan(0, $approval->getAllowedTstampStage2());
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -701,11 +712,10 @@ class ApprovalStatusTest extends FunctionalTestCase
 
         $result = $this->subject->increaseStage($approval);
         self::assertFalse($result);
-
     }
 
-
     //=============================================
+
     /**
      * TearDown
      */

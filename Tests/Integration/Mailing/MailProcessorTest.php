@@ -52,16 +52,18 @@ class MailProcessorTest extends FunctionalTestCase
      */
     const FIXTURE_PATH = __DIR__ . '/MailProcessorTest/Fixtures';
 
+
     /**
      * @var string[]
      */
     protected $testExtensionsToLoad = [
-        'typo3conf/ext/rkw_basics',
+        'typo3conf/ext/core_extended',
         'typo3conf/ext/rkw_authors',
         'typo3conf/ext/rkw_mailer',
         'typo3conf/ext/rkw_newsletter',
         'typo3conf/ext/rkw_registration',
     ];
+
 
     /**
      * @var string[]
@@ -70,50 +72,57 @@ class MailProcessorTest extends FunctionalTestCase
 
 
     /**
-     * @var \RKW\RkwNewsletter\Mailing\MailProcessor
+     * @var \RKW\RkwNewsletter\Mailing\MailProcessor|null
      */
-    private $subject;
-
-    /**
-     * @var \RKW\RkwMailer\Domain\Repository\QueueMailRepository
-     */
-    private $queueMailRepository;
-
-    /**
-     * @var \RKW\RkwMailer\Domain\Repository\QueueRecipientRepository
-     */
-    private $queueRecipientRepository;
-
-    /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository
-     */
-    private $issueRepository;
-
-    /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\TopicRepository
-     */
-    private $topicRepository;
-
-    /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\FrontendUserRepository
-     */
-    private $frontendUserRepository;
-
-    /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\BackendUserRepository
-     */
-    private $backendUserRepository;
-
-    /**
-     * @var \RKW\RkwMailer\Cache\MailCache
-     */
-    private $mailCache;
+    private ?MailProcessor $subject;
 
 
     /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     * @var \RKW\RkwMailer\Domain\Repository\QueueMailRepository|null
      */
-    private $objectManager;
+    private ?QueueMailRepository $queueMailRepository = null;
+
+
+    /**
+     * @var \RKW\RkwMailer\Domain\Repository\QueueRecipientRepository|null
+     */
+    private ?QueueRecipientRepository $queueRecipientRepository;
+
+
+    /**
+     * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository|null
+     */
+    private ?IssueRepository $issueRepository = null;
+
+
+    /**
+     * @var \RKW\RkwNewsletter\Domain\Repository\TopicRepository|null
+     */
+    private ?TopicRepository $topicRepository;
+
+
+    /**
+     * @var \RKW\RkwNewsletter\Domain\Repository\FrontendUserRepository|null
+     */
+    private ?FrontendUserRepository $frontendUserRepository;
+
+
+    /**
+     * @var \RKW\RkwNewsletter\Domain\Repository\BackendUserRepository|null
+     */
+    private ?BackendUserRepository $backendUserRepository;
+
+
+    /**
+     * @var \RKW\RkwMailer\Cache\MailCache|null
+     */
+    private ?MailCache $mailCache;
+
+
+    /**
+     * @var \TYPO3\CMS\Extbase\Object\ObjectManager|null
+     */
+    private ?ObjectManager $objectManager;
 
 
     /**
@@ -129,10 +138,10 @@ class MailProcessorTest extends FunctionalTestCase
         $this->setUpFrontendRootPage(
             1,
             [
-                'EXT:rkw_basics/Configuration/TypoScript/setup.typoscript',
+                'EXT:core_extended/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/setup.typoscript',
-                'EXT:rkw_basics/Configuration/TypoScript/constants.typoscript',
+                'EXT:core_extended/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/constants.typoscript',
                 self::FIXTURE_PATH . '/Frontend/Configuration/Rootpage.typoscript',
@@ -166,7 +175,6 @@ class MailProcessorTest extends FunctionalTestCase
         $this->mailCache = $this->objectManager->get(MailCache::class);
     }
 
-
     //=============================================
 
     /**
@@ -195,6 +203,7 @@ class MailProcessorTest extends FunctionalTestCase
         $this->subject->setIssue($issue);
 
     }
+
 
     /**
      * @test
@@ -225,7 +234,6 @@ class MailProcessorTest extends FunctionalTestCase
         $issue->setNewsletter($newsletter);
 
         $this->subject->setIssue($issue);
-
     }
 
 
@@ -257,6 +265,7 @@ class MailProcessorTest extends FunctionalTestCase
         $this->subject->setIssue($issue);
 
     }
+
 
     /**
      * @test
@@ -302,6 +311,7 @@ class MailProcessorTest extends FunctionalTestCase
         self::assertEquals('test@testen.de', $queueMail->getFromAddress());
         self::assertEquals('Test', $queueMail->getFromName());
     }
+
 
     /**
      * @test
@@ -360,6 +370,7 @@ class MailProcessorTest extends FunctionalTestCase
         self::assertEquals($expectedPartialPaths, $queueMail->getPartialPaths());
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -387,10 +398,10 @@ class MailProcessorTest extends FunctionalTestCase
         $this->setUpFrontendRootPage(
             21,
             [
-                'EXT:rkw_basics/Configuration/TypoScript/setup.typoscript',
+                'EXT:core_extended/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/setup.typoscript',
-                'EXT:rkw_basics/Configuration/TypoScript/constants.typoscript',
+                'EXT:core_extended/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/constants.typoscript',
                 self::FIXTURE_PATH . '/Frontend/Configuration/Page21.typoscript',
@@ -429,6 +440,7 @@ class MailProcessorTest extends FunctionalTestCase
         self::assertEquals('Managementletter', $queueMail->getPlaintextTemplate());
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -464,6 +476,7 @@ class MailProcessorTest extends FunctionalTestCase
         self::assertEquals('Default', $queueMail->getPlaintextTemplate());
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -497,6 +510,7 @@ class MailProcessorTest extends FunctionalTestCase
         self::assertEquals('Managementletter', $queueMail->getHtmlTemplate());
         self::assertEquals('Managementletter', $queueMail->getPlaintextTemplate());
     }
+
 
     /**
      * @test
@@ -560,6 +574,7 @@ class MailProcessorTest extends FunctionalTestCase
         self::assertNull($issue->getQueueMail());
 
     }
+
 
     /**
      * @test
@@ -637,6 +652,7 @@ class MailProcessorTest extends FunctionalTestCase
     }
 
     //=============================================
+
     /**
      * @test
      * @throws \Exception
@@ -658,6 +674,7 @@ class MailProcessorTest extends FunctionalTestCase
 
         $this->subject->setRecipients();
     }
+
 
     /**
      * @test
@@ -815,6 +832,7 @@ class MailProcessorTest extends FunctionalTestCase
     }
 
     //=============================================
+
     /**
      * @test
      * @throws \Exception
@@ -842,6 +860,7 @@ class MailProcessorTest extends FunctionalTestCase
         self::assertEquals('testhash', $result);
 
     }
+
 
     /**
      * @test
@@ -877,6 +896,7 @@ class MailProcessorTest extends FunctionalTestCase
         self::assertEquals($result, $frontendUser->getTxRkwnewsletterHash());
 
     }
+
     //=============================================
 
     /**
@@ -1218,6 +1238,7 @@ class MailProcessorTest extends FunctionalTestCase
 
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -1260,8 +1281,8 @@ class MailProcessorTest extends FunctionalTestCase
 
         $this->subject->setIssue($issue);
         self::assertFalse($this->subject->sendMail($frontendUser));
-
     }
+
 
     /**
      * @test
@@ -1327,6 +1348,7 @@ class MailProcessorTest extends FunctionalTestCase
         self::assertEquals('302400', $marker['settings']['reminderApprovalStage1']);
 
     }
+
 
     /**
      * @test
@@ -1484,6 +1506,7 @@ class MailProcessorTest extends FunctionalTestCase
             $this->mailCache->getHtmlBody($queueRecipient)
         );
     }
+
 
     /**
      * @test
@@ -1691,6 +1714,7 @@ class MailProcessorTest extends FunctionalTestCase
         );
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -1774,6 +1798,7 @@ class MailProcessorTest extends FunctionalTestCase
         );
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -1848,6 +1873,7 @@ class MailProcessorTest extends FunctionalTestCase
         );
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -1910,6 +1936,7 @@ class MailProcessorTest extends FunctionalTestCase
             $this->mailCache->getHtmlBody($queueRecipient)
         );
     }
+
 
     /**
      * @test
@@ -1977,7 +2004,6 @@ class MailProcessorTest extends FunctionalTestCase
     }
 
     //=============================================
-
 
     /**
      * @test
@@ -2109,6 +2135,7 @@ class MailProcessorTest extends FunctionalTestCase
 
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -2158,6 +2185,7 @@ class MailProcessorTest extends FunctionalTestCase
         self::assertFalse($this->subject->sendTestMail('test'));
 
     }
+
 
     /**
      * @test
@@ -2297,9 +2325,7 @@ class MailProcessorTest extends FunctionalTestCase
         );
     }
 
-
     //=============================================
-
 
     /**
      * @test
@@ -2340,6 +2366,7 @@ class MailProcessorTest extends FunctionalTestCase
         self::assertGreaterThanOrEqual(time() - 5, $issue->getStartTstamp());
         self::assertEquals(0, $issue->getSentTstamp());
     }
+
 
     /**
      * @test
@@ -2396,6 +2423,7 @@ class MailProcessorTest extends FunctionalTestCase
         self::assertGreaterThanOrEqual(time() - 5, $issue->getNewsletter()->getLastSentTstamp());
 
     }
+
 
     /**
      * @test
@@ -2455,6 +2483,7 @@ class MailProcessorTest extends FunctionalTestCase
         self::assertTrue($this->subject->sendMails(2));
         self::assertTrue($this->subject->getMailService()->getQueueMail()->getPipeline());
     }
+
 
     /**
      * @test
@@ -2615,7 +2644,6 @@ class MailProcessorTest extends FunctionalTestCase
         self::assertEquals($queueMail->getUid(), $this->subject->getMailService()->getQueueMail()->getUid());
 
     }
-
 
 
     /**
@@ -2800,8 +2828,6 @@ class MailProcessorTest extends FunctionalTestCase
 
     //=============================================
 
-
-
     /**
      * @test
      * @throws \Exception
@@ -2920,7 +2946,6 @@ class MailProcessorTest extends FunctionalTestCase
     }
 
     //=============================================
-
 
     /**
      * TearDown

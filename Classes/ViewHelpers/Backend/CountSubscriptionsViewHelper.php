@@ -30,13 +30,12 @@ use RKW\RkwNewsletter\Domain\Repository\FrontendUserRepository;
 class CountSubscriptionsViewHelper extends AbstractViewHelper
 {
 
-
     /**
      * Initialize arguments.
      *
      * @throws \TYPO3Fluid\Fluid\Core\ViewHelper\Exception
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('newsletter', \RKW\RkwNewsletter\Domain\Model\Newsletter::class, 'Count the subscribers of this newsletter.', true);

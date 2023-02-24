@@ -44,14 +44,16 @@ class ContentLoaderTest extends FunctionalTestCase
      */
     const FIXTURE_PATH = __DIR__ . '/ContentLoaderTest/Fixtures';
 
+
     /**
      * @var string[]
      */
     protected $testExtensionsToLoad = [
-        'typo3conf/ext/rkw_basics',
+        'typo3conf/ext/core_extended',
         'typo3conf/ext/rkw_mailer',
         'typo3conf/ext/rkw_newsletter'
     ];
+
 
     /**
      * @var string[]
@@ -60,31 +62,33 @@ class ContentLoaderTest extends FunctionalTestCase
 
 
     /**
-     * @var \RKW\RkwNewsletter\Mailing\ContentLoader
+     * @var \RKW\RkwNewsletter\Mailing\ContentLoader|null
      */
-    private $subject;
-
-    /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository
-     */
-    private $issueRepository;
+    private ?ContentLoader $subject = null;
 
 
     /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\TopicRepository
+     * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository|null
      */
-    private $topicRepository;
-
-    /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\ContentRepository
-     */
-    private $contentRepository;
+    private ?IssueRepository $issueRepository = null;
 
 
     /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     * @var \RKW\RkwNewsletter\Domain\Repository\TopicRepository|null
      */
-    private $objectManager;
+    private ?TopicRepository $topicRepository = null;
+
+
+    /**
+     * @var \RKW\RkwNewsletter\Domain\Repository\ContentRepository|null
+     */
+    private ?ContentRepository $contentRepository = null;
+
+
+    /**
+     * @var \TYPO3\CMS\Extbase\Object\ObjectManager|null
+     */
+    private ?ObjectManager $objectManager = null;
 
 
     /**
@@ -100,10 +104,10 @@ class ContentLoaderTest extends FunctionalTestCase
         $this->setUpFrontendRootPage(
             1,
             [
-                'EXT:rkw_basics/Configuration/TypoScript/setup.typoscript',
+                'EXT:core_extended/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/setup.typoscript',
-                'EXT:rkw_basics/Configuration/TypoScript/constants.typoscript',
+                'EXT:core_extended/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/constants.typoscript',
                 self::FIXTURE_PATH . '/Frontend/Configuration/Rootpage.typoscript',
@@ -221,7 +225,6 @@ class ContentLoaderTest extends FunctionalTestCase
 
     //=============================================
 
-
     /**
      * @test
      * @throws \Exception
@@ -260,9 +263,7 @@ class ContentLoaderTest extends FunctionalTestCase
         self::assertInstanceOf(Topic::class, $result[0]);
         self::assertInstanceOf(Topic::class, $result[1]);
         self::assertInstanceOf(Topic::class, $result[2]);
-
     }
-
 
     //=============================================
 
@@ -309,6 +310,7 @@ class ContentLoaderTest extends FunctionalTestCase
         $this->subject->setTopics($objectStorage);
 
     }
+
 
     /**
      * @test
@@ -463,6 +465,7 @@ class ContentLoaderTest extends FunctionalTestCase
 
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -518,8 +521,8 @@ class ContentLoaderTest extends FunctionalTestCase
         self::assertEquals(1, $result[80]);
         self::assertEquals(2, $result[82]);
 
-
     }
+
 
     /**
      * @test
@@ -575,9 +578,7 @@ class ContentLoaderTest extends FunctionalTestCase
         self::assertEquals(0, $result[161]);
         self::assertEquals(1, $result[160]);
 
-
     }
-
 
     //=============================================
 
@@ -928,7 +929,6 @@ class ContentLoaderTest extends FunctionalTestCase
     }
 
 
-
     /**
      * @test
      * @throws \Exception
@@ -994,6 +994,7 @@ class ContentLoaderTest extends FunctionalTestCase
         self::assertInstanceOf(Content::class, $content);
         self::assertEquals('Content 20.2', $content->getHeader());
     }
+
 
     /**
      * @test
@@ -1133,7 +1134,6 @@ class ContentLoaderTest extends FunctionalTestCase
 
     //=============================================
 
-
     /**
      * @test
      * @throws \Exception
@@ -1243,7 +1243,6 @@ class ContentLoaderTest extends FunctionalTestCase
     }
 
 
-
     /**
      * @test
      * @throws \Exception
@@ -1294,8 +1293,6 @@ class ContentLoaderTest extends FunctionalTestCase
 
     }
 
-
-
     //=============================================
 
     /**
@@ -1335,6 +1332,7 @@ class ContentLoaderTest extends FunctionalTestCase
         self::assertEquals(50, $result->getUid());
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -1371,9 +1369,7 @@ class ContentLoaderTest extends FunctionalTestCase
         self::assertNull($result);
     }
 
-
     //=============================================
-
 
     /**
      * @test
@@ -1414,7 +1410,6 @@ class ContentLoaderTest extends FunctionalTestCase
 
         self::assertNull($result);
     }
-
 
 
     /**
@@ -1521,6 +1516,7 @@ class ContentLoaderTest extends FunctionalTestCase
         self::assertEquals('Content 71.1', $result->getHeader());
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -1568,6 +1564,7 @@ class ContentLoaderTest extends FunctionalTestCase
         self::assertEquals(1, $result->getTxRkwnewsletterIsEditorial());
         self::assertEquals('Content 71.1', $result->getHeader());
     }
+
 
     /**
      * @test
@@ -1808,8 +1805,8 @@ class ContentLoaderTest extends FunctionalTestCase
 
     }
 
-
     //=============================================
+
     /**
      * @test
      * @throws \Exception
@@ -1862,6 +1859,7 @@ class ContentLoaderTest extends FunctionalTestCase
         self::assertTrue($this->subject->hasContents());
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -1909,7 +1907,6 @@ class ContentLoaderTest extends FunctionalTestCase
 
         self::assertTrue($this->subject->hasContents());
     }
-
 
     //=============================================
 
@@ -1965,6 +1962,7 @@ class ContentLoaderTest extends FunctionalTestCase
         self::assertEquals(1, $this->subject->countTopicsWithContents());
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -2012,6 +2010,7 @@ class ContentLoaderTest extends FunctionalTestCase
 
         self::assertEquals(0, $this->subject->countTopicsWithContents());
     }
+
 
     /**
      * @test

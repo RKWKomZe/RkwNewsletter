@@ -1,8 +1,5 @@
 <?php
-
 namespace RKW\RkwNewsletter\ViewHelpers;
-
-use Madj2k\CoreExtended\Utility\GeneralUtility as Common;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -40,11 +37,12 @@ class IsMandatoryFieldViewHelper extends AbstractViewHelper
      *
      * @throws \TYPO3Fluid\Fluid\Core\ViewHelper\Exception
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('fieldName', 'string', 'FieldName to check for', true);
     }
+
 
     /**
      * @return boolean
@@ -69,6 +67,5 @@ class IsMandatoryFieldViewHelper extends AbstractViewHelper
 
         return in_array($fieldName, $requiredFields);
     }
-
 
 }

@@ -16,7 +16,10 @@ namespace RKW\RkwNewsletter\Controller;
 
 use RKW\RkwMailer\Domain\Model\QueueRecipient;
 use Madj2k\CoreExtended\Utility\GeneralUtility;
+use RKW\RkwMailer\Domain\Repository\QueueMailRepository;
+use RKW\RkwMailer\Domain\Repository\QueueRecipientRepository;
 use RKW\RkwNewsletter\Domain\Model\Issue;
+use RKW\RkwNewsletter\Domain\Repository\TopicRepository;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
@@ -33,29 +36,24 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 {
 
     /**
-     * topicRepository
-     *
      * @var \RKW\RkwNewsletter\Domain\Repository\TopicRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $topicRepository;
+    protected TopicRepository $topicRepository;
 
 
     /**
-     * QueueMailRepository
-     *
      * @var \RKW\RkwMailer\Domain\Repository\QueueMailRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $queueMailRepository;
+    protected QueueMailRepository $queueMailRepository;
+
 
     /**
-     * QueueRecipientRepository
-     *
      * @var \RKW\RkwMailer\Domain\Repository\QueueRecipientRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $queueRecipientRepository;
+    protected QueueRecipientRepository $queueRecipientRepository;
 
 
     /**
@@ -69,7 +67,7 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
-    public function showAction(Issue $issue, array $topicsRaw = [], string $hash = '')
+    public function showAction(Issue $issue, array $topicsRaw = [], string $hash = ''): void
     {
 
         $queueMailId = 0;

@@ -14,6 +14,7 @@ namespace RKW\RkwNewsletter\Domain\Repository;
  * The TYPO3 project - inspiring people to share!
  */
 
+use RKW\RkwNewsletter\Domain\Model\FrontendUser;
 use RKW\RkwNewsletter\Domain\Model\Issue;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
@@ -38,7 +39,7 @@ class FrontendUserRepository extends AbstractRepository
      *
      * @return void
      */
-    public function initializeObject()
+    public function initializeObject(): void
     {
         parent::initializeObject();
         $this->defaultQuerySettings = $this->objectManager->get(Typo3QuerySettings::class);
@@ -110,27 +111,13 @@ class FrontendUserRepository extends AbstractRepository
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * findOneByTxRkwnewsletterHash
      *
      * @var string $hash
-     * @return \RKW\RkwNewsletter\Domain\Model\FrontendUser|NULL
+     * @return \RKW\RkwNewsletter\Domain\Model\FrontendUser|null
      */
-    public function findOneByTxRkwnewsletterHash($hash)
+    public function findOneByTxRkwnewsletterHash(string $hash):? FrontendUser
     {
         $query = $this->createQuery();
         $query->matching(
@@ -139,7 +126,4 @@ class FrontendUserRepository extends AbstractRepository
 
         return $query->execute()->getFirst();
     }
-
-
-
 }

@@ -14,6 +14,10 @@ namespace RKW\RkwNewsletter\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
+use RKW\RkwNewsletter\Domain\Model\FrontendUser;
+use RKW\RkwNewsletter\Domain\Repository\FrontendUserRepository;
+use RKW\RkwNewsletter\Domain\Repository\NewsletterRepository;
+use RKW\RkwNewsletter\Domain\Repository\TopicRepository;
 use RKW\RkwRegistration\Registration\FrontendUserRegistration;
 use RKW\RkwRegistration\Utility\FrontendUserUtility;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
@@ -33,52 +37,41 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
 
-
     /**
-     * newsletterRepository
-     *
      * @var \RKW\RkwNewsletter\Domain\Repository\NewsletterRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $newsletterRepository;
+    protected NewsletterRepository $newsletterRepository;
+
 
     /**
-     * topicRepository
-     *
      * @var \RKW\RkwNewsletter\Domain\Repository\TopicRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $topicRepository;
+    protected TopicRepository $topicRepository;
+
 
     /**
-     * frontendUserRepository
-     *
      * @var \RKW\RkwNewsletter\Domain\Repository\FrontendUserRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $frontendUserRepository;
-
-
-    /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
-     * @TYPO3\CMS\Extbase\Annotation\Inject
-     */
-    protected $objectManager;
+    protected FrontendUserRepository $frontendUserRepository;
 
 
     /**
      * FrontendUser
      *
-     * @var \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser
+     * @var \RKW\RkwNewsletter\Domain\Model\FrontendUser|null
      */
-    protected $frontendUser;
+    protected ?FrontendUser $frontendUser = null;
+
 
     /**
      * FrontendUser via hash, not logged in
      *
-     * @var \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser
+     * @var \RKW\RkwNewsletter\Domain\Model\FrontendUser|null
      */
-    protected $frontendUserByHash;
+    protected ?FrontendUser $frontendUserByHash;
 
 
     /**
@@ -143,7 +136,7 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
     /**
      * Id of logged User
      *
-     * @return integer
+     * @return int
      * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
      */
     protected function getFrontendUserId(): int
@@ -166,7 +159,7 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      *
      * @return \RKW\RkwNewsletter\Domain\Model\FrontendUser|null
      */
-    protected function getFrontendUser()
+    protected function getFrontendUser():? FrontendUser
     {
 
         if (!$this->frontendUser) {
@@ -186,7 +179,7 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      *
      * @return \RKW\RkwNewsletter\Domain\Model\FrontendUser|null
      */
-    protected function getFrontendUserByHash()
+    protected function getFrontendUserByHash():? FrontendUser
     {
         return $this->frontendUserByHash;
     }
@@ -201,10 +194,8 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      */
-    public function newAction(
-        \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser = null,
-        array $topics = []
-    ): void {
+    public function newAction(FrontendUser $frontendUser = null, array $topics = []): void
+    {
 
         // FE-User may be logged in
         /** @var \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser */
@@ -252,10 +243,8 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      * @TYPO3\CMS\Extbase\Annotation\Validate("\RKW\RkwRegistration\Validation\Consent\PrivacyValidator", param="frontendUser")
      * @TYPO3\CMS\Extbase\Annotation\Validate("\RKW\RkwRegistration\Validation\Consent\MarketingValidator", param="frontendUser")
      */
-    public function createAction(
-        \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser,
-        array $topics = []
-    ): void {
+    public function createAction(FrontendUser $frontendUser, array $topics = []): void
+    {
 
         /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $subscriptions */
         $subscriptions = $this->buildCleanedTopicList($topics);
@@ -357,7 +346,7 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      * action edit
      *
      * @param array $topics
-     * @param integer $privacy
+     * @param int $privacy
      * @return void
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
@@ -365,7 +354,6 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      */
     public function editAction(array $topics = array(), int $privacy = 0): void
     {
-
         // FE-User has to be logged in or identified by hash
         /** @var \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser */
         $frontendUser = ($this->getFrontendUser() ? $this->getFrontendUser() : $this->getFrontendUserByHash());
@@ -383,7 +371,6 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
             $this->forward('new');
         }
 
-
         $this->view->assignMultiple(
             array(
                 'newsletterList' => $this->newsletterRepository->findAllForSubscription($this->settings['newsletterList']?: ''),
@@ -400,7 +387,7 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      * action update
      *
      * @param array $topics
-     * @param integer $privacy
+     * @param int $privacy
      * @return void
      * @throws \RKW\RkwRegistration\Exception
      * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
@@ -565,7 +552,6 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
         }
 
         $this->redirect('edit');
-
     }
 
 
@@ -594,11 +580,14 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      * @param string $token
      * @return void
      * @throws \RKW\RkwRegistration\Exception
+     * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
+     * @throws \TYPO3\CMS\Core\Crypto\PasswordHashing\InvalidPasswordHashException
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      * @throws \TYPO3\CMS\Extbase\Persistence\Generic\Exception
      * @throws \TYPO3\CMS\Extbase\Persistence\Generic\Exception\NotImplementedException
@@ -682,8 +671,6 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      * @return void
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
-     * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException
-     * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException
      */
     public function saveSubscription(
         \RKW\RkwRegistration\Domain\Model\FrontendUser $frontendUser,
@@ -742,6 +729,5 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
     {
         return false;
     }
-
 
 }

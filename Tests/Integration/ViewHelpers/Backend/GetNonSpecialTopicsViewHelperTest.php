@@ -20,7 +20,6 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 
-
 /**
  * GetNonSpecialTopicsViewHelperTest
  *
@@ -37,14 +36,16 @@ class GetNonSpecialTopicsViewHelperTest extends FunctionalTestCase
      */
     const FIXTURE_PATH = __DIR__ . '/GetNonSpecialTopicsViewHelperTest/Fixtures';
 
+
     /**
      * @var string[]
      */
     protected $testExtensionsToLoad = [
-        'typo3conf/ext/rkw_basics',
+        'typo3conf/ext/core_extended',
         'typo3conf/ext/rkw_mailer',
         'typo3conf/ext/rkw_newsletter'
     ];
+
 
     /**
      * @var string[]
@@ -53,21 +54,21 @@ class GetNonSpecialTopicsViewHelperTest extends FunctionalTestCase
 
 
     /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository
+     * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository|null
      */
-    private $issueRepository;
+    private ?IssueRepository $issueRepository = null;
 
 
     /**
-     * @var \TYPO3\CMS\Fluid\View\StandaloneView
+     * @var \TYPO3\CMS\Fluid\View\StandaloneView|null
      */
-    private $standAloneViewHelper;
+    private ?StandaloneView $standAloneViewHelper = null;
 
 
     /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     * @var \TYPO3\CMS\Extbase\Object\ObjectManager|null
      */
-    private $objectManager;
+    private ?ObjectManager $objectManager = null;
 
 
     /**
@@ -83,10 +84,10 @@ class GetNonSpecialTopicsViewHelperTest extends FunctionalTestCase
         $this->setUpFrontendRootPage(
             1,
             [
-                'EXT:rkw_basics/Configuration/TypoScript/setup.typoscript',
+                'EXT:core_extended/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/setup.typoscript',
-                'EXT:rkw_basics/Configuration/TypoScript/constants.typoscript',
+                'EXT:core_extended/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/constants.typoscript',
                 self::FIXTURE_PATH . '/Frontend/Configuration/Rootpage.typoscript',
@@ -109,6 +110,7 @@ class GetNonSpecialTopicsViewHelperTest extends FunctionalTestCase
 
     }
 
+    //=============================================
 
     /**
      * @test
@@ -145,8 +147,6 @@ class GetNonSpecialTopicsViewHelperTest extends FunctionalTestCase
 
         self::assertEquals('Test1,Test3,', trim($this->standAloneViewHelper->render()));
     }
-
-
 
     //=============================================
 

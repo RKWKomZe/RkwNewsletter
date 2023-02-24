@@ -17,6 +17,8 @@ namespace RKW\RkwNewsletter\Mailing;
 use RKW\RkwNewsletter\Domain\Model\Content;
 use RKW\RkwNewsletter\Domain\Model\Issue;
 use RKW\RkwNewsletter\Domain\Model\Topic;
+use RKW\RkwNewsletter\Domain\Repository\ContentRepository;
+use RKW\RkwNewsletter\Domain\Repository\PagesRepository;
 use RKW\RkwNewsletter\Exception;
 use TYPO3\CMS\Core\Log\Logger;
 use TYPO3\CMS\Core\Log\LogLevel;
@@ -36,41 +38,41 @@ class ContentLoader
 {
 
     /**
-     * @var \RKW\RkwNewsletter\Domain\Model\Issue
+     * @var \RKW\RkwNewsletter\Domain\Model\Issue|null
      */
-    protected $issue;
+    protected ?Issue $issue = null;
 
 
     /**
      * @var array
      */
-    protected $ordering = [];
+    protected array $ordering = [];
 
 
     /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage|null
      */
-    protected $topics;
+    protected ?ObjectStorage $topics = null;
 
 
     /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\ContentRepository
+     * @var \RKW\RkwNewsletter\Domain\Repository\ContentRepository|null
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $contentRepository;
+    protected ?ContentRepository $contentRepository = null;
 
 
     /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\PagesRepository
+     * @var \RKW\RkwNewsletter\Domain\Repository\PagesRepository<null
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $pagesRepository;
+    protected ?PagesRepository $pagesRepository = null;
 
 
     /**
-     * @var \TYPO3\CMS\Core\Log\Logger
+     * @var \TYPO3\CMS\Core\Log\Logger|null
      */
-    protected $logger;
+    protected ?Logger $logger = null;
 
 
     /**
@@ -92,7 +94,7 @@ class ContentLoader
      *
      * @return \RKW\RkwNewsletter\Domain\Model\Issue|null
      */
-    public function getIssue()
+    public function getIssue():? Issue
     {
         return $this->issue;
     }
@@ -121,7 +123,6 @@ class ContentLoader
 
         $this->setTopics($topics);
     }
-
 
 
     /**
@@ -228,7 +229,6 @@ class ContentLoader
     }
 
 
-
     /**
      * Checks if contents are available for the given topics
      *
@@ -254,7 +254,6 @@ class ContentLoader
      * Counts the topics with contents
      *
      * @return int
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      */
     public function countTopicsWithContents (): int
     {
@@ -278,6 +277,7 @@ class ContentLoader
 
         return $cnt;
     }
+
 
     /**
      * Get all contents as a zip-merged array by topics
@@ -390,7 +390,7 @@ class ContentLoader
      * @param \RKW\RkwNewsletter\Domain\Model\Content $content
      * @return \RKW\RkwNewsletter\Domain\Model\Topic|null
      */
-    public function getTopicOfContent (Content $content)
+    public function getTopicOfContent (Content $content):? Topic
     {
         /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
         $page = $this->pagesRepository->findByUid($content->getPid());
@@ -406,9 +406,8 @@ class ContentLoader
      * Get editorial if content contains an editorial
      *
      * @return \RKW\RkwNewsletter\Domain\Model\Content|null
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      */
-    public function getEditorial()
+    public function getEditorial():? Content
     {
 
         // always empty if we have more than one topic with contents
@@ -547,7 +546,7 @@ class ContentLoader
      *
      * @return \TYPO3\CMS\Core\Log\Logger
      */
-    protected function getLogger()
+    protected function getLogger():? Logger
     {
 
         if (!$this->logger instanceof Logger) {

@@ -1,6 +1,6 @@
 <?php
-
 namespace RKW\RkwNewsletter\Domain\Model;
+
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -32,83 +32,63 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
 
     /**
-     * crdate
-     *
      * @var int
      */
-    protected $crdate = 0;
+    protected int $crdate = 0;
 
 
     /**
-     * sysLanguageUid
-     *
      * @var int
      */
-    protected $sysLanguageUid = -1;
+    protected int $sysLanguageUid = -1;
 
 
     /**
-     * header
-     *
      * @var string
      */
-    protected $header = '';
+    protected string $header = '';
 
 
     /**
-     * headerLink
-     *
      * @var string
      */
-    protected $headerLink = '';
+    protected string $headerLink = '';
 
 
     /**
-     * bodytext
-     *
      * @var string
      */
-    protected $bodytext = '';
+    protected string $bodytext = '';
 
 
     /**
-     * cType
-     *
      * @var string
      */
-    protected $contentType = 'textpic';
+    protected string $contentType = 'textpic';
 
 
     /**
-     * imageCols
-     *
      * @var int
      */
-    protected $imageCols = 0;
+    protected int $imageCols = 0;
 
 
     /**
-     * Image
-     *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Madj2k\CoreExtended\Domain\Model\FileReference>
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Madj2k\CoreExtended\Domain\Model\FileReference>|null
      */
-    protected $image;
+    protected ?ObjectStorage $image = null;
 
 
     /**
-     * txRkwnewsletterAuthors
-     *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwAuthors\Domain\Model\Authors>
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwAuthors\Domain\Model\Authors>|null
      */
-    protected $txRkwnewsletterAuthors;
+    protected ?ObjectStorage $txRkwnewsletterAuthors = null;
 
 
     /**
-     * txRkwnewsletterIsEditorial
-     *
      * @var bool
      */
-    protected $txRkwnewsletterIsEditorial = false;
+    protected bool $txRkwnewsletterIsEditorial = false;
 
 
     /**
@@ -182,6 +162,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->crdate = $crdate;
     }
 
+
     /**
      * Returns the sysLanguageUid
      *
@@ -214,6 +195,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return $this->header;
     }
+
 
     /**
      * Sets the header
@@ -348,7 +330,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the images
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Madj2k\CoreExtended\Domain\Model\FileReference> An object storage containing the backend user
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Madj2k\CoreExtended\Domain\Model\FileReference>
      * @api
      */
     public function getImage(): ObjectStorage
@@ -422,9 +404,9 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
 
     /**
-     * Returns the uid
+     * Returns the txRkwnewsletterIsEditorial
      *
-     * @return bool $txRkwnewsletterIsEditorial
+     * @return bool
      */
     public function getTxRkwnewsletterIsEditorial(): bool
     {
@@ -433,9 +415,9 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
 
     /**
-     * Sets the uid
+     * Sets the txRkwnewsletterIsEditorial
      *
-     * @param bool $uid
+     * @param bool $txRkwnewsletterIsEditorial
      * @return void
      */
     public function setTxRkwnewsletterIsEditorial(bool $txRkwnewsletterIsEditorial): void

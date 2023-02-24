@@ -27,10 +27,10 @@ use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 class TopicRepository extends AbstractRepository
 {
 
-    /*
-     * initializeObject
+    /**
+     * @return void
      */
-    public function initializeObject()
+    public function initializeObject(): void
     {
         parent::initializeObject();
         $this->defaultQuerySettings = $this->objectManager->get(Typo3QuerySettings::class);

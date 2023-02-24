@@ -15,8 +15,13 @@ namespace RKW\RkwNewsletter\Mailing;
  */
 
 use Madj2k\CoreExtended\Utility\FrontendSimulatorUtility;
+use RKW\RkwMailer\Service\MailService;
+use RKW\RkwMailer\Validation\QueueMailValidator;
 use RKW\RkwNewsletter\Domain\Model\FrontendUser;
 use RKW\RkwNewsletter\Domain\Model\Issue;
+use RKW\RkwNewsletter\Domain\Repository\FrontendUserRepository;
+use RKW\RkwNewsletter\Domain\Repository\IssueRepository;
+use RKW\RkwNewsletter\Domain\Repository\NewsletterRepository;
 use RKW\RkwNewsletter\Exception;
 use RKW\RkwNewsletter\Status\IssueStatus;
 use TYPO3\CMS\Core\Log\Logger;
@@ -24,6 +29,7 @@ use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\Log\LogManager;
 use Madj2k\CoreExtended\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
@@ -38,79 +44,70 @@ class MailProcessor
 {
 
     /**
-     * @var \RKW\RkwNewsletter\Domain\Model\Issue
+     * @var \RKW\RkwNewsletter\Domain\Model\Issue|null
      */
-    protected $issue;
+    protected ?Issue $issue = null;
 
 
     /**
-     * frontendUserRepository
-     *
      * @var \RKW\RkwNewsletter\Domain\Repository\FrontendUserRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $frontendUserRepository;
+    protected FrontendUserRepository $frontendUserRepository;
 
 
     /**
-     * newsletterRepository
-     *
      * @var \RKW\RkwNewsletter\Domain\Repository\NewsletterRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $newsletterRepository;
+    protected NewsletterRepository $newsletterRepository;
 
 
     /**
-     * issueRepository
-     *
      * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $issueRepository;
+    protected IssueRepository $issueRepository;
 
 
     /**
      * @var \RKW\RkwNewsletter\Mailing\ContentLoader
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $contentLoader;
+    protected ContentLoader $contentLoader;
 
 
     /**
      * @var \RKW\RkwMailer\Service\MailService
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $mailService;
+    protected MailService $mailService;
+
 
     /**
-     * QueueMailValidator
-     *
      * @var \RKW\RkwMailer\Validation\QueueMailValidator
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $queueMailValidator;
+    protected QueueMailValidator $queueMailValidator;
 
 
     /**
-     * persistenceManager
-     *
      * @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $persistenceManager;
+    protected PersistenceManager $persistenceManager;
 
 
     /**
-     * @var \TYPO3\CMS\Core\Log\Logger
+     * @var \TYPO3\CMS\Core\Log\Logger|null
      */
-    protected $logger;
+    protected ?Logger $logger = null;
 
 
     /**
      * @var array
      */
-    protected $settings = [];
+    protected array $settings = [];
 
 
     /**
@@ -118,7 +115,7 @@ class MailProcessor
      *
      * @return \RKW\RkwMailer\Service\MailService
      */
-    public function getMailService()
+    public function getMailService(): MailService
     {
         return $this->mailService;
     }
@@ -129,7 +126,7 @@ class MailProcessor
      *
      * @return \RKW\RkwNewsletter\Mailing\ContentLoader
      */
-    public function getContentLoader()
+    public function getContentLoader(): ContentLoader
     {
         return $this->contentLoader;
     }
@@ -140,7 +137,7 @@ class MailProcessor
      *
      * @return \RKW\RkwNewsletter\Domain\Model\Issue|null
      */
-    public function getIssue()
+    public function getIssue():? Issue
     {
         return $this->issue;
     }
@@ -267,7 +264,7 @@ class MailProcessor
     /**
      * Sets the subscribed topics and shuffles them
      *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\Topic> $topics
+     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\Topic>|null $topics
      * @return void
      * @throws Exception
      */
@@ -465,6 +462,7 @@ class MailProcessor
         return false;
     }
 
+
     /**
      * Sends emails to all subscribers
      *
@@ -621,6 +619,7 @@ class MailProcessor
         return false;
     }
 
+
     /**
      * inits mailService
      *
@@ -774,11 +773,11 @@ class MailProcessor
      *
      * @return \TYPO3\CMS\Core\Log\Logger
      */
-    protected function getLogger()
+    protected function getLogger(): Logger
     {
 
         if (!$this->logger instanceof Logger) {
-            $this->logger = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(LogManager::class)->getLogger(__CLASS__);
+            $this->logger = GeneralUtility::makeInstance(LogManager::class)->getLogger(__CLASS__);
         }
 
         return $this->logger;
@@ -788,10 +787,11 @@ class MailProcessor
     /**
      * Does debugging of runtime
      *
-     * @param integer $line
+     * @param int $line
      * @param string  $function
+     * @return void
      */
-    private static function debugTime($line, $function)
+    private static function debugTime(int $line, string $function): void
     {
 
         if (GeneralUtility::getApplicationContext()->isDevelopment()) {

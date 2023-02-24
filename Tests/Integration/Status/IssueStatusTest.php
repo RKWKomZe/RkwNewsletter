@@ -36,15 +36,17 @@ class IssueStatusTest extends FunctionalTestCase
      */
     const FIXTURE_PATH = __DIR__ . '/IssueStatusTest/Fixtures';
 
+
     /**
      * @var string[]
      */
     protected $testExtensionsToLoad = [
-        'typo3conf/ext/rkw_basics',
+        'typo3conf/ext/core_extended',
         'typo3conf/ext/rkw_authors',
         'typo3conf/ext/rkw_mailer',
         'typo3conf/ext/rkw_newsletter'
     ];
+
 
     /**
      * @var string[]
@@ -53,22 +55,21 @@ class IssueStatusTest extends FunctionalTestCase
 
 
     /**
-     * @var \RKW\RkwNewsletter\Status\IssueStatus
+     * @var \RKW\RkwNewsletter\Status\IssueStatus|null
      */
-    private $subject;
+    private ?IssueStatus $subject = null;
 
 
     /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository
+     * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository|null
      */
-    private $issueRepository;
+    private ?IssueRepository $issueRepository = null;
 
 
     /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     * @var \TYPO3\CMS\Extbase\Object\ObjectManager|null
      */
-    private $objectManager;
-
+    private ?ObjectManager $objectManager = null;
 
 
     /**
@@ -84,11 +85,11 @@ class IssueStatusTest extends FunctionalTestCase
         $this->setUpFrontendRootPage(
             1,
             [
-                'EXT:rkw_basics/Configuration/TypoScript/setup.typoscript',
+                'EXT:core_extended/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_authors/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/setup.typoscript',
-                'EXT:rkw_basics/Configuration/TypoScript/constants.typoscript',
+                'EXT:core_extended/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_authors/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/constants.typoscript',
@@ -128,7 +129,6 @@ class IssueStatusTest extends FunctionalTestCase
 
         self::assertEquals($this->subject::STAGE_DRAFT, $this->subject::getStage($issue));
     }
-
 
 
     /**
@@ -179,6 +179,7 @@ class IssueStatusTest extends FunctionalTestCase
 
         self::assertEquals($this->subject::STAGE_RELEASE, $this->subject::getStage($issue));
     }
+
 
     /**
      * @test
@@ -255,6 +256,7 @@ class IssueStatusTest extends FunctionalTestCase
         self::assertEquals($this->subject::LEVEL_NONE, $this->subject::getLevel($issue));
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -281,6 +283,7 @@ class IssueStatusTest extends FunctionalTestCase
         self::assertEquals($this->subject::LEVEL1, $this->subject::getLevel($issue));
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -306,6 +309,7 @@ class IssueStatusTest extends FunctionalTestCase
 
         self::assertEquals($this->subject::LEVEL2, $this->subject::getLevel($issue));
     }
+
 
     /**
      * @test
@@ -366,6 +370,7 @@ class IssueStatusTest extends FunctionalTestCase
         self::assertEquals(0, $issue->getSentTstamp());
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -395,8 +400,6 @@ class IssueStatusTest extends FunctionalTestCase
         self::assertEquals($this->subject::STAGE_RELEASE, $issue->getStatus());
         self::assertEquals(0, $issue->getReleaseTstamp());
         self::assertEquals(0, $issue->getSentTstamp());
-
-
     }
 
 
@@ -431,6 +434,7 @@ class IssueStatusTest extends FunctionalTestCase
         self::assertEquals(0, $issue->getSentTstamp());
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -461,6 +465,7 @@ class IssueStatusTest extends FunctionalTestCase
         self::assertEquals(0, $issue->getReleaseTstamp());
         self::assertGreaterThan(0, $issue->getSentTstamp());
     }
+
 
     /**
      * @test
@@ -514,6 +519,7 @@ class IssueStatusTest extends FunctionalTestCase
         self::assertFalse($this->subject::increaseLevel($issue));
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -544,6 +550,7 @@ class IssueStatusTest extends FunctionalTestCase
         self::assertGreaterThan(0, $issue->getInfoTstamp());
         self::assertEquals(0, $issue->getReminderTstamp());
     }
+
 
     /**
      * @test
@@ -576,6 +583,7 @@ class IssueStatusTest extends FunctionalTestCase
         self::assertGreaterThan(0, $issue->getReminderTstamp());
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -603,6 +611,7 @@ class IssueStatusTest extends FunctionalTestCase
     }
 
     //=============================================
+
     /**
      * TearDown
      */

@@ -1,22 +1,6 @@
 <?php
 namespace RKW\RkwNewsletter\Manager;
 
-use Madj2k\CoreExtended\Domain\Model\FileReference;
-use RKW\RkwNewsletter\Domain\Model\Approval;
-use RKW\RkwNewsletter\Domain\Model\Content;
-use RKW\RkwNewsletter\Domain\Model\Issue;
-use RKW\RkwNewsletter\Domain\Model\Newsletter;
-use RKW\RkwNewsletter\Domain\Model\Pages;
-use RKW\RkwNewsletter\Domain\Model\Topic;
-use RKW\RkwNewsletter\Exception;
-use RKW\RkwNewsletter\Status\ApprovalStatus;
-use RKW\RkwNewsletter\Status\IssueStatus;
-use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
-use TYPO3\CMS\Core\Log\Logger;
-use TYPO3\CMS\Core\Log\LogLevel;
-use TYPO3\CMS\Core\Log\LogManager;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -29,6 +13,29 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
+use Madj2k\CoreExtended\Domain\Model\FileReference;
+use Madj2k\CoreExtended\Domain\Repository\FileReferenceRepository;
+use RKW\RkwNewsletter\Domain\Model\Content;
+use RKW\RkwNewsletter\Domain\Model\Issue;
+use RKW\RkwNewsletter\Domain\Model\Newsletter;
+use RKW\RkwNewsletter\Domain\Model\Pages;
+use RKW\RkwNewsletter\Domain\Model\Topic;
+use RKW\RkwNewsletter\Domain\Repository\ContentRepository;
+use RKW\RkwNewsletter\Domain\Repository\IssueRepository;
+use RKW\RkwNewsletter\Domain\Repository\NewsletterRepository;
+use RKW\RkwNewsletter\Domain\Repository\PagesRepository;
+use RKW\RkwNewsletter\Exception;
+use RKW\RkwNewsletter\Status\ApprovalStatus;
+use RKW\RkwNewsletter\Status\IssueStatus;
+use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
+use TYPO3\CMS\Core\Log\Logger;
+use TYPO3\CMS\Core\Log\LogLevel;
+use TYPO3\CMS\Core\Log\LogManager;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
+use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
 
 /**
  * IssueManager
@@ -45,62 +52,65 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
      * @var \RKW\RkwNewsletter\Domain\Repository\NewsletterRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $newsletterRepository;
+    protected NewsletterRepository $newsletterRepository;
+
 
     /**
      * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $issueRepository;
+    protected IssueRepository $issueRepository;
+
 
     /**
      * @var \RKW\RkwNewsletter\Domain\Repository\PagesRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $pagesRepository;
+    protected PagesRepository $pagesRepository;
 
 
     /**
      * @var \RKW\RkwNewsletter\Domain\Repository\ContentRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $contentRepository;
+    protected ContentRepository $contentRepository;
 
 
     /**
      * @var \Madj2k\CoreExtended\Domain\Repository\FileReferenceRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $fileReferenceRepository;
+    protected FileReferenceRepository $fileReferenceRepository;
 
 
     /**
      * @var \TYPO3\CMS\Extbase\Object\ObjectManager
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    private $objectManager;
+    private ObjectManager $objectManager;
+
 
     /**
-     * PersistenceManager
-     *
      * @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $persistenceManager;
+    protected PersistenceManager $persistenceManager;
 
 
     /**
-     * Signal Slot Dispatcher
-     *
      * @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $signalSlotDispatcher;
+    protected Dispatcher $signalSlotDispatcher;
 
 
     /**
-     * Signal name for use in ext_localconf.php
-     *
+     * @var \TYPO3\CMS\Core\Log\Logger|null
+     */
+    protected ?Logger $logger = null;
+
+
+    /**
      * @const string
      */
     const SIGNAL_FOR_SENDING_MAIL_RELEASE = 'sendMailRelease';
@@ -334,6 +344,7 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
      * @param \RKW\RkwNewsletter\Domain\Model\Pages $page
      * @return bool
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      */
     public function buildContents (Newsletter $newsletter, Topic $topic, Pages $page): bool
     {
@@ -351,7 +362,7 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
                 // optional: add image
                 try {
                     /** @var \Madj2k\CoreExtended\Domain\Model\FileReference $fileReference */
-                    $fileReference = $sourcePage->getTxRkwnewsletterTeaserImage() ?: ($sourcePage->getTxRkwbasicsTeaserImage() ?: null);
+                    $fileReference = $sourcePage->getTxRkwnewsletterTeaserImage() ?: ($sourcePage->getTxCoreextendedPreviewImage() ?: null);
                     if ($fileReference) {
                         $this->createFileReference($fileReference, $content);
                     }
@@ -398,7 +409,6 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
 
         return false;
     }
-
 
 
     /**
@@ -540,6 +550,7 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      * @throws \TYPO3\CMS\Core\Type\Exception\InvalidEnumerationValueException
+     * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
      */
     public function buildAllIssues (int $tolerance = 0, int $timestampNow = 0): bool
     {
@@ -764,7 +775,6 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
     }
 
 
-
     /**
      * Check if all approvals are done and set status of the issue to "release" then
      *
@@ -820,6 +830,7 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
         return false;
     }
 
+
     /**
      * Check all issues if there is a release stage to check
      *
@@ -854,13 +865,12 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
     }
 
 
-
     /**
      * Returns logger instance
      *
      * @return \TYPO3\CMS\Core\Log\Logger
      */
-    protected function getLogger()
+    protected function getLogger(): Logger
     {
         if (!$this->logger instanceof Logger) {
             $this->logger = GeneralUtility::makeInstance(LogManager::class)->getLogger(__CLASS__);

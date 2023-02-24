@@ -33,7 +33,7 @@ class GetNonSpecialTopicsViewHelper extends AbstractViewHelper
      *
      * @throws \TYPO3Fluid\Fluid\Core\ViewHelper\Exception
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('issue', Issue::class, 'Get non-special topics from this issue.', true);

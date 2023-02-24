@@ -54,15 +54,17 @@ class IssueManagerTest extends FunctionalTestCase
      */
     const FIXTURE_PATH = __DIR__ . '/IssueManagerTest/Fixtures';
 
+
     /**
      * @var string[]
      */
     protected $testExtensionsToLoad = [
-        'typo3conf/ext/rkw_basics',
+        'typo3conf/ext/core_extended',
         'typo3conf/ext/rkw_authors',
         'typo3conf/ext/rkw_mailer',
         'typo3conf/ext/rkw_newsletter'
     ];
+
 
     /**
      * @var string[]
@@ -71,57 +73,58 @@ class IssueManagerTest extends FunctionalTestCase
 
 
     /**
-     * @var \RKW\RkwNewsletter\Manager\IssueManager
+     * @var \RKW\RkwNewsletter\Manager\IssueManager|null
      */
-    private $subject;
+    private ?IssueManager $subject = null;
 
 
     /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     * @var \TYPO3\CMS\Extbase\Object\ObjectManager|null
      */
-    private $objectManager;
+    private ?ObjectManager $objectManager = null;
 
 
     /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\NewsletterRepository
+     * @var \RKW\RkwNewsletter\Domain\Repository\NewsletterRepository|null
      */
-    private $newsletterRepository;
+    private ?NewsletterRepository $newsletterRepository = null;
 
 
     /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\TopicRepository
+     * @var \RKW\RkwNewsletter\Domain\Repository\TopicRepository|null
      */
-    private $topicRepository;
+    private ?TopicRepository $topicRepository = null;
 
 
     /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository
+     * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository|null
      */
-    private $issueRepository;
+    private ?IssueRepository $issueRepository = null;
 
 
     /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\PagesRepository
+     * @var \RKW\RkwNewsletter\Domain\Repository\PagesRepository|null
      */
-    private $pagesRepository;
+    private ?PagesRepository $pagesRepository = null;
 
 
     /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\ContentRepository
+     * @var \RKW\RkwNewsletter\Domain\Repository\ContentRepository|null
      */
-    private $contentRepository;
+    private ?ContentRepository $contentRepository = null;
 
 
     /**
-     * @var \Madj2k\CoreExtended\Domain\Repository\FileReferenceRepository
+     * @var \Madj2k\CoreExtended\Domain\Repository\FileReferenceRepository|null
      */
-    private $fileReferenceRepository;
+    private ?FileReferenceRepository $fileReferenceRepository = null;
 
 
     /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\ApprovalRepository
+     * @var \RKW\RkwNewsletter\Domain\Repository\ApprovalRepository|null
      */
-    private $approvalRepository;
+    private ?ApprovalRepository $approvalRepository = null;
+
 
     /**
      * Setup
@@ -136,11 +139,11 @@ class IssueManagerTest extends FunctionalTestCase
         $this->setUpFrontendRootPage(
             1,
             [
-                'EXT:rkw_basics/Configuration/TypoScript/setup.typoscript',
+                'EXT:core_extended/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_authors/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/setup.typoscript',
-                'EXT:rkw_basics/Configuration/TypoScript/constants.typoscript',
+                'EXT:core_extended/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_authors/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/constants.typoscript',
@@ -168,6 +171,7 @@ class IssueManagerTest extends FunctionalTestCase
     }
 
     //=============================================
+
     /**
      * @test
      * @throws \Exception
@@ -187,6 +191,7 @@ class IssueManagerTest extends FunctionalTestCase
         self::assertEquals('this year is '. date('Y'), $result);
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -205,6 +210,7 @@ class IssueManagerTest extends FunctionalTestCase
         $result = $this->subject->replaceTitlePlaceholders('this month is {M}');
         self::assertEquals('this month is '. date('m'), $result);
     }
+
 
     /**
      * @test
@@ -283,9 +289,8 @@ class IssueManagerTest extends FunctionalTestCase
         self::assertEquals('Newsletter ' . date('m') . '/' . date('Y'), $issue->getTitle());
         self::assertEquals(0, $issue->getStatus());
         self::assertEquals(false, $issue->getIsSpecial());
-
-
     }
+
 
     /**
      * @test
@@ -317,9 +322,8 @@ class IssueManagerTest extends FunctionalTestCase
         self::assertEquals('SPECIAL: Newsletter ' . date('m') . '/' . date('Y'), $issue->getTitle());
         self::assertEquals(0, $issue->getStatus());
         self::assertEquals(true, $issue->getIsSpecial());
-
-
     }
+
 
     /**
      * @test
@@ -366,6 +370,7 @@ class IssueManagerTest extends FunctionalTestCase
     }
 
     //=============================================
+
     /**
      * @test
      * @throws \Exception
@@ -580,6 +585,7 @@ class IssueManagerTest extends FunctionalTestCase
         self::assertCount(0, $content->getTxRkwnewsletterAuthors());
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -703,7 +709,6 @@ class IssueManagerTest extends FunctionalTestCase
 
     }
 
-
     //=============================================
 
     /**
@@ -720,7 +725,7 @@ class IssueManagerTest extends FunctionalTestCase
          * Given a persisted content-object
          * Given a persisted fileReference-object between the page- and file-object
          * When the method is called
-         * Then an instance of \RKW\RkwBasics\Model\FileReference is returned
+         * Then an instance of \Madj2k\CoreExtended\Model\FileReference is returned
          * Then the file-property is identical to the file-property of the fileReference-object
          * Then the tableLocal-property is identical to the tableLocale-property of the fileReference-object
          * Then the fieldname-property of this instance is set to 'image'
@@ -852,11 +857,12 @@ class IssueManagerTest extends FunctionalTestCase
 
     }
 
+
     /**
      * @test
      * @throws \Exception
      */
-    public function buildContentsUsesRkwBasicsTeaserImage()
+    public function buildContentsUsesCoreExtendedPreviewImage()
     {
 
         /**
@@ -866,13 +872,13 @@ class IssueManagerTest extends FunctionalTestCase
          * Given a persisted topic-object that belongs to the newsletter-object
          * Given a persisted page-object as container-page
          * Given for the topic-object there exists a persisted page-object that belongs to it
-         * Given page-object has a file-reference to a file for the txRkwbasicsTeaserImage-property set
-         * Given page-object has no file-reference to a file for the txRkwNewsletterTeaserImage-property set
+         * Given page-object has a file-reference to a file for the txCoreextendedPreviewImage-property set
+         * Given page-object has no file-reference to a file for the txCoreextendedPreviewImage-property set
          * When the method is called
          * Then true is returned
          * Then the content of the page-object is created in the container-page
          * Then the new content has one file-reference in the image-property
-         * Then this file-references refers to the image of the txRkwbasicsTeaserImage-property of the page-object
+         * Then this file-references refers to the image of the txCoreextendedTeaserImage-property of the page-object
          */
         $this->importDataSet(static::FIXTURE_PATH . '/Database/Check100.xml');
 
@@ -899,13 +905,14 @@ class IssueManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Content $content */
         $content = $contents[0];
 
-        /** @var \RKW\RkwBasics\Domain\Model\File $file */
+        /** @var \Madj2k\CoreExtended\Domain\Model\File $file */
         $file =  $content->getImage()->current()->getFile();
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
         $page = $this->pagesRepository->findByUid(101);
-        self::assertEquals($page->getTxRkwbasicsTeaserImage()->getFile(), $file);
+        self::assertEquals($page->getTxCoreextendedPreviewImage()->getFile(), $file);
     }
+
 
     /**
      * @test
@@ -921,8 +928,8 @@ class IssueManagerTest extends FunctionalTestCase
          * Given a persisted topic-object that belongs to the newsletter-object
          * Given a persisted page-object as container-page
          * Given for the topic-object there exists a persisted page-object that belongs to it
-         * Given page-object has a file-reference to a file for the txRkwbasicsTeaserImage-property set
-         * Given page-object has a file-reference to a file for the txRkwNewsletterTeaserImage-property set
+         * Given page-object has a file-reference to a file for the txCoreextendedPreviewImage-property set
+         * Given page-object has a file-reference to a file for the txCoreextendedPreviewImage-property set
          * When the method is called
          * Then true is returned
          * Then the content of the page-object is created in the container-page
@@ -953,7 +960,7 @@ class IssueManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Content $content */
         $content = $contents[0];
 
-        /** @var \RKW\RkwBasics\Domain\Model\File $file */
+        /** @var \Madj2k\CoreExtended\Domain\Model\File $file */
         $file =  $content->getImage()->current()->getFile();
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
@@ -961,7 +968,9 @@ class IssueManagerTest extends FunctionalTestCase
         self::assertEquals($page->getTxRkwnewsletterTeaserImage()->getFile(), $file);
 
     }
+
     //=============================================
+
     /**
      * @test
      * @throws \Exception
@@ -1158,8 +1167,8 @@ class IssueManagerTest extends FunctionalTestCase
 
     }
 
-
     //=============================================
+
     /**
     * @test
     * @throws \Exception
@@ -1183,6 +1192,7 @@ class IssueManagerTest extends FunctionalTestCase
         $result = $this->subject->buildIssue($newsletter);
         self::assertFalse($result);
     }
+
 
     /**
      * @test
@@ -1229,6 +1239,7 @@ class IssueManagerTest extends FunctionalTestCase
         self::assertEquals($newsletter->getLastIssueTstamp(), $newsletterDb->getLastIssueTstamp());
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -1269,6 +1280,7 @@ class IssueManagerTest extends FunctionalTestCase
     }
 
     //=============================================
+
     /**
      * @test
      * @throws \Exception
@@ -1309,6 +1321,7 @@ class IssueManagerTest extends FunctionalTestCase
         self::assertFalse($result);
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -1348,8 +1361,6 @@ class IssueManagerTest extends FunctionalTestCase
         $result = $this->subject->buildAllIssues(1209600, $timestampNow);
         self::assertFalse($result);
     }
-
-
 
 
     /**
@@ -1443,6 +1454,7 @@ class IssueManagerTest extends FunctionalTestCase
 
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -1483,6 +1495,7 @@ class IssueManagerTest extends FunctionalTestCase
         self::assertFalse($result);
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -1522,8 +1535,6 @@ class IssueManagerTest extends FunctionalTestCase
         $result = $this->subject->buildAllIssues(1209600, $timestampNow);
         self::assertFalse($result);
     }
-
-
 
 
     /**
@@ -1610,9 +1621,8 @@ class IssueManagerTest extends FunctionalTestCase
         // tolerance is 15 days (1209600) for testing
         $result = $this->subject->buildAllIssues(1209600, $timestampNow);
         self::assertFalse($result);
-
-
     }
+
 
     /**
      * @test
@@ -1659,6 +1669,7 @@ class IssueManagerTest extends FunctionalTestCase
 
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -1699,6 +1710,7 @@ class IssueManagerTest extends FunctionalTestCase
         self::assertFalse($result);
 
     }
+
 
     /**
      * @test
@@ -1831,6 +1843,7 @@ class IssueManagerTest extends FunctionalTestCase
 
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -1871,6 +1884,7 @@ class IssueManagerTest extends FunctionalTestCase
         self::assertFalse($result);
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -1910,8 +1924,6 @@ class IssueManagerTest extends FunctionalTestCase
         $result = $this->subject->buildAllIssues(1209600, $timestampNow);
         self::assertFalse($result);
     }
-
-
 
 
     /**
@@ -1956,7 +1968,6 @@ class IssueManagerTest extends FunctionalTestCase
 
         $issues = $this->issueRepository->findAll()->toArray();
         self::assertCount(2, $issues);
-
     }
 
 
@@ -1998,9 +2009,8 @@ class IssueManagerTest extends FunctionalTestCase
         // tolerance is 15 days (1209600) for testing
         $result = $this->subject->buildAllIssues(1209600, $timestampNow);
         self::assertFalse($result);
-
-
     }
+
 
     /**
      * @test
@@ -2046,7 +2056,9 @@ class IssueManagerTest extends FunctionalTestCase
         self::assertCount(2, $issues);
 
     }
+
     //=============================================
+
     /**
      * @test
      * @throws \Exception
@@ -2075,6 +2087,7 @@ class IssueManagerTest extends FunctionalTestCase
         self::assertFalse($result);
 
     }
+
 
     /**
      * @test
@@ -2112,7 +2125,6 @@ class IssueManagerTest extends FunctionalTestCase
         $issueDb = $this->issueRepository->findByUid(260);
         self::assertGreaterThan(0, $issueDb->getInfoTstamp());
     }
-
 
 
     /**
@@ -2220,6 +2232,7 @@ class IssueManagerTest extends FunctionalTestCase
         self::assertEquals(IssueStatus::STAGE_APPROVAL, $issueDb->getStatus());
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -2255,6 +2268,7 @@ class IssueManagerTest extends FunctionalTestCase
         $issueDb = $this->issueRepository->findByUid(290);
         self::assertEquals(IssueStatus::STAGE_RELEASE, $issueDb->getStatus());
     }
+
 
     /**
      * @test
@@ -2294,6 +2308,7 @@ class IssueManagerTest extends FunctionalTestCase
         self::assertGreaterThan(0, $issueDb->getReleaseTstamp());
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -2332,6 +2347,7 @@ class IssueManagerTest extends FunctionalTestCase
         self::assertGreaterThan(0, $issueDb->getSentTstamp());
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -2361,7 +2377,6 @@ class IssueManagerTest extends FunctionalTestCase
 
     //=============================================
 
-
     /**
      * @test
      * @throws \Exception
@@ -2387,7 +2402,6 @@ class IssueManagerTest extends FunctionalTestCase
 
         self::assertEmpty($this->subject->getMailRecipients($issue));
     }
-
 
 
     /**
@@ -2421,6 +2435,7 @@ class IssueManagerTest extends FunctionalTestCase
         self::assertEquals(240, $result[0]->getUid());
         self::assertEquals(241, $result[1]->getUid());
     }
+
 
     /**
      * @test
@@ -2484,6 +2499,7 @@ class IssueManagerTest extends FunctionalTestCase
     }
 
     //=============================================
+
     /**
      * @test
      * @throws \Exception
@@ -2515,6 +2531,7 @@ class IssueManagerTest extends FunctionalTestCase
         self::assertEquals(0, $result);
 
     }
+
 
     /**
      * @test
@@ -2578,7 +2595,6 @@ class IssueManagerTest extends FunctionalTestCase
     }
 
 
-
     /**
      * @test
      * @throws \Exception
@@ -2608,6 +2624,7 @@ class IssueManagerTest extends FunctionalTestCase
         $result = $this->subject->sendMails($issue);
         self::assertEquals(2, $result);
     }
+
 
     /**
      * @test
@@ -2673,8 +2690,8 @@ class IssueManagerTest extends FunctionalTestCase
 
         $result = $this->subject->processConfirmation($issue);
         self::assertFalse($result);
-
     }
+
 
     /**
      * @test
@@ -2716,8 +2733,8 @@ class IssueManagerTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(190);
         self::assertEquals(IssueStatus::STAGE_RELEASE, $issue->getStatus());
-
     }
+
 
     /**
      * @test
@@ -2760,8 +2777,8 @@ class IssueManagerTest extends FunctionalTestCase
         $issue = $this->issueRepository->findByUid(190);
         self::assertGreaterThan(0, $issue->getInfoTstamp());
         self::assertEquals(0, $issue->getReminderTstamp());
-
     }
+
 
     /**
      * @test
@@ -2804,8 +2821,8 @@ class IssueManagerTest extends FunctionalTestCase
         $issue = $this->issueRepository->findByUid(200);
         self::assertGreaterThan(0, $issue->getInfoTstamp());
         self::assertGreaterThan(0, $issue->getReminderTstamp());
-
     }
+
 
     /**
      * @test
@@ -2836,8 +2853,8 @@ class IssueManagerTest extends FunctionalTestCase
 
         $result = $this->subject->processConfirmation($issue);
         self::assertFalse($result);
-
     }
+
 
     /**
      * @test
@@ -2871,9 +2888,7 @@ class IssueManagerTest extends FunctionalTestCase
 
     }
 
-
     //=============================================
-
 
     /**
      * @test
@@ -2936,6 +2951,7 @@ class IssueManagerTest extends FunctionalTestCase
 
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -2997,6 +3013,7 @@ class IssueManagerTest extends FunctionalTestCase
 
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -3034,8 +3051,8 @@ class IssueManagerTest extends FunctionalTestCase
 
         $result = $this->subject->processAllConfirmations(600);
         self::assertEquals(0, $result);
-
     }
+
 
     /**
      * @test
@@ -3064,8 +3081,8 @@ class IssueManagerTest extends FunctionalTestCase
 
         $result = $this->subject->processAllConfirmations(600);
         self::assertEquals(1, $result);
-
     }
+
 
     /**
      * @test
@@ -3104,7 +3121,6 @@ class IssueManagerTest extends FunctionalTestCase
 
         $result = $this->subject->processAllConfirmations(600);
         self::assertEquals(0, $result);
-
     }
 
 
@@ -3130,9 +3146,8 @@ class IssueManagerTest extends FunctionalTestCase
 
     }
 
-
-
     //=============================================
+
 
     /**
      * TearDown

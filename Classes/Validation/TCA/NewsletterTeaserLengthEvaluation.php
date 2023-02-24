@@ -1,8 +1,5 @@
 <?php
-
 namespace RKW\RkwNewsletter\Validation\TCA;
-
-/*
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -17,14 +14,12 @@ namespace RKW\RkwNewsletter\Validation\TCA;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Madj2k\CoreExtended\Utility\GeneralUtility as Common;
 use Madj2k\CoreExtended\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-
 
 /**
  * Class FormValidator
@@ -37,7 +32,6 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 class NewsletterTeaserLengthEvaluation
 {
 
-
     /**
      * JavaScript code for client side validation/evaluation
      *
@@ -48,16 +42,17 @@ class NewsletterTeaserLengthEvaluation
         return 'return value;';
     }
 
+
     /**
      * Server-side validation/evaluation on saving the record
      *
      * @param string $value The field value to be evaluated
-     * @param string $is_in The "is_in" value of the field configuration from TCA
+     * @param string $isIn The "is_in" value of the field configuration from TCA
      * @param bool $set Boolean defining if the value is written to the database or not. Must be passed by reference and changed if needed.
      * @return string Evaluated field value
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
-    public function evaluateFieldValue($value, $is_in, &$set): string
+    public function evaluateFieldValue(string $value, string $isIn, bool &$set): string
     {
 
         $settings = $this->getSettings();
@@ -119,6 +114,7 @@ class NewsletterTeaserLengthEvaluation
 
         return $value;
     }
+
 
     /**
      * Server-side validation/evaluation on opening the record

@@ -36,7 +36,7 @@ class GetEditorialViewHelper extends AbstractViewHelper
      *
      * @throws \TYPO3Fluid\Fluid\Core\ViewHelper\Exception
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('topics', ObjectStorage::class, 'ObjectStorage of topics to load contents for. (optional, default: all).', false, null);
@@ -48,7 +48,6 @@ class GetEditorialViewHelper extends AbstractViewHelper
      * Returns editorial of content
      *
      * @return \RKW\RkwNewsletter\Domain\Model\Content|null
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      * @throws \RKW\RkwNewsletter\Exception
      */
     public function render(): ?Content

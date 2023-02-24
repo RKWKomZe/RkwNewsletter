@@ -18,7 +18,14 @@ use RKW\RkwNewsletter\Domain\Model\Approval;
 use RKW\RkwNewsletter\Domain\Model\Issue;
 use RKW\RkwNewsletter\Domain\Model\Newsletter;
 use RKW\RkwNewsletter\Domain\Model\Topic;
+use RKW\RkwNewsletter\Domain\Repository\BackendUserRepository;
+use RKW\RkwNewsletter\Domain\Repository\IssueRepository;
+use RKW\RkwNewsletter\Domain\Repository\NewsletterRepository;
+use RKW\RkwNewsletter\Mailing\MailProcessor;
+use RKW\RkwNewsletter\Manager\ApprovalManager;
+use RKW\RkwNewsletter\Manager\IssueManager;
 use RKW\RkwNewsletter\Status\IssueStatus;
+use RKW\RkwNewsletter\Validation\EmailValidator;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
@@ -37,65 +44,52 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 {
 
     /**
-     * newsletterRepository
-     *
      * @var \RKW\RkwNewsletter\Domain\Repository\NewsletterRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $newsletterRepository;
+    protected NewsletterRepository $newsletterRepository;
+
 
     /**
-     * issueRepository
-     *
      * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $issueRepository;
+    protected IssueRepository $issueRepository;
 
 
     /**
-     * backendUserRepository
-     *
      * @var \RKW\RkwNewsletter\Domain\Repository\BackendUserRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $backendUserRepository;
+    protected BackendUserRepository $backendUserRepository;
 
 
     /**
-     * IssueManager
-     *
      * @var \RKW\RkwNewsletter\Manager\IssueManager
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $issueManager;
+    protected IssueManager $issueManager;
+
 
     /**
-     * ApprovalManager
-     *
      * @var \RKW\RkwNewsletter\Manager\ApprovalManager
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $approvalManager;
+    protected ApprovalManager $approvalManager;
 
 
     /**
-     * MailProcessor
-     *
      * @var \RKW\RkwNewsletter\Mailing\MailProcessor
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $mailProcessor;
+    protected MailProcessor $mailProcessor;
 
 
     /**
-     * emailValidator
-     *
      * @var \RKW\RkwNewsletter\Validation\EmailValidator
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $emailValidator;
-
+    protected EmailValidator $emailValidator;
 
 
     /**
@@ -270,6 +264,7 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("issue")
      */
     public function testSendAction(Issue $issue, string $emails, Topic $topic = null, string $title = ''): void {

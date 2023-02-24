@@ -1,9 +1,5 @@
 <?php
-
 namespace RKW\RkwNewsletter\Domain\Repository;
-
-use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
-use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -18,6 +14,9 @@ use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
+
 /**
  * PagesRepository
  *
@@ -29,7 +28,10 @@ use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 class PagesRepository extends AbstractRepository
 {
 
-    public function initializeObject()
+    /**
+     * @return void
+     */
+    public function initializeObject(): void
     {
         parent::initializeObject();
         $querySettings = $this->objectManager->get(Typo3QuerySettings::class);

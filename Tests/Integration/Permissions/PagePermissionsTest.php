@@ -37,14 +37,16 @@ class PagePermissionsTest extends FunctionalTestCase
      */
     const FIXTURE_PATH = __DIR__ . '/PagePermissionsTest/Fixtures';
 
+
     /**
      * @var string[]
      */
     protected $testExtensionsToLoad = [
-        'typo3conf/ext/rkw_basics',
+        'typo3conf/ext/core_extended',
         'typo3conf/ext/rkw_mailer',
         'typo3conf/ext/rkw_newsletter'
     ];
+
 
     /**
      * @var string[]
@@ -53,21 +55,21 @@ class PagePermissionsTest extends FunctionalTestCase
 
 
     /**
-     * @var \RKW\RkwNewsletter\Permissions\PagePermissions
+     * @var \RKW\RkwNewsletter\Permissions\PagePermissions|null
      */
-    private $subject;
+    private ?PagePermissions $subject = null;
 
 
     /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     * @var \TYPO3\CMS\Extbase\Object\ObjectManager|null
      */
-    private $objectManager;
+    private ?ObjectManager $objectManager = null;
 
 
     /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\PagesRepository
+     * @var \RKW\RkwNewsletter\Domain\Repository\PagesRepository|null
      */
-    private $pagesRepository;
+    private ?PagesRepository $pagesRepository;
 
 
     /**
@@ -83,10 +85,10 @@ class PagePermissionsTest extends FunctionalTestCase
         $this->setUpFrontendRootPage(
             1,
             [
-                'EXT:rkw_basics/Configuration/TypoScript/setup.typoscript',
+                'EXT:core_extended/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/setup.typoscript',
-                'EXT:rkw_basics/Configuration/TypoScript/constants.typoscript',
+                'EXT:core_extended/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/constants.typoscript',
                 static::FIXTURE_PATH . '/Frontend/Configuration/Rootpage.typoscript',
@@ -98,9 +100,7 @@ class PagePermissionsTest extends FunctionalTestCase
         $this->pagesRepository = $this->objectManager->get(PagesRepository::class);
 
         $this->subject = $this->objectManager->get(PagePermissions::class);
-
     }
-
 
     //=============================================
 
@@ -183,6 +183,7 @@ class PagePermissionsTest extends FunctionalTestCase
         self::assertFalse($this->subject->setPermissions($page, $settings));
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -233,6 +234,7 @@ class PagePermissionsTest extends FunctionalTestCase
 
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -280,6 +282,7 @@ class PagePermissionsTest extends FunctionalTestCase
         self::assertEquals(38, $page->getPermsGroupId());
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -321,12 +324,11 @@ class PagePermissionsTest extends FunctionalTestCase
         self::assertEquals(4, $page->getPermsUser());
         self::assertEquals(4, $page->getPermsGroup());
         self::assertEquals(4, $page->getPermsEverybody());
-
-
     }
 
 
     //=============================================
+
     /**
      * @test
      * @throws \Exception
@@ -383,7 +385,6 @@ class PagePermissionsTest extends FunctionalTestCase
 
     //=============================================
 
-
     /**
      * @test
      * @throws \Exception
@@ -432,6 +433,7 @@ class PagePermissionsTest extends FunctionalTestCase
 
         self::assertEquals($expected, $this->subject->getPermissionSettings());
     }
+
     //=============================================
 
     /**

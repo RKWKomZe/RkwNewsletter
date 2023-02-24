@@ -29,16 +29,15 @@ use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 class ApprovalRepository extends AbstractRepository
 {
 
-    /*
-    * initializeObject
-    */
-    public function initializeObject()
+    /**
+     * @return void
+     */
+    public function initializeObject(): void
     {
         parent::initializeObject();
         $this->defaultQuerySettings = $this->objectManager->get(Typo3QuerySettings::class);
         $this->defaultQuerySettings->setRespectStoragePage(false);
     }
-
 
 
     /**
@@ -57,8 +56,7 @@ class ApprovalRepository extends AbstractRepository
         int $toleranceLevel2,
         int $toleranceStage1 = 0,
         int $toleranceStage2 = 0
-    ): QueryResultInterface
-    {
+    ): QueryResultInterface {
         $query = $this->createQuery();
         $constraints = [];
 

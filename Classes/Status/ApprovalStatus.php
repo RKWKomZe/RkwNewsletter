@@ -32,10 +32,12 @@ class ApprovalStatus
      */
     const STAGE1 = 1;
 
+
     /**
      * @var int
      */
     const STAGE2 = 2;
+
 
     /**
      * @var int
@@ -48,10 +50,12 @@ class ApprovalStatus
      */
     const LEVEL1 = 1;
 
+
     /**
      * @var int
      */
     const LEVEL2 = 2;
+
 
     /**
      * @var int
@@ -79,7 +83,6 @@ class ApprovalStatus
 
         return self::STAGE1;
     }
-
 
 
     /**
@@ -127,7 +130,7 @@ class ApprovalStatus
      * Increases the current stage
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Approval $approval
-     * @param \RKW\RkwNewsletter\Domain\Model\BackendUser $backendUser
+     * @param \RKW\RkwNewsletter\Domain\Model\BackendUser|null $backendUser
      * @return bool
      */
     public static function increaseStage (Approval $approval, BackendUser $backendUser = null): bool
@@ -197,6 +200,5 @@ class ApprovalStatus
 
         return $update;
     }
-
 
 }

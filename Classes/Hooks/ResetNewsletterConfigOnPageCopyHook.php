@@ -1,6 +1,6 @@
 <?php
-
 namespace RKW\RkwNewsletter\Hooks;
+
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -33,13 +33,12 @@ class ResetNewsletterConfigOnPageCopyHook
      * @param string $table The table affected by action, e.g. 'fe_users'.
      * @param int $uid The uid of the record affected by action.
      * @param array $modifiedFields The modified fields of the record.
-     *
      * @return void
      */
     public function processDatamap_postProcessFieldArray(
-        $action,
-        $table,
-        $uid,
+        string $action,
+        string $table,
+        int $uid,
         array &$modifiedFields
     ): void {
 

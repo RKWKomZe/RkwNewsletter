@@ -1,6 +1,6 @@
 <?php
-
 namespace RKW\RkwNewsletter\Domain\Model;
+
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -27,30 +27,30 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  */
 class FrontendUser extends \RKW\RkwRegistration\Domain\Model\FrontendUser
 {
+
     /**
      * @var string
      * @validate \SJBR\SrFreecap\Validation\Validator\CaptchaValidator
      */
-    protected $captchaResponse;
-
-    /**
-     * Holds the subscriptions
-     *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\Topic>
-     */
-    protected $txRkwnewsletterSubscription;
+    protected string $captchaResponse = '';
 
 
     /**
-     * @var string txRkwnewsletterHash
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\Topic>|null
      */
-    protected $txRkwnewsletterHash = '';
+    protected ?ObjectStorage $txRkwnewsletterSubscription = null;
 
 
     /**
-     * @var bool txRkwnewsletterPriority
+     * @var string
      */
-    protected $txRkwnewsletterPriority = false;
+    protected string $txRkwnewsletterHash = '';
+
+
+    /**
+     * @var bool
+     */
+    protected bool $txRkwnewsletterPriority = false;
 
 
     /**
@@ -79,24 +79,27 @@ class FrontendUser extends \RKW\RkwRegistration\Domain\Model\FrontendUser
         $this->txRkwnewsletterSubscription = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
     }
 
+
     /**
      * Sets the captchaResponse
      *
      * @param string $captchaResponse
      * @return void
      */
-    public function setCaptchaResponse($captchaResponse) {
+    public function setCaptchaResponse(string $captchaResponse): void {
         $this->captchaResponse = $captchaResponse;
     }
+
 
     /**
      * Getter for captchaResponse
      *
      * @return string
      */
-    public function getCaptchaResponse() {
+    public function getCaptchaResponse(): string {
         return $this->captchaResponse;
     }
+
 
     /**
      * Sets the Subscriptions. Keep in mind that the property is called "Subscription"
@@ -106,11 +109,11 @@ class FrontendUser extends \RKW\RkwRegistration\Domain\Model\FrontendUser
      * @return void
      * @api
      */
-
     public function setTxRkwnewsletterSubscription(ObjectStorage $subscription): void
     {
         $this->txRkwnewsletterSubscription = $subscription;
     }
+
 
     /**
      * Adds a $subscription to the frontend user
@@ -119,11 +122,11 @@ class FrontendUser extends \RKW\RkwRegistration\Domain\Model\FrontendUser
      * @return void
      * @api
      */
-
     public function addTxRkwnewsletterSubscription(Topic $subscription): void
     {
         $this->txRkwnewsletterSubscription->attach($subscription);
     }
+
 
     /**
      * Removes a Subscription from the frontend user
@@ -136,6 +139,7 @@ class FrontendUser extends \RKW\RkwRegistration\Domain\Model\FrontendUser
     {
         $this->txRkwnewsletterSubscription->detach($subscription);
     }
+
 
     /**
      * Returns the topics. Keep in mind that the property is called "$newsletter"
@@ -156,11 +160,11 @@ class FrontendUser extends \RKW\RkwRegistration\Domain\Model\FrontendUser
      * @param string $hash
      * @return void
      */
-
     public function setTxRkwnewsletterHash(string $hash): void
     {
         $this->txRkwnewsletterHash = $hash;
     }
+
 
     /**
      * get the TxRkwnewsletterHash
@@ -179,11 +183,11 @@ class FrontendUser extends \RKW\RkwRegistration\Domain\Model\FrontendUser
      * @param bool $priority
      * @return void
      */
-
     public function setTxRkwnewsletterPriority(bool $priority): void
     {
         $this->txRkwnewsletterPriority = $priority;
     }
+
 
     /**
      * get the TxRkwnewsletterPriority

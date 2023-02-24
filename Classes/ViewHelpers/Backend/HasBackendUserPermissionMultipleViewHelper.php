@@ -33,7 +33,7 @@ class HasBackendUserPermissionMultipleViewHelper extends AbstractHasBackendUserP
      *
      * @throws \TYPO3Fluid\Fluid\Core\ViewHelper\Exception
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('issues', QueryResultInterface::class, 'Check permissions for this list of issues.', true);

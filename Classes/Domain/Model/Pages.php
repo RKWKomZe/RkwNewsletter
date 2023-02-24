@@ -1,6 +1,6 @@
 <?php
-
 namespace RKW\RkwNewsletter\Domain\Model;
+
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -28,119 +28,90 @@ use Madj2k\CoreExtended\Domain\Model\FileReference;
 class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
 {
     /**
-     * permsUserId
-     *
-     * @var integer
-     */
-    protected $permsUserId = 0;
-
-
-    /**
-     * permsGroupId
-     *
-     * @var integer
-     */
-    protected $permsGroupId = 0;
-
-
-    /**
-     * permsUser
-     *
-     * @var integer
-     */
-    protected $permsUser = 0;
-
-
-    /**
-     * permsGroup
-     *
-     * @var integer
-     */
-    protected $permsGroup = 0;
-
-
-    /**
-     * permsEverybody
-     *
-     * @var integer
-     */
-    protected $permsEverybody = 0;
-
-
-    /**
-     * txRkwnewsletterNewsletter
-     *
-     * @var \RKW\RkwNewsletter\Domain\Model\Newsletter
-     */
-    protected $txRkwnewsletterNewsletter;
-
-    /**
-     * txRkwnewsletterTopic
-     *
-     * @var \RKW\RkwNewsletter\Domain\Model\Topic
-     */
-    protected $txRkwnewsletterTopic;
-
-
-    /**
-     * txRkwnewsletterIssue
-     *
-     * @var \RKW\RkwNewsletter\Domain\Model\Issue
-     */
-    protected $txRkwnewsletterIssue;
-
-
-    /**
-     * txRkwnewsletterExclude
-     *
-     * @var bool
-     */
-    protected $txRkwnewsletterExclude = false;
-
-
-    /**
-     * txRkwnewsletterTeaserHeading
-     *
-     * @var string
-     */
-    protected $txRkwnewsletterTeaserHeading = '';
-
-
-    /**
-     * txRkwnewsletterTeaserText
-     *
-     * @var string
-     */
-    protected $txRkwnewsletterTeaserText = '';
-
-
-    /**
-     * txRkwnewsletterTeaserImage
-     *
-     * @var \Madj2k\CoreExtended\Domain\Model\FileReference
-     */
-    protected $txRkwnewsletterTeaserImage;
-
-
-    /**
-     * txRkwnewsletterTeaserLink
-     *
-     * @var string
-     */
-    protected $txRkwnewsletterTeaserLink = '';
-
-
-    /**
-     * txRkwnewsletterIncludeTstamp
-     *
      * @var int
      */
-    protected $txRkwnewsletterIncludeTstamp = 0;
+    protected int $permsUserId = 0;
 
 
     /**
-     * Returns the permsUserId
-     *
+     * @var int
+     */
+    protected int $permsGroupId = 0;
+
+
+    /**
+     * @var int
+     */
+    protected int $permsUser = 0;
+
+
+    /**
+     * @var int
+     */
+    protected int $permsGroup = 0;
+
+
+    /**
+     * @var int
+     */
+    protected int $permsEverybody = 0;
+
+
+    /**
+     * @var \RKW\RkwNewsletter\Domain\Model\Newsletter|null
+     */
+    protected ?Newsletter $txRkwnewsletterNewsletter = null;
+
+
+    /**
+     * @var \RKW\RkwNewsletter\Domain\Model\Topic|null
+     */
+    protected ?Topic $txRkwnewsletterTopic = null;
+
+
+    /**
+     * @var \RKW\RkwNewsletter\Domain\Model\Issue|null
+     */
+    protected ?Issue $txRkwnewsletterIssue;
+
+
+    /**
+     * @var bool
+     */
+    protected bool $txRkwnewsletterExclude = false;
+
+
+    /**
+     * @var string
+     */
+    protected string $txRkwnewsletterTeaserHeading = '';
+
+
+    /**
+     * @var string
+     */
+    protected string $txRkwnewsletterTeaserText = '';
+
+
+    /**
+     * @var \Madj2k\CoreExtended\Domain\Model\FileReference|null
+     */
+    protected ?FileReference $txRkwnewsletterTeaserImage = null;
+
+
+    /**
+     * @var string
+     */
+    protected string $txRkwnewsletterTeaserLink = '';
+
+
+    /**
+     * @var int
+     */
+    protected int $txRkwnewsletterIncludeTstamp = 0;
+
+
+    /**
      * @return int $permsUserId
      */
     public function getPermsUserId(): int
@@ -221,7 +192,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
     /**
      * Sets the permsGroup
      *
-     * @param integer $permsGroup
+     * @param int $permsGroup
      * @return void
      */
     public function setPermsGroup(int $permsGroup): void
@@ -258,7 +229,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
      *
      * @return \RKW\RkwNewsletter\Domain\Model\Newsletter|null
      */
-    public function getTxRkwnewsletterNewsletter()
+    public function getTxRkwnewsletterNewsletter():? Newsletter
     {
         return $this->txRkwnewsletterNewsletter;
     }
@@ -281,7 +252,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
      *
      * @return \RKW\RkwNewsletter\Domain\Model\Topic|null
      */
-    public function getTxRkwnewsletterTopic()
+    public function getTxRkwnewsletterTopic():? Topic
     {
         return $this->txRkwnewsletterTopic;
     }
@@ -304,7 +275,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
      *
      * @return \RKW\RkwNewsletter\Domain\Model\Issue|null $txRkwnewsletterIssue
      */
-    public function getTxRkwnewsletterIssue()
+    public function getTxRkwnewsletterIssue():? Issue
     {
         return $this->txRkwnewsletterIssue;
     }
@@ -366,6 +337,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
         return $this->txRkwnewsletterTeaserText;
     }
 
+
     /**
      * Sets the txRkwnewsletterTeaserText
      *
@@ -379,25 +351,25 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
 
 
     /**
-     * Returns the image
+     * Returns the txRkwnewsletterTeaserImage
      *
-     * @return \Madj2k\CoreExtended\Domain\Model\FileReference|null $txRkwnewsletterTeaserImage
+     * @return \Madj2k\CoreExtended\Domain\Model\FileReference|null
      */
-    public function getTxRkwnewsletterTeaserImage()
+    public function getTxRkwnewsletterTeaserImage():? FileReference
     {
         return $this->txRkwnewsletterTeaserImage;
     }
 
 
     /**
-     * Sets the image
+     * Sets the txRkwnewsletterTeaserImage
      *
      * @param \Madj2k\CoreExtended\Domain\Model\FileReference $txRkwnewsletterTeaserImage
      * @return void
      */
-    public function setTxRkwnewsletterTeaserImage(FileReference $image): void
+    public function setTxRkwnewsletterTeaserImage(FileReference $txRkwnewsletterTeaserImage): void
     {
-        $this->txRkwnewsletterTeaserImage = $image;
+        $this->txRkwnewsletterTeaserImage = $txRkwnewsletterTeaserImage;
     }
 
 

@@ -15,7 +15,7 @@ namespace RKW\RkwNewsletter\ViewHelpers;
  */
 
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
-use \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * GetGroupedSubscribedTopics
@@ -35,7 +35,7 @@ class GetGroupedSubscribedTopicsViewHelper extends AbstractViewHelper
      *
      * @throws \TYPO3Fluid\Fluid\Core\ViewHelper\Exception
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('subscriptions', ObjectStorage::class, 'ObjectStorage with subscriptions.', true);

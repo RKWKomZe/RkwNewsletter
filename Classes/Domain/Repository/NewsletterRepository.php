@@ -1,6 +1,6 @@
 <?php
-
 namespace RKW\RkwNewsletter\Domain\Repository;
+
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -31,15 +31,17 @@ use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
  */
 class NewsletterRepository extends AbstractRepository
 {
-    /*
-    * initializeObject
-    */
-    public function initializeObject()
+
+    /**
+     * @return void
+     */
+    public function initializeObject(): void
     {
         parent::initializeObject();
         $this->defaultQuerySettings = $this->objectManager->get(Typo3QuerySettings::class);
         $this->defaultQuerySettings->setRespectStoragePage(false);
     }
+
 
     /**
      * findAllToBuildIssue
@@ -49,6 +51,7 @@ class NewsletterRepository extends AbstractRepository
      * @param int $currentTime
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      * @throws \TYPO3\CMS\Core\Type\Exception\InvalidEnumerationValueException
+     * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
      * comment: only used by command controller
      */
     public function findAllToBuildIssue(int $tolerance = 0, int $currentTime = 0): QueryResultInterface
@@ -93,8 +96,8 @@ class NewsletterRepository extends AbstractRepository
                     AND (DAY(FROM_UNIXTIME(' . ($currentTime + $tolerance) . ')) >= day_for_sending)
                 )
             )' .
-            QueryTypo3::getWhereClauseEnabled('tx_rkwnewsletter_domain_model_newsletter') .
-            QueryTypo3::getWhereClauseVersioning('tx_rkwnewsletter_domain_model_newsletter');
+            QueryUtility::getWhereClauseEnabled('tx_rkwnewsletter_domain_model_newsletter') .
+            QueryUtility::getWhereClauseVersioning('tx_rkwnewsletter_domain_model_newsletter');
 
         $query = $this->createQuery();
         $query->statement($statement);

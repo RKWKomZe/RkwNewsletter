@@ -19,7 +19,6 @@ use RKW\RkwNewsletter\ViewHelpers\Mailing\AbstractViewHelper;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 
-
 /**
  * GetTopicNameViewHelper
  *
@@ -36,7 +35,7 @@ class GetTopicNameViewHelper extends AbstractViewHelper
      *
      * @throws \TYPO3Fluid\Fluid\Core\ViewHelper\Exception
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('content', Content::class, 'Content to get topic for.', true);

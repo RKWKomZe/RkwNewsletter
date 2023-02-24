@@ -1,6 +1,6 @@
 <?php
-
 namespace RKW\RkwNewsletter\Domain\Repository;
+
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -28,10 +28,11 @@ use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
  */
 class IssueRepository extends AbstractRepository
 {
-    /*
-     * initializeObject
+
+    /**
+     * @return void
      */
-    public function initializeObject()
+    public function initializeObject(): void
     {
         parent::initializeObject();
         $this->defaultQuerySettings = $this->objectManager->get(Typo3QuerySettings::class);
@@ -85,7 +86,6 @@ class IssueRepository extends AbstractRepository
 
         return $query->execute();
     }
-
 
 
     /**
@@ -204,39 +204,5 @@ class IssueRepository extends AbstractRepository
 
         return $query->execute();
     }
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     *  findAllToSendByBackendUser
-     *
-     * @param int $backendUser
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
-     */
-    public function findAllToSendByBackendUser($backendUser): QueryResultInterface
-    {
-        $query = $this->createQuery();
-
-        $query->matching(
-            $query->logicalAnd(
-                $query->equals('status', 2),
-                $query->equals('releaseTstamp', 0),
-                $query->contains('newsletter.approval', $backendUser)
-            )
-        );
-
-        return $query->execute();
-    }
-
-
 
 }

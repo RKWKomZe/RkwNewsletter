@@ -36,25 +36,30 @@ class PageStatus
      */
     const DRAFT = 'draft';
 
+
     /**
      * @var string
      */
     const APPROVAL_1 = 'stage1';
+
 
     /**
      * @var string
      */
     const APPROVAL_2 = 'stage2';
 
+
     /**
      * @var string
      */
     const RELEASE = 'release';
 
+
     /**
      * @var string
      */
     const SENDING = 'sent'; // no mistake!
+
 
     /**
      * @var int
@@ -105,7 +110,6 @@ class PageStatus
     }
 
 
-
     /**
      * Returns approval-object by given issue and topic
      *
@@ -130,6 +134,5 @@ class PageStatus
             'No approval found for given issue and topic',
             1644845316
         );
-
     }
 }

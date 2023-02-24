@@ -33,7 +33,7 @@ class HasBackendUserPermissionViewHelper extends AbstractHasBackendUserPermissio
      *
      * @throws \TYPO3Fluid\Fluid\Core\ViewHelper\Exception
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('issue', Issue::class, 'Check permissions for this issue.', true);

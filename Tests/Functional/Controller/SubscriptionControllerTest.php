@@ -38,7 +38,7 @@ class SubscriptionControllerTest extends FunctionalTestCase
      * @var string[]
      */
     protected $testExtensionsToLoad = [
-        'typo3conf/ext/rkw_basics',
+        'typo3conf/ext/core_extended',
         'typo3conf/ext/rkw_mailer',
         'typo3conf/ext/rkw_registration',
         'typo3conf/ext/rkw_newsletter',
@@ -50,16 +50,16 @@ class SubscriptionControllerTest extends FunctionalTestCase
     protected $coreExtensionsToLoad = ['css_styled_content'];
 
     /**
-     * @var \RKW\RkwNewsletter\Controller\SubscriptionController
+     * @var \RKW\RkwNewsletter\Controller\SubscriptionController|null
      */
-    private $subject = null;
+    private ?SubscriptionController $subject = null;
 
 
 
     /**
-     * @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager
+     * @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager|null
      */
-    private $persistenceManager = null;
+    private ?PersistenceManager $persistenceManager = null;
 
 
     /**
@@ -82,8 +82,8 @@ class SubscriptionControllerTest extends FunctionalTestCase
             [
                 'EXT:css_styled_content/static/constants.typoscript',
                 'EXT:css_styled_content/static/setup.typoscript',
-                'EXT:rkw_basics/Configuration/TypoScript/constants.typoscript',
-                'EXT:rkw_basics/Configuration/TypoScript/setup.typoscript',
+                'EXT:core_extended/Configuration/TypoScript/constants.typoscript',
+                'EXT:core_extended/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_registration/Configuration/TypoScript/constants.typoscript',
@@ -110,7 +110,6 @@ class SubscriptionControllerTest extends FunctionalTestCase
         // Dummy so far
 
     }
-
 
 
     /**

@@ -38,14 +38,16 @@ class PageStatusTest extends FunctionalTestCase
      */
     const FIXTURE_PATH = __DIR__ . '/PageStatusTest/Fixtures';
 
+
     /**
      * @var string[]
      */
     protected $testExtensionsToLoad = [
-        'typo3conf/ext/rkw_basics',
+        'typo3conf/ext/core_extended',
         'typo3conf/ext/rkw_mailer',
         'typo3conf/ext/rkw_newsletter'
     ];
+
 
     /**
      * @var string[]
@@ -54,30 +56,33 @@ class PageStatusTest extends FunctionalTestCase
 
 
     /**
-     * @var \RKW\RkwNewsletter\Status\PageStatus
+     * @var \RKW\RkwNewsletter\Status\PageStatus|null
      */
-    private $subject;
+    private ?PageStatus $subject = null;
 
 
     /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     * @var \TYPO3\CMS\Extbase\Object\ObjectManager|null
      */
-    private $objectManager;
+    private ?ObjectManager $objectManager = null;
+
 
     /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository
+     * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository|null
      */
-    private $issueRepository;
+    private ?IssueRepository $issueRepository = null;
+
 
     /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\TopicRepository
+     * @var \RKW\RkwNewsletter\Domain\Repository\TopicRepository|null
      */
-    private $topicRepository;
+    private ?TopicRepository $topicRepository = null;
+
 
     /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\PagesRepository
+     * @var \RKW\RkwNewsletter\Domain\Repository\PagesRepository|null
      */
-    private $pagesRepository;
+    private ?PagesRepository $pagesRepository = null;
 
 
     /**
@@ -93,10 +98,10 @@ class PageStatusTest extends FunctionalTestCase
         $this->setUpFrontendRootPage(
             1,
             [
-                'EXT:rkw_basics/Configuration/TypoScript/setup.typoscript',
+                'EXT:core_extended/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/setup.typoscript',
-                'EXT:rkw_basics/Configuration/TypoScript/constants.typoscript',
+                'EXT:core_extended/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/constants.typoscript',
                 static::FIXTURE_PATH . '/Frontend/Configuration/Rootpage.typoscript',
@@ -110,12 +115,9 @@ class PageStatusTest extends FunctionalTestCase
         $this->pagesRepository = $this->objectManager->get(PagesRepository::class);
 
         $this->subject = $this->objectManager->get(PageStatus::class);
-
     }
 
-
     //=============================================
-
 
     /**
      * @test
@@ -150,6 +152,7 @@ class PageStatusTest extends FunctionalTestCase
         self::assertEquals($this->subject::DRAFT, $this->subject::getStage($page));
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -182,6 +185,7 @@ class PageStatusTest extends FunctionalTestCase
 
         self::assertEquals($this->subject::APPROVAL_1, $this->subject::getStage($page));
     }
+
 
     /**
      * @test
@@ -216,6 +220,7 @@ class PageStatusTest extends FunctionalTestCase
         self::assertEquals($this->subject::APPROVAL_2, $this->subject::getStage($page));
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -248,7 +253,6 @@ class PageStatusTest extends FunctionalTestCase
 
         self::assertEquals($this->subject::RELEASE, $this->subject::getStage($page));
     }
-
 
 
     /**
@@ -352,7 +356,6 @@ class PageStatusTest extends FunctionalTestCase
         self::assertEquals($this->subject::DONE, $this->subject::getStage($page));
     }
 
-
     //=============================================
 
     /**
@@ -388,6 +391,7 @@ class PageStatusTest extends FunctionalTestCase
         $this->subject::getApproval($issue, $topic);
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -418,6 +422,7 @@ class PageStatusTest extends FunctionalTestCase
 
         $this->subject::getApproval($issue, $topic);
     }
+
 
     /**
      * @test
@@ -461,12 +466,5 @@ class PageStatusTest extends FunctionalTestCase
     {
         parent::tearDown();
     }
-
-
-
-
-
-
-
 
 }

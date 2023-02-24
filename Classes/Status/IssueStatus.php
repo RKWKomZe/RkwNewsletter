@@ -32,20 +32,24 @@ class IssueStatus
      */
     const STAGE_DRAFT = 0;
 
+
     /**
      * @var int
      */
     const STAGE_APPROVAL = 1;
+
 
     /**
      * @var int
      */
     const STAGE_RELEASE = 2;
 
+
     /**
      * @var int
      */
     const STAGE_SENDING = 3;
+
 
     /**
      * @var int
@@ -58,15 +62,18 @@ class IssueStatus
      */
     const LEVEL_NONE = 0;
 
+
     /**
      * @var int
      */
     const LEVEL1 = 1;
 
+
     /**
      * @var int
      */
     const LEVEL2 = 2;
+
 
     /**
      * @var int
@@ -130,7 +137,6 @@ class IssueStatus
 
         return self::LEVEL_DONE;
     }
-
 
 
     /**
@@ -199,6 +205,5 @@ class IssueStatus
 
         return $update;
     }
-
 
 }

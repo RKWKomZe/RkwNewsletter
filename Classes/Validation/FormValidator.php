@@ -3,6 +3,7 @@
 namespace RKW\RkwNewsletter\Validation;
 
 use Madj2k\CoreExtended\Utility\GeneralUtility;
+use RKW\RkwNewsletter\Domain\Model\FrontendUser;
 use RKW\RkwRegistration\Utility\FrontendUserUtility;
 use TYPO3\CMS\Extbase\Error\Error;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -40,7 +41,6 @@ class FormValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractVali
      */
     public function isValid($frontendUser)
     {
-
         $isValid = true;
 
         // get required fields of user
@@ -66,7 +66,6 @@ class FormValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractVali
                 $isValid = false;
             }
         }
-
 
         // check all properties on required
         foreach ($requiredFields as $requiredField) {

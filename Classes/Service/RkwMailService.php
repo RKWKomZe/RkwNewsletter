@@ -1,17 +1,5 @@
 <?php
-
 namespace RKW\RkwNewsletter\Service;
-
-use RKW\RkwMailer\Service\MailService;
-use RKW\RkwMailer\Utility\FrontendLocalizationUtility;
-use RKW\RkwNewsletter\Domain\Model\Approval;
-use RKW\RkwNewsletter\Domain\Model\BackendUser;
-use RKW\RkwNewsletter\Domain\Model\Issue;
-use RKW\RkwRegistration\Domain\Model\FrontendUser;
-use RKW\RkwRegistration\Domain\Model\OptIn;
-use RKW\RkwRegistration\Domain\Model\Registration;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -25,6 +13,16 @@ use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
+use RKW\RkwMailer\Service\MailService;
+use RKW\RkwNewsletter\Domain\Model\Approval;
+use RKW\RkwNewsletter\Domain\Model\BackendUser;
+use RKW\RkwNewsletter\Domain\Model\Issue;
+use RKW\RkwRegistration\Domain\Model\FrontendUser;
+use RKW\RkwRegistration\Domain\Model\OptIn;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use RKW\RkwMailer\Utility\FrontendLocalizationUtility;
 
 /**
  * RkwMailService
@@ -314,7 +312,6 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
     }
 
 
-
     /**
      * Returns TYPO3 settings
      *
@@ -326,6 +323,5 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
     {
         return \Madj2k\CoreExtended\Utility\GeneralUtility::getTypoScriptConfiguration('Rkwnewsletter', $which);
     }
-
 
 }

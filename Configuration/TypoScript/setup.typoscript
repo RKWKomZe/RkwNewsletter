@@ -7,7 +7,7 @@ config.tx_extbase.persistence {
     classes {
 
         // Subclasses
-        RKW\RkwBasics\Domain\Model\Pages {
+        Madj2k\CoreExtended\Domain\Model\Pages {
             subclasses {
                 Tx_RkwNewsletter_Pages = RKW\RkwNewsletter\Domain\Model\Pages
             }

@@ -14,11 +14,9 @@ namespace RKW\RkwNewsletter\ViewHelpers;
  * The TYPO3 project - inspiring people to share!
  */
 
-use RKW\RkwNewsletter\Domain\Model\Newsletter;
 use RKW\RkwNewsletter\Domain\Model\Topic;
 use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
-use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
-use \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * IsTopicSubscribedViewHelper
@@ -38,12 +36,13 @@ class IsTopicSubscribedViewHelper extends AbstractViewHelper
      *
      * @throws \TYPO3Fluid\Fluid\Core\ViewHelper\Exception
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('topic', Topic::class, 'Topic to check for', true);
         $this->registerArgument('frontendUser', FrontendUser::class, 'Frontend-user', false, null);
     }
+
 
     /**
      * checks is user has subscribed to a topic

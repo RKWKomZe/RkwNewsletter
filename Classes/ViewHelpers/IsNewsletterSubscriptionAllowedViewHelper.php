@@ -16,8 +16,7 @@ namespace RKW\RkwNewsletter\ViewHelpers;
 
 use RKW\RkwNewsletter\Domain\Model\Newsletter;
 use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
-use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
-use \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * IsNewsletterSubscriptionAllowedViewHelper
@@ -37,7 +36,7 @@ class IsNewsletterSubscriptionAllowedViewHelper extends AbstractViewHelper
      *
      * @throws \TYPO3Fluid\Fluid\Core\ViewHelper\Exception
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('newsletter', Newsletter::class, 'Newsletter-object.', true);

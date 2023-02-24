@@ -16,12 +16,14 @@ namespace RKW\RkwNewsletter\Permissions;
 
 use Madj2k\CoreExtended\Utility\GeneralUtility;
 use RKW\RkwNewsletter\Domain\Model\Pages;
+use RKW\RkwNewsletter\Domain\Repository\PagesRepository;
 use RKW\RkwNewsletter\Status\PageStatus;
 use TYPO3\CMS\Core\Log\Logger;
 use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Type\Bitmask\Permission;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 
 /**
  * PagePermissions
@@ -38,7 +40,7 @@ class PagePermissions
      * @var \RKW\RkwNewsletter\Domain\Repository\PagesRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $pagesRepository;
+    protected PagesRepository $pagesRepository;
 
 
     /**
@@ -47,7 +49,13 @@ class PagePermissions
      * @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $persistenceManager;
+    protected PersistenceManager $persistenceManager;
+
+
+    /**
+     * @var \TYPO3\CMS\Core\Log\Logger|null
+     */
+    protected ?Logger $logger = null;
 
 
     /**
@@ -159,16 +167,15 @@ class PagePermissions
     }
 
 
-
     /**
      * Returns logger instance
      *
      * @return \TYPO3\CMS\Core\Log\Logger
      */
-    protected function getLogger()
+    protected function getLogger(): Logger
     {
         if (!$this->logger instanceof Logger) {
-            $this->logger = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(LogManager::class)->getLogger(__CLASS__);
+            $this->logger = GeneralUtility::makeInstance(LogManager::class)->getLogger(__CLASS__);
         }
 
         return $this->logger;

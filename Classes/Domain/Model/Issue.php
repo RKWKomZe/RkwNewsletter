@@ -1,6 +1,6 @@
 <?php
-
 namespace RKW\RkwNewsletter\Domain\Model;
+
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -32,124 +32,94 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
     /**
-     * title
+     * @var string
+     */
+    protected string $title = '';
+
+
+    /**
+     * @var int
+     */
+    protected int $status = 0;
+
+
+    /**
      *
      * @var string
      */
-    protected $title = '';
+    protected string $introduction = '';
 
 
     /**
-     * status
-     *
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwAuthors\Domain\Model\Authors>|null
+     */
+    protected ?ObjectStorage $authors = null;
+
+
+    /**
+     * @var \RKW\RkwNewsletter\Domain\Model\Newsletter|null
+     */
+    protected ?Newsletter $newsletter = null;
+
+
+    /**
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\Pages>|null
+     */
+    protected ?ObjectStorage $pages = null;
+
+
+    /**
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\Approval>|null
+     */
+    protected ?ObjectStorage $approvals = null;
+
+
+    /**
+     * @var \RKW\RkwMailer\Domain\Model\QueueMail|null
+     */
+    protected ?QueueMail $queueMail = null;
+
+
+    /**
      * @var int
      */
-    protected $status = 0;
+    protected int $infoTstamp = 0;
 
 
     /**
-     * introduction
-     *
+     * @var int
+     */
+    protected int $reminderTstamp = 0;
+
+
+    /**
+     * @var int
+     */
+    protected int $releaseTstamp = 0;
+
+
+    /**
+     * @var int
+     */
+    protected int $startTstamp = 0;
+
+
+    /**
+     * @var int
+     */
+    protected int $sentTstamp = 0;
+
+
+    /**
      * @var string
      */
-    protected $introduction = '';
+    protected string $recipients = '';
 
 
     /**
-     * author
-     *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwAuthors\Domain\Model\Authors>
-     */
-    protected $authors;
-
-
-    /**
-     * newsletter
-     *
-     * @var \RKW\RkwNewsletter\Domain\Model\Newsletter
-     */
-    protected $newsletter;
-
-
-    /**
-     * pages
-     *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\Pages>
-     */
-    protected $pages;
-
-
-    /**
-     * approvals
-     *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\Approval>
-     */
-    protected $approvals;
-
-
-    /**
-     * queueMail
-     *
-     * @var \RKW\RkwMailer\Domain\Model\QueueMail
-     */
-    protected $queueMail;
-
-
-    /**
-     * infoTstamp
-     *
-     * @var int
-     */
-    protected $infoTstamp = 0;
-
-
-    /**
-     * reminderTstamp
-     *
-     * @var int
-     */
-    protected $reminderTstamp = 0;
-
-
-    /**
-     * releaseTstamp
-     *
-     * @var int
-     */
-    protected $releaseTstamp = 0;
-
-
-    /**
-     * startTstamp
-     *
-     * @var int
-     */
-    protected $startTstamp = 0;
-
-
-    /**
-     * sentTstamp
-     *
-     * @var int
-     */
-    protected $sentTstamp = 0;
-
-
-    /**
-     * recipients
-     *
-     * @var string
-     */
-    protected $recipients;
-
-
-    /**
-     * isSpecial
-     *
      * @var bool
      */
-    protected $isSpecial;
-
+    protected bool $isSpecial = false;
 
 
     /**
@@ -297,13 +267,12 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
 
-
     /**
      * Returns the newsletter
      *
      * @return \RKW\RkwNewsletter\Domain\Model\Newsletter|null $newsletter
      */
-    public function getNewsletter()
+    public function getNewsletter():? Newsletter
     {
         return $this->newsletter;
     }
@@ -432,7 +401,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return \RKW\RkwMailer\Domain\Model\QueueMail|null $queueMail
      */
-    public function getQueueMail()
+    public function getQueueMail():? QueueMail
     {
         return $this->queueMail;
     }
@@ -450,16 +419,16 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
 
-
     /**
      * Returns the infoTstamp
      *
-     * @return int $infoTstamp
+     * @return int
      */
     public function getInfoTstamp(): int
     {
         return $this->infoTstamp;
     }
+
 
     /**
      * Sets the infoTstamp
@@ -476,7 +445,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the reminderTstamp
      *
-     * @return int $reminderTstamp
+     * @return int
      */
     public function getReminderTstamp(): int
     {
@@ -499,7 +468,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the releaseTstamp
      *
-     * @return int $sent
+     * @return int
      */
     public function getReleaseTstamp(): int
     {
@@ -522,7 +491,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the startTstamp
      *
-     * @return int $startTstamp
+     * @return int
      */
     public function getStartTstamp(): int
     {
@@ -545,7 +514,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the sentTstamp
      *
-     * @return int $sentTstamp
+     * @return int
      */
     public function getSentTstamp(): int
     {
@@ -613,6 +582,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         }
     }
 
+
     /**
      * Returns the recipient. Keep in mind that the property is called "recipients"
      * although it can hold several pages.
@@ -624,6 +594,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return GeneralUtility::trimExplode(',', $this->recipients, true);
     }
+
 
     /**
      * Sets the recipient. Keep in mind that the property is called "pages"
@@ -642,12 +613,13 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the isSpecial
      *
-     * @return bool $isSpecial
+     * @return bool
      */
     public function getIsSpecial(): bool
     {
         return $this->isSpecial;
     }
+
 
     /**
      * Sets the isSpecial

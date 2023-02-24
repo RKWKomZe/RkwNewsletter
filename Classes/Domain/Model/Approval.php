@@ -27,82 +27,69 @@ class Approval extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
 
     /**
-     * topic
-     *
-     * @var \RKW\RkwNewsletter\Domain\Model\Topic
+     * @var \RKW\RkwNewsletter\Domain\Model\Topic|null
      */
-    protected $topic;
+    protected ?Topic $topic;
+
 
     /**
-     * issue
-     *
-     * @var \RKW\RkwNewsletter\Domain\Model\Issue
+     * @var \RKW\RkwNewsletter\Domain\Model\Issue|null
      */
-    protected $issue;
+    protected ?Issue $issue = null;
+
 
     /**
-     * page
-     *
-     * @var \RKW\RkwNewsletter\Domain\Model\Pages
+     * @var \RKW\RkwNewsletter\Domain\Model\Pages|null
      */
-    protected $page;
+    protected ?Pages $page = null;
+
 
     /**
-     * allowedByUserStage1
-     *
-     * @var \RKW\RkwNewsletter\Domain\Model\BackendUser
+     * @var \RKW\RkwNewsletter\Domain\Model\BackendUser|null
      */
-    protected $allowedByUserStage1;
+    protected ?BackendUser $allowedByUserStage1 = null;
+
 
     /**
-     * allowedByUserStage2
-     *
-     * @var \RKW\RkwNewsletter\Domain\Model\BackendUser
+     * @var \RKW\RkwNewsletter\Domain\Model\BackendUser|null
      */
-    protected $allowedByUserStage2;
+    protected ?BackendUser $allowedByUserStage2 = null;
+
 
     /**
-     * allowedTstampStage1
-     *
      * @var int
      */
-    protected $allowedTstampStage1 = 0;
+    protected int $allowedTstampStage1 = 0;
+
 
     /**
-     * allowedTstampStage2
-     *
      * @var int
      */
-    protected $allowedTstampStage2 = 0;
+    protected int $allowedTstampStage2 = 0;
+
 
     /**
-     * sentInfoTstampStage1
-     *
      * @var int
      */
-    protected $sentInfoTstampStage1 = 0;
+    protected int $sentInfoTstampStage1 = 0;
+
 
     /**
-     * sentInfoTstampStage2
-     *
      * @var int
      */
-    protected $sentInfoTstampStage2 = 0;
+    protected int $sentInfoTstampStage2 = 0;
+
 
     /**
-     * sentReminderTstampStage1
-     *
      * @var int
      */
-    protected $sentReminderTstampStage1 = 0;
+    protected int $sentReminderTstampStage1 = 0;
+
 
     /**
-     * sentReminderTstampStage2
-     *
      * @var int
      */
-    protected $sentReminderTstampStage2 = 0;
-
+    protected int $sentReminderTstampStage2 = 0;
 
 
     /**
@@ -110,7 +97,7 @@ class Approval extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return \RKW\RkwNewsletter\Domain\Model\Topic|null
      */
-    public function getTopic()
+    public function getTopic():? Topic
     {
         return $this->topic;
     }
@@ -132,10 +119,11 @@ class Approval extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return \RKW\RkwNewsletter\Domain\Model\Issue|null $issue
      */
-    public function getIssue()
+    public function getIssue():? Issue
     {
         return $this->issue;
     }
+
 
     /**
      * Sets the issue
@@ -154,10 +142,11 @@ class Approval extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return \RKW\RkwNewsletter\Domain\Model\Pages|null
      */
-    public function getPage()
+    public function getPage():? Pages
     {
         return $this->page;
     }
+
 
     /**
      * Sets the pages
@@ -176,7 +165,7 @@ class Approval extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return \RKW\RkwNewsletter\Domain\Model\BackendUser|null
      */
-    public function getAllowedByUserStage1()
+    public function getAllowedByUserStage1():? BackendUser
     {
         return $this->allowedByUserStage1;
     }
@@ -194,16 +183,16 @@ class Approval extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
 
-
     /**
      * Returns the user.
      *
      * @return \RKW\RkwNewsletter\Domain\Model\BackendUser|null
      */
-    public function getAllowedByUserStage2()
+    public function getAllowedByUserStage2():? BackendUser
     {
         return $this->allowedByUserStage2;
     }
+
 
     /**
      * Sets a user
@@ -217,7 +206,6 @@ class Approval extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
 
-
     /**
      * Returns the allowedTstampStage1
      *
@@ -227,6 +215,7 @@ class Approval extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return $this->allowedTstampStage1;
     }
+
 
     /**
      * Sets the allowedTstampStage1
@@ -239,6 +228,7 @@ class Approval extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->allowedTstampStage1 = $timestamp;
     }
 
+
     /**
      * Returns the allowedTstampStage2
      *
@@ -248,6 +238,7 @@ class Approval extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return $this->allowedTstampStage2;
     }
+
 
     /**
      * Sets the allowedTstampStage2
@@ -260,6 +251,7 @@ class Approval extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->allowedTstampStage2 = $timestamp;
     }
 
+
     /**
      * Returns the sentInfoTstampStage1
      *
@@ -269,6 +261,7 @@ class Approval extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return $this->sentInfoTstampStage1;
     }
+
 
     /**
      * Sets the sentInfoTstampStage1
@@ -281,6 +274,7 @@ class Approval extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->sentInfoTstampStage1 = $timestamp;
     }
 
+
     /**
      * Returns the sentInfoTstampStage2
      *
@@ -290,6 +284,7 @@ class Approval extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return $this->sentInfoTstampStage2;
     }
+
 
     /**
      * Sets the sentInfoTstampStage2
@@ -302,6 +297,7 @@ class Approval extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->sentInfoTstampStage2 = $timestamp;
     }
 
+
     /**
      * Returns the sentReminderTstampStage1
      *
@@ -311,6 +307,7 @@ class Approval extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return $this->sentReminderTstampStage1;
     }
+
 
     /**
      * Sets the sentReminderTstampStage1
@@ -323,6 +320,7 @@ class Approval extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->sentReminderTstampStage1 = $timestamp;
     }
 
+
     /**
      * Returns the sendReminderomailStage2
      *
@@ -332,6 +330,7 @@ class Approval extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return $this->sentReminderTstampStage2;
     }
+
 
     /**
      * Sets the sentReminderTstampStage2
@@ -343,6 +342,4 @@ class Approval extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->sentReminderTstampStage2 = $timestamp;
     }
-
-
 }

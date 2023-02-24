@@ -1,5 +1,4 @@
 <?php
-
 namespace RKW\RkwNewsletter\Domain\Repository;
 /*
  * This file is part of the TYPO3 CMS project.
@@ -34,7 +33,7 @@ class ContentRepository extends AbstractRepository
     /*
      * initializeObject
      */
-    public function initializeObject()
+    public function initializeObject(): void
     {
         parent::initializeObject();
         $this->defaultQuerySettings = $this->objectManager->get(Typo3QuerySettings::class);
