@@ -100,7 +100,6 @@ CREATE TABLE tx_rkwnewsletter_domain_model_approval (
 
 	PRIMARY KEY (uid),
 	KEY parent (pid),
-
 );
 
 
@@ -134,8 +133,7 @@ CREATE TABLE tx_rkwnewsletter_domain_model_issue (
 	cruser_id int(11) unsigned DEFAULT '0' NOT NULL,
 
 	PRIMARY KEY (uid),
-	KEY parent (pid),
-
+	KEY parent (pid)
 );
 
 
@@ -146,6 +144,9 @@ CREATE TABLE fe_users (
   tx_rkwnewsletter_subscription varchar(255) DEFAULT '' NOT NULL,
   tx_rkwnewsletter_hash varchar(255) DEFAULT '' NOT NULL,
   tx_rkwnewsletter_priority int(1) unsigned DEFAULT '0' NOT NULL,
+
+	KEY tx_rkwnewsletter_hash (tx_rkwnewsletter_hash),
+	KEY tx_rkwnewsletter_subscription (tx_rkwnewsletter_subscription)
 );
 
 
@@ -163,6 +164,10 @@ CREATE TABLE pages (
   tx_rkwnewsletter_teaser_image varchar(255) DEFAULT '' NOT NULL,
   tx_rkwnewsletter_teaser_link varchar(255) DEFAULT '' NOT NULL,
   tx_rkwnewsletter_include_tstamp int(11) DEFAULT '0' NOT NULL,
+
+	KEY tx_rkwnewsletter_newsletter (tx_rkwnewsletter_newsletter),
+	KEY tx_rkwnewsletter_topic (tx_rkwnewsletter_topic),
+	KEY tx_rkwnewsletter_issue (tx_rkwnewsletter_issue)
 );
 
 

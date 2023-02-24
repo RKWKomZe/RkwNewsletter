@@ -1,6 +1,6 @@
 <?php
-
 namespace RKW\RkwNewsletter\Validation;
+
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -15,6 +15,7 @@ namespace RKW\RkwNewsletter\Validation;
  */
 
 use TYPO3\CMS\Extbase\Error\Result;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Validation\ValidatorResolver;
 
 /**
@@ -22,17 +23,19 @@ use TYPO3\CMS\Extbase\Validation\ValidatorResolver;
  *
  * @author Maximilian Fäßler <maximilian@faesslerweb.de>
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class EmailValidator implements \TYPO3\CMS\Core\SingletonInterface
 {
+
     /**
      * @var \TYPO3\CMS\Extbase\Object\ObjectManager
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $objectManager;
+    protected ObjectManager $objectManager;
+
 
     /**
      * mail
@@ -47,7 +50,6 @@ class EmailValidator implements \TYPO3\CMS\Core\SingletonInterface
         $conjunctionValidator = $validatorResolver->createValidator('Conjunction');
         $conjunctionValidator->addValidator($validatorResolver->createValidator('EmailAddress'));
         return $conjunctionValidator->validate($emailAddress);
-
     }
 
 

@@ -1,9 +1,5 @@
 <?php
-
 namespace RKW\RkwNewsletter\Domain\Repository;
-
-use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
-use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -18,19 +14,26 @@ use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
+
 /**
  * PagesRepository
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
+class PagesRepository extends AbstractRepository
 {
 
-    public function initializeObject()
+    /**
+     * @return void
+     */
+    public function initializeObject(): void
     {
+        parent::initializeObject();
         $querySettings = $this->objectManager->get(Typo3QuerySettings::class);
         $querySettings->setRespectStoragePage(false);
     }
@@ -38,10 +41,10 @@ class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
     /**
      * findByTopicNotIncluded
-     * 
+     *
      * @param \RKW\RkwNewsletter\Domain\Model\Topic $topic
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
-     * @comment implicitly tested
+     * comment: implicitly tested
      */
     public function findByTopicNotIncluded(\RKW\RkwNewsletter\Domain\Model\Topic $topic): QueryResultInterface
     {
@@ -61,5 +64,5 @@ class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
         return $query->execute();
     }
-    
+
 }

@@ -1,22 +1,6 @@
 <?php
 namespace RKW\RkwNewsletter\Manager;
 
-use RKW\RkwBasics\Domain\Model\FileReference;
-use RKW\RkwNewsletter\Domain\Model\Approval;
-use RKW\RkwNewsletter\Domain\Model\Content;
-use RKW\RkwNewsletter\Domain\Model\Issue;
-use RKW\RkwNewsletter\Domain\Model\Newsletter;
-use RKW\RkwNewsletter\Domain\Model\Pages;
-use RKW\RkwNewsletter\Domain\Model\Topic;
-use RKW\RkwNewsletter\Exception;
-use RKW\RkwNewsletter\Status\ApprovalStatus;
-use RKW\RkwNewsletter\Status\IssueStatus;
-use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
-use TYPO3\CMS\Core\Log\Logger;
-use TYPO3\CMS\Core\Log\LogLevel;
-use TYPO3\CMS\Core\Log\LogManager;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -30,11 +14,34 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * The TYPO3 project - inspiring people to share!
  */
 
+use Madj2k\CoreExtended\Domain\Model\FileReference;
+use Madj2k\CoreExtended\Domain\Repository\FileReferenceRepository;
+use RKW\RkwNewsletter\Domain\Model\Content;
+use RKW\RkwNewsletter\Domain\Model\Issue;
+use RKW\RkwNewsletter\Domain\Model\Newsletter;
+use RKW\RkwNewsletter\Domain\Model\Pages;
+use RKW\RkwNewsletter\Domain\Model\Topic;
+use RKW\RkwNewsletter\Domain\Repository\ContentRepository;
+use RKW\RkwNewsletter\Domain\Repository\IssueRepository;
+use RKW\RkwNewsletter\Domain\Repository\NewsletterRepository;
+use RKW\RkwNewsletter\Domain\Repository\PagesRepository;
+use RKW\RkwNewsletter\Exception;
+use RKW\RkwNewsletter\Status\ApprovalStatus;
+use RKW\RkwNewsletter\Status\IssueStatus;
+use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
+use TYPO3\CMS\Core\Log\Logger;
+use TYPO3\CMS\Core\Log\LogLevel;
+use TYPO3\CMS\Core\Log\LogManager;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
+use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
+
 /**
  * IssueManager
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
@@ -43,69 +50,72 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
 
     /**
      * @var \RKW\RkwNewsletter\Domain\Repository\NewsletterRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $newsletterRepository;
+    protected NewsletterRepository $newsletterRepository;
+
 
     /**
      * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $issueRepository;
+    protected IssueRepository $issueRepository;
+
 
     /**
      * @var \RKW\RkwNewsletter\Domain\Repository\PagesRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $pagesRepository;
-
-    
-    /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\ContentRepository
-     * @inject
-     */
-    protected $contentRepository;
+    protected PagesRepository $pagesRepository;
 
 
     /**
-     * @var \RKW\RkwBasics\Domain\Repository\FileReferenceRepository
-     * @inject
+     * @var \RKW\RkwNewsletter\Domain\Repository\ContentRepository
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $fileReferenceRepository;
+    protected ContentRepository $contentRepository;
 
-    
+
+    /**
+     * @var \Madj2k\CoreExtended\Domain\Repository\FileReferenceRepository
+     * @TYPO3\CMS\Extbase\Annotation\Inject
+     */
+    protected FileReferenceRepository $fileReferenceRepository;
+
+
     /**
      * @var \TYPO3\CMS\Extbase\Object\ObjectManager
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    private $objectManager;
-    
+    private ObjectManager $objectManager;
+
+
     /**
-     * PersistenceManager
-     *
      * @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $persistenceManager;
+    protected PersistenceManager $persistenceManager;
 
 
     /**
-     * Signal Slot Dispatcher
-     *
      * @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $signalSlotDispatcher;
+    protected Dispatcher $signalSlotDispatcher;
 
-    
+
     /**
-     * Signal name for use in ext_localconf.php
-     *
+     * @var \TYPO3\CMS\Core\Log\Logger|null
+     */
+    protected ?Logger $logger = null;
+
+
+    /**
      * @const string
      */
     const SIGNAL_FOR_SENDING_MAIL_RELEASE = 'sendMailRelease';
 
-    
+
     /**
      * replaceTitlePlaceholder
      *
@@ -120,11 +130,11 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
 
         return $title;
     }
-    
-    
+
+
     /**
      * Creates an issue
-     * 
+     *
      * @param \RKW\RkwNewsletter\Domain\Model\Newsletter $newsletter
      * @param bool $isSpecial
      * @return \RKW\RkwNewsletter\Domain\Model\Issue
@@ -139,7 +149,7 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
         if ($newsletter->_isNew()) {
             throw new Exception('Newsletter is not persisted.', 1639058270);
         }
-        
+
         // create issue and set title
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = GeneralUtility::makeInstance(Issue::class);
@@ -152,23 +162,23 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
         $newsletter->addIssue($issue);
         $this->newsletterRepository->update($newsletter);
         $this->persistenceManager->persistAll();
-        
+
         $this->getLogger()->log(
-            LogLevel::DEBUG, 
+            LogLevel::DEBUG,
             sprintf(
-                'Created issue with id=%s of newsletter with id=%s.', 
+                'Created issue with id=%s of newsletter with id=%s.',
                 $issue->getUid(),
                 $newsletter->getUid()
             )
         );
-        
+
         return $issue;
     }
 
 
     /**
      * Creates a page for the topic
-     * 
+     *
      * @param \RKW\RkwNewsletter\Domain\Model\Newsletter $newsletter
      * @param \RKW\RkwNewsletter\Domain\Model\Topic $topic
      * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
@@ -176,7 +186,7 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
      * @throws Exception
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
-     * @toDo add translation functionality when upgraded to TYPO3 9.5 and above
+     * @todo add translation functionality when upgraded to TYPO3 9.5 and above
      */
     public function createPage(Newsletter $newsletter, Topic $topic, Issue $issue): Pages
     {
@@ -206,12 +216,12 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
         $this->persistenceManager->persistAll();
 
         $this->getLogger()->log(
-            LogLevel::DEBUG, 
+            LogLevel::DEBUG,
             sprintf(
                 'Created page with id=%s and sysLanguageUid=%s for topic id=%s in parent page with id=%s of newsletter with id=%s.',
-                $page->getUid(), 
+                $page->getUid(),
                 'null',
-                $topic->getUid(), 
+                $topic->getUid(),
                 $topic->getContainerPage()->getUid(),
                 $newsletter->getUid()
             )
@@ -234,7 +244,7 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
     {
         /** @var \RKW\RkwNewsletter\Domain\Model\Content $content */
         $content  = GeneralUtility::makeInstance(Content::class);
-        
+
         $content->setPid($page->getUid());
         $content->setSysLanguageUid($newsletter->getSysLanguageUid());
         $content->setContentType('textpic');
@@ -243,7 +253,7 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
         $content->setHeader($sourcePage->getTxRkwnewsletterTeaserHeading() ?: $sourcePage->getTitle());
         $content->setBodytext($sourcePage->getTxRkwnewsletterTeaserText() ?: $sourcePage->getAbstract());
         $content->setHeaderLink($sourcePage->getTxRkwnewsletterTeaserLink() ?: 't3://page?uid=' . $sourcePage->getUid());
-        
+
         // we need a loop here to work with persistence - what ever...
         foreach ($sourcePage->getTxRkwauthorsAuthorship() as $author) {
             $content->addTxRkwnewsletterAuthors($author);
@@ -263,12 +273,12 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
         $this->persistenceManager->persistAll();
 
         $this->getLogger()->log(
-            LogLevel::DEBUG, 
+            LogLevel::DEBUG,
             sprintf(
-                'Added content-element with id=%s and sysLanguageUid=%s to page with uid=%s of newsletter with id=%s.', 
-                $content->getUid(), 
-                $content->getSysLanguageUid(), 
-                $page->getUid(), 
+                'Added content-element with id=%s and sysLanguageUid=%s to page with uid=%s of newsletter with id=%s.',
+                $content->getUid(),
+                $content->getSysLanguageUid(),
+                $page->getUid(),
                 $newsletter->getUid()
             )
         );
@@ -280,9 +290,9 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
     /**
      * Creates a file reference for a content based on page-properties
      *
-     * @param \RKW\RkwBasics\Domain\Model\FileReference $fileReferenceSource
+     * @param \Madj2k\CoreExtended\Domain\Model\FileReference $fileReferenceSource
      * @param \RKW\RkwNewsletter\Domain\Model\Content $content
-     * @return \RKW\RkwBasics\Domain\Model\FileReference
+     * @return \Madj2k\CoreExtended\Domain\Model\FileReference
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      */
     public function createFileReference(FileReference $fileReferenceSource, Content $content): FileReference
@@ -292,27 +302,27 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
         /** @var \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUserAuthentication */
         $backendUserAuthentication = GeneralUtility::makeInstance(BackendUserAuthentication::class);
         $backendUserAuthentication->setWorkspace(0);
-        
+
         $beUserTemp = $GLOBALS['BE_USER'];
         $GLOBALS['BE_USER'] = $backendUserAuthentication;
-                
-        /** @var \RKW\RkwBasics\Domain\Model\FileReference $fileReference */
+
+        /** @var \Madj2k\CoreExtended\Domain\Model\FileReference $fileReference */
         $fileReference = GeneralUtility::makeInstance(FileReference::class);
         $fileReference->setOriginalResource($fileReferenceSource->getOriginalResource());
         $fileReference->setFile($fileReferenceSource->getFile());
-        
+
         $fileReference->setTableLocal($fileReferenceSource->getTableLocal());
         $fileReference->setTablenames('tt_content');
         $fileReference->setFieldName('image');
         $fileReference->setUidForeign($content->getUid());
         $fileReference->setPid($content->getPid());
-        
+
         $this->fileReferenceRepository->add($fileReference);
         $this->persistenceManager->persistAll();
 
         // switch BE-user back to normal !!!
         $GLOBALS['BE_USER'] = $beUserTemp;
-        
+
             $this->getLogger()->log(
             LogLevel::DEBUG,
             sprintf(
@@ -321,7 +331,7 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
                 $content->getUid()
             )
         );
-    
+
         return $fileReference;
     }
 
@@ -334,6 +344,7 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
      * @param \RKW\RkwNewsletter\Domain\Model\Pages $page
      * @return bool
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      */
     public function buildContents (Newsletter $newsletter, Topic $topic, Pages $page): bool
     {
@@ -350,29 +361,29 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
 
                 // optional: add image
                 try {
-                    /** @var \RKW\RkwBasics\Domain\Model\FileReference $fileReference */
-                    $fileReference = $sourcePage->getTxRkwnewsletterTeaserImage() ?: ($sourcePage->getTxRkwbasicsTeaserImage() ?: null);
+                    /** @var \Madj2k\CoreExtended\Domain\Model\FileReference $fileReference */
+                    $fileReference = $sourcePage->getTxRkwnewsletterTeaserImage() ?: ($sourcePage->getTxCoreextendedPreviewImage() ?: null);
                     if ($fileReference) {
                         $this->createFileReference($fileReference, $content);
                     }
-                    
+
                 } catch (\Exception $e) {
                     $this->getLogger()->log(
-                        LogLevel::ERROR, 
+                        LogLevel::ERROR,
                         sprintf(
                             'Can not add fileReference to content with id=%s of newsletter with id=%s. Error: %s',
-                            $content->getUid(), 
-                            $newsletter->getUid(), 
+                            $content->getUid(),
+                            $newsletter->getUid(),
                             $e->getMessage()
                         )
                     );
                 }
-                
+
                 // update timestamp
                 $sourcePage->setTxRkwnewsletterIncludeTstamp(time());
                 $this->pagesRepository->update($sourcePage);
             }
-            
+
             $this->persistenceManager->persistAll();
 
             $this->getLogger()->log(
@@ -383,24 +394,23 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
                     $newsletter->getUid()
                 )
             );
-            
+
             return true;
-        } 
-        
+        }
+
         $this->getLogger()->log(
-            LogLevel::DEBUG, 
+            LogLevel::DEBUG,
             sprintf(
-                'No contents built for topic with id=%s of newsletter with id=%s.', 
-                $topic->getUid(), 
+                'No contents built for topic with id=%s of newsletter with id=%s.',
+                $topic->getUid(),
                 $newsletter->getUid()
             )
         );
-        
+
         return false;
     }
 
-    
-    
+
     /**
      * Builds all pages for a topic and adds contents
      *
@@ -416,9 +426,9 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
     {
         /** @var \RKW\RkwNewsletter\Manager\ApprovalManager $approvalManager */
         $approvalManager = $this->objectManager->get(ApprovalManager::class);
-        
+
         if (
-            (! $topics) 
+            (! $topics)
             && ($newsletter->getTopic())
         ){
             $topics = $newsletter->getTopic()->toArray();
@@ -461,7 +471,7 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
         return false;
     }
 
-    
+
     /**
      * Builds an issue with all contents for the given newsletter
      *
@@ -500,7 +510,7 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
             if (! count($topics)) {
                 $newsletter->setLastIssueTstamp(time());
                 $this->newsletterRepository->update($newsletter);
-            } 
+            }
 
             $this->issueRepository->update($issue);
             $this->persistenceManager->persistAll();
@@ -513,9 +523,9 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
                     $newsletter->getUid()
                 )
             );
-            
+
             return true;
-        } 
+        }
 
         $this->getLogger()->log(
             LogLevel::WARNING,
@@ -524,11 +534,11 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
                 $newsletter->getUid()
             )
         );
-              
-        return false;        
+
+        return false;
     }
 
-    
+
     /**
      * Builds issues for all due newsletters
      *
@@ -540,6 +550,7 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      * @throws \TYPO3\CMS\Core\Type\Exception\InvalidEnumerationValueException
+     * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
      */
     public function buildAllIssues (int $tolerance = 0, int $timestampNow = 0): bool
     {
@@ -559,7 +570,7 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
                     count($newsletterList)
                 )
             );
-            
+
             return true;
         }
 
@@ -570,7 +581,7 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
         return false;
     }
 
-    
+
     /**
      * Increases the level of the current stage
      *
@@ -610,7 +621,7 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
 
         return false;
     }
-    
+
 
     /**
      * Increases the current stage
@@ -651,7 +662,7 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
 
         return false;
     }
-    
+
 
     /**
      * Get the email-recipients for the approval based in the current stage
@@ -713,7 +724,7 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
         ) {
 
             if ($level != IssueStatus::LEVEL_DONE) {
-                
+
                 // Signal for e.g. E-Mails
                 $this->signalSlotDispatcher->dispatch(
                     __CLASS__,
@@ -732,9 +743,9 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
                 );
 
                 return 1;
-            
+
             } else {
-                
+
                 // here we could implement an automatic approval
                 // but we don't want this on here!
                 $this->getLogger()->log(
@@ -746,10 +757,10 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
                         $level
                     )
                 );
-                
+
                 return 2;
             }
-        }    
+        }
 
         $this->getLogger()->log(
             LogLevel::DEBUG,
@@ -759,10 +770,9 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
                 $stage
             )
         );
-        
+
         return 0;
     }
-
 
 
     /**
@@ -784,7 +794,7 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
         ){
             return false;
         }
-        
+
         // check if all approvals are done
         /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
         foreach ($issue->getApprovals() as $approval) {
@@ -792,10 +802,10 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
                 return false;
             }
         }
-        
+
         // update if status is approval
         if ($issue->getStatus() == IssueStatus::STAGE_APPROVAL) {
-            
+
             // update status to release
             $issue->setStatus(IssueStatus::STAGE_RELEASE);
             $this->issueRepository->update($issue);
@@ -816,9 +826,10 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
             $this->increaseLevel($issue);
             return true;
         }
-        
-        return false;       
+
+        return false;
     }
+
 
     /**
      * Check all issues if there is a release stage to check
@@ -849,10 +860,9 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
                 count($issueList)
             )
         );
-        
+
         return count($issueList);
     }
-    
 
 
     /**
@@ -860,7 +870,7 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
      *
      * @return \TYPO3\CMS\Core\Log\Logger
      */
-    protected function getLogger()
+    protected function getLogger(): Logger
     {
         if (!$this->logger instanceof Logger) {
             $this->logger = GeneralUtility::makeInstance(LogManager::class)->getLogger(__CLASS__);

@@ -15,10 +15,10 @@ namespace RKW\RkwNewsletter\ViewHelpers\Mailing\Content;
 
 use RKW\RkwNewsletter\Mailing\ContentLoader;
 use RKW\RkwNewsletter\ViewHelpers\Mailing\AbstractViewHelper;
+use RKW\RkwNewsletter\Domain\Model\Content;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
-
 
 /**
  * GetEditorialViewHelper
@@ -36,7 +36,7 @@ class GetEditorialViewHelper extends AbstractViewHelper
      *
      * @throws \TYPO3Fluid\Fluid\Core\ViewHelper\Exception
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('topics', ObjectStorage::class, 'ObjectStorage of topics to load contents for. (optional, default: all).', false, null);
@@ -48,10 +48,9 @@ class GetEditorialViewHelper extends AbstractViewHelper
      * Returns editorial of content
      *
      * @return \RKW\RkwNewsletter\Domain\Model\Content|null
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      * @throws \RKW\RkwNewsletter\Exception
      */
-    public function render()
+    public function render(): ?Content
     {
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
@@ -60,15 +59,15 @@ class GetEditorialViewHelper extends AbstractViewHelper
 
         /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        
+
         /** @var \RKW\RkwNewsletter\Mailing\ContentLoader $contentLoader */
         $contentLoader = $objectManager->get(ContentLoader::class, $issue);
-       
+
         // set topics
         if ($topics) {
             $contentLoader->setTopics($topics);
         }
-        
+
         return $contentLoader->getEditorial();
     }
 }

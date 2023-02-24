@@ -32,7 +32,7 @@ abstract class AbstractViewHelper extends CoreAbstractViewHelper
      *
      * @throws \TYPO3Fluid\Fluid\Core\ViewHelper\Exception
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('issue', Issue::class, 'Load contents for this issue.', true);

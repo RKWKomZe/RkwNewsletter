@@ -23,20 +23,19 @@ use RKW\RkwNewsletter\Domain\Repository\FrontendUserRepository;
  * CountSubscriptionsViewHelper
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class CountSubscriptionsViewHelper extends AbstractViewHelper
 {
 
-
     /**
      * Initialize arguments.
      *
      * @throws \TYPO3Fluid\Fluid\Core\ViewHelper\Exception
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('newsletter', \RKW\RkwNewsletter\Domain\Model\Newsletter::class, 'Count the subscribers of this newsletter.', true);

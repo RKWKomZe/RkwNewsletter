@@ -1,6 +1,6 @@
 <?php
-
 namespace RKW\RkwNewsletter\Domain\Repository;
+
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -22,29 +22,31 @@ use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
  *
  * @author Maximilian Fäßler <maximilian@faesslerweb.de>
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class IssueRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
+class IssueRepository extends AbstractRepository
 {
-    /*
-     * initializeObject
+
+    /**
+     * @return void
      */
-    public function initializeObject()
+    public function initializeObject(): void
     {
+        parent::initializeObject();
         $this->defaultQuerySettings = $this->objectManager->get(Typo3QuerySettings::class);
         $this->defaultQuerySettings->setRespectStoragePage(false);
     }
 
-    
+
     /**
      * findAllForConfirmationByTolerance
      *
      * @param int $toleranceLevel2
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
-     * @comment implicitly tested
+     * comment: implicitly tested
      */
     public function findAllForConfirmationByTolerance(int $toleranceLevel2): QueryResultInterface
     {
@@ -52,13 +54,13 @@ class IssueRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
         $query->matching(
             $query->logicalAnd(
-                
+
                 // status is approval or release
                 $query->logicalOr(
                     $query->equals('status', 2),
                     $query->equals('status', 1)
                 ),
-                
+
                 // nor released nor sent
                 $query->equals('sentTstamp', 0),
                 $query->equals('releaseTstamp', 0),
@@ -86,13 +88,12 @@ class IssueRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     }
 
 
-
     /**
      * findAllToApproveOnStage1
      *
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
-     * @comment only used in backend module
+     * comment: only used in backend module
      */
     public function findAllToApproveOnStage1(): QueryResultInterface
     {
@@ -114,7 +115,7 @@ class IssueRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      *
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
-     * @comment only used in backend module
+     * comment: only used in backend module
      */
     public function findAllToApproveOnStage2(): QueryResultInterface
     {
@@ -139,7 +140,7 @@ class IssueRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      *
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
-     * @comment only used in backend module
+     * comment: only used in backend module
      */
     public function findAllForTestSending(): QueryResultInterface
     {
@@ -160,7 +161,7 @@ class IssueRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      *
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
-     * @comment only used in backend module
+     * comment: only used in backend module
      */
     public function findAllToStartSending(): QueryResultInterface
     {
@@ -185,7 +186,7 @@ class IssueRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @param int $limit
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
-     * @comment only used in command controller
+     * comment: only used in command controller
      */
     public function findAllToSend(int $limit = 5): QueryResultInterface
     {
@@ -203,39 +204,5 @@ class IssueRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
         return $query->execute();
     }
-
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    /**
-     *  findAllToSendByBackendUser
-     *
-     * @param int $backendUser
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
-     */
-    public function findAllToSendByBackendUser($backendUser): QueryResultInterface
-    {
-        $query = $this->createQuery();
-
-        $query->matching(
-            $query->logicalAnd(
-                $query->equals('status', 2),
-                $query->equals('releaseTstamp', 0),
-                $query->contains('newsletter.approval', $backendUser)
-            )
-        );
-
-        return $query->execute();
-    }
-
-
 
 }

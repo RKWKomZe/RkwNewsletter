@@ -1,8 +1,5 @@
 <?php
-
 namespace RKW\RkwNewsletter\ViewHelpers;
-
-use \RKW\RkwBasics\Helper\Common;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -17,7 +14,7 @@ use \RKW\RkwBasics\Helper\Common;
  * The TYPO3 project - inspiring people to share!
  */
 
-use RKW\RkwBasics\Utility\GeneralUtility;
+use Madj2k\CoreExtended\Utility\GeneralUtility;
 use \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
@@ -27,10 +24,10 @@ use \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
  *
  * @author Maximilian Fäßler <maximilian@faesslerweb.de>
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- * @toDo: rework and write tests
+ * @todo rework and write tests
  */
 class IsMandatoryFieldViewHelper extends AbstractViewHelper
 {
@@ -40,28 +37,29 @@ class IsMandatoryFieldViewHelper extends AbstractViewHelper
      *
      * @throws \TYPO3Fluid\Fluid\Core\ViewHelper\Exception
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('fieldName', 'string', 'FieldName to check for', true);
     }
-    
+
+
     /**
      * @return boolean
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
-    public function render()
+    public function render(): bool
     {
         $fieldName = $this->arguments['fieldName'];
 
-        $settings = GeneralUtility::getTyposcriptConfiguration('Rkwnewsletter');
+        $settings = GeneralUtility::getTypoScriptConfiguration('Rkwnewsletter');
         $requiredFields = array('email');
         if ($settings['requiredFieldsSubscription']) {
             $requiredFields = array_merge(
-                $requiredFields, 
+                $requiredFields,
                 GeneralUtility::trimExplode(
-                    ',', 
-                    $settings['requiredFieldsSubscription'], 
+                    ',',
+                    $settings['requiredFieldsSubscription'],
                     true
                 )
             );
@@ -69,6 +67,5 @@ class IsMandatoryFieldViewHelper extends AbstractViewHelper
 
         return in_array($fieldName, $requiredFields);
     }
-
 
 }

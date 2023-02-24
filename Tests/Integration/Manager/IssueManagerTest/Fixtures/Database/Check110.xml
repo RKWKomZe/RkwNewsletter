@@ -20,7 +20,7 @@
         <pid>1</pid>
         <title>Container</title>
     </pages>
-    
+
     <pages>
         <uid>111</uid>
         <pid>1</pid>
@@ -28,7 +28,7 @@
         <doktype>1</doktype>
         <tx_rkwnewsletter_newsletter>110</tx_rkwnewsletter_newsletter>
         <tx_rkwnewsletter_topic>110</tx_rkwnewsletter_topic>
-        <tx_rkwbasics_teaser_image>1</tx_rkwbasics_teaser_image>
+        <tx_coreextended_preview_image>1</tx_coreextended_preview_image>
         <tx_rkwnewsletter_teaser_image>1</tx_rkwnewsletter_teaser_image>
     </pages>
 
@@ -42,7 +42,7 @@
         <name>test.jpg</name>
         <identifier>test.jpg</identifier>
     </sys_file>
-    
+
     <sys_file>
         <uid>111</uid>
         <pid>0</pid>
@@ -53,14 +53,14 @@
         <name>test1.jpg</name>
         <identifier>test1.jpg</identifier>
     </sys_file>
-    
+
     <sys_file_reference>
         <uid>110</uid>
         <pid>0</pid>
         <uid_local>110</uid_local>
         <uid_foreign>111</uid_foreign>
         <tablenames>pages</tablenames>
-        <fieldname>txRkwBasicsTeaserImage</fieldname>
+        <fieldname>txCoreextendedPreviewImage</fieldname>
         <table_local>sys_file</table_local>
     </sys_file_reference>
 

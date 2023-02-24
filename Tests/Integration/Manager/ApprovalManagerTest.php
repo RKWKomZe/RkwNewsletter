@@ -30,7 +30,7 @@ use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
  * ApprovalManagerTest
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwMailer
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
@@ -42,15 +42,17 @@ class ApprovalManagerTest extends FunctionalTestCase
      */
     const FIXTURE_PATH = __DIR__ . '/ApprovalManagerTest/Fixtures';
 
+
     /**
      * @var string[]
      */
     protected $testExtensionsToLoad = [
-        'typo3conf/ext/rkw_basics',
+        'typo3conf/ext/core_extended',
         'typo3conf/ext/rkw_authors',
         'typo3conf/ext/rkw_mailer',
         'typo3conf/ext/rkw_newsletter'
     ];
+
 
     /**
      * @var string[]
@@ -59,46 +61,46 @@ class ApprovalManagerTest extends FunctionalTestCase
 
 
     /**
-     * @var \RKW\RkwNewsletter\Manager\ApprovalManager
+     * @var \RKW\RkwNewsletter\Manager\ApprovalManager|null
      */
-    private $subject;
+    private ?ApprovalManager $subject = null;
 
 
     /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     * @var \TYPO3\CMS\Extbase\Object\ObjectManager|null
      */
-    private $objectManager;
+    private ?ObjectManager $objectManager = null;
 
 
     /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\TopicRepository
+     * @var \RKW\RkwNewsletter\Domain\Repository\TopicRepository|null
      */
-    private $topicRepository;
+    private ?TopicRepository $topicRepository = null;
 
-    
-    /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository
-     */
-    private $issueRepository;
 
-    
     /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\PagesRepository
+     * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository|null
      */
-    private $pagesRepository;
+    private ?IssueRepository $issueRepository = null;
 
-    
+
     /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\ApprovalRepository
+     * @var \RKW\RkwNewsletter\Domain\Repository\PagesRepository|null
      */
-    private $approvalRepository;
+    private ?PagesRepository $pagesRepository = null;
+
+
+    /**
+     * @var \RKW\RkwNewsletter\Domain\Repository\ApprovalRepository|null
+     */
+    private ?ApprovalRepository $approvalRepository;
 
 
     /**
      * Setup
      * @throws \Exception
      */
-    protected function setUp()
+    protected function setUp(): void
     {
 
         parent::setUp();
@@ -107,14 +109,14 @@ class ApprovalManagerTest extends FunctionalTestCase
         $this->setUpFrontendRootPage(
             1,
             [
-                'EXT:rkw_basics/Configuration/TypoScript/setup.typoscript',
+                'EXT:core_extended/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_authors/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/setup.typoscript',
-                'EXT:rkw_basics/Configuration/TypoScript/constants.typoscript',
+                'EXT:core_extended/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_authors/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/constants.typoscript',
-                'EXT:rkw_newsletter/Configuration/TypoScript/constants.typoscript',               
+                'EXT:rkw_newsletter/Configuration/TypoScript/constants.typoscript',
                 self::FIXTURE_PATH . '/Frontend/Configuration/Rootpage.typoscript',
             ]
         );
@@ -136,6 +138,7 @@ class ApprovalManagerTest extends FunctionalTestCase
     }
 
     //=============================================
+
     /**
      * @test
      * @throws \Exception
@@ -158,19 +161,19 @@ class ApprovalManagerTest extends FunctionalTestCase
          * Then the changes on the issue-object are persisted
          */
         $this->importDataSet(self::FIXTURE_PATH . '/Database/Check10.xml');
-        
+
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic */
         $topic = $this->topicRepository->findByUid(10);
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(10);
-        
+
         /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
         $page = $this->pagesRepository->findByUid(10);
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $approval = $this->subject->createApproval($topic, $issue, $page);
-        
+
         self::assertInstanceOf(Approval::class, $approval);
         self::assertEquals($topic, $approval->getTopic());
         self::assertEquals($page, $approval->getPage());
@@ -230,6 +233,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         $approvalDb = $this->approvalRepository->findByUid(80);
         self::assertGreaterThan(0, $approvalDb->getSentInfoTstampStage1());
     }
+
 
     /**
      * @test
@@ -333,6 +337,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         $approvalDb = $this->approvalRepository->findByUid(110);
         self::assertGreaterThan(0, $approvalDb->getSentInfoTstampStage2());
     }
+
 
     /**
      * @test
@@ -487,6 +492,7 @@ class ApprovalManagerTest extends FunctionalTestCase
 
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -527,6 +533,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         self::assertGreaterThan(0, $approvalDb->getAllowedTstampStage2());
         self::assertNull($approvalDb->getAllowedByUserStage2());
     }
+
 
     /**
      * @test
@@ -571,6 +578,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         self::assertEquals(150, $approvalDb->getAllowedByUserStage2()->getUid());
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -597,8 +605,9 @@ class ApprovalManagerTest extends FunctionalTestCase
         self::assertFalse($result);
 
     }
-    
+
     //=============================================
+
     /**
      * @test
      * @throws \Exception
@@ -651,11 +660,12 @@ class ApprovalManagerTest extends FunctionalTestCase
         $approval = $this->approvalRepository->findByUid(30);
 
         $result = $this->subject->getMailRecipients($approval);
-        self::assertInternalType('array', $result);
+        self::assertIsArray( $result);
         self::assertCount(2, $result);
         self::assertEquals(30, $result[0]->getUid());
         self::assertEquals(31, $result[1]->getUid());
     }
+
 
     /**
      * @test
@@ -685,7 +695,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         $approval = $this->approvalRepository->findByUid(40);
 
         $result = $this->subject->getMailRecipients($approval);
-        self::assertInternalType('array', $result);
+        self::assertIsArray( $result);
         self::assertCount(1, $result);
         self::assertEquals(40, $result[0]->getUid());
         self::assertEquals('test@rkw.de', $result[0]->getEmail());
@@ -718,11 +728,12 @@ class ApprovalManagerTest extends FunctionalTestCase
         $approval = $this->approvalRepository->findByUid(50);
 
         $result = $this->subject->getMailRecipients($approval);
-        self::assertInternalType('array', $result);
+        self::assertIsArray( $result);
         self::assertCount(2, $result);
         self::assertEquals(52, $result[0]->getUid());
         self::assertEquals(53, $result[1]->getUid());
     }
+
 
     /**
      * @test
@@ -752,11 +763,12 @@ class ApprovalManagerTest extends FunctionalTestCase
         $approval = $this->approvalRepository->findByUid(60);
 
         $result = $this->subject->getMailRecipients($approval);
-        self::assertInternalType('array', $result);
+        self::assertIsArray( $result);
         self::assertCount(1, $result);
         self::assertEquals(62, $result[0]->getUid());
         self::assertEquals('test2@rkw.de', $result[0]->getEmail());
     }
+
 
     /**
      * @test
@@ -786,8 +798,9 @@ class ApprovalManagerTest extends FunctionalTestCase
         $result = $this->subject->getMailRecipients($approval);
         self::assertEmpty($result);
     }
+
     //=============================================
-    
+
     /**
      * @test
      * @throws \Exception
@@ -819,6 +832,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         self::assertEquals(1, $result);
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -848,7 +862,7 @@ class ApprovalManagerTest extends FunctionalTestCase
 
         $result = $this->subject->sendMails($approval);
         self::assertEquals(1, $result);
-        
+
     }
 
 
@@ -881,7 +895,7 @@ class ApprovalManagerTest extends FunctionalTestCase
 
         $result = $this->subject->sendMails($approval);
         self::assertEquals(2, $result);
-        
+
     }
 
 
@@ -908,14 +922,14 @@ class ApprovalManagerTest extends FunctionalTestCase
          */
 
         $this->importDataSet(self::FIXTURE_PATH . '/Database/Check200.xml');
-        
+
         /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
         $approval = $this->approvalRepository->findByUid(200);
 
         $result = $this->subject->sendMails($approval);
         self::assertEquals(0, $result);
-
     }
+
 
     /**
      * @test
@@ -946,8 +960,8 @@ class ApprovalManagerTest extends FunctionalTestCase
 
         $result = $this->subject->sendMails($approval);
         self::assertEquals(1, $result);
-
     }
+
 
     /**
      * @test
@@ -979,8 +993,8 @@ class ApprovalManagerTest extends FunctionalTestCase
 
         $result = $this->subject->sendMails($approval);
         self::assertEquals(1, $result);
-
     }
+
 
     /**
      * @test
@@ -1046,6 +1060,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         self::assertEquals(0, $result);
 
     }
+
 
     /**
      * @test
@@ -1135,7 +1150,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         self::assertEquals(0, $approvalDb->getSentReminderTstampStage1());
         self::assertEquals(0, $approvalDb->getAllowedTstampStage1());
         self::assertEquals(0, $approvalDb->getAllowedTstampStage2());
-        
+
         /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
         $page = $this->pagesRepository->findByUid(170);
         self::assertEquals(1, $page->getPermsUserId());
@@ -1145,6 +1160,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         self::assertEquals(1, $page->getPermsEverybody());
 
     }
+
 
     /**
      * @test
@@ -1233,7 +1249,7 @@ class ApprovalManagerTest extends FunctionalTestCase
          * Given a persisted page-object
          * Given the page-object refers the issue-object
          * Given the page-object refers the topic-object
-         * Given the page-object belongs to the approval-object 
+         * Given the page-object belongs to the approval-object
          * When the method is called
          * Then false is returned
          * Then the allowTstampStage1-property is set
@@ -1266,7 +1282,6 @@ class ApprovalManagerTest extends FunctionalTestCase
         self::assertEquals(2, $page->getPermsUser());
         self::assertEquals(2, $page->getPermsGroup());
         self::assertEquals(2, $page->getPermsEverybody());
-
 
     }
 
@@ -1331,6 +1346,7 @@ class ApprovalManagerTest extends FunctionalTestCase
 
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -1392,6 +1408,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         self::assertEquals(2, $page->getPermsEverybody());
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -1451,6 +1468,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         self::assertEquals(2, $page->getPermsEverybody());
 
     }
+
 
     /**
      * @test
@@ -1605,6 +1623,7 @@ class ApprovalManagerTest extends FunctionalTestCase
 
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -1625,7 +1644,7 @@ class ApprovalManagerTest extends FunctionalTestCase
          * Given a persisted page-object
          * Given the page-object refers the issue-object
          * Given the page-object refers the topic-object
-         * Given the page-object belongs to the approval-object 
+         * Given the page-object belongs to the approval-object
          * Given both tolerance-parameters for the level have been set to 600 seconds
          * Given both tolerance-parameters for the stage have been set to 1200 seconds
          * Given the sentInfoTstampStage1-property is set to a value older than 600 seconds from now
@@ -1647,6 +1666,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         self::assertEquals(1, $result);
 
     }
+
 
     /**
      * @test
@@ -1691,6 +1711,7 @@ class ApprovalManagerTest extends FunctionalTestCase
         self::assertEquals(0, $result);
 
     }
+
 
     /**
      * @test
@@ -1859,8 +1880,8 @@ class ApprovalManagerTest extends FunctionalTestCase
 
         $result = $this->subject->processAllConfirmations(1200,1200, 600, 600);
         self::assertEquals(1, $result);
-
     }
+
 
     /**
      * @test
@@ -1902,9 +1923,9 @@ class ApprovalManagerTest extends FunctionalTestCase
 
         $result = $this->subject->processAllConfirmations(600, 600, 1200, 1200);
         self::assertEquals(1, $result);
-
     }
-    
+
+
     /**
      * @test
      * @throws \Exception
@@ -1948,6 +1969,8 @@ class ApprovalManagerTest extends FunctionalTestCase
         self::assertEquals(0, $result);
 
     }
+
+
     /**
      * @test
      * @throws \Exception
@@ -2084,15 +2107,14 @@ class ApprovalManagerTest extends FunctionalTestCase
         self::assertEquals(0, $result);
     }
 
-   
     //=============================================
 
     /**
      * TearDown
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
-       //parent::tearDown();
+       parent::tearDown();
     }
 
 

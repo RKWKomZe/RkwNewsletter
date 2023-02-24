@@ -26,7 +26,7 @@ use RKW\RkwNewsletter\Domain\Repository\TopicRepository;
  * CountSubscriptionsViewHelperTest
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwMailer
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
@@ -38,14 +38,16 @@ class CountSubscriptionsViewHelperTest extends FunctionalTestCase
      */
     const FIXTURE_PATH = __DIR__ . '/CountSubscriptionsViewHelperTest/Fixtures';
 
+
     /**
      * @var string[]
      */
     protected $testExtensionsToLoad = [
-        'typo3conf/ext/rkw_basics',
+        'typo3conf/ext/core_extended',
         'typo3conf/ext/rkw_mailer',
         'typo3conf/ext/rkw_newsletter'
     ];
+
 
     /**
      * @var string[]
@@ -54,34 +56,34 @@ class CountSubscriptionsViewHelperTest extends FunctionalTestCase
 
 
     /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\NewsletterRepository
+     * @var \RKW\RkwNewsletter\Domain\Repository\NewsletterRepository|null
      */
-    private $newletterRepository;
+    private ?NewsletterRepository $newletterRepository = null;
 
 
     /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\TopicRepository
+     * @var \RKW\RkwNewsletter\Domain\Repository\TopicRepository|null
      */
-    private $topicRepository;
+    private ?TopicRepository $topicRepository = null;
 
 
     /**
-     * @var \TYPO3\CMS\Fluid\View\StandaloneView
+     * @var \TYPO3\CMS\Fluid\View\StandaloneView|null
      */
-    private $standAloneViewHelper;
+    private ?StandaloneView $standAloneViewHelper = null;
 
 
     /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     * @var \TYPO3\CMS\Extbase\Object\ObjectManager|null
      */
-    private $objectManager;
+    private ?ObjectManager $objectManager = null;
 
 
     /**
      * Setup
      * @throws \Exception
      */
-    protected function setUp()
+    protected function setUp(): void
     {
 
         parent::setUp();
@@ -90,10 +92,10 @@ class CountSubscriptionsViewHelperTest extends FunctionalTestCase
         $this->setUpFrontendRootPage(
             1,
             [
-                'EXT:rkw_basics/Configuration/TypoScript/setup.typoscript',
+                'EXT:core_extended/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/setup.typoscript',
-                'EXT:rkw_basics/Configuration/TypoScript/constants.typoscript',
+                'EXT:core_extended/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/constants.typoscript',
                 self::FIXTURE_PATH . '/Frontend/Configuration/Rootpage.typoscript',
@@ -116,9 +118,9 @@ class CountSubscriptionsViewHelperTest extends FunctionalTestCase
                 0 => self::FIXTURE_PATH . '/Frontend/Templates'
             ]
         );
-
     }
 
+    //=============================================
 
     /**
      * @test
@@ -233,7 +235,7 @@ class CountSubscriptionsViewHelperTest extends FunctionalTestCase
     /**
      * TearDown
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
     }

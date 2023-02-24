@@ -24,7 +24,7 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
  *  IssueStatusTest
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwMailer
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
@@ -36,15 +36,17 @@ class IssueStatusTest extends FunctionalTestCase
      */
     const FIXTURE_PATH = __DIR__ . '/IssueStatusTest/Fixtures';
 
+
     /**
      * @var string[]
      */
     protected $testExtensionsToLoad = [
-        'typo3conf/ext/rkw_basics',
+        'typo3conf/ext/core_extended',
         'typo3conf/ext/rkw_authors',
         'typo3conf/ext/rkw_mailer',
         'typo3conf/ext/rkw_newsletter'
     ];
+
 
     /**
      * @var string[]
@@ -53,29 +55,28 @@ class IssueStatusTest extends FunctionalTestCase
 
 
     /**
-     * @var \RKW\RkwNewsletter\Status\IssueStatus
+     * @var \RKW\RkwNewsletter\Status\IssueStatus|null
      */
-    private $subject;
+    private ?IssueStatus $subject = null;
 
 
     /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository
+     * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository|null
      */
-    private $issueRepository;
-    
-    
-    /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
-     */
-    private $objectManager;
+    private ?IssueRepository $issueRepository = null;
 
+
+    /**
+     * @var \TYPO3\CMS\Extbase\Object\ObjectManager|null
+     */
+    private ?ObjectManager $objectManager = null;
 
 
     /**
      * Setup
      * @throws \Exception
      */
-    protected function setUp()
+    protected function setUp(): void
     {
 
         parent::setUp();
@@ -84,11 +85,11 @@ class IssueStatusTest extends FunctionalTestCase
         $this->setUpFrontendRootPage(
             1,
             [
-                'EXT:rkw_basics/Configuration/TypoScript/setup.typoscript',
+                'EXT:core_extended/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_authors/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/setup.typoscript',
-                'EXT:rkw_basics/Configuration/TypoScript/constants.typoscript',
+                'EXT:core_extended/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_authors/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/constants.typoscript',
@@ -128,8 +129,7 @@ class IssueStatusTest extends FunctionalTestCase
 
         self::assertEquals($this->subject::STAGE_DRAFT, $this->subject::getStage($issue));
     }
-    
-   
+
 
     /**
      * @test
@@ -179,6 +179,7 @@ class IssueStatusTest extends FunctionalTestCase
 
         self::assertEquals($this->subject::STAGE_RELEASE, $this->subject::getStage($issue));
     }
+
 
     /**
      * @test
@@ -255,6 +256,7 @@ class IssueStatusTest extends FunctionalTestCase
         self::assertEquals($this->subject::LEVEL_NONE, $this->subject::getLevel($issue));
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -281,6 +283,7 @@ class IssueStatusTest extends FunctionalTestCase
         self::assertEquals($this->subject::LEVEL1, $this->subject::getLevel($issue));
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -306,6 +309,7 @@ class IssueStatusTest extends FunctionalTestCase
 
         self::assertEquals($this->subject::LEVEL2, $this->subject::getLevel($issue));
     }
+
 
     /**
      * @test
@@ -351,7 +355,7 @@ class IssueStatusTest extends FunctionalTestCase
          * Then true is returned
          * Then the status of the issue-object is set to $this->subject::STAGE_APPROVAL
          * Then the releaseTstamp-property is not set
-         * Then the sentTstamp-property is not set 
+         * Then the sentTstamp-property is not set
          */
 
         $this->importDataSet(self::FIXTURE_PATH . '/Database/Check10.xml');
@@ -363,8 +367,9 @@ class IssueStatusTest extends FunctionalTestCase
         self::assertTrue($result);
         self::assertEquals($this->subject::STAGE_APPROVAL, $issue->getStatus());
         self::assertEquals(0, $issue->getReleaseTstamp());
-        self::assertEquals(0, $issue->getSentTstamp());        
+        self::assertEquals(0, $issue->getSentTstamp());
     }
+
 
     /**
      * @test
@@ -395,8 +400,6 @@ class IssueStatusTest extends FunctionalTestCase
         self::assertEquals($this->subject::STAGE_RELEASE, $issue->getStatus());
         self::assertEquals(0, $issue->getReleaseTstamp());
         self::assertEquals(0, $issue->getSentTstamp());
-
-
     }
 
 
@@ -431,6 +434,7 @@ class IssueStatusTest extends FunctionalTestCase
         self::assertEquals(0, $issue->getSentTstamp());
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -461,6 +465,7 @@ class IssueStatusTest extends FunctionalTestCase
         self::assertEquals(0, $issue->getReleaseTstamp());
         self::assertGreaterThan(0, $issue->getSentTstamp());
     }
+
 
     /**
      * @test
@@ -514,6 +519,7 @@ class IssueStatusTest extends FunctionalTestCase
         self::assertFalse($this->subject::increaseLevel($issue));
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -544,6 +550,7 @@ class IssueStatusTest extends FunctionalTestCase
         self::assertGreaterThan(0, $issue->getInfoTstamp());
         self::assertEquals(0, $issue->getReminderTstamp());
     }
+
 
     /**
      * @test
@@ -576,6 +583,7 @@ class IssueStatusTest extends FunctionalTestCase
         self::assertGreaterThan(0, $issue->getReminderTstamp());
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -601,14 +609,15 @@ class IssueStatusTest extends FunctionalTestCase
 
         self::assertFalse($this->subject::increaseLevel($issue));
     }
-    
+
     //=============================================
+
     /**
      * TearDown
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
     }
-    
+
 }

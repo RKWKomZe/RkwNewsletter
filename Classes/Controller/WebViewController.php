@@ -15,8 +15,11 @@ namespace RKW\RkwNewsletter\Controller;
  */
 
 use RKW\RkwMailer\Domain\Model\QueueRecipient;
-use RKW\RkwBasics\Utility\GeneralUtility;
+use Madj2k\CoreExtended\Utility\GeneralUtility;
+use RKW\RkwMailer\Domain\Repository\QueueMailRepository;
+use RKW\RkwMailer\Domain\Repository\QueueRecipientRepository;
 use RKW\RkwNewsletter\Domain\Model\Issue;
+use RKW\RkwNewsletter\Domain\Repository\TopicRepository;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
@@ -25,7 +28,7 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  *
  * @author Maximilian Fäßler <maximilian@faesslerweb.de>
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
@@ -33,35 +36,30 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 {
 
     /**
-     * topicRepository
-     *
      * @var \RKW\RkwNewsletter\Domain\Repository\TopicRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $topicRepository;
+    protected TopicRepository $topicRepository;
 
 
     /**
-     * QueueMailRepository
-     *
      * @var \RKW\RkwMailer\Domain\Repository\QueueMailRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $queueMailRepository;
+    protected QueueMailRepository $queueMailRepository;
+
 
     /**
-     * QueueRecipientRepository
-     *
      * @var \RKW\RkwMailer\Domain\Repository\QueueRecipientRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $queueRecipientRepository;
+    protected QueueRecipientRepository $queueRecipientRepository;
 
 
     /**
      * action show
      *
-     * @ignorevalidation $issue
+     * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("issue")
      * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
      * @param array $topicsRaw
      * @param string $hash
@@ -69,9 +67,9 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
-    public function showAction(Issue $issue, array $topicsRaw = [], string $hash = '')
+    public function showAction(Issue $issue, array $topicsRaw = [], string $hash = ''): void
     {
-        
+
         $queueMailId = 0;
         $queueRecipientId = 0;
 
@@ -83,7 +81,7 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         if (isset($rkwMailerParams['uid'])) {
             $queueRecipientId = intval($rkwMailerParams['uid']);
         }
-        
+
         // set default recipient based on FE-language settings – just in case
         /** @var \RKW\RkwMailer\Domain\Model\QueueRecipient $queueRecipient */
         $queueRecipient = GeneralUtility::makeInstance(QueueRecipient::class);
@@ -104,7 +102,7 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 )
             );
         }
-        
+
         // convert topic-ids to objects
         $topics = new ObjectStorage();
         if ($topicsRaw) {
@@ -113,7 +111,7 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                     $topics->attach($topic);
                 }
             }
-            
+
         } else {
             foreach($issue->getPages() as $page) {
 
@@ -125,11 +123,11 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
 
         // add paths depending on template of newsletter - including the default one!
-        $settings = GeneralUtility::getTyposcriptConfiguration(
-            'Rkwnewsletter', 
+        $settings = GeneralUtility::getTypoScriptConfiguration(
+            'Rkwnewsletter',
             ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK
         );
-        
+
         $layoutPaths = $settings['view']['newsletter']['layoutRootPaths'];
         $layoutPathsNew = [];
         if (is_array($layoutPaths)) {

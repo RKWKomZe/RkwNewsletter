@@ -20,19 +20,9 @@
 
                 <f:render partial="Subscription/Topics" arguments="{_all}" />
 
-                <div class="form__field">
-                    <f:form.checkbox
-                        id="privacy"
-                        class="checkbox"
-                        name="privacy"
-                        value="1"
-                        checked="{privacy}"
-                    />
-                    <label for="privacy" class="checkbox-label">
-                        <rkwRegistration:privacyText textVersion="newsletter" />
-                    </label>
-                </div>
-
+                <rkwRegistration:consent type="privacy" key="newsletter" />
+                <rkwRegistration:consent type="marketing" />
+                
                 <p class="flex space-start btn-list">
                     <f:form.submit class="btn btn--primary" value='<f:translate key="templates_subscription_edit.subscribe" />' />
                 </p>

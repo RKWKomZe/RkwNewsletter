@@ -1,7 +1,7 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
     xmlns:rkwNewsletter="http://typo3.org/ns/RKW/RkwNewsletter/ViewHelpers"
     xmlns:rkwRegistration="http://typo3.org/ns/RKW/RkwRegistration/ViewHelpers"
-    xmlns:rkwBasics="http://typo3.org/ns/RKW/RkwBasics/ViewHelpers"
+    xmlns:coreExtended="http://typo3.org/ns/Madj2k/CoreExtended/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
     <f:layout name="Default" />
@@ -25,35 +25,10 @@
                     <f:render partial="Subscription/User" arguments="{_all}" />
 
                     <f:if condition="{frontendUser.uid} < 1">
-                        <div class="form__field">
-                            <f:form.checkbox
-                                id="terms"
-                                class="checkbox"
-                                name="terms"
-                                value="1"
-                                checked="{terms}"
-                            />
-                            <label for="terms" class="checkbox-label">
-                                <f:link.page pageUid="{settings.termsPid}" target="_blank">
-                                    <f:translate key="templates_subscription_new.terms" />
-                                </f:link.page>
-                            </label>
-                        </div>
+                        <rkwRegistration:consent type="terms" />
                     </f:if>
-
-
-                    <div class="form__field">
-                        <f:form.checkbox
-                            id="privacy"
-                            class="checkbox"
-                            name="privacy"
-                            value="1"
-                            checked="{privacy}"
-                        />
-                        <label for="privacy" class="checkbox-label">
-                            <rkwRegistration:privacyText textVersion="newsletter" />
-                        </label>
-                    </div>
+                    <rkwRegistration:consent type="privacy" key="newsletter" />
+                    <rkwRegistration:consent type="marketing" />
 
                     <f:render partial="Subscription/CaptchaElement" />
 

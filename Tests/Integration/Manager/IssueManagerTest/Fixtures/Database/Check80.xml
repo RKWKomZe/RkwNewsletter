@@ -11,24 +11,24 @@
         <name>test.jpg</name>
         <identifier>test.jpg</identifier>
     </sys_file>
-    
+
     <sys_file_reference>
         <uid>80</uid>
         <pid>0</pid>
         <uid_local>80</uid_local>
         <uid_foreign>80</uid_foreign>
         <tablenames>pages</tablenames>
-        <fieldname>txRkwbasicsTeaserImage</fieldname>
+        <fieldname>txCoreextendedPreviewImage</fieldname>
         <table_local>sys_file</table_local>
     </sys_file_reference>
-    
+
     <pages>
         <uid>80</uid>
         <pid>1</pid>
         <title>Test-Title</title>
-        <tx_rkwbasics_teaser_image>1</tx_rkwbasics_teaser_image>
+        <tx_coreextended_preview_image>1</tx_coreextended_preview_image>
     </pages>
-    
+
     <tt_content>
         <uid>80</uid>
         <pid>1</pid>

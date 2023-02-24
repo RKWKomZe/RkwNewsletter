@@ -18,7 +18,14 @@ use RKW\RkwNewsletter\Domain\Model\Approval;
 use RKW\RkwNewsletter\Domain\Model\Issue;
 use RKW\RkwNewsletter\Domain\Model\Newsletter;
 use RKW\RkwNewsletter\Domain\Model\Topic;
+use RKW\RkwNewsletter\Domain\Repository\BackendUserRepository;
+use RKW\RkwNewsletter\Domain\Repository\IssueRepository;
+use RKW\RkwNewsletter\Domain\Repository\NewsletterRepository;
+use RKW\RkwNewsletter\Mailing\MailProcessor;
+use RKW\RkwNewsletter\Manager\ApprovalManager;
+use RKW\RkwNewsletter\Manager\IssueManager;
 use RKW\RkwNewsletter\Status\IssueStatus;
+use RKW\RkwNewsletter\Validation\EmailValidator;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
@@ -29,7 +36,7 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  *
  * @author Maximilian Fäßler <maximilian@faesslerweb.de>
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
@@ -37,67 +44,54 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 {
 
     /**
-     * newsletterRepository
-     *
      * @var \RKW\RkwNewsletter\Domain\Repository\NewsletterRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $newsletterRepository;
+    protected NewsletterRepository $newsletterRepository;
+
 
     /**
-     * issueRepository
-     *
      * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $issueRepository;
+    protected IssueRepository $issueRepository;
 
 
     /**
-     * backendUserRepository
-     *
      * @var \RKW\RkwNewsletter\Domain\Repository\BackendUserRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $backendUserRepository;
-    
-    
+    protected BackendUserRepository $backendUserRepository;
+
+
     /**
-     * IssueManager
-     *
      * @var \RKW\RkwNewsletter\Manager\IssueManager
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $issueManager;
+    protected IssueManager $issueManager;
+
 
     /**
-     * ApprovalManager
-     *
      * @var \RKW\RkwNewsletter\Manager\ApprovalManager
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $approvalManager;
+    protected ApprovalManager $approvalManager;
 
 
     /**
-     * MailProcessor
-     *
      * @var \RKW\RkwNewsletter\Mailing\MailProcessor
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $mailProcessor;
+    protected MailProcessor $mailProcessor;
 
-    
+
     /**
-     * emailValidator
-     *
      * @var \RKW\RkwNewsletter\Validation\EmailValidator
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $emailValidator;
+    protected EmailValidator $emailValidator;
 
 
-  
     /**
      * Show a list of all outstanding confirmations
      *
@@ -129,7 +123,7 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
-     * @ignorevalidation $approval
+     * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("approval")
      */
     public function approveAction(Approval $approval): void
     {
@@ -222,7 +216,7 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
 
         $this->issueManager->buildIssue($newsletter,$topicArray);
-        
+
         $this->addFlashMessage(
             LocalizationUtility::translate(
                 'releaseController.message.issueCreated',
@@ -232,7 +226,7 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
         $this->redirect('createIssueList');
     }
-    
+
 
     /**
      * action testList
@@ -270,13 +264,14 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
-     * @ignorevalidation $issue
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
+     * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("issue")
      */
     public function testSendAction(Issue $issue, string $emails, Topic $topic = null, string $title = ''): void {
 
         $emailArray = GeneralUtility::trimExplode(',', $emails);
         foreach ($emailArray as $email) {
-            
+
             /** @var \TYPO3\CMS\Extbase\Error\Result $validateEmail */
             $validateEmail = $this->emailValidator->email($email);
             if ($validateEmail->hasErrors()) {
@@ -330,7 +325,7 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
         $this->redirect('testList');
     }
-        
+
 
     /**
      * action sendList
@@ -352,7 +347,7 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             ]
         );
     }
-    
+
 
     /**
      * action sendConfirm
@@ -364,7 +359,7 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
-     * @ignorevalidation $issue
+     * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("issue")
      */
     public function sendConfirmAction(Issue $issue = null, string $title = ''): void
     {
@@ -383,7 +378,7 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
             $this->redirect('sendList');
         }
-       
+
         // set title
         $issue->setTitle($title);
         $this->issueRepository->update($issue);
@@ -407,20 +402,20 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
-     * @ignorevalidation $issue
+     * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("issue")
      * @throws \Exception
      */
     public function sendAction(Issue $issue, string $title = ''): void
     {
         if ($issue->getStatus() == IssueStatus::STAGE_RELEASE) {
-            
+
             if ($title) {
                 $issue->setTitle($title);
                 $this->issueRepository->update($issue);
             }
 
             $this->issueManager->increaseStage($issue);
-            
+
             $this->addFlashMessage(
                 \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(
                     'releaseController.message.sendingStarted',
@@ -428,8 +423,8 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 )
             );
         }
-        
+
         $this->redirect('sendList');
     }
-    
+
 }

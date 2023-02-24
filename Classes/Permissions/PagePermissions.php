@@ -14,20 +14,22 @@ namespace RKW\RkwNewsletter\Permissions;
  * The TYPO3 project - inspiring people to share!
  */
 
-use RKW\RkwBasics\Utility\GeneralUtility;
+use Madj2k\CoreExtended\Utility\GeneralUtility;
 use RKW\RkwNewsletter\Domain\Model\Pages;
+use RKW\RkwNewsletter\Domain\Repository\PagesRepository;
 use RKW\RkwNewsletter\Status\PageStatus;
 use TYPO3\CMS\Core\Log\Logger;
 use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Type\Bitmask\Permission;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 
 /**
  * PagePermissions
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
@@ -36,18 +38,24 @@ class PagePermissions
 
     /**
      * @var \RKW\RkwNewsletter\Domain\Repository\PagesRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $pagesRepository;
+    protected PagesRepository $pagesRepository;
 
 
     /**
      * PersistenceManager
      *
      * @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $persistenceManager;
+    protected PersistenceManager $persistenceManager;
+
+
+    /**
+     * @var \TYPO3\CMS\Core\Log\Logger|null
+     */
+    protected ?Logger $logger = null;
 
 
     /**
@@ -67,7 +75,7 @@ class PagePermissions
         if (! $settings) {
             $settings = $this->getPermissionSettings();
         }
-        
+
         $userGroupIdNames = [
             'userId',
             'groupId',
@@ -104,11 +112,11 @@ class PagePermissions
                 $update = true;
             }
         }
-        
+
         if ($update) {
             $this->pagesRepository->update($page);
             $this->persistenceManager->persistAll();
-            
+
             $this->getLogger()->log(
                 LogLevel::INFO,
                 sprintf(
@@ -140,8 +148,8 @@ class PagePermissions
 
         return true;
     }
-    
-  
+
+
     /**
      * Returns permission-settings
      *
@@ -150,14 +158,13 @@ class PagePermissions
      */
     public function getPermissionSettings(): array
     {
-        $settings = GeneralUtility::getTyposcriptConfiguration(
-            'Rkwnewsletter', 
+        $settings = GeneralUtility::getTypoScriptConfiguration(
+            'Rkwnewsletter',
             ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS
         );
-        
+
         return $settings['pages']['permissions'] ?: [];
     }
-
 
 
     /**
@@ -165,10 +172,10 @@ class PagePermissions
      *
      * @return \TYPO3\CMS\Core\Log\Logger
      */
-    protected function getLogger()
+    protected function getLogger(): Logger
     {
         if (!$this->logger instanceof Logger) {
-            $this->logger = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(LogManager::class)->getLogger(__CLASS__);
+            $this->logger = GeneralUtility::makeInstance(LogManager::class)->getLogger(__CLASS__);
         }
 
         return $this->logger;

@@ -1,6 +1,6 @@
 <?php
-
 namespace RKW\RkwNewsletter\Domain\Model;
+
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -25,133 +25,103 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  *
  * @author Maximilian Fäßler <maximilian@faesslerweb.de>
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
     /**
-     * title
+     * @var string
+     */
+    protected string $title = '';
+
+
+    /**
+     * @var int
+     */
+    protected int $status = 0;
+
+
+    /**
      *
      * @var string
      */
-    protected $title = '';
+    protected string $introduction = '';
 
-    
+
     /**
-     * status
-     *
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwAuthors\Domain\Model\Authors>|null
+     */
+    protected ?ObjectStorage $authors = null;
+
+
+    /**
+     * @var \RKW\RkwNewsletter\Domain\Model\Newsletter|null
+     */
+    protected ?Newsletter $newsletter = null;
+
+
+    /**
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\Pages>|null
+     */
+    protected ?ObjectStorage $pages = null;
+
+
+    /**
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\Approval>|null
+     */
+    protected ?ObjectStorage $approvals = null;
+
+
+    /**
+     * @var \RKW\RkwMailer\Domain\Model\QueueMail|null
+     */
+    protected ?QueueMail $queueMail = null;
+
+
+    /**
      * @var int
      */
-    protected $status = 0;
+    protected int $infoTstamp = 0;
 
-    
+
     /**
-     * introduction
-     *
+     * @var int
+     */
+    protected int $reminderTstamp = 0;
+
+
+    /**
+     * @var int
+     */
+    protected int $releaseTstamp = 0;
+
+
+    /**
+     * @var int
+     */
+    protected int $startTstamp = 0;
+
+
+    /**
+     * @var int
+     */
+    protected int $sentTstamp = 0;
+
+
+    /**
      * @var string
      */
-    protected $introduction = '';
+    protected string $recipients = '';
 
 
     /**
-     * author
-     *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwAuthors\Domain\Model\Authors>
-     */
-    protected $authors;
-    
-    
-    /**
-     * newsletter
-     *
-     * @var \RKW\RkwNewsletter\Domain\Model\Newsletter
-     */
-    protected $newsletter;
-
-    
-    /**
-     * pages
-     *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\Pages>
-     */
-    protected $pages;
-
-    
-    /**
-     * approvals
-     *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\Approval>
-     */
-    protected $approvals;
-
-
-    /**
-     * queueMail
-     *
-     * @var \RKW\RkwMailer\Domain\Model\QueueMail
-     */
-    protected $queueMail;
-
-
-    /**
-     * infoTstamp
-     *
-     * @var int
-     */
-    protected $infoTstamp = 0;
-
-
-    /**
-     * reminderTstamp
-     *
-     * @var int
-     */
-    protected $reminderTstamp = 0;
-
-
-    /**
-     * releaseTstamp
-     *
-     * @var int
-     */
-    protected $releaseTstamp = 0;
-
-
-    /**
-     * startTstamp
-     *
-     * @var int
-     */
-    protected $startTstamp = 0;
-    
-    
-    /**
-     * sentTstamp
-     *
-     * @var int
-     */
-    protected $sentTstamp = 0;
-    
-    
-    /**
-     * recipients
-     *
-     * @var string
-     */
-    protected $recipients;
-
-
-    /**
-     * isSpecial
-     *
      * @var bool
      */
-    protected $isSpecial;
+    protected bool $isSpecial = false;
 
 
-    
     /**
      * __construct
      */
@@ -161,7 +131,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->initStorageObjects();
     }
 
-    
+
     /**
      * Initializes all ObjectStorage properties
      * Do not modify this method!
@@ -178,7 +148,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
     }
 
-    
+
     /**
      * Returns the title
      *
@@ -189,7 +159,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->title;
     }
 
-    
+
     /**
      * Sets the title
      *
@@ -201,7 +171,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->title = $title;
     }
 
-    
+
     /**
      * Returns the status
      *
@@ -212,7 +182,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->status;
     }
 
-    
+
     /**
      * Sets the status
      *
@@ -224,7 +194,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->status = $status;
     }
 
-    
+
     /**
      * Returns the introduction
      *
@@ -297,18 +267,17 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
 
-
     /**
      * Returns the newsletter
      *
      * @return \RKW\RkwNewsletter\Domain\Model\Newsletter|null $newsletter
      */
-    public function getNewsletter()
+    public function getNewsletter():? Newsletter
     {
         return $this->newsletter;
     }
 
-    
+
     /**
      * Sets the newsletter
      *
@@ -320,7 +289,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->newsletter = $newsletter;
     }
 
-    
+
     /**
      * Adds a page to the issue
      *
@@ -333,7 +302,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->pages->attach($pages);
     }
 
-    
+
     /**
      * Removes a page from the issue
      *
@@ -346,7 +315,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->pages->detach($pages);
     }
 
-    
+
     /**
      * Returns the pages. Keep in mind that the property is called "pages"
      * although it can hold several pages.
@@ -359,7 +328,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->pages;
     }
 
-    
+
     /**
      * Sets the pages. Keep in mind that the property is called "pages"
      * although it can hold several pages.
@@ -373,7 +342,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->pages = $pages;
     }
 
-    
+
     /**
      * Adds a approval to the release
      *
@@ -386,7 +355,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->approvals->attach($approval);
     }
 
-    
+
     /**
      * Removes a approval from the release
      *
@@ -399,7 +368,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->approvals->detach($approval);
     }
 
-    
+
     /**
      * Returns the approval. Keep in mind that the property is called "approvals"
      * although it can hold several approvals.
@@ -412,7 +381,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->approvals;
     }
 
-    
+
     /**
      * Sets the approval. Keep in mind that the property is called "approvals"
      * although it can hold several approvals.
@@ -426,18 +395,18 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->approvals = $approvals;
     }
 
-   
+
     /**
      * Returns the queueMail
      *
      * @return \RKW\RkwMailer\Domain\Model\QueueMail|null $queueMail
      */
-    public function getQueueMail()
+    public function getQueueMail():? QueueMail
     {
         return $this->queueMail;
     }
 
-    
+
     /**
      * Sets the queueMail
      *
@@ -449,17 +418,17 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->queueMail = $queueMail;
     }
 
-    
-    
+
     /**
      * Returns the infoTstamp
      *
-     * @return int $infoTstamp
+     * @return int
      */
     public function getInfoTstamp(): int
     {
         return $this->infoTstamp;
     }
+
 
     /**
      * Sets the infoTstamp
@@ -472,17 +441,17 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->infoTstamp = $infoTstamp;
     }
 
-    
+
     /**
      * Returns the reminderTstamp
      *
-     * @return int $reminderTstamp
+     * @return int
      */
     public function getReminderTstamp(): int
     {
         return $this->reminderTstamp;
     }
-    
+
 
     /**
      * Sets the reminderTstamp
@@ -495,18 +464,18 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->reminderTstamp = $reminderTstamp;
     }
 
-    
+
     /**
      * Returns the releaseTstamp
      *
-     * @return int $sent
+     * @return int
      */
     public function getReleaseTstamp(): int
     {
         return $this->releaseTstamp;
     }
 
-    
+
     /**
      * Sets the releaseTstamp
      *
@@ -517,19 +486,19 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->releaseTstamp = $releaseTstamp;
     }
-    
+
 
     /**
      * Returns the startTstamp
      *
-     * @return int $startTstamp
+     * @return int
      */
     public function getStartTstamp(): int
     {
         return $this->startTstamp;
     }
 
-    
+
     /**
      * Sets the start
      *
@@ -545,13 +514,13 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the sentTstamp
      *
-     * @return int $sentTstamp
+     * @return int
      */
     public function getSentTstamp(): int
     {
         return $this->sentTstamp;
     }
-    
+
 
     /**
      * Sets the sent
@@ -579,7 +548,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->setRecipients($recipients);
     }
 
-    
+
     /**
      * Removes a recipient from the issue
      *
@@ -595,7 +564,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
             $this->setRecipients($recipients);
         }
     }
-    
+
 
     /**
      * Removes a recipient by id from the issue
@@ -613,6 +582,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         }
     }
 
+
     /**
      * Returns the recipient. Keep in mind that the property is called "recipients"
      * although it can hold several pages.
@@ -624,6 +594,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return GeneralUtility::trimExplode(',', $this->recipients, true);
     }
+
 
     /**
      * Sets the recipient. Keep in mind that the property is called "pages"
@@ -637,17 +608,18 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->recipients = implode(',', $recipients);
     }
-   
-    
+
+
     /**
      * Returns the isSpecial
      *
-     * @return bool $isSpecial
+     * @return bool
      */
     public function getIsSpecial(): bool
     {
         return $this->isSpecial;
     }
+
 
     /**
      * Sets the isSpecial

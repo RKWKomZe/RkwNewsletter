@@ -13,12 +13,10 @@ namespace RKW\RkwNewsletter\ViewHelpers\Mailing;
  * The TYPO3 project - inspiring people to share!
  */
 
-use RKW\RkwNewsletter\Domain\Model\Issue;
 use RKW\RkwNewsletter\Mailing\ContentLoader;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
-
 
 /**
  * GetCacheIdentifierViewHelper
@@ -36,7 +34,7 @@ class GetCacheIdentifierViewHelper extends AbstractViewHelper
      *
      * @throws \TYPO3Fluid\Fluid\Core\ViewHelper\Exception
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('topics', ObjectStorage::class, 'ObjectStorage of topics to load contents for. (optional, default: all).', false, null);
@@ -68,7 +66,7 @@ class GetCacheIdentifierViewHelper extends AbstractViewHelper
         if ($topics) {
             $contentLoader->setTopics($topics);
         }
-        
+
         // get topic-ordering
         $ordering = $contentLoader->getOrdering();
         return $issue->getUid() . '_' . implode('-', array_keys($ordering)) . '_' . $limit;

@@ -22,22 +22,22 @@ use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
  *
  * @author Maximilian Fäßler <maximilian@faesslerweb.de>
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class ApprovalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
+class ApprovalRepository extends AbstractRepository
 {
 
-    /*
-    * initializeObject
-    */
-    public function initializeObject()
+    /**
+     * @return void
+     */
+    public function initializeObject(): void
     {
+        parent::initializeObject();
         $this->defaultQuerySettings = $this->objectManager->get(Typo3QuerySettings::class);
         $this->defaultQuerySettings->setRespectStoragePage(false);
     }
-    
 
 
     /**
@@ -49,15 +49,14 @@ class ApprovalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @param int $toleranceStage2
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
-     * @comment implicitly tested
+     * comment: implicitly tested
      */
     public function findAllForConfirmationByTolerance(
-        int $toleranceLevel1, 
+        int $toleranceLevel1,
         int $toleranceLevel2,
         int $toleranceStage1 = 0,
         int $toleranceStage2 = 0
-    ): QueryResultInterface
-    {
+    ): QueryResultInterface {
         $query = $this->createQuery();
         $constraints = [];
 
@@ -73,7 +72,7 @@ class ApprovalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                     )
                 )
             );
-        
+
         // Check for info/reminder on stage 2
         $constraints[] =
             $query->logicalAnd(
@@ -98,7 +97,7 @@ class ApprovalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                     $query->equals('allowedTstampStage1', 0)
                 );
         }
-    
+
         // Check for automatic approval on stage 2
         if ($toleranceStage2) {
             $constraints[] =
@@ -110,8 +109,8 @@ class ApprovalRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                     $query->equals('allowedTstampStage2', 0)
                 );
         }
-        
-        
+
+
         // Build query
         $query->matching(
             $query->logicalAnd(
