@@ -35,11 +35,6 @@ call_user_func(
         );
 
         //=================================================================
-        // Register CommandController
-        //=================================================================
-        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['extbase']['commandControllers'][] = 'RKW\\RkwNewsletter\\Controller\\NewsletterCommandController';
-
-        //=================================================================
         // Register TCA evaluation to be available in 'eval' of TCA
         //=================================================================
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tce']['formevals']['RKW\\RkwNewsletter\\Validation\\TCA\\NewsletterTeaserLengthEvaluation'] = '';
@@ -57,20 +52,15 @@ call_user_func(
          */
         $signalSlotDispatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class);
         $signalSlotDispatcher->connect(
-            \RKW\RkwRegistration\Tools\Registration::class,
-            \RKW\RkwRegistration\Tools\Registration::SIGNAL_AFTER_CREATING_OPTIN_EXISTING_USER . 'RkwNewsletter',
+            RKW\RkwRegistration\Registration\AbstractRegistration::class,
+            \RKW\RkwRegistration\Registration\AbstractRegistration::SIGNAL_AFTER_CREATING_OPTIN . 'RkwNewsletter',
             \RKW\RkwNewsletter\Service\RkwMailService::class,
             'sendOptInRequest'
         );
+
         $signalSlotDispatcher->connect(
-            \RKW\RkwRegistration\Tools\Registration::class,
-            \RKW\RkwRegistration\Tools\Registration::SIGNAL_AFTER_CREATING_OPTIN_USER  . 'RkwNewsletter',
-            \RKW\RkwNewsletter\Service\RkwMailService::class,
-            'sendOptInRequest'
-        );
-        $signalSlotDispatcher->connect(
-            \RKW\RkwRegistration\Tools\Registration::class,
-            \RKW\RkwRegistration\Tools\Registration::SIGNAL_AFTER_USER_REGISTER_GRANT . 'RkwNewsletter',
+            RKW\RkwRegistration\Registration\AbstractRegistration::class,
+            \RKW\RkwRegistration\Registration\AbstractRegistration::SIGNAL_AFTER_REGISTRATION_COMPLETED . 'RkwNewsletter',
             \RKW\RkwNewsletter\Controller\SubscriptionController::class,
             'saveSubscription'
         );

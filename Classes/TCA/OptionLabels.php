@@ -15,14 +15,16 @@ namespace RKW\RkwNewsletter\TCA;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-
+use RKW\RkwNewsletter\Domain\Model\Topic;
+use RKW\RkwNewsletter\Domain\Repository\TopicRepository;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * Class OptionLabels
  *
  * @author Christian Dilger <c.dilger@addorange.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
@@ -33,16 +35,18 @@ class OptionLabels
      *
      * @params array &$params
      * @params object $pObj
+     * @param array $params
+     * @param $pObj
      * @return void
      */
     public static function getNewsletterTopicTitlesWithRootByUid(array &$params, $pObj): void
     {
 
         /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-        $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\ObjectManager::class);
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
 
         /** @var \RKW\RkwNewsletter\Domain\Repository\TopicRepository $topic */
-        $topicRepository = $objectManager->get(\RKW\RkwNewsletter\Domain\Repository\TopicRepository::class);
+        $topicRepository = $objectManager->get(TopicRepository::class);
         $result = $topicRepository->findAll();
 
         // build extended names
@@ -68,7 +72,7 @@ class OptionLabels
      * @param \RKW\RkwNewsletter\Domain\Model\Topic $topic
      * @return string
      */
-    public static function getExtendedTopicName(\RKW\RkwNewsletter\Domain\Model\Topic $topic): string
+    public static function getExtendedTopicName(Topic $topic): string
     {
 
         if ($topic->getNewsletter()) {

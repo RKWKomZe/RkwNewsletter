@@ -1,8 +1,5 @@
 <?php
-
 namespace RKW\RkwNewsletter\Validation\TCA;
-
-/*
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -17,47 +14,45 @@ namespace RKW\RkwNewsletter\Validation\TCA;
  * The TYPO3 project - inspiring people to share!
  */
 
-use \RKW\RkwBasics\Helper\Common;
-use RKW\RkwBasics\Utility\GeneralUtility;
+use Madj2k\CoreExtended\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
-
 /**
  * Class FormValidator
  *
  * @author Maximilian Fäßler <maximilian@faesslerweb.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class NewsletterTeaserLengthEvaluation
 {
 
-
     /**
      * JavaScript code for client side validation/evaluation
      *
      * @return string JavaScript code for client side validation/evaluation
      */
-    public function returnFieldJS(): string 
+    public function returnFieldJS(): string
     {
         return 'return value;';
     }
+
 
     /**
      * Server-side validation/evaluation on saving the record
      *
      * @param string $value The field value to be evaluated
-     * @param string $is_in The "is_in" value of the field configuration from TCA
+     * @param string $isIn The "is_in" value of the field configuration from TCA
      * @param bool $set Boolean defining if the value is written to the database or not. Must be passed by reference and changed if needed.
      * @return string Evaluated field value
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
-    public function evaluateFieldValue($value, $is_in, &$set): string 
+    public function evaluateFieldValue(string $value, string $isIn, bool &$set): string
     {
 
         $settings = $this->getSettings();
@@ -93,7 +88,7 @@ class NewsletterTeaserLengthEvaluation
                 );
                 $messageQueue->addMessage($message);
             }
-            
+
             if (
                 ($settings['maxTeaserLength'])
                 && ($strLength  > intval($settings['maxTeaserLength']))
@@ -116,9 +111,10 @@ class NewsletterTeaserLengthEvaluation
 
             }
         }
-        
+
         return $value;
     }
+
 
     /**
      * Server-side validation/evaluation on opening the record
@@ -126,7 +122,7 @@ class NewsletterTeaserLengthEvaluation
      * @param array $parameters Array with key 'value' containing the field value from the database
      * @return string Evaluated field value
      */
-    public function deevaluateFieldValue(array $parameters): string 
+    public function deevaluateFieldValue(array $parameters): string
     {
         return $parameters['value'];
     }
@@ -141,7 +137,7 @@ class NewsletterTeaserLengthEvaluation
      */
     protected function getSettings(string $which = ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS): array
     {
-        return GeneralUtility::getTyposcriptConfiguration('Rkwnewsletter', $which);
+        return GeneralUtility::getTypoScriptConfiguration('Rkwnewsletter', $which);
     }
 
 

@@ -32,7 +32,7 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  * ContentLoaderTest
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwMailer
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
@@ -44,14 +44,16 @@ class ContentLoaderTest extends FunctionalTestCase
      */
     const FIXTURE_PATH = __DIR__ . '/ContentLoaderTest/Fixtures';
 
+
     /**
      * @var string[]
      */
     protected $testExtensionsToLoad = [
-        'typo3conf/ext/rkw_basics',
+        'typo3conf/ext/core_extended',
         'typo3conf/ext/rkw_mailer',
         'typo3conf/ext/rkw_newsletter'
     ];
+
 
     /**
      * @var string[]
@@ -60,38 +62,40 @@ class ContentLoaderTest extends FunctionalTestCase
 
 
     /**
-     * @var \RKW\RkwNewsletter\Mailing\ContentLoader
+     * @var \RKW\RkwNewsletter\Mailing\ContentLoader|null
      */
-    private $subject;
-    
-    /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository
-     */
-    private $issueRepository;
+    private ?ContentLoader $subject = null;
 
 
     /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\TopicRepository
+     * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository|null
      */
-    private $topicRepository;
+    private ?IssueRepository $issueRepository = null;
+
 
     /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\ContentRepository
+     * @var \RKW\RkwNewsletter\Domain\Repository\TopicRepository|null
      */
-    private $contentRepository;    
+    private ?TopicRepository $topicRepository = null;
 
-    
+
     /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     * @var \RKW\RkwNewsletter\Domain\Repository\ContentRepository|null
      */
-    private $objectManager;
+    private ?ContentRepository $contentRepository = null;
+
+
+    /**
+     * @var \TYPO3\CMS\Extbase\Object\ObjectManager|null
+     */
+    private ?ObjectManager $objectManager = null;
 
 
     /**
      * Setup
      * @throws \Exception
      */
-    protected function setUp()
+    protected function setUp(): void
     {
 
         parent::setUp();
@@ -100,12 +104,12 @@ class ContentLoaderTest extends FunctionalTestCase
         $this->setUpFrontendRootPage(
             1,
             [
-                'EXT:rkw_basics/Configuration/TypoScript/setup.typoscript',
+                'EXT:core_extended/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/setup.typoscript',
-                'EXT:rkw_basics/Configuration/TypoScript/constants.typoscript',
+                'EXT:core_extended/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/constants.typoscript',
-                'EXT:rkw_newsletter/Configuration/TypoScript/constants.typoscript',                
+                'EXT:rkw_newsletter/Configuration/TypoScript/constants.typoscript',
                 self::FIXTURE_PATH . '/Frontend/Configuration/Rootpage.typoscript',
             ]
         );
@@ -127,7 +131,7 @@ class ContentLoaderTest extends FunctionalTestCase
 
 
     }
-    
+
     //=============================================
 
     /**
@@ -149,7 +153,7 @@ class ContentLoaderTest extends FunctionalTestCase
          * Given for topic-object C there is a page-object Y that belongs to the issue-object M
          * Given for topic-object D there is a page-object Z that belongs to the issue-object N
          * Given the issue-object N is set via setIssue before
-         * When method is called 
+         * When method is called
          * Then getIssue returns the issue M that has been set
          * Then getTopics returns three topics
          * Then these topics are the topics A, B and C of the given issue M
@@ -170,7 +174,7 @@ class ContentLoaderTest extends FunctionalTestCase
 
         $this->subject->setIssue($issueTwo);
         $this->subject->setIssue($issueOne);
-        
+
         self::assertEquals($issueOne, $this->subject->getIssue());
         self::assertCount(3, $this->subject->getTopics());
         self::assertEquals($expectedTopics, $this->subject->getTopics()->toArray());
@@ -195,7 +199,7 @@ class ContentLoaderTest extends FunctionalTestCase
          * Given for topic-object B there is a page-object Y that belongs to the current issue-object
          * Given for topic-object C there is a page-object Z that belongs to the current issue-object
          * Given the issue-object is set via setIssue before
-         * When method is called 
+         * When method is called
          * Then it returns an array
          * Then the array contains three key-value-pairs
          * Then the key of topic A contains the value 0
@@ -207,11 +211,11 @@ class ContentLoaderTest extends FunctionalTestCase
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(10);
-        
+
         $this->subject->setIssue($issue);
         $result = $this->subject->getOrdering();
 
-        self::assertInternalType('array', $result);
+        self::assertIsArray( $result);
         self::assertCount(3, $result);
         self::assertEquals(0, $result[10]);
         self::assertEquals(1, $result[11]);
@@ -220,7 +224,6 @@ class ContentLoaderTest extends FunctionalTestCase
     }
 
     //=============================================
-
 
     /**
      * @test
@@ -239,12 +242,12 @@ class ContentLoaderTest extends FunctionalTestCase
          * Given for topic-object B there is a page-object Y that belongs to the current issue-object
          * Given for topic-object C there is a page-object Z that belongs to the current issue-object
          * Given the issue-object is set via setIssue before
-         * When method is called 
+         * When method is called
          * Then it returns an ObjectStorage
          * Then the ObjectStorage contains three topic-objects
          * Then topic D is not part of the ObjectStorage
          */
-        
+
         $this->importDataSet(static::FIXTURE_PATH . '/Database/Check10.xml');
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
@@ -260,9 +263,7 @@ class ContentLoaderTest extends FunctionalTestCase
         self::assertInstanceOf(Topic::class, $result[0]);
         self::assertInstanceOf(Topic::class, $result[1]);
         self::assertInstanceOf(Topic::class, $result[2]);
-
     }
-
 
     //=============================================
 
@@ -290,7 +291,7 @@ class ContentLoaderTest extends FunctionalTestCase
          */
         static::expectException(\RKW\RkwNewsletter\Exception::class);
         static::expectExceptionCode(1649840507);
-        
+
         $this->importDataSet(static::FIXTURE_PATH . '/Database/Check10.xml');
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
@@ -300,15 +301,16 @@ class ContentLoaderTest extends FunctionalTestCase
         $topic1 = $this->topicRepository->findByUid(10);
 
         $this->subject->setIssue($issue);
-        
+
         /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($topic1);
         $objectStorage->attach(GeneralUtility::makeInstance(Issue::class));
-        
+
         $this->subject->setTopics($objectStorage);
 
     }
+
 
     /**
      * @test
@@ -328,7 +330,7 @@ class ContentLoaderTest extends FunctionalTestCase
          * Given for topic-object C there is a page-object Z that belongs to the current issue-object
          * Given the issue-object is set via setIssue before
          * When the method is called with two topic-objects in the order topic A/topic B
-         * Then getSorting returns an array 
+         * Then getSorting returns an array
          * Then the array contains two key-value-pairs
          * Then the key of topic A contains the value 0
          * Then the key of topic B contains the value 1
@@ -343,7 +345,7 @@ class ContentLoaderTest extends FunctionalTestCase
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic2 */
         $topic2 = $this->topicRepository->findByUid(11);
-        
+
         /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($topic1);
@@ -353,7 +355,7 @@ class ContentLoaderTest extends FunctionalTestCase
         $this->subject->setTopics($objectStorage);
         $result = $this->subject->getOrdering();
 
-        self::assertInternalType('array', $result);
+        self::assertIsArray( $result);
         self::assertCount(2, $result);
         self::assertEquals(0, $result[10]);
         self::assertEquals(1, $result[11]);
@@ -398,12 +400,12 @@ class ContentLoaderTest extends FunctionalTestCase
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($topic2);
         $objectStorage->attach($topic1);
-        
+
         $this->subject->setIssue($issue);
         $this->subject->setTopics($objectStorage);
         $result = $this->subject->getOrdering();
 
-        self::assertInternalType('array', $result);
+        self::assertIsArray( $result);
         self::assertCount(2, $result);
         self::assertEquals(1, $result[10]);
         self::assertEquals(0, $result[11]);
@@ -450,18 +452,19 @@ class ContentLoaderTest extends FunctionalTestCase
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($topic2);
         $objectStorage->attach($topic1);
-        
+
         $this->subject->setIssue($issue);
         $this->subject->setTopics($objectStorage);
         $result = $this->subject->getOrdering();
 
-        self::assertInternalType('array', $result);
+        self::assertIsArray( $result);
         self::assertCount(3, $result);
         self::assertEquals(0, $result[82]);
         self::assertEquals(1, $result[81]);
         self::assertEquals(2, $result[80]);
 
     }
+
 
     /**
      * @test
@@ -507,19 +510,19 @@ class ContentLoaderTest extends FunctionalTestCase
         $objectStorage->attach($topic2);
         $objectStorage->attach($topic1);
         $objectStorage->attach($topic3);
-        
+
         $this->subject->setIssue($issue);
         $this->subject->setTopics($objectStorage);
         $result = $this->subject->getOrdering();
 
-        self::assertInternalType('array', $result);
+        self::assertIsArray( $result);
         self::assertCount(3, $result);
         self::assertEquals(0, $result[81]);
         self::assertEquals(1, $result[80]);
         self::assertEquals(2, $result[82]);
 
-
     }
+
 
     /**
      * @test
@@ -569,15 +572,13 @@ class ContentLoaderTest extends FunctionalTestCase
         $this->subject->setIssue($issue);
         $this->subject->setTopics($objectStorage);
         $result = $this->subject->getOrdering();
-        
-        self::assertInternalType('array', $result);
+
+        self::assertIsArray( $result);
         self::assertCount(2, $result);
         self::assertEquals(0, $result[161]);
         self::assertEquals(1, $result[160]);
 
-
     }
-    
 
     //=============================================
 
@@ -618,14 +619,14 @@ class ContentLoaderTest extends FunctionalTestCase
         /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($topic2);
-        
+
         $this->subject->setIssue($issue);
         $this->subject->setTopics($objectStorage);
         $this->subject->addTopic($topic1);
-        
+
         $result = $this->subject->getOrdering();
 
-        self::assertInternalType('array', $result);
+        self::assertIsArray( $result);
         self::assertCount(2, $result);
         self::assertEquals(1, $result[10]);
         self::assertEquals(0, $result[11]);
@@ -671,19 +672,19 @@ class ContentLoaderTest extends FunctionalTestCase
         /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($topic2);
-        
+
         $this->subject->setIssue($issue);
         $this->subject->setTopics($objectStorage);
         $this->subject->addTopic($topic1);
 
         $result = $this->subject->getOrdering();
 
-        self::assertInternalType('array', $result);
+        self::assertIsArray( $result);
         self::assertCount(3, $result);
         self::assertEquals(0, $result[82]);
         self::assertEquals(1, $result[81]);
         self::assertEquals(2, $result[80]);
-        
+
     }
 
 
@@ -738,12 +739,12 @@ class ContentLoaderTest extends FunctionalTestCase
         $this->subject->addTopic($topic3);
         $result = $this->subject->getOrdering();
 
-        self::assertInternalType('array', $result);
+        self::assertIsArray( $result);
         self::assertCount(2, $result);
         self::assertEquals(0, $result[161]);
         self::assertEquals(1, $result[160]);
     }
-    
+
     //=============================================
 
     /**
@@ -775,7 +776,7 @@ class ContentLoaderTest extends FunctionalTestCase
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic1 */
         $topic1 = $this->topicRepository->findByUid(10);
-        
+
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic2 */
         $topic2 = $this->topicRepository->findByUid(11);
 
@@ -783,14 +784,14 @@ class ContentLoaderTest extends FunctionalTestCase
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($topic2);
         $objectStorage->attach($topic1);
-        
+
         $this->subject->setIssue($issue);
         $this->subject->setTopics($objectStorage);
         $this->subject->removeTopic($topic2);
 
         $result = $this->subject->getOrdering();
 
-        self::assertInternalType('array', $result);
+        self::assertIsArray( $result);
         self::assertCount(1, $result);
         self::assertEquals(0, $result[10]);
     }
@@ -835,19 +836,19 @@ class ContentLoaderTest extends FunctionalTestCase
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($topic2);
         $objectStorage->attach($topic1);
-        
+
         $this->subject->setIssue($issue);
         $this->subject->setTopics($objectStorage);
         $this->subject->removeTopic($topic2);
 
         $result = $this->subject->getOrdering();
 
-        self::assertInternalType('array', $result);
+        self::assertIsArray( $result);
         self::assertCount(2, $result);
         self::assertEquals(0, $result[82]);
         self::assertEquals(1, $result[80]);
     }
-    
+
     //=============================================
 
     /**
@@ -892,17 +893,17 @@ class ContentLoaderTest extends FunctionalTestCase
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic2 */
         $topic2 = $this->topicRepository->findByUid(21);
-        
+
         /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($topic2);
         $objectStorage->attach($topic1);
-        
+
         $this->subject->setIssue($issue);
         $this->subject->setTopics($objectStorage);
         $result = $this->subject->getContents();
-        
-        self::assertInternalType('array', $result);
+
+        self::assertIsArray( $result);
         self::assertCount(5, $result);
 
         $content = $result[0];
@@ -924,10 +925,9 @@ class ContentLoaderTest extends FunctionalTestCase
         $content = $result[4];
         self::assertInstanceOf(Content::class, $content);
         self::assertEquals('Content 20.4', $content->getHeader());
-        
+
     }
 
-   
 
     /**
      * @test
@@ -962,7 +962,7 @@ class ContentLoaderTest extends FunctionalTestCase
          * Then the contents marked as editorial are ignored
          * Then no contents of topic C are included
          */
-        
+
         $this->importDataSet(static::FIXTURE_PATH . '/Database/Check20.xml');
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
@@ -978,12 +978,12 @@ class ContentLoaderTest extends FunctionalTestCase
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($topic2);
         $objectStorage->attach($topic1);
-        
+
         $this->subject->setIssue($issue);
         $this->subject->setTopics($objectStorage);
         $result = $this->subject->getContents(1);
 
-        self::assertInternalType('array', $result);
+        self::assertIsArray( $result);
         self::assertCount(2, $result);
 
         $content = $result[0];
@@ -994,6 +994,7 @@ class ContentLoaderTest extends FunctionalTestCase
         self::assertInstanceOf(Content::class, $content);
         self::assertEquals('Content 20.2', $content->getHeader());
     }
+
 
     /**
      * @test
@@ -1040,12 +1041,12 @@ class ContentLoaderTest extends FunctionalTestCase
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($topic2);
         $objectStorage->attach($topic1);
-        
+
         $this->subject->setIssue($issue);
         $this->subject->setTopics($objectStorage);
         $result = $this->subject->getContents();
 
-        self::assertInternalType('array', $result);
+        self::assertIsArray( $result);
         self::assertCount(3, $result);
 
         $content = $result[0];
@@ -1060,8 +1061,8 @@ class ContentLoaderTest extends FunctionalTestCase
         self::assertInstanceOf(Content::class, $content);
         self::assertEquals('Content 40.4', $content->getHeader());
     }
-    
-    
+
+
     /**
      * @test
      * @throws \Exception
@@ -1101,12 +1102,12 @@ class ContentLoaderTest extends FunctionalTestCase
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic */
         $topic = $this->topicRepository->findByUid(92);
-        
+
         $this->subject->setIssue($issue);
         $this->subject->addTopic($topic);
         $result = $this->subject->getContents();
 
-        self::assertInternalType('array', $result);
+        self::assertIsArray( $result);
         self::assertCount(5, $result);
 
         $content = $result[0];
@@ -1132,7 +1133,6 @@ class ContentLoaderTest extends FunctionalTestCase
     }
 
     //=============================================
-
 
     /**
      * @test
@@ -1178,12 +1178,12 @@ class ContentLoaderTest extends FunctionalTestCase
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($topic2);
         $objectStorage->attach($topic1);
-        
+
         $this->subject->setIssue($issue);
         $this->subject->setTopics($objectStorage);
         $result = $this->subject->getFirstHeadline();
 
-        self::assertInternalType('string', $result);
+        self::assertIsString( $result);
         self::assertEquals('Content 21.2', $result);
 
     }
@@ -1232,17 +1232,16 @@ class ContentLoaderTest extends FunctionalTestCase
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($topic2);
         $objectStorage->attach($topic1);
-        
+
         $this->subject->setIssue($issue);
         $this->subject->setTopics($objectStorage);
         $result = $this->subject->getFirstHeadline();
 
-        self::assertInternalType('string', $result);
+        self::assertIsString( $result);
         self::assertEmpty($result);
 
     }
 
-    
 
     /**
      * @test
@@ -1284,18 +1283,16 @@ class ContentLoaderTest extends FunctionalTestCase
         /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($topic2);
-        
+
         $this->subject->setIssue($issue);
         $this->subject->setTopics($objectStorage);
         $result = $this->subject->getFirstHeadline();
 
-        self::assertInternalType('string', $result);
+        self::assertIsString( $result);
         self::assertEquals('Content 21.2', $result);
 
     }
 
-    
-    
     //=============================================
 
     /**
@@ -1321,10 +1318,10 @@ class ContentLoaderTest extends FunctionalTestCase
          * Then the topic-object A is returned
          */
         $this->importDataSet(static::FIXTURE_PATH . '/Database/Check50.xml');
-        
+
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(50);
-        
+
         /** @var \RKW\RkwNewsletter\Domain\Model\Content $content */
         $content = $this->contentRepository->findByUid(50);
 
@@ -1334,6 +1331,7 @@ class ContentLoaderTest extends FunctionalTestCase
         self::assertInstanceOf(Topic::class, $result);
         self::assertEquals(50, $result->getUid());
     }
+
 
     /**
      * @test
@@ -1371,10 +1369,8 @@ class ContentLoaderTest extends FunctionalTestCase
         self::assertNull($result);
     }
 
-
     //=============================================
 
-    
     /**
      * @test
      * @throws \Exception
@@ -1415,8 +1411,7 @@ class ContentLoaderTest extends FunctionalTestCase
         self::assertNull($result);
     }
 
-    
-    
+
     /**
      * @test
      * @throws \Exception
@@ -1457,8 +1452,8 @@ class ContentLoaderTest extends FunctionalTestCase
 
         /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
         $objectStorage = new ObjectStorage();
-        $objectStorage->attach($topic1);        
-        
+        $objectStorage->attach($topic1);
+
         $this->subject->setIssue($issue);
         $this->subject->setTopics($objectStorage);
         $result = $this->subject->getEditorial();
@@ -1509,17 +1504,18 @@ class ContentLoaderTest extends FunctionalTestCase
         /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($topic1);
-        
+
         $this->subject->setIssue($issue);
         $this->subject->setTopics($objectStorage);
-        
+
         /** @var \RKW\RkwNewsletter\Domain\Model\Content $result */
         $result = $this->subject->getEditorial();
-        
+
         self::assertInstanceOf(Content::class, $result);
         self::assertEquals(1, $result->getTxRkwnewsletterIsEditorial());
         self::assertEquals('Content 71.1', $result->getHeader());
     }
+
 
     /**
      * @test
@@ -1569,6 +1565,7 @@ class ContentLoaderTest extends FunctionalTestCase
         self::assertEquals('Content 71.1', $result->getHeader());
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -1605,14 +1602,14 @@ class ContentLoaderTest extends FunctionalTestCase
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(150);
-        
+
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topic1 */
         $topic1 = $this->topicRepository->findByUid(150);
 
         /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($topic1);
-        
+
         $this->subject->setIssue($issue);
         $this->subject->setTopics($objectStorage);
 
@@ -1649,7 +1646,7 @@ class ContentLoaderTest extends FunctionalTestCase
          * Given that page-object R belongs to the topic-object B
          * Given that page-object S belongs to the newsletter-object X
          * Given that page-object S belongs to the issue-object Y
-         * Given that page-object S belongs to the topic-object C 
+         * Given that page-object S belongs to the topic-object C
          * Given the issue-object is set via setIssue before
          * Given setTopics is called with topic B/topic A
          * When the method is called
@@ -1674,14 +1671,14 @@ class ContentLoaderTest extends FunctionalTestCase
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($topic2);
         $objectStorage->attach($topic1);
-        
+
         $this->subject->setIssue($issue);
         $this->subject->setTopics($objectStorage);
 
         /** @var array $result */
         $result = $this->subject->getPages();
 
-        self::assertInternalType('array', $result);
+        self::assertIsArray( $result);
         self::assertCount(2, $result);
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
@@ -1738,12 +1735,12 @@ class ContentLoaderTest extends FunctionalTestCase
         /** @var array $result */
         $result = $this->subject->getPages();
 
-        self::assertInternalType('array', $result);
+        self::assertIsArray( $result);
         self::assertCount(0, $result);
 
     }
-    
-    
+
+
     /**
      * @test
      * @throws \Exception
@@ -1791,14 +1788,14 @@ class ContentLoaderTest extends FunctionalTestCase
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($topic2);
         $objectStorage->attach($topic1);
-        
+
         $this->subject->setIssue($issue);
         $this->subject->setTopics($objectStorage);
 
         /** @var array $result */
         $result = $this->subject->getPages();
 
-        self::assertInternalType('array', $result);
+        self::assertIsArray( $result);
         self::assertCount(1, $result);
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Pages $page */
@@ -1808,8 +1805,8 @@ class ContentLoaderTest extends FunctionalTestCase
 
     }
 
-    
     //=============================================
+
     /**
      * @test
      * @throws \Exception
@@ -1855,12 +1852,13 @@ class ContentLoaderTest extends FunctionalTestCase
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($topic2);
         $objectStorage->attach($topic1);
-        
+
         $this->subject->setIssue($issue);
         $this->subject->setTopics($objectStorage);
 
         self::assertTrue($this->subject->hasContents());
     }
+
 
     /**
      * @test
@@ -1903,13 +1901,12 @@ class ContentLoaderTest extends FunctionalTestCase
         /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage */
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($topic2);
-        
+
         $this->subject->setIssue($issue);
         $this->subject->setTopics($objectStorage);
 
         self::assertTrue($this->subject->hasContents());
     }
-
 
     //=============================================
 
@@ -1965,6 +1962,7 @@ class ContentLoaderTest extends FunctionalTestCase
         self::assertEquals(1, $this->subject->countTopicsWithContents());
     }
 
+
     /**
      * @test
      * @throws \Exception
@@ -2012,7 +2010,8 @@ class ContentLoaderTest extends FunctionalTestCase
 
         self::assertEquals(0, $this->subject->countTopicsWithContents());
     }
-    
+
+
     /**
      * @test
      * @throws \Exception
@@ -2060,13 +2059,13 @@ class ContentLoaderTest extends FunctionalTestCase
 
         self::assertEquals(1, $this->subject->countTopicsWithContents());
     }
-    
+
     //=============================================
 
     /**
      * TearDown
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
     }

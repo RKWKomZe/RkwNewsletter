@@ -20,7 +20,7 @@ use RKW\RkwNewsletter\Domain\Model\Issue;
  * IssueStatus
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
@@ -31,52 +31,59 @@ class IssueStatus
      * @var int
      */
     const STAGE_DRAFT = 0;
-    
+
+
     /**
      * @var int
      */
     const STAGE_APPROVAL = 1;
+
 
     /**
      * @var int
      */
     const STAGE_RELEASE = 2;
 
+
     /**
      * @var int
      */
-    const STAGE_SENDING = 3;    
-    
+    const STAGE_SENDING = 3;
+
+
     /**
      * @var int
      */
     const STAGE_DONE = 4;
 
-    
+
     /**
      * @var int
      */
     const LEVEL_NONE = 0;
-    
+
+
     /**
      * @var int
      */
     const LEVEL1 = 1;
+
 
     /**
      * @var int
      */
     const LEVEL2 = 2;
 
+
     /**
      * @var int
      */
     const LEVEL_DONE = 3;
-    
-    
+
+
     /**
      * Returns current stage of the issue based on timestamps and status
-     * 
+     *
      * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue
      * @return int
      */
@@ -98,7 +105,7 @@ class IssueStatus
         if ($issue->getStatus() == 4) {
             return self::STAGE_DONE;
         }
-        
+
         return self::STAGE_DRAFT;
     }
 
@@ -111,12 +118,12 @@ class IssueStatus
      */
     public static function getLevel (Issue $issue): string
     {
-        
+
         // Only relevant for stage "release"
         if (self::getStage($issue) != self::STAGE_RELEASE) {
             return self::LEVEL_NONE;
         }
-        
+
         if (
             ($issue->getInfoTstamp() < 1)
             && ($issue->getReminderTstamp() < 1)
@@ -127,10 +134,9 @@ class IssueStatus
         if ($issue->getReminderTstamp() < 1) {
             return self::LEVEL2;
         }
-        
+
         return self::LEVEL_DONE;
     }
-
 
 
     /**
@@ -166,10 +172,10 @@ class IssueStatus
             $issue->setSentTstamp(time());
             $update = true;
         }
-        
+
         return $update;
     }
-    
+
 
     /**
      * Increases the level of the release stage - only available here!!!!
@@ -196,9 +202,8 @@ class IssueStatus
             $issue->setReminderTstamp(time());
             $update = true;
         }
-      
+
         return $update;
     }
-
 
 }

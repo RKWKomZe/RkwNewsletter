@@ -9,14 +9,14 @@ plugin.tx_rkwnewsletter {
 
 		# cat=plugin.tx_rkwnewsletter/file; type=string; label=Path to template partials (FE)
 		partialRootPath = EXT:rkw_newsletter/Resources/Private/Partials/
-		
+
 		newsletter {
             # cat=module.tx_rkwnewsletter/file; type=string; label=Path to template root for newsletter
             templateRootPath = EXT:rkw_newsletter/Resources/Private/Templates/Newsletter
-    
+
             # cat=module.tx_rkwnewsletter/file; type=string; label=Path to template partials for newsletter
             partialRootPath = EXT:rkw_newsletter/Resources/Private/Partials/Newsletter
-    
+
             # cat=module.tx_rkwnewsletter/file; type=string; label=Path to template layouts for newsletter
             layoutRootPath = EXT:rkw_newsletter/Resources/Private/Layouts/Newsletter
         }
@@ -46,9 +46,6 @@ plugin.tx_rkwnewsletter {
 		# cat=plugin.tx_rkwnewsletter//a; type=integer; label=Pid of login mask
 		loginPid =
 
-        # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Pid of terms
-        termsPid =
-
         # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Pid for subscriptions
         subscriptionPid =
 
@@ -63,7 +60,7 @@ plugin.tx_rkwnewsletter {
 
         # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Minimum teaser length
         maxTeaserLength = 900
-        
+
         # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Maximum number of content items per newsletter-issue
         maxContentItems = 10
 

@@ -16,18 +16,17 @@ namespace RKW\RkwNewsletter\ViewHelpers;
 
 use RKW\RkwNewsletter\Domain\Model\Newsletter;
 use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
-use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
-use \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * IsNewsletterSubscriptionAllowedViewHelper
  *
  * @author Maximilian Fäßler <maximilian@faesslerweb.de>
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- * @toDo: rework and write tests
+ * @todo rework and write tests
  */
 class IsNewsletterSubscriptionAllowedViewHelper extends AbstractViewHelper
 {
@@ -37,7 +36,7 @@ class IsNewsletterSubscriptionAllowedViewHelper extends AbstractViewHelper
      *
      * @throws \TYPO3Fluid\Fluid\Core\ViewHelper\Exception
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('newsletter', Newsletter::class, 'Newsletter-object.', true);
@@ -50,11 +49,11 @@ class IsNewsletterSubscriptionAllowedViewHelper extends AbstractViewHelper
      *
      * @return boolean
      */
-    public function render()
+    public function render(): bool
     {
         $newsletter = $this->arguments['newsletter'];
         $frontendUser = $this->arguments['frontendUser'];
-        
+
         // if newsletter has no restrictions
         if (!$newsletter->getUsergroup()->toArray()) {
             return true;

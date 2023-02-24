@@ -1,6 +1,6 @@
 <?php
-
 namespace RKW\RkwNewsletter\Domain\Model;
+
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -15,7 +15,7 @@ namespace RKW\RkwNewsletter\Domain\Model;
  */
 
 use RKW\RkwAuthors\Domain\Model\Authors;
-use RKW\RkwBasics\Domain\Model\FileReference;
+use Madj2k\CoreExtended\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
@@ -23,94 +23,74 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  *
  * @author Maximilian Fäßler <maximilian@faesslerweb.de>
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
- 
-    
+
+
     /**
-     * crdate
-     *
      * @var int
      */
-    protected $crdate = 0;
+    protected int $crdate = 0;
 
-    
+
     /**
-     * sysLanguageUid
-     *
      * @var int
      */
-    protected $sysLanguageUid = -1;
+    protected int $sysLanguageUid = -1;
 
-    
+
     /**
-     * header
-     *
      * @var string
      */
-    protected $header = '';
+    protected string $header = '';
 
-    
+
     /**
-     * headerLink
-     *
      * @var string
      */
-    protected $headerLink = '';
+    protected string $headerLink = '';
 
-    
+
     /**
-     * bodytext
-     *
      * @var string
      */
-    protected $bodytext = '';
+    protected string $bodytext = '';
 
-    
+
     /**
-     * cType
-     *
      * @var string
      */
-    protected $contentType = 'textpic';
+    protected string $contentType = 'textpic';
 
-    
+
     /**
-     * imageCols
-     *
      * @var int
      */
-    protected $imageCols = 0;
+    protected int $imageCols = 0;
 
-    
+
     /**
-     * Image
-     *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwBasics\Domain\Model\FileReference>
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Madj2k\CoreExtended\Domain\Model\FileReference>|null
      */
-    protected $image;
+    protected ?ObjectStorage $image = null;
 
 
     /**
-     * txRkwnewsletterAuthors
-     *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwAuthors\Domain\Model\Authors>
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwAuthors\Domain\Model\Authors>|null
      */
-    protected $txRkwnewsletterAuthors;
+    protected ?ObjectStorage $txRkwnewsletterAuthors = null;
 
 
     /**
-     * txRkwnewsletterIsEditorial
-     *
      * @var bool
      */
-    protected $txRkwnewsletterIsEditorial = false;
+    protected bool $txRkwnewsletterIsEditorial = false;
 
-    
+
     /**
      * __construct
      */
@@ -147,7 +127,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->uid;
     }
 
-    
+
     /**
      * Sets the uid
      *
@@ -159,7 +139,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->uid = $uid;
     }
 
-    
+
     /**
      * Returns the crdate
      *
@@ -170,7 +150,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->crdate;
     }
 
-    
+
     /**
      * Sets the crdate
      *
@@ -182,6 +162,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->crdate = $crdate;
     }
 
+
     /**
      * Returns the sysLanguageUid
      *
@@ -192,7 +173,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->sysLanguageUid;
     }
 
-    
+
     /**
      * Sets the sysLanguageUid
      *
@@ -204,7 +185,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->sysLanguageUid = $sysLanguageUid;
     }
 
-    
+
     /**
      * Returns the header
      *
@@ -214,6 +195,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return $this->header;
     }
+
 
     /**
      * Sets the header
@@ -237,7 +219,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->headerLink;
     }
 
-    
+
     /**
      * Sets the headerLink
      *
@@ -260,7 +242,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->bodytext;
     }
 
-    
+
     /**
      * Sets the bodytext
      *
@@ -272,7 +254,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->bodytext = $bodytext;
     }
 
-    
+
     /**
      * Returns the contentType
      *
@@ -283,7 +265,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->contentType;
     }
 
-    
+
     /**
      * Sets the contentType
      *
@@ -295,7 +277,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->contentType = $contentType;
     }
 
-    
+
     /**
      * Returns the imageCols
      *
@@ -306,7 +288,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->imageCols;
     }
 
-    
+
     /**
      * Sets the imageCols
      *
@@ -320,9 +302,9 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
 
     /**
-     * Adds an image 
+     * Adds an image
      *
-     * @param \RKW\RkwBasics\Domain\Model\FileReference $image
+     * @param \Madj2k\CoreExtended\Domain\Model\FileReference $image
      * @return void
      * @api
      */
@@ -331,11 +313,11 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->image->attach($image);
     }
 
-    
+
     /**
      * Removes an image
      *
-     * @param \RKW\RkwBasics\Domain\Model\FileReference $image
+     * @param \Madj2k\CoreExtended\Domain\Model\FileReference $image
      * @return void
      * @api
      */
@@ -344,23 +326,23 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->image->detach($image);
     }
 
-    
+
     /**
      * Returns the images
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwBasics\Domain\Model\FileReference> An object storage containing the backend user
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Madj2k\CoreExtended\Domain\Model\FileReference>
      * @api
      */
     public function getImage(): ObjectStorage
     {
         return $this->image;
     }
-    
+
 
     /**
      * Sets the images
      *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwBasics\Domain\Model\FileReference> $image
+     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Madj2k\CoreExtended\Domain\Model\FileReference> $image
      * @return void
      * @api
      */
@@ -382,7 +364,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->txRkwnewsletterAuthors->attach($txRkwnewsletterAuthors);
     }
 
-    
+
     /**
      * Removes a txRkwnewsletterAuthors
      *
@@ -395,7 +377,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->txRkwnewsletterAuthors->detach($txRkwnewsletterAuthors);
     }
 
-    
+
     /**
      * Returns the txRkwnewsletterAuthors
      *
@@ -407,7 +389,7 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->txRkwnewsletterAuthors;
     }
 
-    
+
     /**
      * Sets the txRkwnewsletterAuthors
      *
@@ -420,22 +402,22 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->txRkwnewsletterAuthors = $txRkwnewsletterAuthors;
     }
 
-    
+
     /**
-     * Returns the uid
+     * Returns the txRkwnewsletterIsEditorial
      *
-     * @return bool $txRkwnewsletterIsEditorial
+     * @return bool
      */
     public function getTxRkwnewsletterIsEditorial(): bool
     {
         return $this->txRkwnewsletterIsEditorial;
     }
 
-    
+
     /**
-     * Sets the uid
+     * Sets the txRkwnewsletterIsEditorial
      *
-     * @param bool $uid
+     * @param bool $txRkwnewsletterIsEditorial
      * @return void
      */
     public function setTxRkwnewsletterIsEditorial(bool $txRkwnewsletterIsEditorial): void

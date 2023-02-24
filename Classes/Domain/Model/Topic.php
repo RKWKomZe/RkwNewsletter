@@ -21,71 +21,63 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  *
  * @author Maximilian Fäßler <maximilian@faesslerweb.de>
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
+
     /**
-     * name
-     *
      * @var string
      */
-    protected $name = '';
+    protected string $name = '';
 
 
     /**
-     * shortDescription
-     *
      * @var string
      */
-    protected $shortDescription = '';
+    protected string $shortDescription = '';
 
 
     /**
-     * containerPage
-     *
-     * @var \RKW\RkwNewsletter\Domain\Model\Pages
+     * @var \RKW\RkwNewsletter\Domain\Model\Pages|null
      */
-    protected $containerPage;
+    protected ?Pages $containerPage = null;
+
 
     /**
-     * newsletter
-     *
-     * @var \RKW\RkwNewsletter\Domain\Model\Newsletter
+     * @var \RKW\RkwNewsletter\Domain\Model\Newsletter|null
      */
-    protected $newsletter;
+    protected ?Newsletter $newsletter = null;
+
 
     /**
-     * approvalStage1
-     *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\BackendUser>
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\BackendUser>|null
      */
-    protected $approvalStage1;
+    protected ?ObjectStorage $approvalStage1 = null;
+
 
     /**
      * approvalStage2
      *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\BackendUser>
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\BackendUser>|null
      */
-    protected $approvalStage2;
+    protected ?ObjectStorage $approvalStage2  = null;
 
-       /**
-     * isSpecial
-     *
+
+     /**
      * @var bool
      */
-    protected $isSpecial = false;
+    protected bool $isSpecial = false;
+
 
     /**
-     * sorting
-     *
      * @var int
      */
-    protected $sorting = 0;
+    protected int $sorting = 0;
 
-    
+
     /**
      * __construct
      */
@@ -94,6 +86,7 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         //Do not remove the next line: It would break the functionality
         $this->initStorageObjects();
     }
+
 
     /**
      * Initializes all ObjectStorage properties
@@ -109,6 +102,7 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->approvalStage2 = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
     }
 
+
     /**
      * Returns the name
      *
@@ -118,6 +112,7 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return $this->name;
     }
+
 
     /**
      * Sets the name
@@ -130,15 +125,17 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->name = $name;
     }
 
+
     /**
      * Returns the shortDescription
      *
-     * @return string 
+     * @return string
      */
     public function getShortDescription(): string
     {
         return $this->shortDescription;
     }
+
 
     /**
      * Sets the shortDescription
@@ -151,15 +148,17 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->shortDescription = $shortDescription;
     }
 
+
     /**
      * Returns the containerPage
      *
      * @return \RKW\RkwNewsletter\Domain\Model\Pages|null $containerPage
      */
-    public function getContainerPage()
+    public function getContainerPage():? Pages
     {
         return $this->containerPage;
     }
+
 
     /**
      * Sets the containerPage
@@ -172,15 +171,17 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->containerPage = $containerPage;
     }
 
+
     /**
      * Returns the newsletter
      *
      * @return \RKW\RkwNewsletter\Domain\Model\Newsletter|null $newsletter
      */
-    public function getNewsletter()
+    public function getNewsletter():? Newsletter
     {
         return $this->newsletter;
     }
+
 
     /**
      * Sets the newsletter
@@ -192,6 +193,7 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->newsletter = $newsletter;
     }
+
 
     /**
      * Adds a backend user to the topic
@@ -205,6 +207,7 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->approvalStage1->attach($backendUser);
     }
 
+
     /**
      * Removes a backend user from the topic
      *
@@ -217,16 +220,18 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->approvalStage1->detach($backendUser);
     }
 
+
     /**
      * Returns the backend user.
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\BackendUser> An object storage containing the backend user
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\BackendUser>
      * @api
      */
     public function getApprovalStage1(): ObjectStorage
     {
         return $this->approvalStage1;
     }
+
 
     /**
      * Sets the backend user.
@@ -240,6 +245,7 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->approvalStage1 = $backendUser;
     }
 
+
     /**
      * Adds a backend user to the topic
      *
@@ -251,6 +257,7 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->approvalStage2->attach($backendUser);
     }
+
 
     /**
      * Removes a backend user from the topic
@@ -264,16 +271,18 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->approvalStage2->detach($backendUser);
     }
 
+
     /**
      * Returns the backend user.
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\BackendUser> An object storage containing the backend user
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\BackendUser>
      * @api
      */
     public function getApprovalStage2(): ObjectStorage
     {
         return $this->approvalStage2;
     }
+
 
     /**
      * Sets the backend user.
@@ -287,6 +296,7 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->approvalStage2 = $backendUser;
     }
 
+
     /**
      * Returns the isSpecial
      *
@@ -296,6 +306,7 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return $this->isSpecial;
     }
+
 
     /**
      * Sets the isSpecial
@@ -308,7 +319,7 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->isSpecial = $isSpecial;
     }
 
-    
+
     /**
      * Returns the sorting
      *
@@ -318,6 +329,7 @@ class Topic extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return $this->sorting;
     }
+
 
     /**
      * Sets the sorting

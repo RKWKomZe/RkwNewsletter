@@ -24,7 +24,7 @@ use RKW\RkwNewsletter\Exception;
  * PageStatus
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
@@ -36,32 +36,37 @@ class PageStatus
      */
     const DRAFT = 'draft';
 
+
     /**
      * @var string
      */
     const APPROVAL_1 = 'stage1';
+
 
     /**
      * @var string
      */
     const APPROVAL_2 = 'stage2';
 
+
     /**
      * @var string
      */
     const RELEASE = 'release';
 
+
     /**
      * @var string
      */
     const SENDING = 'sent'; // no mistake!
-    
+
+
     /**
      * @var int
      */
     const DONE = 'sent';
-    
-    
+
+
     /**
      * Returns current stage of the page based on the status of the issue and its approvals
      *
@@ -73,11 +78,11 @@ class PageStatus
     {
         $issueStage = IssueStatus::getStage($page->getTxRkwnewsletterIssue());
         if ($issueStage == IssueStatus::STAGE_APPROVAL) {
-            
+
             /** @var \RKW\RkwNewsletter\Domain\Model\Approval $approval */
             $approval = self::getApproval($page->getTxRkwnewsletterIssue(), $page->getTxRkwnewsletterTopic());
             $approvalStage = ApprovalStatus::getStage($approval);
-            
+
             if ($approvalStage == ApprovalStatus::STAGE2) {
                 return self::APPROVAL_2;
             }
@@ -85,14 +90,14 @@ class PageStatus
             if ($approvalStage == ApprovalStatus::STAGE_DONE) {
                 return self::RELEASE;
             }
-            
+
             return self::APPROVAL_1;
         }
 
         if ($issueStage == IssueStatus::STAGE_RELEASE) {
             return self::RELEASE;
         }
-        
+
         if ($issueStage == IssueStatus::STAGE_SENDING) {
             return self::SENDING;
         }
@@ -100,12 +105,11 @@ class PageStatus
         if ($issueStage == IssueStatus::STAGE_DONE) {
             return self::DONE;
         }
-        
-        return self::DRAFT;        
+
+        return self::DRAFT;
     }
 
-    
-    
+
     /**
      * Returns approval-object by given issue and topic
      *
@@ -130,6 +134,5 @@ class PageStatus
             'No approval found for given issue and topic',
             1644845316
         );
-       
     }
 }

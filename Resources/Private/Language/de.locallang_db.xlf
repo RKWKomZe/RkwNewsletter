@@ -95,7 +95,7 @@
 			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.day_for_sending">
 				<source>Day of Month for Mailing</source>
 				<target state="translated">Tag des Monats für Versand</target>
-			</trans-unit>            
+			</trans-unit>
 			<trans-unit id="tx_rkwnewsletter_domain_model_newsletter.approval">
 				<source>Final Approval for Sending</source>
 				<target state="translated">Finale Freigabe zum Versand</target>
@@ -207,7 +207,7 @@
 				<source>Stage 2: Sent Reminder At</source>
 				<target state="translated">Stufe 2: Erinnerung gesendet am</target>
 			</trans-unit>
-			
+
 
             <!-- ##################################################### -->
             <!-- tx_rkwnewsletter_domain_model_issue                 -->
@@ -287,7 +287,7 @@
 			<trans-unit id="tx_rkwnewsletter_domain_model_issue.start_tstamp">
 				<source>Issue Started</source>
 				<target state="translated">Ausgabe startet am</target>
-			</trans-unit>			
+			</trans-unit>
 			<trans-unit id="tx_rkwnewsletter_domain_model_issue.sent_tstamp">
 				<source>Issue Sent</source>
 				<target state="translated">Ausgabe gesendet am</target>
@@ -359,6 +359,11 @@
                 <source>This is an editorial</source>
                 <target>Dieser Beitrag ist ein Editorial</target>
             </trans-unit>
+            <trans-unit id="tt_content.tx_rkwtemplate_authors">
+                <source>Source</source>
+                <target>Urheber</target>
+            </trans-unit>
+
 
 
             <!-- ##################################################### -->
@@ -380,7 +385,7 @@
 			<trans-unit id="flexform.subscription.general">
                 <source>General</source>
                 <target>Allgemein</target>
-            </trans-unit>            
+            </trans-unit>
 			<trans-unit id="flexform.subscription.newsletter">
                 <source>Newsletter for subscription</source>
                 <target>Newsletter für Abonnement</target>

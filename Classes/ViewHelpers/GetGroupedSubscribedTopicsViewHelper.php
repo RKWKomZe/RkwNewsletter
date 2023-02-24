@@ -15,17 +15,17 @@ namespace RKW\RkwNewsletter\ViewHelpers;
  */
 
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
-use \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * GetGroupedSubscribedTopics
  *
  * @author Maximilian Fäßler <maximilian@faesslerweb.de>
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- * @toDo: rework and write tests
+ * @todo rework and write tests
  */
 class GetGroupedSubscribedTopicsViewHelper extends AbstractViewHelper
 {
@@ -35,19 +35,19 @@ class GetGroupedSubscribedTopicsViewHelper extends AbstractViewHelper
      *
      * @throws \TYPO3Fluid\Fluid\Core\ViewHelper\Exception
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('subscriptions', ObjectStorage::class, 'ObjectStorage with subscriptions.', true);
     }
 
-    
+
     /**
      * returns a grouped list of topics
      *
      * @return array
      */
-    public function render()
+    public function render(): array
     {
 
         $subscriptions = $this->arguments['subscriptions'];

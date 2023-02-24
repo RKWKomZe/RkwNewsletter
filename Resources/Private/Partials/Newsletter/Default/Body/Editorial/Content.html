@@ -10,23 +10,23 @@
                     <f:format.stripTags>
                         <rkwMailer:email.replace.rteLinks plaintextFormat="true">
                             <f:format.raw>
-                                <rkwMailer:plaintextLineBreaks convertLineBreaks="true">{content}</rkwMailer:plaintextLineBreaks>
+                                <rkwMailer:email.plaintextLineBreaks convertLineBreaks="true">{content}</rkwMailer:email.plaintextLineBreaks>
                             </f:format.raw>
                         </rkwMailer:email.replace.rteLinks>
                     </f:format.stripTags>
                 </f:then>
                 <f:else>
-                    <rkwMailer:email.translate 
-                        key="partials_newsletter_body_editorial_content.introduction" 
-                        languageKey="{queueRecipient.languageCode}" 
+                    <rkwMailer:email.translate
+                        key="partials_newsletter_body_editorial_content.introduction"
+                        languageKey="{queueRecipient.languageCode}"
                         extensionName="rkwNewsletter" />
                 </f:else>
             </f:if>
         </rkwMailer:email.replace.redirectLinks>\n\n
     </f:section>
-    
-    
-    
+
+
+
     <!-- HTML -->
     <f:section name="Html">
         <tr>
@@ -38,9 +38,9 @@
                         </f:then>
                         <f:else>
                             <p>
-                                <rkwMailer:email.translate 
-                                    key="partials_newsletter_body_editorial_content.introduction" 
-                                    languageKey="{queueRecipient.languageCode}" 
+                                <rkwMailer:email.translate
+                                    key="partials_newsletter_body_editorial_content.introduction"
+                                    languageKey="{queueRecipient.languageCode}"
                                     extensionName="rkwNewsletter" />
                             </p>
                         </f:else>

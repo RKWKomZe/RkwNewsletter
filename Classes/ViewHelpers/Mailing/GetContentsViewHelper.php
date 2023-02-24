@@ -1,5 +1,6 @@
 <?php
 namespace RKW\RkwNewsletter\ViewHelpers\Mailing;
+
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -13,12 +14,10 @@ namespace RKW\RkwNewsletter\ViewHelpers\Mailing;
  * The TYPO3 project - inspiring people to share!
  */
 
-use RKW\RkwNewsletter\Domain\Model\Issue;
 use RKW\RkwNewsletter\Mailing\ContentLoader;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
-
 
 /**
  * GetContentsViewHelper
@@ -36,7 +35,7 @@ class GetContentsViewHelper extends AbstractViewHelper
      *
      * @throws \TYPO3Fluid\Fluid\Core\ViewHelper\Exception
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('topics', ObjectStorage::class, 'ObjectStorage of topics to load contents for. (optional, default: all).', false, null);
@@ -57,10 +56,10 @@ class GetContentsViewHelper extends AbstractViewHelper
         $issue = $this->arguments['issue'];
         $topics = $this->arguments['topics'];
         $limit = intval($this->arguments['limit']);
-                            
+
         /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        
+
         /** @var \RKW\RkwNewsletter\Mailing\ContentLoader $contentLoader */
         $contentLoader = $objectManager->get(ContentLoader::class, $issue);
 

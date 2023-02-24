@@ -1,16 +1,5 @@
 <?php
-
 namespace RKW\RkwNewsletter\Service;
-
-use RKW\RkwMailer\Service\MailService;
-use RKW\RkwMailer\Utility\FrontendLocalizationUtility;
-use RKW\RkwNewsletter\Domain\Model\Approval;
-use RKW\RkwNewsletter\Domain\Model\BackendUser;
-use RKW\RkwNewsletter\Domain\Model\Issue;
-use RKW\RkwRegistration\Domain\Model\FrontendUser;
-use RKW\RkwRegistration\Domain\Model\Registration;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -25,12 +14,22 @@ use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
  * The TYPO3 project - inspiring people to share!
  */
 
+use RKW\RkwMailer\Service\MailService;
+use RKW\RkwNewsletter\Domain\Model\Approval;
+use RKW\RkwNewsletter\Domain\Model\BackendUser;
+use RKW\RkwNewsletter\Domain\Model\Issue;
+use RKW\RkwRegistration\Domain\Model\FrontendUser;
+use RKW\RkwRegistration\Domain\Model\OptIn;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use RKW\RkwMailer\Utility\FrontendLocalizationUtility;
+
 /**
  * RkwMailService
  *
  * @author Maximilian Fäßler <maximilian@faesslerweb.de>
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
@@ -53,12 +52,12 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     public function sendMailAdminApproval(
-        array $admins, 
-        Approval $approval, 
-        int $stage = 1, 
+        array $admins,
+        Approval $approval,
+        int $stage = 1,
         bool$isReminder = false
     ): void {
-        
+
         // get settings
         $settings = $this->getSettings(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
         if ($settings['view']['templateRootPaths']) {
@@ -127,11 +126,11 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     public function sendMailAdminApprovalAutomatic(
-        array $admins, 
-        Approval $approval, 
+        array $admins,
+        Approval $approval,
         int $stage = 1
     ): void {
-        
+
         // get settings
         $settings = $this->getSettings(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
         if ($settings['view']['templateRootPaths']) {
@@ -199,11 +198,11 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     public function sendMailAdminRelease(
-        array $admins, 
-        Issue $issue, 
+        array $admins,
+        Issue $issue,
         bool $isReminder = false
     ): void {
-        
+
         // get settings
         $settings = $this->getSettings(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
         if ($settings['view']['templateRootPaths']) {
@@ -252,7 +251,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
             $mailService->getQueueMail()->setHtmlTemplate('Email/AdminRelease');
 
             $mailService->send();
-            
+
         }
     }
 
@@ -261,7 +260,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
      * send opt-in
      *
      * @param \RKW\RkwRegistration\Domain\Model\FrontendUser $frontendUser
-     * @param \RKW\RkwRegistration\Domain\Model\Registration|null $registration
+     * @param \RKW\RkwRegistration\Domain\Model\OptIn|null $optIn
      * @return void
      * @throws \Exception
      * @throws \RKW\RkwMailer\Exception
@@ -271,10 +270,10 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     public function sendOptInRequest(
-        FrontendUser $frontendUser, 
-        Registration $registration = null
+        FrontendUser $frontendUser,
+        OptIn $optIn = null
     ): void {
-        
+
         // get settings
         $settings = $this->getSettings(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
         $settingsDefault = $this->getSettings();
@@ -287,7 +286,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
             $mailService->setTo($frontendUser, array(
                 'marker' => array(
                     'frontendUser' => $frontendUser,
-                    'registration' => $registration,
+                    'optIn'        => $optIn,
                     'pageUid'      => intval($GLOBALS['TSFE']->id),
                     'loginPid'     => intval($settingsDefault['loginPid']),
                 ),
@@ -312,7 +311,6 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
         }
     }
 
-    
 
     /**
      * Returns TYPO3 settings
@@ -323,8 +321,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
      */
     protected function getSettings(string $which = ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS): array
     {
-        return \RKW\RkwBasics\Utility\GeneralUtility::getTyposcriptConfiguration('Rkwnewsletter', $which);
+        return \Madj2k\CoreExtended\Utility\GeneralUtility::getTypoScriptConfiguration('Rkwnewsletter', $which);
     }
-
 
 }

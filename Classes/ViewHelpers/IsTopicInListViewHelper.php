@@ -14,21 +14,19 @@ namespace RKW\RkwNewsletter\ViewHelpers;
  * The TYPO3 project - inspiring people to share!
  */
 
-use RKW\RkwNewsletter\Domain\Model\Newsletter;
 use RKW\RkwNewsletter\Domain\Model\Topic;
-use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
-use \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * IsTopicInListViewHelper
  *
  * @author Maximilian Fäßler <maximilian@faesslerweb.de>
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- * @toDo: rework and write tests
+ * @todo rework and write tests
  */
 class IsTopicInListViewHelper extends AbstractViewHelper
 {
@@ -38,24 +36,24 @@ class IsTopicInListViewHelper extends AbstractViewHelper
      *
      * @throws \TYPO3Fluid\Fluid\Core\ViewHelper\Exception
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('topicList', ObjectStorage::class, 'ObjectStorage with topics.', true);
         $this->registerArgument('topic', Topic::class, 'Topic to check for', true);
     }
 
-    
+
     /**
      * checks is user has subscribed to a topic
      *
      * @return boolean
      */
-    public function render()
+    public function render(): bool
     {
         $topicList = $this->arguments['topicList'];
         $topic = $this->arguments['topic'];
-        
+
         /** @var \RKW\RkwNewsletter\Domain\Model\Topic $topicFromList */
         foreach ($topicList as $topicFromList) {
 
@@ -65,8 +63,6 @@ class IsTopicInListViewHelper extends AbstractViewHelper
             }
         }
 
-
         return false;
-        //===
     }
 }

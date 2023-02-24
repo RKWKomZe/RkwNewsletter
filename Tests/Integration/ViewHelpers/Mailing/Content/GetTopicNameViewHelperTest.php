@@ -16,19 +16,17 @@ namespace RKW\RkwNewsletter\Tests\Integration\ViewHelpers\Mailing\Content;
 
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use RKW\RkwNewsletter\Domain\Repository\ContentRepository;
-use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use RKW\RkwNewsletter\Domain\Repository\IssueRepository;
-use RKW\RkwNewsletter\Domain\Repository\TopicRepository;
 
 
 /**
  * GetTopicNameViewHelperTest
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright Rkw Kompetenzzentrum
+ * @copyright RKW Kompetenzzentrum
  * @package RKW_RkwMailer
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
@@ -44,7 +42,7 @@ class GetTopicNameViewHelperTest extends FunctionalTestCase
      * @var string[]
      */
     protected $testExtensionsToLoad = [
-        'typo3conf/ext/rkw_basics',
+        'typo3conf/ext/core_extended',
         'typo3conf/ext/rkw_mailer',
         'typo3conf/ext/rkw_newsletter'
     ];
@@ -83,7 +81,7 @@ class GetTopicNameViewHelperTest extends FunctionalTestCase
      * Setup
      * @throws \Exception
      */
-    protected function setUp()
+    protected function setUp(): void
     {
 
         parent::setUp();
@@ -92,10 +90,10 @@ class GetTopicNameViewHelperTest extends FunctionalTestCase
         $this->setUpFrontendRootPage(
             1,
             [
-                'EXT:rkw_basics/Configuration/TypoScript/setup.typoscript',
+                'EXT:core_extended/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/setup.typoscript',
-                'EXT:rkw_basics/Configuration/TypoScript/constants.typoscript',
+                'EXT:core_extended/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_mailer/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/constants.typoscript',
                 self::FIXTURE_PATH . '/Frontend/Configuration/Rootpage.typoscript',
@@ -147,7 +145,7 @@ class GetTopicNameViewHelperTest extends FunctionalTestCase
          * Then a string is returned
          * Then the name of topic-object A is returned
          */
-       
+
         $this->importDataSet(static::FIXTURE_PATH . '/Database/Check10.xml');
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
@@ -160,12 +158,12 @@ class GetTopicNameViewHelperTest extends FunctionalTestCase
         $this->standAloneViewHelper->assignMultiple(
             [
                 'issue' => $issue,
-                'content' => $content       
+                'content' => $content
             ]
         );
 
         $result = trim($this->standAloneViewHelper->render());
-        self::assertInternalType('string', $result);
+        self::assertIsString( $result);
         self::assertEquals('Topic 10', $result);
     }
 
@@ -221,7 +219,7 @@ class GetTopicNameViewHelperTest extends FunctionalTestCase
     /**
      * TearDown
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
     }

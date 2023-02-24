@@ -1,5 +1,4 @@
 <?php
-
 namespace RKW\RkwNewsletter\Domain\Repository;
 /*
  * This file is part of the TYPO3 CMS project.
@@ -29,13 +28,14 @@ use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class ContentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
+class ContentRepository extends AbstractRepository
 {
     /*
      * initializeObject
      */
-    public function initializeObject()
+    public function initializeObject(): void
     {
+        parent::initializeObject();
         $this->defaultQuerySettings = $this->objectManager->get(Typo3QuerySettings::class);
         $this->defaultQuerySettings->setRespectStoragePage(false);
         $this->defaultQuerySettings->setRespectSysLanguage(false);
@@ -50,15 +50,15 @@ class ContentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @param int $limit
      * @param bool $includeEditorials
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
-     * @comment implicitly tested
+     * comment: implicitly tested
      */
     public function findByPageAndLanguage(
         Pages $page,
-        int $languageUid = 0, 
-        int $limit = 0, 
+        int $languageUid = 0,
+        int $limit = 0,
         bool $includeEditorials = false
     ): QueryResultInterface {
-        
+
         $query = $this->createQuery();
         $constraints = [
             $query->equals('pid', $page),
@@ -78,7 +78,7 @@ class ContentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 'sorting' => QueryInterface::ORDER_ASCENDING,
             )
         );
-        
+
         if ($limit > 0) {
             $query->setLimit($limit);
         }
@@ -94,7 +94,7 @@ class ContentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @param int $languageUid
      * @param bool $includeEditorials
      * @return int
-     * @comment implicitly tested
+     * comment: implicitly tested
      */
     public function countByPageAndLanguage(
         Pages $page,
@@ -115,11 +115,11 @@ class ContentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query->matching(
             $query->logicalAnd($constraints)
         );
-        
+
         return $query->execute()->count();
     }
-    
-    
+
+
     /**
      * countByPagesAndLanguageUid
      *
@@ -127,7 +127,7 @@ class ContentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @param int $languageUid
      * @param bool $includeEditorials
      * @return int
-     * @comment implicitly tested
+     * comment: implicitly tested
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      */
     public function countByPagesAndLanguage(
@@ -166,7 +166,7 @@ class ContentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @param \RKW\RkwNewsletter\Domain\Model\Pages $page
      * @param int $languageUid
      * @return \RKW\RkwNewsletter\Domain\Model\Content|null
-     * @comment implicitly tested
+     * comment: implicitly tested
      */
     public function findOneEditorialByPageAndLanguage(
         Pages $page,
@@ -184,6 +184,6 @@ class ContentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
         return $query->execute()->getFirst();
     }
-    
+
 
 }
