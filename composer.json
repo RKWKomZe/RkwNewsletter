@@ -28,7 +28,7 @@
         "rkw/rkw-authors": "~9.5.0",
         "rkw/rkw-mailer": "~9.5.9",
         "rkw/rkw-registration": "~9.5.0",
-		"sjbr/sr-freecap": "~2.5"
+		"sjbr/sr-freecap": "~2.5.0"
     },
     "autoload": {
         "psr-4": {
