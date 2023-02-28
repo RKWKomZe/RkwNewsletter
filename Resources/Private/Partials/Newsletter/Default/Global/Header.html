@@ -1,5 +1,5 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-    xmlns:rkwMailer="http://typo3.org/ns/RKW/RkwMailer/ViewHelpers"
+    xmlns:postmaster="http://typo3.org/ns/Madj2k/Postmaster/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
     <!-- PLAINTEXT -->
@@ -14,8 +14,8 @@
         <f:if condition="!{isWebView}">
             <tr>
                 <td style="padding: 8px 16px; font-size:10px; text-align:center; color:#808080;">
-                    <rkwMailer:email.translate key="partials_newsletter_global_header.problems1" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />
-                    <a href="<rkwMailer:email.uri.action action='show' controller='WebView' extensionName='rkwNewsletter' pluginName='Webview' absolute='true' arguments='{issue: issue, topicsRaw: topics, hash: hash}' noCacheHash='true' pageType='{settings.webViewPageNum}' queueMail='{queueMail}' queueRecipient='{queueRecipient}'/>" style="color:#808080;"><rkwMailer:email.translate key="partials_newsletter_global_header.problems2" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" /></a>
+                    <postmaster:email.translate key="partials_newsletter_global_header.problems1" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />
+                    <a href="<postmaster:email.uri.action action='show' controller='WebView' extensionName='rkwNewsletter' pluginName='Webview' absolute='true' arguments='{issue: issue, topicsRaw: topics, hash: hash}' noCacheHash='true' pageType='{settings.webViewPageNum}' queueMail='{queueMail}' queueRecipient='{queueRecipient}'/>" style="color:#808080;"><postmaster:email.translate key="partials_newsletter_global_header.problems2" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" /></a>
                 </td>
             </tr>
         </f:if>

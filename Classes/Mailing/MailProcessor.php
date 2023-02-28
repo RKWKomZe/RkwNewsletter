@@ -15,8 +15,8 @@ namespace RKW\RkwNewsletter\Mailing;
  */
 
 use Madj2k\CoreExtended\Utility\FrontendSimulatorUtility;
-use RKW\RkwMailer\Service\MailService;
-use RKW\RkwMailer\Validation\QueueMailValidator;
+use Madj2k\Postmaster\Service\MailService;
+use Madj2k\Postmaster\Validation\QueueMailValidator;
 use RKW\RkwNewsletter\Domain\Model\FrontendUser;
 use RKW\RkwNewsletter\Domain\Model\Issue;
 use RKW\RkwNewsletter\Domain\Repository\FrontendUserRepository;
@@ -78,14 +78,14 @@ class MailProcessor
 
 
     /**
-     * @var \RKW\RkwMailer\Service\MailService
+     * @var \Madj2k\Postmaster\Service\MailService
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected MailService $mailService;
 
 
     /**
-     * @var \RKW\RkwMailer\Validation\QueueMailValidator
+     * @var \Madj2k\Postmaster\Validation\QueueMailValidator
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected QueueMailValidator $queueMailValidator;
@@ -113,7 +113,7 @@ class MailProcessor
     /**
      * Gets the mailService
      *
-     * @return \RKW\RkwMailer\Service\MailService
+     * @return \Madj2k\Postmaster\Service\MailService
      */
     public function getMailService(): MailService
     {
@@ -149,7 +149,7 @@ class MailProcessor
      * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue $issue
      * @return void
      * @throws Exception
-     * @throws \RKW\RkwMailer\Exception
+     * @throws \Madj2k\Postmaster\Exception
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
@@ -327,7 +327,7 @@ class MailProcessor
      * @param \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser
      * @return bool
      * @throws Exception
-     * @throws \RKW\RkwMailer\Exception
+     * @throws \Madj2k\Postmaster\Exception
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
@@ -397,7 +397,7 @@ class MailProcessor
      * @param string $email
      * @return bool
      * @throws Exception
-     * @throws \RKW\RkwMailer\Exception
+     * @throws \Madj2k\Postmaster\Exception
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
@@ -421,7 +421,7 @@ class MailProcessor
                 [
                     'fistName' => 'Maxima',
                     'lastName' => 'Musterfrau',
-                    'txRkwregistrationGender' => 1,
+                    'txFeregisterGender' => 1,
                     'title' => 'Prof. Dr. Dr.',
                     'email' => $email,
                 ],
@@ -469,7 +469,7 @@ class MailProcessor
      * @param int $limit
      * @return bool
      * @throws Exception
-     * @throws \RKW\RkwMailer\Exception
+     * @throws \Madj2k\Postmaster\Exception
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      * @throws \Exception
@@ -573,7 +573,7 @@ class MailProcessor
      * @param string $emails
      * @return bool
      * @throws Exception
-     * @throws \RKW\RkwMailer\Exception
+     * @throws \Madj2k\Postmaster\Exception
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      */
@@ -625,7 +625,7 @@ class MailProcessor
      *
      * @return void
      * @throws \RKW\RkwNewsletter\Exception
-     * @throws \RKW\RkwMailer\Exception
+     * @throws \Madj2k\Postmaster\Exception
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
@@ -659,7 +659,7 @@ class MailProcessor
                 }
 
                 // set properties for queueMail
-                /** @var \RKW\RkwMailer\Domain\Model\QueueMail $queueMail */
+                /** @var \Madj2k\Postmaster\Domain\Model\QueueMail $queueMail */
                 $this->mailService->getQueueMail()->setSubject($this->issue->getTitle());
                 $this->mailService->getQueueMail()->setCategory('rkwNewsletter');
 

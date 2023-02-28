@@ -14,15 +14,15 @@ namespace RKW\RkwNewsletter\Service;
  * The TYPO3 project - inspiring people to share!
  */
 
-use RKW\RkwMailer\Service\MailService;
+use Madj2k\Postmaster\Service\MailService;
 use RKW\RkwNewsletter\Domain\Model\Approval;
 use RKW\RkwNewsletter\Domain\Model\BackendUser;
 use RKW\RkwNewsletter\Domain\Model\Issue;
-use RKW\RkwRegistration\Domain\Model\FrontendUser;
-use RKW\RkwRegistration\Domain\Model\OptIn;
+use Madj2k\FeRegister\Domain\Model\FrontendUser;
+use Madj2k\FeRegister\Domain\Model\OptIn;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
-use RKW\RkwMailer\Utility\FrontendLocalizationUtility;
+use Madj2k\Postmaster\Utility\FrontendLocalizationUtility;
 
 /**
  * RkwMailService
@@ -45,7 +45,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
      * @param bool $isReminder
      * @return void
      * @throws \Exception
-     * @throws \RKW\RkwMailer\Exception
+     * @throws \Madj2k\Postmaster\Exception
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      * @throws \TYPO3Fluid\Fluid\View\Exception\InvalidTemplateResourceException
@@ -62,7 +62,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
         $settings = $this->getSettings(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
         if ($settings['view']['templateRootPaths']) {
 
-            /** @var \RKW\RkwMailer\Service\MailService $mailService */
+            /** @var \Madj2k\Postmaster\Service\MailService $mailService */
             $mailService = GeneralUtility::makeInstance(MailService::class);
 
             /** @var \RKW\RkwNewsletter\Domain\Model\BackendUser $admin */
@@ -119,7 +119,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
      * @param int $stage
      * @return void
      * @throws \Exception
-     * @throws \RKW\RkwMailer\Exception
+     * @throws \Madj2k\Postmaster\Exception
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      * @throws \TYPO3Fluid\Fluid\View\Exception\InvalidTemplateResourceException
@@ -135,7 +135,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
         $settings = $this->getSettings(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
         if ($settings['view']['templateRootPaths']) {
 
-            /** @var \RKW\RkwMailer\Service\MailService $mailService */
+            /** @var \Madj2k\Postmaster\Service\MailService $mailService */
             $mailService = GeneralUtility::makeInstance(MailService::class);
 
             /** @var \RKW\RkwNewsletter\Domain\Model\BackendUser $admin */
@@ -191,7 +191,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
      * @param bool $isReminder
      * @return void
      * @throws \Exception
-     * @throws \RKW\RkwMailer\Exception
+     * @throws \Madj2k\Postmaster\Exception
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      * @throws \TYPO3Fluid\Fluid\View\Exception\InvalidTemplateResourceException
@@ -207,7 +207,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
         $settings = $this->getSettings(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
         if ($settings['view']['templateRootPaths']) {
 
-            /** @var \RKW\RkwMailer\Service\MailService $mailService */
+            /** @var \Madj2k\Postmaster\Service\MailService $mailService */
             $mailService = GeneralUtility::makeInstance(MailService::class);
 
             /** @var \RKW\RkwNewsletter\Domain\Model\BackendUser $admin */
@@ -259,11 +259,11 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
     /**
      * send opt-in
      *
-     * @param \RKW\RkwRegistration\Domain\Model\FrontendUser $frontendUser
-     * @param \RKW\RkwRegistration\Domain\Model\OptIn|null $optIn
+     * @param \Madj2k\FeRegister\Domain\Model\FrontendUser $frontendUser
+     * @param \Madj2k\FeRegister\Domain\Model\OptIn|null $optIn
      * @return void
      * @throws \Exception
-     * @throws \RKW\RkwMailer\Exception
+     * @throws \Madj2k\Postmaster\Exception
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      * @throws \TYPO3Fluid\Fluid\View\Exception\InvalidTemplateResourceException
@@ -279,7 +279,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
         $settingsDefault = $this->getSettings();
         if ($settings['view']['templateRootPaths']) {
 
-            /** @var \RKW\RkwMailer\Service\MailService $mailService */
+            /** @var \Madj2k\Postmaster\Service\MailService $mailService */
             $mailService = GeneralUtility::makeInstance(MailService::class);
 
             // send new user an email with token
@@ -297,7 +297,7 @@ class RkwMailService implements \TYPO3\CMS\Core\SingletonInterface
                     'rkwMailService.subject.optInRequest',
                     'rkw_newsletter',
                     array(),
-                    $frontendUser->getTxRkwregistrationLanguageKey()
+                    $frontendUser->getTxFeregisterLanguageKey()
                 )
             );
 

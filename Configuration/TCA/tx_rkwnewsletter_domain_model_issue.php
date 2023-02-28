@@ -226,7 +226,7 @@ return [
         'queue_mail' => [
             'config' => [
                 'type' => 'passthrough',
-                'foreign_table' => 'tx_rkwmailer_domain_model_queuemail',
+                'foreign_table' => 'tx_postmaster_domain_model_queuemail',
             ],
         ],
 

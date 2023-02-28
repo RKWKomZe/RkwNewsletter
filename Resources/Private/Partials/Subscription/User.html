@@ -1,23 +1,23 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
     xmlns:rkwNewsletter="http://typo3.org/ns/RKW/RkwNewsletter/ViewHelpers"
-    xmlns:rkwRegistration="http://typo3.org/ns/RKW/RkwRegistration/ViewHelpers"
+    xmlns:feRegister="http://typo3.org/ns/Madj2k/FeRegister/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
     <div class="form__field width25">
         <label class="form-label" for="gender">
-            <f:translate key="tx_rkwnewsletter_domain_model_frontenduser.tx_rkwregistration_gender" />
+            <f:translate key="tx_rkwnewsletter_domain_model_frontenduser.tx_feregister_gender" />
             <f:render partial="LabelSuffix" arguments="{field: 'gender'}" />
         </label>
         <f:form.select
             id="gender"
             class="select-field select-field--longer"
-            property="txRkwregistrationGender"
-            options="{99: '{f:translate(key:\"tx_rkwnewsletter_domain_model_frontenduser.tx_rkwregistration_gender.I.neutral\")}', 0: '{f:translate(key:\"tx_rkwnewsletter_domain_model_frontenduser.tx_rkwregistration_gender.I.man\")}', 1: '{f:translate(key:\"tx_rkwnewsletter_domain_model_frontenduser.tx_rkwregistration_gender.I.woman\")}'}" optionValueField="uid" optionLabelField="name"
+            property="txFeregisterGender"
+            options="{99: '{f:translate(key:\"tx_rkwnewsletter_domain_model_frontenduser.tx_feregister_gender.I.neutral\")}', 0: '{f:translate(key:\"tx_rkwnewsletter_domain_model_frontenduser.tx_feregister_gender.I.man\")}', 1: '{f:translate(key:\"tx_rkwnewsletter_domain_model_frontenduser.tx_feregister_gender.I.woman\")}'}" optionValueField="uid" optionLabelField="name"
         />
     </div>
 
     <f:comment>
-        <f:if condition="<rkwRegistration:titleList />">
+        <f:if condition="<feRegister:titleList />">
             <div class="form__field width100">
                 <label class="form-label" for="title">
                     <f:translate key="tx_rkwnewsletter_domain_model_frontenduser.title" />
@@ -27,12 +27,12 @@
                 <f:form.select
                     id="title"
                     class="select-field select-field--longer"
-                    property="txRkwregistrationTitle"
-                    options="<rkwRegistration:titleList />"
+                    property="txFeregisterTitle"
+                    options="<feRegister:titleList />"
                     optionValueField="uid"
                     optionLabelField="name"
                     prependOptionValue="0"
-                    prependOptionLabel="{f:translate(key:'tx_rkwnewsletter_domain_model_frontenduser.tx_rkwregistration_title.I.neutral')}"
+                    prependOptionLabel="{f:translate(key:'tx_rkwnewsletter_domain_model_frontenduser.tx_feregister_title.I.neutral')}"
                 />
             </div>
         </f:if>

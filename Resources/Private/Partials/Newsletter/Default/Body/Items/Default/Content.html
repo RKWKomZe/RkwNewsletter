@@ -1,6 +1,6 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
     xmlns:coreExtended="http://typo3.org/ns/Madj2k/CoreExtended/ViewHelpers"
-    xmlns:rkwMailer="http://typo3.org/ns/RKW/RkwMailer/ViewHelpers"
+    xmlns:postmaster="http://typo3.org/ns/Madj2k/Postmaster/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
     <!-- PLAINTEXT -->
@@ -9,16 +9,16 @@
         {content.header} – <f:render partial="Body/Items/Default/Badge" section="Plaintext" arguments="{_all}" />\n
         ==================================================\n
         <f:format.stripTags>
-            <rkwMailer:email.replace.rteLinks plaintextFormat="true">
+            <postmaster:email.replace.rteLinks plaintextFormat="true">
                 <f:format.raw>
-                    <rkwMailer:email.plaintextLineBreaks convertLineBreaks="true">{content.bodytext}</rkwMailer:email.plaintextLineBreaks>
+                    <postmaster:email.plaintextLineBreaks convertLineBreaks="true">{content.bodytext}</postmaster:email.plaintextLineBreaks>
                 </f:format.raw>
-            </rkwMailer:email.replace.rteLinks>
+            </postmaster:email.replace.rteLinks>
         </f:format.stripTags>
 
         <f:if condition="{content.headerLink}">
         \n\n
-        >> <rkwMailer:email.uri.typolink parameter='{content.headerLink}' />
+        >> <postmaster:email.uri.typolink parameter='{content.headerLink}' />
         </f:if>\n
     </f:section>
 
@@ -41,7 +41,7 @@
                 <td style="padding: 12px 16px 0; line-height: 24px">
                     <f:if condition="{content.headerLink}">
                         <f:then>
-                            <a href="{rkwMailer:email.uri.typolink(parameter:'{content.headerLink}')}" target="_blank" id="item-{itemIterator.cycle}" name="item-{itemIterator.cycle}" style="font-size: 24px; font-weight: 400; text-decoration: none; color:#E64415;">
+                            <a href="{postmaster:email.uri.typolink(parameter:'{content.headerLink}')}" target="_blank" id="item-{itemIterator.cycle}" name="item-{itemIterator.cycle}" style="font-size: 24px; font-weight: 400; text-decoration: none; color:#E64415;">
                                 {content.header}
                             </a>
                         </f:then>
@@ -58,7 +58,7 @@
             <tr>
                 <td style="padding-top: 11px">
                     <f:if condition="{content.image}">
-                        <rkwMailer:email.image image="{content.image.0}" treatIdAsReference="true" absolute="false" width="536" height="200c" style="display: block; width: 100%; height: auto" />
+                        <postmaster:email.image image="{content.image.0}" treatIdAsReference="true" absolute="false" width="536" height="200c" style="display: block; width: 100%; height: auto" />
                     </f:if>
                 </td>
             </tr>
@@ -77,7 +77,7 @@
             <!-- content -->
             <tr>
                 <td class="prefix-fix wysiwyg-content" style="padding: 11px 16px {f:if(condition: '{content.headerLink}', then: '0', else: '24px')}; line-height: 22px">
-                    <rkwMailer:email.replace.rteLinks style="color:#E64415;"><f:format.raw>{content.bodytext}</f:format.raw></rkwMailer:email.replace.rteLinks>
+                    <postmaster:email.replace.rteLinks style="color:#E64415;"><f:format.raw>{content.bodytext}</f:format.raw></postmaster:email.replace.rteLinks>
                 </td>
             </tr>
 
@@ -85,7 +85,7 @@
             <f:if condition="{content.headerLink}">
                 <tr>
                     <td style="padding: 13px 16px 24px">
-                        <a href="<rkwMailer:email.uri.typolink parameter='{content.headerLink}' />" target="_blank" style="color:#E64415; font-weight: 700; text-decoration: none; text-transform: uppercase">&gt;&gt; Mehr erfahren</a>
+                        <a href="<postmaster:email.uri.typolink parameter='{content.headerLink}' />" target="_blank" style="color:#E64415; font-weight: 700; text-decoration: none; text-transform: uppercase">&gt;&gt; Mehr erfahren</a>
                     </td>
                 </tr>
             </f:if>
@@ -95,7 +95,7 @@
                 <tr>
                     <td style="padding: 0 16px">
                         <p style="margin: 0; padding: 23px 0 0; border-top: 1px solid #000; color: #333; font-size: 12px; font-weight:bold">
-                            <rkwMailer:email.translate key="partials_newsletter_body_items_default_content.contact" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />
+                            <postmaster:email.translate key="partials_newsletter_body_items_default_content.contact" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />
                         </p>
                     </td>
                 </tr>

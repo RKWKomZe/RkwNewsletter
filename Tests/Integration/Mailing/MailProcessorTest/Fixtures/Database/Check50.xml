@@ -21,8 +21,8 @@
         <queue_mail>50</queue_mail>
     </tx_rkwnewsletter_domain_model_issue>
 
-    <tx_rkwmailer_domain_model_queuemail>
+    <tx_postmaster_domain_model_queuemail>
         <uid>50</uid>
         <pid>0</pid>
-    </tx_rkwmailer_domain_model_queuemail>
+    </tx_postmaster_domain_model_queuemail>
 </dataset>

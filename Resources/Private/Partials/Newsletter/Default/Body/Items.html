@@ -1,11 +1,11 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-    xmlns:rkwMailer="http://typo3.org/ns/RKW/RkwMailer/ViewHelpers"
+    xmlns:postmaster="http://typo3.org/ns/Madj2k/Postmaster/ViewHelpers"
     xmlns:rkwNewsletter="http://typo3.org/ns/RKW/RkwNewsletter/ViewHelpers"
     data-namespace-typo3-fluid="true">
     
     <!-- PLAINTEXT -->
     <f:section name="Plaintext">
-        <rkwMailer:email.replace.redirectLinks queueMail="{queueMail}" isPlaintext="true">
+        <postmaster:email.replace.redirectLinks queueMail="{queueMail}" isPlaintext="true">
             <f:for
                 each="{rkwNewsletter:mailing.getContents(issue:'{issue}', topics:'{topics}')}"
                 as="content"
@@ -25,14 +25,14 @@
                     </f:else>
                 </f:if>
             </f:for>
-        </rkwMailer:email.replace.redirectLinks>
+        </postmaster:email.replace.redirectLinks>
     </f:section>
     
     
     <!-- HTML -->
     <f:section name="Html">
       
-        <rkwMailer:email.replace.redirectLinks queueMail="{queueMail}">
+        <postmaster:email.replace.redirectLinks queueMail="{queueMail}">
             
             <f:for 
                 each="{rkwNewsletter:mailing.getContents(issue:'{issue}', topics:'{topics}')}" 
@@ -62,6 +62,6 @@
                     </f:else>
                 </f:if>
             </f:for>
-        </rkwMailer:email.replace.redirectLinks>
+        </postmaster:email.replace.redirectLinks>
     </f:section>
 </html>

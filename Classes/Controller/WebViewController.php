@@ -14,10 +14,10 @@ namespace RKW\RkwNewsletter\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
-use RKW\RkwMailer\Domain\Model\QueueRecipient;
+use Madj2k\Postmaster\Domain\Model\QueueRecipient;
 use Madj2k\CoreExtended\Utility\GeneralUtility;
-use RKW\RkwMailer\Domain\Repository\QueueMailRepository;
-use RKW\RkwMailer\Domain\Repository\QueueRecipientRepository;
+use Madj2k\Postmaster\Domain\Repository\QueueMailRepository;
+use Madj2k\Postmaster\Domain\Repository\QueueRecipientRepository;
 use RKW\RkwNewsletter\Domain\Model\Issue;
 use RKW\RkwNewsletter\Domain\Repository\TopicRepository;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
@@ -43,14 +43,14 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
 
     /**
-     * @var \RKW\RkwMailer\Domain\Repository\QueueMailRepository
+     * @var \Madj2k\Postmaster\Domain\Repository\QueueMailRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected QueueMailRepository $queueMailRepository;
 
 
     /**
-     * @var \RKW\RkwMailer\Domain\Repository\QueueRecipientRepository
+     * @var \Madj2k\Postmaster\Domain\Repository\QueueRecipientRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected QueueRecipientRepository $queueRecipientRepository;
@@ -74,7 +74,7 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $queueRecipientId = 0;
 
         // check for queueMailId and queueRecipientId as params from redirection
-        $rkwMailerParams = \TYPO3\CMS\Core\Utility\GeneralUtility::_GP('tx_rkwmailer');
+        $rkwMailerParams = \TYPO3\CMS\Core\Utility\GeneralUtility::_GP('tx_postmaster');
         if (isset($rkwMailerParams['mid'])) {
             $queueMailId = intval($rkwMailerParams['mid']);
         }
@@ -83,7 +83,7 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
 
         // set default recipient based on FE-language settings – just in case
-        /** @var \RKW\RkwMailer\Domain\Model\QueueRecipient $queueRecipient */
+        /** @var \Madj2k\Postmaster\Domain\Model\QueueRecipient $queueRecipient */
         $queueRecipient = GeneralUtility::makeInstance(QueueRecipient::class);
         $queueRecipient->setLanguageCode($GLOBALS['TSFE']->config['config']['language']);
         $this->view->assign('queueRecipient', $queueRecipient);

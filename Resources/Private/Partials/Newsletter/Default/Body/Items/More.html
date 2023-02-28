@@ -1,11 +1,11 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-    xmlns:rkwMailer="http://typo3.org/ns/RKW/RkwMailer/ViewHelpers"
+    xmlns:postmaster="http://typo3.org/ns/Madj2k/Postmaster/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
     <!-- PLAINTEXT -->
     <f:section name="Plaintext">
         ##################################################################################################################################\n
-        >> <rkwMailer:email.translate key="partials_newsletter_body_items_more.readMore" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />: <rkwMailer:email.uri.action action="show" controller="WebView" extensionName="rkwNewsletter" pluginName="Webview" absolute="true" arguments="{issue: issue, topicsRaw: topics, hash: '---hash---'}" section="item-{settings.maxContentItems}" noCacheHash="true" pageType="{settings.webViewPageNum}"/> \n
+        >> <postmaster:email.translate key="partials_newsletter_body_items_more.readMore" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />: <postmaster:email.uri.action action="show" controller="WebView" extensionName="rkwNewsletter" pluginName="Webview" absolute="true" arguments="{issue: issue, topicsRaw: topics, hash: '---hash---'}" section="item-{settings.maxContentItems}" noCacheHash="true" pageType="{settings.webViewPageNum}"/> \n
         ##################################################################################################################################\n\n
     </f:section>
     
@@ -20,7 +20,7 @@
             <tr>
                 <td style="width: 8px; background: #808080">&nbsp;</td>
                 <td style="background: #808080; text-align: center; vertical-align: middle">
-                    <a href="<rkwMailer:email.uri.action action='show' controller='WebView' extensionName='rkwNewsletter' pluginName='Webview' absolute='true' arguments='{issue: issue, topicsRaw: topics, hash: \'---hash---\'}' section='item-{settings.maxContentItems}' noCacheHash='true' pageType='{settings.webViewPageNum}'/>" style="color: #fff; font-weight: 700; text-decoration: none; text-transform: uppercase"><rkwMailer:email.translate key="partials_newsletter_body_items_more.readMore" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" /></a>
+                    <a href="<postmaster:email.uri.action action='show' controller='WebView' extensionName='rkwNewsletter' pluginName='Webview' absolute='true' arguments='{issue: issue, topicsRaw: topics, hash: \'---hash---\'}' section='item-{settings.maxContentItems}' noCacheHash='true' pageType='{settings.webViewPageNum}'/>" style="color: #fff; font-weight: 700; text-decoration: none; text-transform: uppercase"><postmaster:email.translate key="partials_newsletter_body_items_more.readMore" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" /></a>
                 </td>
                 <td style="width: 8px; background: #808080">&nbsp;</td>
             </tr>

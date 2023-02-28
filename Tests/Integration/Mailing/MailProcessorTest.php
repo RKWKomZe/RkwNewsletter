@@ -15,11 +15,11 @@ namespace RKW\RkwNewsletter\Tests\Integration\Mailing;
  */
 
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
-use RKW\RkwMailer\Cache\MailCache;
-use RKW\RkwMailer\Domain\Model\QueueRecipient;
-use RKW\RkwMailer\Domain\Repository\QueueMailRepository;
-use RKW\RkwMailer\Domain\Repository\QueueRecipientRepository;
-use RKW\RkwMailer\Utility\QueueMailUtility;
+use Madj2k\Postmaster\Cache\MailCache;
+use Madj2k\Postmaster\Domain\Model\QueueRecipient;
+use Madj2k\Postmaster\Domain\Repository\QueueMailRepository;
+use Madj2k\Postmaster\Domain\Repository\QueueRecipientRepository;
+use Madj2k\Postmaster\Utility\QueueMailUtility;
 use RKW\RkwNewsletter\Domain\Model\FrontendUser;
 use RKW\RkwNewsletter\Domain\Model\Issue;
 use RKW\RkwNewsletter\Domain\Model\Newsletter;
@@ -58,10 +58,10 @@ class MailProcessorTest extends FunctionalTestCase
      */
     protected $testExtensionsToLoad = [
         'typo3conf/ext/core_extended',
+        'typo3conf/ext/postmaster',
         'typo3conf/ext/rkw_authors',
-        'typo3conf/ext/rkw_mailer',
         'typo3conf/ext/rkw_newsletter',
-        'typo3conf/ext/rkw_registration',
+        'typo3conf/ext/fe_register',
     ];
 
 
@@ -78,13 +78,13 @@ class MailProcessorTest extends FunctionalTestCase
 
 
     /**
-     * @var \RKW\RkwMailer\Domain\Repository\QueueMailRepository|null
+     * @var \Madj2k\Postmaster\Domain\Repository\QueueMailRepository|null
      */
     private ?QueueMailRepository $queueMailRepository = null;
 
 
     /**
-     * @var \RKW\RkwMailer\Domain\Repository\QueueRecipientRepository|null
+     * @var \Madj2k\Postmaster\Domain\Repository\QueueRecipientRepository|null
      */
     private ?QueueRecipientRepository $queueRecipientRepository;
 
@@ -114,7 +114,7 @@ class MailProcessorTest extends FunctionalTestCase
 
 
     /**
-     * @var \RKW\RkwMailer\Cache\MailCache|null
+     * @var \Madj2k\Postmaster\Cache\MailCache|null
      */
     private ?MailCache $mailCache;
 
@@ -139,10 +139,10 @@ class MailProcessorTest extends FunctionalTestCase
             1,
             [
                 'EXT:core_extended/Configuration/TypoScript/setup.typoscript',
-                'EXT:rkw_mailer/Configuration/TypoScript/setup.typoscript',
+                'EXT:postmaster/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/setup.typoscript',
                 'EXT:core_extended/Configuration/TypoScript/constants.typoscript',
-                'EXT:rkw_mailer/Configuration/TypoScript/constants.typoscript',
+                'EXT:postmaster/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/constants.typoscript',
                 self::FIXTURE_PATH . '/Frontend/Configuration/Rootpage.typoscript',
             ]
@@ -151,10 +151,10 @@ class MailProcessorTest extends FunctionalTestCase
         /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
         $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
 
-        /** @var \RKW\RkwMailer\Domain\Repository\QueueMailRepository queueMailRepository */
+        /** @var \Madj2k\Postmaster\Domain\Repository\QueueMailRepository queueMailRepository */
         $this->queueMailRepository = $this->objectManager->get(QueueMailRepository::class);
 
-        /** @var \RKW\RkwMailer\Domain\Repository\QueueRecipientRepository queueRecipientRepository */
+        /** @var \Madj2k\Postmaster\Domain\Repository\QueueRecipientRepository queueRecipientRepository */
         $this->queueRecipientRepository = $this->objectManager->get(QueueRecipientRepository::class);
 
         /** @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository issueRepository */
@@ -299,7 +299,7 @@ class MailProcessorTest extends FunctionalTestCase
 
         $this->subject->setIssue($issue);
 
-        /** @var \RKW\RkwMailer\Domain\Model\QueueMail $queueMail */
+        /** @var \Madj2k\Postmaster\Domain\Model\QueueMail $queueMail */
         $queueMail = $this->queueMailRepository->findByUid(1);
 
         self::assertEquals(1, $this->subject->getMailService()->getQueueMail()->getUid());
@@ -362,7 +362,7 @@ class MailProcessorTest extends FunctionalTestCase
 
         $this->subject->setIssue($issue);
 
-        /** @var \RKW\RkwMailer\Domain\Model\QueueMail $queueMail */
+        /** @var \Madj2k\Postmaster\Domain\Model\QueueMail $queueMail */
         $queueMail = $this->queueMailRepository->findByUid(1);
 
         self::assertEquals(1, $this->subject->getMailService()->getQueueMail()->getUid());
@@ -399,10 +399,10 @@ class MailProcessorTest extends FunctionalTestCase
             21,
             [
                 'EXT:core_extended/Configuration/TypoScript/setup.typoscript',
-                'EXT:rkw_mailer/Configuration/TypoScript/setup.typoscript',
+                'EXT:postmaster/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/setup.typoscript',
                 'EXT:core_extended/Configuration/TypoScript/constants.typoscript',
-                'EXT:rkw_mailer/Configuration/TypoScript/constants.typoscript',
+                'EXT:postmaster/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/constants.typoscript',
                 self::FIXTURE_PATH . '/Frontend/Configuration/Page21.typoscript',
             ]
@@ -430,7 +430,7 @@ class MailProcessorTest extends FunctionalTestCase
 
         $this->subject->setIssue($issue);
 
-        /** @var \RKW\RkwMailer\Domain\Model\QueueMail $queueMail */
+        /** @var \Madj2k\Postmaster\Domain\Model\QueueMail $queueMail */
         $queueMail = $this->queueMailRepository->findByUid(1);
 
         self::assertEquals(1, $this->subject->getMailService()->getQueueMail()->getUid());
@@ -469,7 +469,7 @@ class MailProcessorTest extends FunctionalTestCase
 
         $this->subject->setIssue($issue);
 
-        /** @var \RKW\RkwMailer\Domain\Model\QueueMail $queueMail */
+        /** @var \Madj2k\Postmaster\Domain\Model\QueueMail $queueMail */
         $queueMail = $this->queueMailRepository->findByUid(1);
 
         self::assertEquals('Default', $queueMail->getHtmlTemplate());
@@ -504,7 +504,7 @@ class MailProcessorTest extends FunctionalTestCase
 
         $this->subject->setIssue($issue);
 
-        /** @var \RKW\RkwMailer\Domain\Model\QueueMail $queueMail */
+        /** @var \Madj2k\Postmaster\Domain\Model\QueueMail $queueMail */
         $queueMail = $this->queueMailRepository->findByUid(1);
 
         self::assertEquals('Managementletter', $queueMail->getHtmlTemplate());
@@ -537,7 +537,7 @@ class MailProcessorTest extends FunctionalTestCase
 
         $this->subject->setIssue($issue);
 
-        /** @var \RKW\RkwMailer\Domain\Model\QueueMail $queueMail */
+        /** @var \Madj2k\Postmaster\Domain\Model\QueueMail $queueMail */
         $queueMail = $this->queueMailRepository->findByUid(1);
 
         self::assertEquals(1, $this->subject->getMailService()->getQueueMail()->getUid());
@@ -604,7 +604,7 @@ class MailProcessorTest extends FunctionalTestCase
         $persistenceManager = $this->objectManager->get(PersistenceManager::class);
         $persistenceManager->clearState();
 
-        /** @var \RKW\RkwMailer\Domain\Model\QueueMail $queueMail */
+        /** @var \Madj2k\Postmaster\Domain\Model\QueueMail $queueMail */
         $queueMails = $this->queueMailRepository->findAll();
 
         self::assertCount(1, $queueMails);
@@ -1333,7 +1333,7 @@ class MailProcessorTest extends FunctionalTestCase
         $this->subject->setIssue($issue);
         self::assertTrue($this->subject->sendMail($frontendUser));
 
-        /** @var \RKW\RkwMailer\Domain\Model\QueueRecipient $queueRecipient */
+        /** @var \Madj2k\Postmaster\Domain\Model\QueueRecipient $queueRecipient */
         $queueRecipient = $this->queueRecipientRepository->findByUid(1);
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
 
@@ -1403,7 +1403,7 @@ class MailProcessorTest extends FunctionalTestCase
         $this->subject->setIssue($issue);
         self::assertTrue($this->subject->sendMail($frontendUser));
 
-        /** @var \RKW\RkwMailer\Domain\Model\QueueRecipient $queueRecipient */
+        /** @var \Madj2k\Postmaster\Domain\Model\QueueRecipient $queueRecipient */
         $queueRecipient = $this->queueRecipientRepository->findByUid(1);
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
 
@@ -1485,7 +1485,7 @@ class MailProcessorTest extends FunctionalTestCase
         $this->subject->setIssue($issue);
         self::assertTrue($this->subject->sendMail($frontendUser));
 
-        /** @var \RKW\RkwMailer\Domain\Model\QueueRecipient $queueRecipient */
+        /** @var \Madj2k\Postmaster\Domain\Model\QueueRecipient $queueRecipient */
         $queueRecipient = $this->queueRecipientRepository->findByUid(1);
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
 
@@ -1563,7 +1563,7 @@ class MailProcessorTest extends FunctionalTestCase
         $this->subject->setIssue($issue);
         self::assertTrue($this->subject->sendMail($frontendUser));
 
-        /** @var \RKW\RkwMailer\Domain\Model\QueueRecipient $queueRecipient */
+        /** @var \Madj2k\Postmaster\Domain\Model\QueueRecipient $queueRecipient */
         $queueRecipient = $this->queueRecipientRepository->findByUid(1);
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
 
@@ -1684,7 +1684,7 @@ class MailProcessorTest extends FunctionalTestCase
         $this->subject->setIssue($issue);
         self::assertTrue($this->subject->sendMail($frontendUser));
 
-        /** @var \RKW\RkwMailer\Domain\Model\QueueRecipient $queueRecipient */
+        /** @var \Madj2k\Postmaster\Domain\Model\QueueRecipient $queueRecipient */
         $queueRecipient = $this->queueRecipientRepository->findByUid(1);
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
 
@@ -1768,7 +1768,7 @@ class MailProcessorTest extends FunctionalTestCase
         $this->subject->setIssue($issue);
         self::assertTrue($this->subject->sendMail($frontendUser));
 
-        /** @var \RKW\RkwMailer\Domain\Model\QueueRecipient $queueRecipient */
+        /** @var \Madj2k\Postmaster\Domain\Model\QueueRecipient $queueRecipient */
         $queueRecipient = $this->queueRecipientRepository->findByUid(1);
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
 
@@ -1850,7 +1850,7 @@ class MailProcessorTest extends FunctionalTestCase
         $this->subject->setIssue($issue);
         self::assertTrue($this->subject->sendMail($frontendUser));
 
-        /** @var \RKW\RkwMailer\Domain\Model\QueueRecipient $queueRecipient */
+        /** @var \Madj2k\Postmaster\Domain\Model\QueueRecipient $queueRecipient */
         $queueRecipient = $this->queueRecipientRepository->findByUid(1);
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
 
@@ -1923,7 +1923,7 @@ class MailProcessorTest extends FunctionalTestCase
         $this->subject->setIssue($issue);
         self::assertTrue($this->subject->sendMail($frontendUser));
 
-        /** @var \RKW\RkwMailer\Domain\Model\QueueRecipient $queueRecipient */
+        /** @var \Madj2k\Postmaster\Domain\Model\QueueRecipient $queueRecipient */
         $queueRecipient = $this->queueRecipientRepository->findByUid(1);
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
 
@@ -1989,7 +1989,7 @@ class MailProcessorTest extends FunctionalTestCase
         $this->subject->setIssue($issue);
         self::assertTrue($this->subject->sendMail($frontendUser));
 
-        /** @var \RKW\RkwMailer\Domain\Model\QueueRecipient $queueRecipient */
+        /** @var \Madj2k\Postmaster\Domain\Model\QueueRecipient $queueRecipient */
         $queueRecipient = $this->queueRecipientRepository->findByUid(1);
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
 
@@ -2239,7 +2239,7 @@ class MailProcessorTest extends FunctionalTestCase
 
         self::assertTrue($this->subject->sendTestMail('test@rkw.de'));
 
-        /** @var \RKW\RkwMailer\Domain\Model\QueueRecipient $queueRecipient */
+        /** @var \Madj2k\Postmaster\Domain\Model\QueueRecipient $queueRecipient */
         $queueRecipient = $this->queueRecipientRepository->findByUid(1);
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
 
@@ -2305,7 +2305,7 @@ class MailProcessorTest extends FunctionalTestCase
 
         self::assertTrue($this->subject->sendTestMail('test@rkw.de'));
 
-        /** @var \RKW\RkwMailer\Domain\Model\QueueRecipient $queueRecipient */
+        /** @var \Madj2k\Postmaster\Domain\Model\QueueRecipient $queueRecipient */
         $queueRecipient = $this->queueRecipientRepository->findByUid(1);
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
 
@@ -2617,7 +2617,7 @@ class MailProcessorTest extends FunctionalTestCase
 
         $this->subject->setIssue($issue);
 
-        /** @var \RKW\RkwMailer\Domain\Model\QueueMail $queueMail */
+        /** @var \Madj2k\Postmaster\Domain\Model\QueueMail $queueMail */
         $queueMail = $this->subject->getMailService()->getQueueMail();
         $count = $this->queueMailRepository->findAll()->count();
 
@@ -2711,7 +2711,7 @@ class MailProcessorTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(230);
 
-        /** @var \RKW\RkwMailer\Domain\Model\QueueMail $queueMail */
+        /** @var \Madj2k\Postmaster\Domain\Model\QueueMail $queueMail */
         self::assertCount(0, $this->queueMailRepository->findAll());
 
         $this->subject->setIssue($issue);
@@ -2723,7 +2723,7 @@ class MailProcessorTest extends FunctionalTestCase
         self::assertTrue($this->subject->sendMails(2));
         self::assertCount(2, $this->queueRecipientRepository->findAll());
 
-        /** @var \RKW\RkwMailer\Domain\Model\QueueRecipient $queueRecipient */
+        /** @var \Madj2k\Postmaster\Domain\Model\QueueRecipient $queueRecipient */
         $queueRecipient = $this->queueRecipientRepository->findByUid(1);
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
 
@@ -2744,7 +2744,7 @@ class MailProcessorTest extends FunctionalTestCase
             $this->mailCache->getHtmlBody($queueRecipient)
         );
 
-        /** @var \RKW\RkwMailer\Domain\Model\QueueRecipient $queueRecipient */
+        /** @var \Madj2k\Postmaster\Domain\Model\QueueRecipient $queueRecipient */
         $queueRecipient = $this->queueRecipientRepository->findByUid(2);
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
 
@@ -2771,7 +2771,7 @@ class MailProcessorTest extends FunctionalTestCase
         self::assertTrue($this->subject->sendMails(1));
         self::assertCount(3, $this->queueRecipientRepository->findAll());
 
-        /** @var \RKW\RkwMailer\Domain\Model\QueueRecipient $queueRecipient */
+        /** @var \Madj2k\Postmaster\Domain\Model\QueueRecipient $queueRecipient */
         $queueRecipient = $this->queueRecipientRepository->findByUid(3);
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
 
@@ -2798,7 +2798,7 @@ class MailProcessorTest extends FunctionalTestCase
         self::assertTrue($this->subject->sendMails(2));
         self::assertCount(4, $this->queueRecipientRepository->findAll());
 
-        /** @var \RKW\RkwMailer\Domain\Model\QueueRecipient $queueRecipient */
+        /** @var \Madj2k\Postmaster\Domain\Model\QueueRecipient $queueRecipient */
         $queueRecipient = $this->queueRecipientRepository->findByUid(4);
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
 
@@ -2885,7 +2885,7 @@ class MailProcessorTest extends FunctionalTestCase
         self::assertTrue($this->subject->sendTestMails('test,test@rkw.de,test1@rkw.de'));
         self::assertCount(2, $this->queueRecipientRepository->findAll());
 
-        /** @var \RKW\RkwMailer\Domain\Model\QueueRecipient $queueRecipient */
+        /** @var \Madj2k\Postmaster\Domain\Model\QueueRecipient $queueRecipient */
         $queueRecipient = $this->queueRecipientRepository->findByUid(1);
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
 
@@ -2912,7 +2912,7 @@ class MailProcessorTest extends FunctionalTestCase
             $this->mailCache->getHtmlBody($queueRecipient)
         );
 
-        /** @var \RKW\RkwMailer\Domain\Model\QueueRecipient $queueRecipient */
+        /** @var \Madj2k\Postmaster\Domain\Model\QueueRecipient $queueRecipient */
         $queueRecipient = $this->queueRecipientRepository->findByUid(2);
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
 

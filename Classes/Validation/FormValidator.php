@@ -4,7 +4,7 @@ namespace RKW\RkwNewsletter\Validation;
 
 use Madj2k\CoreExtended\Utility\GeneralUtility;
 use RKW\RkwNewsletter\Domain\Model\FrontendUser;
-use RKW\RkwRegistration\Utility\FrontendUserUtility;
+use Madj2k\FeRegister\Utility\FrontendUserUtility;
 use TYPO3\CMS\Extbase\Error\Error;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
@@ -35,7 +35,7 @@ class FormValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractVali
     /**
      * validation
      *
-     * @param \RKW\RkwRegistration\Domain\Model\FrontendUser $frontendUser
+     * @param \Madj2k\FeRegister\Domain\Model\FrontendUser $frontendUser
      * @return boolean
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
@@ -80,11 +80,11 @@ class FormValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractVali
 
                 if (
                     (
-                        ($requiredField != 'txRkwregistrationGender')
+                        ($requiredField != 'txFeregisterGender')
                         && (empty($frontendUser->$getter()))
                     )
                     || (
-                        ($requiredField == 'txRkwregistrationGender')
+                        ($requiredField == 'txFeregisterGender')
                         && ($frontendUser->$getter() == 99)
                     )
                 ) {
