@@ -24,7 +24,7 @@
 				<source>Title</source>
                 <target>Titel</target>
 			</trans-unit>
-            <trans-unit id="tx_rkwnewsletter_domain_model_frontenduser.tx_rkwregistration_title.I.neutral">
+            <trans-unit id="tx_rkwnewsletter_domain_model_frontenduser.tx_feregister_title.I.neutral">
                 <source>-- Please select --</source>
                 <target>-- Bitte wählen --</target>
             </trans-unit>
@@ -32,19 +32,19 @@
 				<source>Company</source>
                 <target>Firma/Organisation</target>
 			</trans-unit>
-            <trans-unit id="tx_rkwnewsletter_domain_model_frontenduser.tx_rkwregistration_gender">
+            <trans-unit id="tx_rkwnewsletter_domain_model_frontenduser.tx_feregister_gender">
                 <source>Salutation</source>
                 <target>Anrede</target>
             </trans-unit>
-            <trans-unit id="tx_rkwnewsletter_domain_model_frontenduser.tx_rkwregistration_gender.I.man">
+            <trans-unit id="tx_rkwnewsletter_domain_model_frontenduser.tx_feregister_gender.I.man">
                 <source>Mr.</source>
                 <target>Herr</target>
             </trans-unit>
-            <trans-unit id="tx_rkwnewsletter_domain_model_frontenduser.tx_rkwregistration_gender.I.woman">
+            <trans-unit id="tx_rkwnewsletter_domain_model_frontenduser.tx_feregister_gender.I.woman">
                 <source>Mrs.</source>
                 <target>Frau</target>
             </trans-unit>
-            <trans-unit id="tx_rkwnewsletter_domain_model_frontenduser.tx_rkwregistration_gender.I.neutral">
+            <trans-unit id="tx_rkwnewsletter_domain_model_frontenduser.tx_feregister_gender.I.neutral">
                 <source>-- Please select --</source>
                 <target>-- Bitte wählen --</target>
             </trans-unit>

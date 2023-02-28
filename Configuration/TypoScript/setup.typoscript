@@ -44,7 +44,7 @@ config.tx_extbase.persistence {
 
         #===============================================
 
-        RKW\RkwRegistration\Domain\Model\FrontendUser {
+        Madj2k\FeRegister\Domain\Model\FrontendUser {
             subclasses {
                 Tx_RkwNewsletter_FrontendUser = RKW\RkwNewsletter\Domain\Model\FrontendUser
             }
@@ -53,7 +53,7 @@ config.tx_extbase.persistence {
         RKW\RkwNewsletter\Domain\Model\FrontendUser {
 
             // storage for new records in cross-extension-context
-            newRecordStoragePid = {$plugin.tx_rkwregistration.persistence.storagePid}
+            newRecordStoragePid = {$plugin.tx_feregister.persistence.storagePid}
             mapping {
                 tableName = fe_users
             }
@@ -61,7 +61,7 @@ config.tx_extbase.persistence {
 
         #===============================================
 
-        RKW\RkwRegistration\Domain\Model\BackendUser {
+        Madj2k\FeRegister\Domain\Model\BackendUser {
             subclasses {
                 Tx_RkwNewsletter_BackendUser = RKW\RkwNewsletter\Domain\Model\BackendUser
             }
@@ -115,7 +115,7 @@ plugin.tx_rkwnewsletter {
        RKW\RkwNewsletter\Domain\Model\FrontendUser {
         newRecordStoragePid = 618
        }
-   RKW\RkwRegistration\Domain\Model\FrontendUser {
+   Madj2k\FeRegister\Domain\Model\FrontendUser {
         newRecordStoragePid = 618
        }
 	}
@@ -304,15 +304,15 @@ txRkwNewsletterWebView {
 
             10 {
                 search = ###baseUrl###
-                replace = {$plugin.tx_rkwmailer.settings.baseUrl}
+                replace = {$plugin.tx_postmaster.settings.baseUrl}
             }
             20 {
                 search = ###baseUrlLogo###
-                replace = {$plugin.tx_rkwmailer.settings.basePathLogo}
+                replace = {$plugin.tx_postmaster.settings.basePathLogo}
             }
             30 {
                 search = ###baseUrlImages###
-                replace = {$plugin.tx_rkwmailer.settings.basePathImages}
+                replace = {$plugin.tx_postmaster.settings.basePathImages}
             }
 
         }

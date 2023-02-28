@@ -13,8 +13,8 @@
         <return_path>return@testen.de</return_path>
         <settings_page>2</settings_page>
     </tx_rkwnewsletter_domain_model_newsletter>
-    
-    
+
+
     <tx_rkwnewsletter_domain_model_issue>
         <uid>180</uid>
         <pid>0</pid>
@@ -22,8 +22,8 @@
         <pages>2</pages>
         <title>Test</title>
     </tx_rkwnewsletter_domain_model_issue>
-    
-    
+
+
     <tx_rkwnewsletter_domain_model_topic>
         <uid>180</uid>
         <pid>0</pid>
@@ -39,8 +39,8 @@
         <container_page>1</container_page>
         <newsletter>180</newsletter>
     </tx_rkwnewsletter_domain_model_topic>
-    
-    
+
+
     <pages>
         <uid>180</uid>
         <pid>1</pid>
@@ -67,7 +67,7 @@
         <uid>180</uid>
         <pid>180</pid>
         <header>Content 160.4</header>
-        <bodytext>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</bodytext>        
+        <bodytext>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</bodytext>
         <sorting>4</sorting>
     </tt_content>
 
@@ -95,7 +95,7 @@
         <sorting>1</sorting>
         <tx_rkwnewsletter_is_editorial>1</tx_rkwnewsletter_is_editorial>
     </tt_content>
-    
+
     <tt_content>
         <uid>184</uid>
         <pid>181</pid>
@@ -120,7 +120,7 @@
         <sorting>1</sorting>
         <tx_rkwnewsletter_is_editorial>1</tx_rkwnewsletter_is_editorial>
     </tt_content>
-    
+
 
     <fe_users>
         <uid>180</uid>
@@ -128,10 +128,10 @@
         <email>test@teste.de</email>
         <first_name>Clemens</first_name>
         <last_name>Mustermann</last_name>
-        <tx_rkwregistration_gender>0</tx_rkwregistration_gender>
+        <tx_feregister_gender>0</tx_feregister_gender>
         <tx_rkwnewsletter_subscription>180,161</tx_rkwnewsletter_subscription>
         <tx_rkwnewsletter_hash>HashMeIfYouCan</tx_rkwnewsletter_hash>
-        <tx_rkwregistration_language_key>de</tx_rkwregistration_language_key>
+        <tx_feregister_language_key>de</tx_feregister_language_key>
     </fe_users>
-    
+
 </dataset>

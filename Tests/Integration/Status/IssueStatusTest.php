@@ -42,8 +42,8 @@ class IssueStatusTest extends FunctionalTestCase
      */
     protected $testExtensionsToLoad = [
         'typo3conf/ext/core_extended',
+        'typo3conf/ext/postmaster',
         'typo3conf/ext/rkw_authors',
-        'typo3conf/ext/rkw_mailer',
         'typo3conf/ext/rkw_newsletter'
     ];
 
@@ -87,11 +87,11 @@ class IssueStatusTest extends FunctionalTestCase
             [
                 'EXT:core_extended/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_authors/Configuration/TypoScript/setup.typoscript',
-                'EXT:rkw_mailer/Configuration/TypoScript/setup.typoscript',
+                'EXT:postmaster/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/setup.typoscript',
                 'EXT:core_extended/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_authors/Configuration/TypoScript/constants.typoscript',
-                'EXT:rkw_mailer/Configuration/TypoScript/constants.typoscript',
+                'EXT:postmaster/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/constants.typoscript',
                 self::FIXTURE_PATH . '/Frontend/Configuration/Rootpage.typoscript',
             ]

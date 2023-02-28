@@ -12,7 +12,7 @@ plugin.tx_rkwnewsletter {
         }
 	}
 	persistence {
-		storagePid = 
+		storagePid =
 	}
 
 	settings {
@@ -48,7 +48,7 @@ plugin.tx_rkwnewsletter {
         webViewPageNum = 1536732477
 
         # cat=plugin.tx_rkwnewsletter//a; type=string; label=Required fields for subscription
-        requiredFieldsSubscription = txRkwregistrationGender, firstName, lastName
+        requiredFieldsSubscription = txFeregisterGender, firstName, lastName
 
         # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Maximum teaser length
         minTeaserLength = 500

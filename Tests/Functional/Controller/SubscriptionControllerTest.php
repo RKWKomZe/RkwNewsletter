@@ -3,7 +3,7 @@ namespace RKW\RkwNewsletter\Tests\Functional\Controller;
 
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 
-use RKW\RkwMailer\Service\MailService;
+use Madj2k\Postmaster\Service\MailService;
 use RKW\RkwNewsletter\Controller\SubscriptionController;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -39,8 +39,8 @@ class SubscriptionControllerTest extends FunctionalTestCase
      */
     protected $testExtensionsToLoad = [
         'typo3conf/ext/core_extended',
-        'typo3conf/ext/rkw_mailer',
-        'typo3conf/ext/rkw_registration',
+        'typo3conf/ext/postmaster',
+        'typo3conf/ext/fe_register',
         'typo3conf/ext/rkw_newsletter',
     ];
 
@@ -84,10 +84,10 @@ class SubscriptionControllerTest extends FunctionalTestCase
                 'EXT:css_styled_content/static/setup.typoscript',
                 'EXT:core_extended/Configuration/TypoScript/constants.typoscript',
                 'EXT:core_extended/Configuration/TypoScript/setup.typoscript',
-                'EXT:rkw_mailer/Configuration/TypoScript/constants.typoscript',
-                'EXT:rkw_mailer/Configuration/TypoScript/setup.typoscript',
-                'EXT:rkw_registration/Configuration/TypoScript/constants.typoscript',
-                'EXT:rkw_registration/Configuration/TypoScript/setup.typoscript',
+                'EXT:postmaster/Configuration/TypoScript/constants.typoscript',
+                'EXT:postmaster/Configuration/TypoScript/setup.typoscript',
+                'EXT:fe_register/Configuration/TypoScript/constants.typoscript',
+                'EXT:fe_register/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/setup.typoscript',
                 'EXT:rkw_newsletter/Tests/Functional/Controller/Fixtures/Frontend/Basics.typoscript',

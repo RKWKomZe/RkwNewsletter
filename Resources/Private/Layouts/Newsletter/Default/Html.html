@@ -1,5 +1,5 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-	xmlns:rkwMailer="http://typo3.org/ns/RKW/RkwMailer/ViewHelpers"
+	xmlns:postmaster="http://typo3.org/ns/Madj2k/Postmaster/ViewHelpers"
 	xmlns:rkwNewsletter="http://typo3.org/ns/RKW/RkwNewsletter/ViewHelpers"
 	data-namespace-typo3-fluid="true">
 
@@ -28,7 +28,7 @@
 					</td>
 				</tr>
 			</table>
-			<rkwMailer:email.pixelCounter queueRecipient="{queueRecipient}" queueMail="{queueMail}" />
+			<postmaster:email.pixelCounter queueRecipient="{queueRecipient}" queueMail="{queueMail}" />
 		</body>
 	</html>
 </html>

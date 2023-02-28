@@ -1,12 +1,12 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-    xmlns:rkwMailer="http://typo3.org/ns/RKW/RkwMailer/ViewHelpers"
+    xmlns:postmaster="http://typo3.org/ns/Madj2k/Postmaster/ViewHelpers"
     xmlns:rkwAuthors="http://typo3.org/ns/RKW/RkwAuthors/ViewHelpers"
     data-namespace-typo3-fluid="true">
     
     <!-- PLAINTEXT -->
     <f:section name="Plaintext">
         <f:if condition="{content.txRkwnewsletterAuthors}">
-            <rkwMailer:email.translate key="partials_newsletter_body_items_default_contact.contact" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />\n
+            <postmaster:email.translate key="partials_newsletter_body_items_default_contact.contact" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />\n
             <f:for each="{content.txRkwnewsletterAuthors}" as="author" iteration="iteratorAuthor">
                 <f:if condition="{iteratorAuthor.isFirst}">
                     <rkwAuthors:GetCombinedName author='{author}'/>\n
@@ -30,12 +30,12 @@
                             <f:if condition="{author.imageBoxes}">
                                 <f:then>
                                     <td style="padding: 5px 12px 0 16px; vertical-align: top; ">
-                                        <rkwMailer:email.image image="{author.imageBoxes}" treatIdAsReference="true" absolute="false" alt="<rkwAuthors:GetCombinedName author='{author}'/>" width="80" style="border:1px solid #D3D3D3;" />
+                                        <postmaster:email.image image="{author.imageBoxes}" treatIdAsReference="true" absolute="false" alt="<rkwAuthors:GetCombinedName author='{author}'/>" width="80" style="border:1px solid #D3D3D3;" />
                                     </td>
                                 </f:then>
                                 <f:else>
                                     <td style="padding: 5px 12px 0 16px; vertical-align: top; ">
-                                        <rkwMailer:email.image src="EXT:rkw_authors/Resources/Public/Images/author-box-small-fallback.jpg" absolute="false" alt="<rkwAuthors:GetCombinedName author='{author}'/>" width="80c" height="80c" style="border:1px solid #D3D3D3;" />
+                                        <postmaster:email.image src="EXT:rkw_authors/Resources/Public/Images/author-box-small-fallback.jpg" absolute="false" alt="<rkwAuthors:GetCombinedName author='{author}'/>" width="80c" height="80c" style="border:1px solid #D3D3D3;" />
                                     </td>
                                 </f:else>
                             </f:if>

@@ -12,7 +12,7 @@ plugin.tx_rkwnewsletter {
         }
 	}
 	persistence {
-		storagePid = 
+		storagePid =
 	}
 
 	settings {
@@ -48,7 +48,7 @@ plugin.tx_rkwnewsletter {
         webViewPageNum = 1536732477
 
         # cat=plugin.tx_rkwnewsletter//a; type=string; label=Required fields for subscription
-        requiredFieldsSubscription = txRkwregistrationGender, firstName, lastName
+        requiredFieldsSubscription = txFeregisterGender, firstName, lastName
 
         # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Maximum teaser length
         minTeaserLength = 500
@@ -105,7 +105,7 @@ plugin.tx_rkwnewsletter {
                     # cat=plugin.tx_rkwnewsletter//a; type=integer; label=GroupId permission
                     groupId = 4
                     # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Perms of user (0, 1, 2, 4, 8, 16 - and every possible combination of it)
-                    user = 8 
+                    user = 8
                     # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Perms of group (0, 1, 2, 4, 8, 16 - and every possible combination of it)
                     group = 8
                     # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Perms of everybody (0, 1, 2, 4, 8, 16 - and every possible combination of it)

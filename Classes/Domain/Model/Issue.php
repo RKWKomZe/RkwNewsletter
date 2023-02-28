@@ -15,7 +15,7 @@ namespace RKW\RkwNewsletter\Domain\Model;
  */
 
 use RKW\RkwAuthors\Domain\Model\Authors;
-use RKW\RkwMailer\Domain\Model\QueueMail;
+use Madj2k\Postmaster\Domain\Model\QueueMail;
 use RKW\RkwNewsletter\Exception;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
@@ -75,7 +75,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
 
     /**
-     * @var \RKW\RkwMailer\Domain\Model\QueueMail|null
+     * @var \Madj2k\Postmaster\Domain\Model\QueueMail|null
      */
     protected ?QueueMail $queueMail = null;
 
@@ -399,7 +399,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the queueMail
      *
-     * @return \RKW\RkwMailer\Domain\Model\QueueMail|null $queueMail
+     * @return \Madj2k\Postmaster\Domain\Model\QueueMail|null $queueMail
      */
     public function getQueueMail():? QueueMail
     {
@@ -410,7 +410,7 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Sets the queueMail
      *
-     * @param \RKW\RkwMailer\Domain\Model\QueueMail $queueMail
+     * @param \Madj2k\Postmaster\Domain\Model\QueueMail $queueMail
      * @return void
      */
     public function setQueueMail(QueueMail $queueMail): void

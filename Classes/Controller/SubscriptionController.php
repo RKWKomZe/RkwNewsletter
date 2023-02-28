@@ -18,8 +18,8 @@ use RKW\RkwNewsletter\Domain\Model\FrontendUser;
 use RKW\RkwNewsletter\Domain\Repository\FrontendUserRepository;
 use RKW\RkwNewsletter\Domain\Repository\NewsletterRepository;
 use RKW\RkwNewsletter\Domain\Repository\TopicRepository;
-use RKW\RkwRegistration\Registration\FrontendUserRegistration;
-use RKW\RkwRegistration\Utility\FrontendUserUtility;
+use Madj2k\FeRegister\Registration\FrontendUserRegistration;
+use Madj2k\FeRegister\Utility\FrontendUserUtility;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
@@ -227,7 +227,7 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      * @param \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser
      * @param array $topics
      * @return void
-     * @throws \RKW\RkwRegistration\Exception
+     * @throws \Madj2k\FeRegister\Exception
      * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
@@ -240,9 +240,9 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
      * @TYPO3\CMS\Extbase\Annotation\Validate("\RKW\RkwNewsletter\Validation\FormValidator", param="frontendUser")
-     * @TYPO3\CMS\Extbase\Annotation\Validate("\RKW\RkwRegistration\Validation\Consent\TermsValidator", param="frontendUser")
-     * @TYPO3\CMS\Extbase\Annotation\Validate("\RKW\RkwRegistration\Validation\Consent\PrivacyValidator", param="frontendUser")
-     * @TYPO3\CMS\Extbase\Annotation\Validate("\RKW\RkwRegistration\Validation\Consent\MarketingValidator", param="frontendUser")
+     * @TYPO3\CMS\Extbase\Annotation\Validate("\Madj2k\FeRegister\Validation\Consent\TermsValidator", param="frontendUser")
+     * @TYPO3\CMS\Extbase\Annotation\Validate("\Madj2k\FeRegister\Validation\Consent\PrivacyValidator", param="frontendUser")
+     * @TYPO3\CMS\Extbase\Annotation\Validate("\Madj2k\FeRegister\Validation\Consent\MarketingValidator", param="frontendUser")
      */
     public function createAction(FrontendUser $frontendUser, array $topics = []): void
     {
@@ -274,7 +274,7 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
             // get all changed properties and save them in the opt-in
             $frontendUserArray = FrontendUserUtility::convertObjectToArray($frontendUser, true); // take array to reduce size in the database
 
-            /** @var \RKW\RkwRegistration\Registration\FrontendUserRegistration $registration */
+            /** @var \Madj2k\FeRegister\Registration\FrontendUserRegistration $registration */
             $registration = $this->objectManager->get(FrontendUserRegistration::class);
             $registration->setFrontendUserOptInUpdate($frontendUser)
                 ->setFrontendUser($frontendUser)
@@ -308,7 +308,7 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
                 }
                 $this->frontendUserRepository->update($frontendUser);
 
-                \RKW\RkwRegistration\DataProtection\ConsentHandler::add(
+                \Madj2k\FeRegister\DataProtection\ConsentHandler::add(
                     $this->request,
                     $this->getFrontendUser(),
                     $subscriptions,
@@ -390,7 +390,7 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      * @param array $topics
      * @param int $privacy
      * @return void
-     * @throws \RKW\RkwRegistration\Exception
+     * @throws \Madj2k\FeRegister\Exception
      * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
@@ -482,7 +482,7 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
             $this->addFlashMessage(
                 LocalizationUtility::translate(
                     'registrationController.error.accept_privacy',
-                    'rkw_registration'
+                    'fe_register'
                 ),
                 '',
                 AbstractMessage::ERROR
@@ -499,7 +499,7 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
         ) {
 
             // register new user or simply send opt-in to existing user
-            /** @var \RKW\RkwRegistration\Registration\FrontendUserRegistration $registration */
+            /** @var \Madj2k\FeRegister\Registration\FrontendUserRegistration $registration */
             $registration = $this->objectManager->get(FrontendUserRegistration::class);
             $registration->setFrontendUser($frontendUser)
                 ->setData($subscriptions)
@@ -525,7 +525,7 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
                 $frontendUser->setTxRkwnewsletterSubscription($subscriptions);
                 $this->frontendUserRepository->update($frontendUser);
 
-                \RKW\RkwRegistration\DataProtection\ConsentHandler::add(
+                \Madj2k\FeRegister\DataProtection\ConsentHandler::add(
                     $this->request,
                     $this->getFrontendUser(),
                     $subscriptions,
@@ -580,7 +580,7 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      * @param string $tokenUser
      * @param string $token
      * @return void
-     * @throws \RKW\RkwRegistration\Exception
+     * @throws \Madj2k\FeRegister\Exception
      * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
      * @throws \TYPO3\CMS\Core\Crypto\PasswordHashing\InvalidPasswordHashException
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
@@ -597,7 +597,7 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      */
     public function optInAction(string $tokenUser, string $token): void
     {
-        /** @var \RKW\RkwRegistration\Registration\FrontendUserRegistration $registration */
+        /** @var \Madj2k\FeRegister\Registration\FrontendUserRegistration $registration */
         $registration = $this->objectManager->get(FrontendUserRegistration::class);
         $result = $registration->setFrontendUserToken($tokenUser)
             ->setCategory('rkwNewsletter')
@@ -608,7 +608,7 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
         if (
             ($result >= 200 && $result < 300)
             && ($frontendUser = $registration->getFrontendUserPersisted())
-            && ($frontendUser instanceof \RKW\RkwRegistration\Domain\Model\FrontendUser)
+            && ($frontendUser instanceof \Madj2k\FeRegister\Domain\Model\FrontendUser)
             && ($frontendUser = $this->frontendUserRepository->findByIdentifier($frontendUser->getUid()))
         ){
 
@@ -633,7 +633,7 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
         } elseif (
             ($result >= 300 && $result < 400)
             && ($frontendUser = $registration->getFrontendUserPersisted())
-            && ($frontendUser instanceof \RKW\RkwRegistration\Domain\Model\FrontendUser)
+            && ($frontendUser instanceof \Madj2k\FeRegister\Domain\Model\FrontendUser)
             && ($frontendUser = $this->frontendUserRepository->findByIdentifier($frontendUser->getUid()))
         ){
             $this->addFlashMessage(
@@ -667,15 +667,15 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      * createSubscription - used by SignalSlot
      * Called via SignalSlot after successfully completed optIn
      *
-     * @param \RKW\RkwRegistration\Domain\Model\FrontendUser $frontendUser
-     * @param \RKW\RkwRegistration\Domain\Model\OptIn $optIn
+     * @param \Madj2k\FeRegister\Domain\Model\FrontendUser $frontendUser
+     * @param \Madj2k\FeRegister\Domain\Model\OptIn $optIn
      * @return void
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      */
     public function saveSubscription(
-        \RKW\RkwRegistration\Domain\Model\FrontendUser $frontendUser,
-        \RKW\RkwRegistration\Domain\Model\OptIn $optIn
+        \Madj2k\FeRegister\Domain\Model\FrontendUser $frontendUser,
+        \Madj2k\FeRegister\Domain\Model\OptIn $optIn
     ){
 
         if (
