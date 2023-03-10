@@ -1,0 +1,16 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+    <f:layout name="{mailType}" />
+    
+    <!-- PLAINTEXT -->
+    <f:section name="Plaintext">
+        <f:render partial="Body" section="Plaintext" arguments="{_all}" />
+    </f:section>
+    
+    <!-- HTML -->
+    <f:section name="Html">
+        <f:render partial="Body" section="Html" arguments="{_all}" />
+    </f:section>
+
+</html>
