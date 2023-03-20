@@ -1,15 +1,16 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-    xmlns:rkwMailer="http://typo3.org/ns/RKW/RkwMailer/ViewHelpers"
+    xmlns:postmaster="http://typo3.org/ns/Madj2k/Postmaster/ViewHelpers"
+    xmlns:rkwNewsletter="http://typo3.org/ns/RKW/RkwNewsletter/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
     <!-- PLAINTEXT -->
     <f:section name="Plaintext">
         Liebe Mitglieder, liebe Interessierte, sehr geehrte Damen und Herren,
         \n\n
-        <rkwMailer:cache.renderCache queueMail="{queueMail}" isPlaintext="true" additionalIdentifier="{rkwNewsletter:mailing.getCacheIdentifier(issue:'{issue}', topics:'{topics}')}">
+        <postmaster:cache.renderCache queueMail="{queueMail}" isPlaintext="true" additionalIdentifier="{rkwNewsletter:mailing.getCacheIdentifier(issue:'{issue}', topics:'{topics}')}">
             <f:render partial="Body/Editorial" section="Plaintext" arguments="{_all}" />
             <f:render partial="Body/Items" section="Plaintext" arguments="{_all}" />
-        </rkwMailer:cache.renderCache>
+        </postmaster:cache.renderCache>
     </f:section>
 
     <!-- =================================================================================== -->
@@ -27,10 +28,10 @@
         </tr>
 
         <!-- Editorial & Content -->
-        <rkwMailer:cache.renderCache queueMail="{queueMail}" additionalIdentifier="{rkwNewsletter:mailing.getCacheIdentifier(issue:'{issue}', topics:'{topics}')}" nonCachedMarkers="{hash: '{hash}'}">
+        <postmaster:cache.renderCache queueMail="{queueMail}" additionalIdentifier="{rkwNewsletter:mailing.getCacheIdentifier(issue:'{issue}', topics:'{topics}')}" nonCachedMarkers="{hash: '{hash}'}">
             <f:render partial="Body/Editorial" section="Html" arguments="{_all}" />
             <f:render partial="Body/Items" section="Html" arguments="{_all}" />
-        </rkwMailer:cache.renderCache>
+        </postmaster:cache.renderCache>
     </f:section>
 
 </html>
