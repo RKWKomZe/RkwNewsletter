@@ -1,12 +1,13 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
     xmlns:rkwMailer="http://typo3.org/ns/RKW/RkwMailer/ViewHelpers"
+    xmlns:rkwNewsletter="http://typo3.org/ns/RKW/RkwNewsletter/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
     <!-- PLAINTEXT -->
     <f:section name="Plaintext">
-        <rkwMailer:recipientSalutation 
-            queueRecipient="{queueRecipient}" 
-            prependText="{rkwMailer:email.translate(key:'partials_newsletter_body.headline', languageKey:'{queueRecipient.languageCode}', extensionName:'rkwNewsletter')} " 
+        <rkwMailer:recipientSalutation
+            queueRecipient="{queueRecipient}"
+            prependText="{rkwMailer:email.translate(key:'partials_newsletter_body.headline', languageKey:'{queueRecipient.languageCode}', extensionName:'rkwNewsletter')} "
             appendText="," />
         \n\n
         <rkwMailer:cache.renderCache queueMail="{queueMail}" isPlaintext="true" additionalIdentifier="{rkwNewsletter:mailing.getCacheIdentifier(issue:'{issue}', topics:'{topics}')}">
@@ -14,23 +15,23 @@
             <f:render partial="Body/Items" section="Plaintext" arguments="{_all}" />
         </rkwMailer:cache.renderCache>
     </f:section>
-        
+
     <!-- =================================================================================== -->
     <!-- HTML -->
 
     <f:section name="Html">
-    
+
         <!-- Headline -->
         <tr>
             <td style="padding: 0 16px; line-height: 20px">
                 <p style="margin: 24px 0 24px; font-size:24px; line-height: 28px">
-                    <rkwMailer:recipientSalutation queueRecipient="{queueRecipient}" 
-                        prependText="{rkwMailer:email.translate(key:'partials_newsletter_body.headline', languageKey:'{queueRecipient.languageCode}', extensionName:'rkwNewsletter')} " 
+                    <rkwMailer:recipientSalutation queueRecipient="{queueRecipient}"
+                        prependText="{rkwMailer:email.translate(key:'partials_newsletter_body.headline', languageKey:'{queueRecipient.languageCode}', extensionName:'rkwNewsletter')} "
                         appendText="," />
                 </p>
             </td>
         </tr>
-    
+
         <!-- Editorial & Content -->
         <rkwMailer:cache.renderCache queueMail="{queueMail}" additionalIdentifier="{rkwNewsletter:mailing.getCacheIdentifier(issue:'{issue}', topics:'{topics}')}" nonCachedMarkers="{hash: '{hash}'}">
             <f:render partial="Body/Editorial" section="Html" arguments="{_all}" />
