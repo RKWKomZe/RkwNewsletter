@@ -31,14 +31,14 @@ class ResetNewsletterConfigOnPageCopyHook
      *
      * @param string $action The action to perform, e.g. 'update'.
      * @param string $table The table affected by action, e.g. 'fe_users'.
-     * @param int $uid The uid of the record affected by action.
+     * @param string $uid The uid of the record affected by action.
      * @param array $modifiedFields The modified fields of the record.
      * @return void
      */
     public function processDatamap_postProcessFieldArray(
         string $action,
         string $table,
-        int $uid,
+        string $uid,
         array &$modifiedFields
     ): void {
 

@@ -127,7 +127,7 @@
         <pid>0</pid>
         <email>test1@teste.de</email>
         <tx_rkwnewsletter_subscription>230,231</tx_rkwnewsletter_subscription>
-        <tx_rkwnewsletter_hash>HashMeIfYouCan</tx_rkwnewsletter_hash>
+        <tx_rkwnewsletter_hash>HashMeIfYouCanButWeHaveToHaveFourtySigns</tx_rkwnewsletter_hash>
         <tx_feregister_language_key>de</tx_feregister_language_key>
     </fe_users>
 
@@ -136,7 +136,7 @@
         <pid>0</pid>
         <email>test2@teste.de</email>
         <tx_rkwnewsletter_subscription>230</tx_rkwnewsletter_subscription>
-        <tx_rkwnewsletter_hash>HashMeIfYouCan</tx_rkwnewsletter_hash>
+        <tx_rkwnewsletter_hash>HashMeIfYouCanButWeHaveToHaveFourtySigns</tx_rkwnewsletter_hash>
         <tx_feregister_language_key>de</tx_feregister_language_key>
     </fe_users>
 
@@ -145,7 +145,7 @@
         <pid>0</pid>
         <email>test3@teste.de</email>
         <tx_rkwnewsletter_subscription>231</tx_rkwnewsletter_subscription>
-        <tx_rkwnewsletter_hash>HashMeIfYouCan</tx_rkwnewsletter_hash>
+        <tx_rkwnewsletter_hash>HashMeIfYouCanButWeHaveToHaveFourtySigns</tx_rkwnewsletter_hash>
         <tx_feregister_language_key>de</tx_feregister_language_key>
     </fe_users>
 
@@ -154,7 +154,7 @@
         <pid>0</pid>
         <email>test4@teste.de</email>
         <tx_rkwnewsletter_subscription>231</tx_rkwnewsletter_subscription>
-        <tx_rkwnewsletter_hash>HashMeIfYouCan</tx_rkwnewsletter_hash>
+        <tx_rkwnewsletter_hash>HashMeIfYouCanButWeHaveToHaveFourtySigns</tx_rkwnewsletter_hash>
         <tx_feregister_language_key>de</tx_feregister_language_key>
     </fe_users>
 

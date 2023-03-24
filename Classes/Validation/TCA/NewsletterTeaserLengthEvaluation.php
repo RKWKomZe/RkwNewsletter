@@ -52,7 +52,7 @@ class NewsletterTeaserLengthEvaluation
      * @return string Evaluated field value
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
-    public function evaluateFieldValue(string $value, string $isIn, bool &$set): string
+    public function evaluateFieldValue(string $value, string $isIn = null, bool &$set = false): string
     {
 
         $settings = $this->getSettings();

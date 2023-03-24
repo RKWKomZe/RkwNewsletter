@@ -72,6 +72,22 @@ config.tx_extbase.persistence {
                 tableName = be_users
             }
         }
+
+        #===============================================
+
+        RKW\RkwNewsletter\Domain\Model\Approval {
+
+            // storage for new records
+            newRecordStoragePid = {$plugin.tx_rkwnewsletter.persistence.storagePid}
+        }
+
+        #===============================================
+
+        RKW\RkwNewsletter\Domain\Model\Issue {
+
+            // storage for new records
+             newRecordStoragePid = {$plugin.tx_rkwnewsletter.persistence.storagePid}
+        }
     }
 }
 
@@ -92,6 +108,7 @@ plugin.tx_rkwnewsletter {
 		partialRootPaths {
             0 = EXT:rkw_newsletter/Resources/Private/Partials/
             1 = {$plugin.tx_rkwnewsletter.view.partialRootPath}
+            2 = {$plugin.tx_coreextended.view.partialRootPath}
         }
 
         newsletter {
@@ -111,13 +128,6 @@ plugin.tx_rkwnewsletter {
 	}
 	persistence {
 		storagePid = {$plugin.tx_rkwnewsletter.persistence.storagePid}
-		  classes {
-       RKW\RkwNewsletter\Domain\Model\FrontendUser {
-        newRecordStoragePid = 618
-       }
-   Madj2k\FeRegister\Domain\Model\FrontendUser {
-        newRecordStoragePid = 618
-       }
 	}
 
 	settings {
@@ -197,6 +207,7 @@ plugin.tx_rkwnewsletter_webview {
         partialRootPaths {
             0 = EXT:rkw_newsletter/Resources/Private/Partials/Newsletter/
             1 = {$plugin.tx_rkwnewsletter.view.newsletter.partialRootPath}
+            2 = {$plugin.tx_coreextended.view.partialRootPath}
         }
 
         newsletter {
@@ -212,6 +223,7 @@ plugin.tx_rkwnewsletter_webview {
             partialRootPaths {
                 0 = EXT:rkw_newsletter/Resources/Private/Partials/Newsletter
                 1 = {$plugin.tx_rkwnewsletter.view.newsletter.partialRootPath}
+                2 = {$plugin.tx_coreextended.view.partialRootPath}
             }
         }
     }
@@ -237,6 +249,7 @@ module.tx_rkwnewsletter {
         partialRootPaths {
             0 = EXT:rkw_newsletter/Resources/Private/Partials/Backend/
             1 = {$module.tx_rkwnewsletter.view.partialRootPath}
+            2 = {$plugin.tx_coreextended.view.partialRootPath}
         }
     }
 

@@ -58,6 +58,9 @@ class MailProcessorTest extends FunctionalTestCase
      */
     protected $testExtensionsToLoad = [
         'typo3conf/ext/core_extended',
+        'typo3conf/ext/ajax_api',
+        'typo3conf/ext/accelerator',
+        'typo3conf/ext/persisted_sanitized_routing',
         'typo3conf/ext/postmaster',
         'typo3conf/ext/rkw_authors',
         'typo3conf/ext/rkw_newsletter',
@@ -68,7 +71,9 @@ class MailProcessorTest extends FunctionalTestCase
     /**
      * @var string[]
      */
-    protected $coreExtensionsToLoad = [ ];
+    protected $coreExtensionsToLoad = [
+        'seo'
+    ];
 
 
     /**
@@ -145,7 +150,9 @@ class MailProcessorTest extends FunctionalTestCase
                 'EXT:postmaster/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/constants.typoscript',
                 self::FIXTURE_PATH . '/Frontend/Configuration/Rootpage.typoscript',
-            ]
+            ],
+            ['rkw-kompetenzzentrum.local' => self::FIXTURE_PATH . '/Frontend/Configuration/config.yaml']
+
         );
 
         /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
@@ -302,7 +309,7 @@ class MailProcessorTest extends FunctionalTestCase
         /** @var \Madj2k\Postmaster\Domain\Model\QueueMail $queueMail */
         $queueMail = $this->queueMailRepository->findByUid(1);
 
-        self::assertEquals(1, $this->subject->getMailService()->getQueueMail()->getUid());
+        self::assertEquals(1, $this->subject->getMailMessage()->getQueueMail()->getUid());
         self::assertEquals(2, $queueMail->getSettingsPid());
         self::assertEquals('rkwNewsletter', $queueMail->getCategory());
         self::assertEquals('return@testen.de', $queueMail->getReturnPath());
@@ -365,7 +372,7 @@ class MailProcessorTest extends FunctionalTestCase
         /** @var \Madj2k\Postmaster\Domain\Model\QueueMail $queueMail */
         $queueMail = $this->queueMailRepository->findByUid(1);
 
-        self::assertEquals(1, $this->subject->getMailService()->getQueueMail()->getUid());
+        self::assertEquals(1, $this->subject->getMailMessage()->getQueueMail()->getUid());
         self::assertEquals($expectedLayoutPaths, $queueMail->getLayoutPaths());
         self::assertEquals($expectedPartialPaths, $queueMail->getPartialPaths());
     }
@@ -433,7 +440,7 @@ class MailProcessorTest extends FunctionalTestCase
         /** @var \Madj2k\Postmaster\Domain\Model\QueueMail $queueMail */
         $queueMail = $this->queueMailRepository->findByUid(1);
 
-        self::assertEquals(1, $this->subject->getMailService()->getQueueMail()->getUid());
+        self::assertEquals(1, $this->subject->getMailMessage()->getQueueMail()->getUid());
         self::assertEquals($expectedLayoutPaths, $queueMail->getLayoutPaths());
         self::assertEquals($expectedPartialPaths, $queueMail->getPartialPaths());
         self::assertEquals('Managementletter', $queueMail->getHtmlTemplate());
@@ -540,7 +547,7 @@ class MailProcessorTest extends FunctionalTestCase
         /** @var \Madj2k\Postmaster\Domain\Model\QueueMail $queueMail */
         $queueMail = $this->queueMailRepository->findByUid(1);
 
-        self::assertEquals(1, $this->subject->getMailService()->getQueueMail()->getUid());
+        self::assertEquals(1, $this->subject->getMailMessage()->getQueueMail()->getUid());
         self::assertEquals(0, $queueMail->getPipeline());
     }
 
@@ -570,7 +577,7 @@ class MailProcessorTest extends FunctionalTestCase
 
         $this->subject->setIssue($issue);
 
-        self::assertEquals(1, $this->subject->getMailService()->getQueueMail()->getUid());
+        self::assertEquals(1, $this->subject->getMailMessage()->getQueueMail()->getUid());
         self::assertNull($issue->getQueueMail());
 
     }
@@ -608,7 +615,7 @@ class MailProcessorTest extends FunctionalTestCase
         $queueMails = $this->queueMailRepository->findAll();
 
         self::assertCount(1, $queueMails);
-        self::assertEquals(50, $this->subject->getMailService()->getQueueMail()->getUid());
+        self::assertEquals(50, $this->subject->getMailMessage()->getQueueMail()->getUid());
     }
 
 
@@ -1341,10 +1348,10 @@ class MailProcessorTest extends FunctionalTestCase
         self::assertIsArray( $marker);
         self::assertCount(4, $marker);
 
-        self::assertEquals('RKW_MAILER_NAMESPACES RKW\RkwNewsletter\Domain\Model\Issue:150', $marker['issue']);
-        self::assertEquals('RKW_MAILER_NAMESPACES_ARRAY RKW\RkwNewsletter\Domain\Model\Topic:151', $marker['topics']);
-        self::assertEquals('HashMeIfYouCan', $marker['hash']);
-        self::assertIsArray( $marker['settings']);
+        self::assertEquals('TX_ACCELERATOR_NAMESPACES RKW\RkwNewsletter\Domain\Model\Issue:150', $marker['issue']);
+        self::assertEquals('TX_ACCELERATOR_NAMESPACES_ARRAY RKW\RkwNewsletter\Domain\Model\Topic:151', $marker['topics']);
+        self::assertEquals('HashMeIfYouCanButWeHaveToHaveFourtySigns', $marker['hash']);
+        self::assertIsArray($marker['settings']);
         self::assertEquals('302400', $marker['settings']['reminderApprovalStage1']);
 
     }
@@ -1854,21 +1861,22 @@ class MailProcessorTest extends FunctionalTestCase
         $queueRecipient = $this->queueRecipientRepository->findByUid(1);
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
 
-         self::assertStringContainsString(
-             'http%3A%2F%2Fwww.rkw-kompetenzzentrum.rkw.local%2Findex.php%3Fid%3D2%26',
-             $this->mailCache->getPlaintextBody($queueRecipient)
-         );
         self::assertStringContainsString(
-            'http%3A%2F%2Fwww.rkw-kompetenzzentrum.rkw.local%2Findex.php%3Fid%3D2%26',
+             'http%3A%2F%2Fwww.rkw-kompetenzzentrum.rkw.local%2Fabonnements%2',
+             $this->mailCache->getPlaintextBody($queueRecipient)
+        );
+
+        self::assertStringContainsString(
+            'http%3A%2F%2Fwww.rkw-kompetenzzentrum.rkw.local%2Fabonnements%2',
             $this->mailCache->getHtmlBody($queueRecipient)
         );
 
         self::assertStringContainsString(
-            '%26tx_rkwnewsletter_subscription%255Bhash%255D%3DHashMeIfYouCan',
+            '%2FHashMeIfYouCanButWeHaveToHaveFourtySigns%2F',
             $this->mailCache->getPlaintextBody($queueRecipient)
         );
         self::assertStringContainsString(
-            '%26tx_rkwnewsletter_subscription%255Bhash%255D%3DHashMeIfYouCan',
+            '%2FHashMeIfYouCanButWeHaveToHaveFourtySigns%2F',
             $this->mailCache->getHtmlBody($queueRecipient)
         );
     }
@@ -2247,8 +2255,8 @@ class MailProcessorTest extends FunctionalTestCase
         self::assertIsArray( $marker);
         self::assertCount(3, $marker);
 
-        self::assertEquals('RKW_MAILER_NAMESPACES RKW\RkwNewsletter\Domain\Model\Issue:210', $marker['issue']);
-        self::assertEquals('RKW_MAILER_NAMESPACES_ARRAY RKW\RkwNewsletter\Domain\Model\Topic:211', $marker['topics']);
+        self::assertEquals('TX_ACCELERATOR_NAMESPACES RKW\RkwNewsletter\Domain\Model\Issue:210', $marker['issue']);
+        self::assertEquals('TX_ACCELERATOR_NAMESPACES_ARRAY RKW\RkwNewsletter\Domain\Model\Topic:211', $marker['topics']);
         self::assertNull($marker['hash']);
         self::assertIsArray( $marker['settings']);
         self::assertEquals('302400', $marker['settings']['reminderApprovalStage1']);
@@ -2310,8 +2318,8 @@ class MailProcessorTest extends FunctionalTestCase
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
 
         // we have to trigger the rendering manually here - for testing only!
-        $this->subject->getMailService()->getMailer()->renderTemplates(
-            $this->subject->getMailService()->getQueueMail(),
+        $this->subject->getMailMessage()->getMailer()->renderTemplates(
+            $this->subject->getMailMessage()->getQueueMail(),
             $queueRecipient
         );
 
@@ -2451,7 +2459,7 @@ class MailProcessorTest extends FunctionalTestCase
         $this->subject->setIssue($issue);
 
         self::assertTrue($this->subject->sendMails(2));
-        self::assertEquals(1, $this->subject->getMailService()->getQueueMail()->getType());
+        self::assertEquals(1, $this->subject->getMailMessage()->getQueueMail()->getType());
     }
 
 
@@ -2481,7 +2489,7 @@ class MailProcessorTest extends FunctionalTestCase
         $this->subject->setIssue($issue);
 
         self::assertTrue($this->subject->sendMails(2));
-        self::assertTrue($this->subject->getMailService()->getQueueMail()->getPipeline());
+        self::assertTrue($this->subject->getMailMessage()->getQueueMail()->getPipeline());
     }
 
 
@@ -2517,13 +2525,13 @@ class MailProcessorTest extends FunctionalTestCase
         // First call
         // --------------------------------
         self::assertTrue($this->subject->sendMails(4));
-        self::assertTrue($this->subject->getMailService()->getQueueMail()->getPipeline());
+        self::assertTrue($this->subject->getMailMessage()->getQueueMail()->getPipeline());
 
         // --------------------------------
         // Second call
         // --------------------------------
         self::assertFalse($this->subject->sendMails(4));
-        self::assertFalse($this->subject->getMailService()->getQueueMail()->getPipeline());
+        self::assertFalse($this->subject->getMailMessage()->getQueueMail()->getPipeline());
     }
 
 
@@ -2618,7 +2626,7 @@ class MailProcessorTest extends FunctionalTestCase
         $this->subject->setIssue($issue);
 
         /** @var \Madj2k\Postmaster\Domain\Model\QueueMail $queueMail */
-        $queueMail = $this->subject->getMailService()->getQueueMail();
+        $queueMail = $this->subject->getMailMessage()->getQueueMail();
         $count = $this->queueMailRepository->findAll()->count();
 
         // --------------------------------
@@ -2630,7 +2638,7 @@ class MailProcessorTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(260);
         self::assertEquals($queueMail->getUid(), $issue->getQueueMail()->getUid());
-        self::assertEquals($queueMail->getUid(), $this->subject->getMailService()->getQueueMail()->getUid());
+        self::assertEquals($queueMail->getUid(), $this->subject->getMailMessage()->getQueueMail()->getUid());
 
         // --------------------------------
         // Second call
@@ -2641,7 +2649,7 @@ class MailProcessorTest extends FunctionalTestCase
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(260);
         self::assertEquals($queueMail->getUid(), $issue->getQueueMail()->getUid());
-        self::assertEquals($queueMail->getUid(), $this->subject->getMailService()->getQueueMail()->getUid());
+        self::assertEquals($queueMail->getUid(), $this->subject->getMailMessage()->getQueueMail()->getUid());
 
     }
 
@@ -2890,8 +2898,8 @@ class MailProcessorTest extends FunctionalTestCase
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
 
         // we have to trigger the rendering manually here - for testing only!
-        $this->subject->getMailService()->getMailer()->renderTemplates(
-            $this->subject->getMailService()->getQueueMail(),
+        $this->subject->getMailMessage()->getMailer()->renderTemplates(
+            $this->subject->getMailMessage()->getQueueMail(),
             $queueRecipient
         );
 
@@ -2917,8 +2925,8 @@ class MailProcessorTest extends FunctionalTestCase
         self::assertInstanceOf(QueueRecipient::class, $queueRecipient);
 
         // we have to trigger the rendering manually here - for testing only!
-        $this->subject->getMailService()->getMailer()->renderTemplates(
-            $this->subject->getMailService()->getQueueMail(),
+        $this->subject->getMailMessage()->getMailer()->renderTemplates(
+            $this->subject->getMailMessage()->getQueueMail(),
             $queueRecipient
         );
 
@@ -2939,7 +2947,7 @@ class MailProcessorTest extends FunctionalTestCase
             $this->mailCache->getHtmlBody($queueRecipient)
         );
 
-        self::assertEquals(false, $this->subject->getMailService()->getQueueMail()->getPipeline());
+        self::assertEquals(false, $this->subject->getMailMessage()->getQueueMail()->getPipeline());
         self::assertNotEquals(IssueStatus::STAGE_DONE, $issue->getStatus());
         self::assertEquals(0, $issue->getSentTstamp());
         self::assertEquals(0, $issue->getNewsletter()->getLastSentTstamp());

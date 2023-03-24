@@ -5,10 +5,7 @@
 
     <!-- PLAINTEXT -->
     <f:section name="Plaintext">
-        <postmaster:email.recipientSalutation
-            queueRecipient="{queueRecipient}"
-            prependText="{postmaster:email.translate(key:'partials_newsletter_body.headline', languageKey:'{queueRecipient.languageCode}', extensionName:'rkwNewsletter')} "
-            appendText="," />
+        Liebe Mitglieder, liebe Interessierte, sehr geehrte Damen und Herren,
         \n\n
         <postmaster:cache.renderCache queueMail="{queueMail}" isPlaintext="true" additionalIdentifier="{rkwNewsletter:mailing.getCacheIdentifier(issue:'{issue}', topics:'{topics}')}">
             <f:render partial="Body/Editorial" section="Plaintext" arguments="{_all}" />
@@ -25,9 +22,7 @@
         <tr>
             <td style="padding: 0 16px; line-height: 20px">
                 <p style="margin: 24px 0 24px; font-size:24px; line-height: 28px">
-                    <postmaster:email.recipientSalutation queueRecipient="{queueRecipient}"
-                        prependText="{postmaster:email.translate(key:'partials_newsletter_body.headline', languageKey:'{queueRecipient.languageCode}', extensionName:'rkwNewsletter')} "
-                        appendText="," />
+                    Liebe Mitglieder, liebe Interessierte, sehr geehrte Damen und Herren,
                 </p>
             </td>
         </tr>

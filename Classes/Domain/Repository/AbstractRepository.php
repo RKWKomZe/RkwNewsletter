@@ -15,6 +15,7 @@ namespace RKW\RkwNewsletter\Domain\Repository;
  * The TYPO3 project - inspiring people to share!
  */
 
+use Madj2k\CoreExtended\Domain\Repository\StoragePidAwareAbstractRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -27,20 +28,8 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
  * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class AbstractRepository  extends \TYPO3\CMS\Extbase\Persistence\Repository
+class AbstractRepository  extends StoragePidAwareAbstractRepository
 {
 
-    /**
-     * Set the extensionName explicitly in configurationManager in order to make
-     * storagePid work in CLI-context and with the test-framework
-     *
-     * @return void
-     */
-    public function initializeObject(): void
-    {
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $configurationManager = $objectManager->get(ConfigurationManager::class);
-        $configurationManager->setConfiguration(['extensionName' => 'Rkwnewsletter']);
-    }
 
 }

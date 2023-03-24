@@ -15,8 +15,8 @@ namespace RKW\RkwNewsletter\Mailing;
  */
 
 use Madj2k\CoreExtended\Utility\FrontendSimulatorUtility;
-use Madj2k\Postmaster\Service\MailService;
 use Madj2k\Postmaster\Validation\QueueMailValidator;
+use Madj2k\Postmaster\Mail\MailMessage;
 use RKW\RkwNewsletter\Domain\Model\FrontendUser;
 use RKW\RkwNewsletter\Domain\Model\Issue;
 use RKW\RkwNewsletter\Domain\Repository\FrontendUserRepository;
@@ -78,10 +78,10 @@ class MailProcessor
 
 
     /**
-     * @var \Madj2k\Postmaster\Service\MailService
+     * @var \Madj2k\Postmaster\Mail\MailMessage
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected MailService $mailService;
+    protected MailMessage $mailMessage;
 
 
     /**
@@ -111,13 +111,13 @@ class MailProcessor
 
 
     /**
-     * Gets the mailService
+     * Gets the mailMessage
      *
-     * @return \Madj2k\Postmaster\Service\MailService
+     * @return \Madj2k\Postmaster\Mail\MailMessage
      */
-    public function getMailService(): MailService
+    public function getMailMessage(): MailMessage
     {
-        return $this->mailService;
+        return $this->mailMessage;
     }
 
 
@@ -144,7 +144,7 @@ class MailProcessor
 
 
     /**
-     * Sets the issue and inits mailService
+     * Sets the issue and inits mailMessage
      *
      * @param \RKW\RkwNewsletter\Domain\Model\Issue $issue $issue
      * @return void
@@ -349,8 +349,8 @@ class MailProcessor
         // check for contents!
         if ($this->contentLoader->hasContents()) {
 
-            // send email via mailService
-            $result = $this->mailService->setTo(
+            // send email via mailMessage
+            $result = $this->mailMessage->setTo(
                 $frontendUser,
                 array(
                     'marker'  => array(
@@ -416,8 +416,8 @@ class MailProcessor
         // check for contents!
         if ($this->contentLoader->hasContents()) {
 
-            // send email via mailService
-            $result = $this->mailService->setTo(
+            // send email via mailMessage
+            $result = $this->mailMessage->setTo(
                 [
                     'fistName' => 'Maxima',
                     'lastName' => 'Musterfrau',
@@ -486,12 +486,12 @@ class MailProcessor
         if (! $this->issue->getStartTstamp()) {
 
             $this->issue->setStartTstamp(time());
-            $this->issue->setQueueMail($this->mailService->getQueueMail());
+            $this->issue->setQueueMail($this->mailMessage->getQueueMail());
             $this->issueRepository->update($this->issue);
             $this->persistenceManager->persistAll();
 
-            $this->mailService->getQueueMail()->setType(1);
-            $this->mailService->startPipelining();
+            $this->mailMessage->getQueueMail()->setType(1);
+            $this->mailMessage->startPipelining();
 
             $this->getLogger()->log(
                 LogLevel::INFO,
@@ -538,13 +538,13 @@ class MailProcessor
             $this->persistenceManager->persistAll();
 
             // send mail
-            $this->mailService->send();
+            $this->mailMessage->send();
             return true;
         }
 
         // no subscribers left? Then end current sending!
         // remove pipeline flag
-        $this->mailService->stopPipelining();
+        $this->mailMessage->stopPipelining();
 
         // set status and timestamp
         $this->issue->setSentTstamp(time());
@@ -605,7 +605,7 @@ class MailProcessor
                 }
             }
 
-            return $this->mailService->send();
+            return $this->mailMessage->send();
         }
 
         $this->getLogger()->log(
@@ -621,7 +621,7 @@ class MailProcessor
 
 
     /**
-     * inits mailService
+     * inits mailMessage
      *
      * @return void
      * @throws \RKW\RkwNewsletter\Exception
@@ -639,14 +639,14 @@ class MailProcessor
         ) {
 
             if ($queueMail = $this->issue->getQueueMail()) {
-                $this->mailService->setQueueMail($queueMail);
+                $this->mailMessage->setQueueMail($queueMail);
 
                 $this->getLogger()->log(
                     LogLevel::DEBUG,
-                    sprintf('Initialized mailService for issue with id=%s of newsletter-configuration with id=%s with existing queueMail-object with id=%s.',
+                    sprintf('Initialized mailMessage for issue with id=%s of newsletter-configuration with id=%s with existing queueMail-object with id=%s.',
                         $this->issue->getUid(),
                         $this->issue->getNewsletter()->getUid(),
-                        $this->mailService->getQueueMail()->getUid()
+                        $this->mailMessage->getQueueMail()->getUid()
                     )
                 );
 
@@ -655,49 +655,49 @@ class MailProcessor
                 // set settingsPid and load settings from there
                 $settings = $this->getSettings();
                 if ($this->issue->getNewsletter()->getSettingsPage()) {
-                    $this->mailService->getQueueMail()->setSettingsPid($this->issue->getNewsletter()->getSettingsPage()->getUid());
+                    $this->mailMessage->getQueueMail()->setSettingsPid($this->issue->getNewsletter()->getSettingsPage()->getUid());
                 }
 
                 // set properties for queueMail
                 /** @var \Madj2k\Postmaster\Domain\Model\QueueMail $queueMail */
-                $this->mailService->getQueueMail()->setSubject($this->issue->getTitle());
-                $this->mailService->getQueueMail()->setCategory('rkwNewsletter');
+                $this->mailMessage->getQueueMail()->setSubject($this->issue->getTitle());
+                $this->mailMessage->getQueueMail()->setCategory('rkwNewsletter');
 
 
                 // set mail params
                 if ($this->issue->getNewsletter()->getReturnPath()) {
-                    $this->mailService->getQueueMail()->setReturnPath($this->issue->getNewsletter()->getReturnPath());
+                    $this->mailMessage->getQueueMail()->setReturnPath($this->issue->getNewsletter()->getReturnPath());
                 }
                 if ($this->issue->getNewsletter()->getReplyMail()) {
-                    $this->mailService->getQueueMail()->setReplyToAddress($this->issue->getNewsletter()->getReplyMail());
+                    $this->mailMessage->getQueueMail()->setReplyToAddress($this->issue->getNewsletter()->getReplyMail());
                 }
                 if ($this->issue->getNewsletter()->getSenderMail()) {
-                    $this->mailService->getQueueMail()->setFromAddress($this->issue->getNewsletter()->getSenderMail());
+                    $this->mailMessage->getQueueMail()->setFromAddress($this->issue->getNewsletter()->getSenderMail());
                 }
                 if ($this->issue->getNewsletter()->getSenderName()) {
-                    $this->mailService->getQueueMail()->setReplyToName($this->issue->getNewsletter()->getSenderName());
-                    $this->mailService->getQueueMail()->setFromName($this->issue->getNewsletter()->getSenderName());
+                    $this->mailMessage->getQueueMail()->setReplyToName($this->issue->getNewsletter()->getSenderName());
+                    $this->mailMessage->getQueueMail()->setFromName($this->issue->getNewsletter()->getSenderName());
                 }
 
-                $this->mailService->getQueueMail()->setPlaintextTemplate(
+                $this->mailMessage->getQueueMail()->setPlaintextTemplate(
                     ($this->issue->getNewsletter()->getTemplate() ?: 'Default')
                 );
-                $this->mailService->getQueueMail()->setHtmlTemplate(
+                $this->mailMessage->getQueueMail()->setHtmlTemplate(
                     ($this->issue->getNewsletter()->getTemplate() ?: 'Default')
                 );
 
-                $this->mailService->getQueueMail()->addLayoutPaths($settings['view']['newsletter']['layoutRootPaths']);
-                $this->mailService->getQueueMail()->addTemplatePaths($settings['view']['newsletter']['templateRootPaths']);
-                $this->mailService->getQueueMail()->addPartialPaths($settings['view']['newsletter']['partialRootPaths']);
+                $this->mailMessage->getQueueMail()->addLayoutPaths($settings['view']['newsletter']['layoutRootPaths']);
+                $this->mailMessage->getQueueMail()->addTemplatePaths($settings['view']['newsletter']['templateRootPaths']);
+                $this->mailMessage->getQueueMail()->addPartialPaths($settings['view']['newsletter']['partialRootPaths']);
 
                 // add paths depending on template - including the default one!
                 $layoutPaths = $settings['view']['newsletter']['layoutRootPaths'];
                 if (is_array($layoutPaths)) {
                     foreach ($layoutPaths as $path) {
                         $path = trim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-                        $this->mailService->getQueueMail()->addLayoutPath($path . 'Default');
+                        $this->mailMessage->getQueueMail()->addLayoutPath($path . 'Default');
                         if ($this->issue->getNewsletter()->getTemplate() != 'Default') {
-                            $this->mailService->getQueueMail()->addLayoutPath(
+                            $this->mailMessage->getQueueMail()->addLayoutPath(
                                 $path . $this->issue->getNewsletter()->getTemplate()
                             );
                         }
@@ -708,9 +708,9 @@ class MailProcessor
                 if (is_array($partialPaths)) {
                     foreach ($partialPaths as $path) {
                         $path = trim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-                        $this->mailService->getQueueMail()->addPartialPath($path . 'Default');
+                        $this->mailMessage->getQueueMail()->addPartialPath($path . 'Default');
                         if ($this->issue->getNewsletter()->getTemplate() != 'Default') {
-                            $this->mailService->getQueueMail()->addPartialPath(
+                            $this->mailMessage->getQueueMail()->addPartialPath(
                                 $path . $this->issue->getNewsletter()->getTemplate()
                             );
                         }
@@ -722,16 +722,16 @@ class MailProcessor
                  */
 
                 // last but not least: check if queueMail has all configuration needed for sending
-                if (! $this->queueMailValidator->validate($this->mailService->getQueueMail())) {
+                if (! $this->queueMailValidator->validate($this->mailMessage->getQueueMail())) {
                     throw new Exception('Newsletter is missing essential configuration. Sending will not be possible.', 1651215173);
                 }
 
                 $this->getLogger()->log(
                     LogLevel::DEBUG,
-                    sprintf('Initialized mailService for issue with id=%s of newsletter-configuration with id=%s with new queueMail-object with id=%s.',
+                    sprintf('Initialized mailMessage for issue with id=%s of newsletter-configuration with id=%s with new queueMail-object with id=%s.',
                         $this->issue->getUid(),
                         $this->issue->getNewsletter()->getUid(),
-                        $this->mailService->getQueueMail()->getUid()
+                        $this->mailMessage->getQueueMail()->getUid()
                     )
                 );
             }
@@ -796,7 +796,7 @@ class MailProcessor
 
         if (GeneralUtility::getApplicationContext()->isDevelopment()) {
 
-            $path = \TYPO3\CMS\Core\Core\Environment::getPublicPath() . '/typo3temp/var/logs/tx_rkwnewsletter_runtime.txt';
+            $path = \TYPO3\CMS\Core\Core\Environment::getVarPath() . '/log/tx_rkwnewsletter_runtime.txt';
             file_put_contents($path, microtime() . ' ' . $line . ' ' . $function . "\n", FILE_APPEND);
         }
     }

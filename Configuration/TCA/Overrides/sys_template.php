@@ -2,13 +2,13 @@
 defined('TYPO3_MODE') || die('Access denied.');
 
 call_user_func(
-        function () {
+        function (string $extKey) {
 
         //=================================================================
         // Add TypoScript
         //=================================================================
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
-            'rkw_newsletter',
+            $extKey,
             'Configuration/TypoScript',
             'RKW Newsletter'
         );
@@ -17,9 +17,10 @@ call_user_func(
         // Add TsConfig
         //=================================================================
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerPageTSConfigFile(
-            'rkw_newsletter',
+            $extKey,
             'Configuration/TsConfig/setup.typoscript',
             'RKW Newsletter'
         );
-    }
+    },
+    'rkw_newsletter'
 );

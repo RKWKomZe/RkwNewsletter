@@ -42,6 +42,9 @@ class IssueStatusTest extends FunctionalTestCase
      */
     protected $testExtensionsToLoad = [
         'typo3conf/ext/core_extended',
+        'typo3conf/ext/ajax_api',
+        'typo3conf/ext/accelerator',
+        'typo3conf/ext/persisted_sanitized_routing',
         'typo3conf/ext/postmaster',
         'typo3conf/ext/rkw_authors',
         'typo3conf/ext/rkw_newsletter'
@@ -51,7 +54,9 @@ class IssueStatusTest extends FunctionalTestCase
     /**
      * @var string[]
      */
-    protected $coreExtensionsToLoad = [ ];
+    protected $coreExtensionsToLoad = [
+        'seo'
+    ];
 
 
     /**

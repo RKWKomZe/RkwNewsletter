@@ -61,8 +61,8 @@ class CreateIssuesCommand extends Command
                 'tolerance',
                 't',
                 InputOption::VALUE_REQUIRED,
-                'Tolerance for creating next issue according to last time an issue was built (in seconds)',
-                0
+                'Tolerance for creating next issue according to last time an issue was built (in seconds, default: 604800)',
+                604800
             );
     }
 
@@ -125,6 +125,7 @@ class CreateIssuesCommand extends Command
 
             $io->error($message);
             $this->getLogger()->log(LogLevel::ERROR, $message);
+            $result = 1;
         }
 
         $io->writeln('Done');

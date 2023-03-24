@@ -14,12 +14,14 @@ namespace RKW\RkwNewsletter\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
+use Madj2k\CoreExtended\Utility\SiteUtility;
 use Madj2k\Postmaster\Domain\Model\QueueRecipient;
 use Madj2k\CoreExtended\Utility\GeneralUtility;
 use Madj2k\Postmaster\Domain\Repository\QueueMailRepository;
 use Madj2k\Postmaster\Domain\Repository\QueueRecipientRepository;
 use RKW\RkwNewsletter\Domain\Model\Issue;
 use RKW\RkwNewsletter\Domain\Repository\TopicRepository;
+use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
@@ -66,6 +68,7 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @return void
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
+     * @throws \TYPO3\CMS\Core\Exception\SiteNotFoundException
      */
     public function showAction(Issue $issue, array $topicsRaw = [], string $hash = ''): void
     {
@@ -90,7 +93,10 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
         // check if there is a recipient given
         if (
+            /** @var \Madj2k\Postmaster\Domain\Model\QueueMail $queueMail */
             ($queueMail = $this->queueMailRepository->findByUid($queueMailId))
+
+            /** @var \Madj2k\Postmaster\Domain\Model\QueueRecipient $queueRecipient */
             && ($queueRecipient = $this->queueRecipientRepository->findByUid($queueRecipientId))
         ) {
 

@@ -130,7 +130,7 @@
         <last_name>Mustermann</last_name>
         <tx_feregister_gender>0</tx_feregister_gender>
         <tx_rkwnewsletter_subscription>180,161</tx_rkwnewsletter_subscription>
-        <tx_rkwnewsletter_hash>HashMeIfYouCan</tx_rkwnewsletter_hash>
+        <tx_rkwnewsletter_hash>HashMeIfYouCanButWeHaveToHaveFourtySigns</tx_rkwnewsletter_hash>
         <tx_feregister_language_key>de</tx_feregister_language_key>
     </fe_users>
 
