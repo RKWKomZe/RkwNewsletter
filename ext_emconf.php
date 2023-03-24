@@ -28,12 +28,12 @@ $EM_CONF[$_EXTKEY] = [
 			'core_extended' => '9.5.4-9.5.99',
 			'postmaster' => '9.5.9-9.5.99',
             'fe_register' => '9.5.0-9.5.99',
-            'sr_freecap' => '2.5.6-2.5.99',
             'rkw_authors' => '9.5.0-9.5.99',
 		],
 		'conflicts' => [
 		],
 		'suggests' => [
-		],
+            'sr_freecap' => '2.5.6-2.5.99',
+        ],
 	],
 ];

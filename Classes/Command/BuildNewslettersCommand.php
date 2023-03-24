@@ -68,7 +68,7 @@ class BuildNewslettersCommand extends Command
      */
     protected function configure(): void
     {
-        $this->setDescription('Creates issues for all newsletters.')
+        $this->setDescription('Creates mails for all released newsletters.')
             ->addOption(
                 'newsletterLimit',
                 'l',
@@ -80,15 +80,15 @@ class BuildNewslettersCommand extends Command
                 'recipientsPerNewsletterLimit',
                 'r',
                 InputOption::VALUE_REQUIRED,
-                'Maximum number of recipients per newsletters to process on each call (default: 10)',
-                10
+                'Maximum number of recipients per newsletters to process on each call (default: 50)',
+                50
             )
             ->addOption(
                 'sleep',
                 's',
                 InputOption::VALUE_REQUIRED,
-                'How many seconds the script should sleep after each run (default: 60)',
-                60
+                'How many seconds the script should sleep after each run (default: 10)',
+                10
             );
     }
 
@@ -162,6 +162,7 @@ class BuildNewslettersCommand extends Command
 
             $io->error($message);
             $this->getLogger()->log(LogLevel::ERROR, $message);
+            $result = 1;
         }
 
         $io->writeln('Done');

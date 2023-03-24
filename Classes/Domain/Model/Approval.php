@@ -29,7 +29,7 @@ class Approval extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * @var \RKW\RkwNewsletter\Domain\Model\Topic|null
      */
-    protected ?Topic $topic;
+    protected ?Topic $topic = null;
 
 
     /**

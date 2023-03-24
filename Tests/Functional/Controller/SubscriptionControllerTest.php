@@ -3,7 +3,7 @@ namespace RKW\RkwNewsletter\Tests\Functional\Controller;
 
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 
-use Madj2k\Postmaster\Service\MailService;
+use Madj2k\Postmaster\Mail\MailMassage;
 use RKW\RkwNewsletter\Controller\SubscriptionController;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -39,15 +39,23 @@ class SubscriptionControllerTest extends FunctionalTestCase
      */
     protected $testExtensionsToLoad = [
         'typo3conf/ext/core_extended',
+        'typo3conf/ext/ajax_api',
+        'typo3conf/ext/accelerator',
+        'typo3conf/ext/persisted_sanitized_routing',
         'typo3conf/ext/postmaster',
         'typo3conf/ext/fe_register',
+        'typo3conf/ext/rkw_authors',
         'typo3conf/ext/rkw_newsletter',
     ];
 
     /**
      * @var string[]
      */
-    protected $coreExtensionsToLoad = ['css_styled_content'];
+    protected $coreExtensionsToLoad = [
+        'css_styled_content',
+        'filemetadata',
+        'seo'
+    ];
 
     /**
      * @var \RKW\RkwNewsletter\Controller\SubscriptionController|null
@@ -107,7 +115,8 @@ class SubscriptionControllerTest extends FunctionalTestCase
     public function newActionRedirectsToEditIfFrontendUserHasSubscription ()
     {
 
-        // Dummy so far
+        // dummy so far!
+        self::assertSame(1,1);
 
     }
 

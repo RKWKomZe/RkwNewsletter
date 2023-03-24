@@ -2,24 +2,23 @@
 defined('TYPO3_MODE') || die('Access denied.');
 
 call_user_func(
-    function () {
-        
-        $extensionKey = 'rkw_newsletter';
-        
+    function (string $extKey) {
+
+
         //=================================================================
         // Register Plugins
         //=================================================================
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
-            $extensionKey,
+            $extKey,
             'Subscription',
             'RKW Newsletter: Anmeldung'
         );
-        
+
         //=================================================================
         // Add Flexforms
         //=================================================================
         // plugin signature: <extension key without underscores> '_' <plugin name in lowercase>
-        $pluginSignature = str_replace('_','', $extensionKey) . '_subscription';
+        $pluginSignature = str_replace('_','', $extKey) . '_subscription';
         $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
         $fileName = 'FILE:EXT:rkw_newsletter/Configuration/FlexForms/Subscription.xml';
 
@@ -27,7 +26,7 @@ call_user_func(
             $pluginSignature,
             $fileName
         );
-        
+
         //=================================================================
         // TCA Extension
         //=================================================================
@@ -41,10 +40,10 @@ call_user_func(
                 ],
             ],
         ];
-        
+
         // Extend TCA when rkw_authors is available
         if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('rkw_authors')) {
-        
+
             $tmpCols['tx_rkwnewsletter_authors'] = [
                 'exclude' => 0,
                 'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tt_content.tx_rkwnewsletter_authors',
@@ -59,14 +58,12 @@ call_user_func(
                 ],
             ];
         }
-        
+
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('tt_content', $tmpCols);
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
             'tt_content',
             '--div--;LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tt_content.tx_rkwnewsletter;,tx_rkwnewsletter_is_editorial, tx_rkwnewsletter_authors'
         );
-        
-
-
-    }
+    },
+    'rkw_newsletter'
 );

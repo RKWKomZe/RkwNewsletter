@@ -13,8 +13,8 @@
         <return_path>return@testen.de</return_path>
         <settings_page>2</settings_page>
     </tx_rkwnewsletter_domain_model_newsletter>
-    
-    
+
+
     <tx_rkwnewsletter_domain_model_issue>
         <uid>150</uid>
         <pid>0</pid>
@@ -22,8 +22,8 @@
         <pages>2</pages>
         <title>Test</title>
     </tx_rkwnewsletter_domain_model_issue>
-    
-    
+
+
     <tx_rkwnewsletter_domain_model_topic>
         <uid>150</uid>
         <pid>0</pid>
@@ -37,8 +37,8 @@
         <container_page>1</container_page>
         <newsletter>150</newsletter>
     </tx_rkwnewsletter_domain_model_topic>
-    
-    
+
+
     <pages>
         <uid>150</uid>
         <pid>1</pid>
@@ -60,7 +60,7 @@
         <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
         <no_search>1</no_search>
     </pages>
-    
+
     <tt_content>
         <uid>150</uid>
         <pid>151</pid>
@@ -82,14 +82,14 @@
         <sorting>1</sorting>
         <tx_rkwnewsletter_is_editorial>1</tx_rkwnewsletter_is_editorial>
     </tt_content>
-    
+
 
     <fe_users>
         <uid>150</uid>
         <pid>0</pid>
         <email>test@teste.de</email>
         <tx_rkwnewsletter_subscription>151</tx_rkwnewsletter_subscription>
-        <tx_rkwnewsletter_hash>HashMeIfYouCan</tx_rkwnewsletter_hash>
+        <tx_rkwnewsletter_hash>HashMeIfYouCanButWeHaveToHaveFourtySigns</tx_rkwnewsletter_hash>
     </fe_users>
-    
+
 </dataset>

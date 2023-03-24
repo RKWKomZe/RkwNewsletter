@@ -126,9 +126,6 @@
             <trans-unit id="subscriptionController.error.unexpectedError">
                <source>Upps, unfortunately something went wrong. Please contact our support.</source>
             </trans-unit>
-            <trans-unit id="subscriptionController.error.acceptTerms">
-				<source>You have to accept our terms and conditions.</source>
-            </trans-unit>
             <trans-unit id="subscriptionController.error.notIdentified">
 				<source>Upps, it seems that we have not been able to identify you via the link used. You may already have cancelled your subscription. Would you like to sign up again?</source>
             </trans-unit>
@@ -406,10 +403,14 @@
             </trans-unit>
 
 
-            <!-- Partials/Newsletter/*/Body/Items/Default/Contact.html -->
+            <!-- Partials/Newsletter/*/Body/Items/Default/Content.html -->
             <trans-unit id="partials_newsletter_body_items_default_content.contact">
                 <source>Contact:</source>
             </trans-unit>
+            <trans-unit id="partials_newsletter_body_items_default_content.more">
+                <source><![CDATA[>> read more]]></source>
+            </trans-unit>
+
 
 
             <!-- Partials/Newsletter/*/Body/Items/Default/Separator.html -->
@@ -543,9 +544,6 @@
             </trans-unit>
             <trans-unit id="templates_subscription_new.userData">
                 <source>Personal data</source>
-            </trans-unit>
-            <trans-unit id="templates_subscription_new.terms">
-                <source>I accept the terms and conditions.</source>
             </trans-unit>
 
 

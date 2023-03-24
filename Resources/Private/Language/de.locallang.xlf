@@ -505,12 +505,15 @@
             </trans-unit>
 
 
-            <!-- Partials/Newsletter/*/Body/Items/Default/Contact.html -->
+            <!-- Partials/Newsletter/*/Body/Items/Default/Content.html -->
             <trans-unit id="partials_newsletter_body_items_default_content.contact">
                 <source>Contact:</source>
                 <target>Kontakt:</target>
             </trans-unit>
-
+            <trans-unit id="partials_newsletter_body_items_default_content.more">
+                <source><![CDATA[>> read more]]></source>
+                <target><![CDATA[>> mehr erfahren]]></target>
+            </trans-unit>
 
             <!-- Partials/Newsletter/*/Body/Items/Separator.html -->
             <trans-unit id="partials_newsletter_body_items_separator.headline">
@@ -675,10 +678,6 @@
             <trans-unit id="templates_subscription_new.userData">
                 <source>Personal data</source>
                 <target>Persönliche Daten</target>
-            </trans-unit>
-            <trans-unit id="templates_subscription_new.terms">
-                <source>I accept the terms and conditions.</source>
-                <target>Ich akzeptiere die Nutzungsbedingungen.</target>
             </trans-unit>
 
 

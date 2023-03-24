@@ -60,6 +60,9 @@ class IssueManagerTest extends FunctionalTestCase
      */
     protected $testExtensionsToLoad = [
         'typo3conf/ext/core_extended',
+        'typo3conf/ext/ajax_api',
+        'typo3conf/ext/accelerator',
+        'typo3conf/ext/persisted_sanitized_routing',
         'typo3conf/ext/postmaster',
         'typo3conf/ext/rkw_authors',
         'typo3conf/ext/rkw_newsletter'
@@ -69,7 +72,9 @@ class IssueManagerTest extends FunctionalTestCase
     /**
      * @var string[]
      */
-    protected $coreExtensionsToLoad = [ ];
+    protected $coreExtensionsToLoad = [
+        'seo'
+    ];
 
 
     /**
@@ -272,6 +277,7 @@ class IssueManagerTest extends FunctionalTestCase
          * Given a newsletter-object that is persisted
          * When the method is called
          * Then an instance of \RKW\RkwNewsletter\Model\Issue is returned
+         * Then this instance is persisted
          * Then the title of this instance is set to the title set in the newsletter-object
          * Then the stage of the instance is set to zero
          * Then the isSpecial-attribute is set to false
@@ -338,7 +344,7 @@ class IssueManagerTest extends FunctionalTestCase
          * Given a newsletter-object that is persisted
          * When the method is called
          * Then an instance of \RKW\RkwNewsletter\Model\Issue is returned
-         * Then the instance is persisted
+         * Then the issue-instance is persisted
          * Then the instance is added as issue to the newsletter-object
          * Then this newsletter-object is also persisted
          */

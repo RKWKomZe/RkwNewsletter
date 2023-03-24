@@ -71,7 +71,7 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      *
      * @var \RKW\RkwNewsletter\Domain\Model\FrontendUser|null
      */
-    protected ?FrontendUser $frontendUserByHash;
+    protected ?FrontendUser $frontendUserByHash = null;
 
 
     /**
@@ -239,10 +239,11 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
-     * @TYPO3\CMS\Extbase\Annotation\Validate("\RKW\RkwNewsletter\Validation\FormValidator", param="frontendUser")
-     * @TYPO3\CMS\Extbase\Annotation\Validate("\Madj2k\FeRegister\Validation\Consent\TermsValidator", param="frontendUser")
-     * @TYPO3\CMS\Extbase\Annotation\Validate("\Madj2k\FeRegister\Validation\Consent\PrivacyValidator", param="frontendUser")
-     * @TYPO3\CMS\Extbase\Annotation\Validate("\Madj2k\FeRegister\Validation\Consent\MarketingValidator", param="frontendUser")
+     * @TYPO3\CMS\Extbase\Annotation\Validate("RKW\RkwNewsletter\Validation\FormValidator", param="frontendUser")
+     * @TYPO3\CMS\Extbase\Annotation\Validate("Madj2k\FeRegister\Validation\Consent\TermsValidator", param="frontendUser")
+     * @TYPO3\CMS\Extbase\Annotation\Validate("Madj2k\FeRegister\Validation\Consent\PrivacyValidator", param="frontendUser")
+     * @TYPO3\CMS\Extbase\Annotation\Validate("Madj2k\FeRegister\Validation\Consent\MarketingValidator", param="frontendUser")
+     * @TYPO3\CMS\Extbase\Annotation\Validate("Madj2k\CoreExtended\Validation\CaptchaValidator", param="frontendUser")
      */
     public function createAction(FrontendUser $frontendUser, array $topics = []): void
     {
@@ -347,13 +348,11 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      * action edit
      *
      * @param array $topics
-     * @param int $privacy
      * @return void
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      */
-    public function editAction(array $topics = array(), int $privacy = 0): void
+    public function editAction(array $topics = array()): void
     {
         // FE-User has to be logged in or identified by hash
         /** @var \RKW\RkwNewsletter\Domain\Model\FrontendUser $frontendUser */
@@ -376,7 +375,6 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
             array(
                 'newsletterList' => $this->newsletterRepository->findAllForSubscription($this->settings['newsletterList']?: ''),
                 'topicList'      => $this->buildCleanedTopicList($topics),
-                'privacy'        => (bool)$privacy,
                 'frontendUser'   => $frontendUser,
                 'hash'           => ($this->getFrontendUserByHash() ? $this->getFrontendUserByHash()->getTxRkwnewsletterHash() : ''),
             )
@@ -388,22 +386,23 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      * action update
      *
      * @param array $topics
-     * @param int $privacy
      * @return void
      * @throws \Madj2k\FeRegister\Exception
      * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
+     * @throws \TYPO3\CMS\Core\Crypto\PasswordHashing\InvalidPasswordHashException
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      * @throws \TYPO3\CMS\Extbase\Persistence\Generic\Exception
      * @throws \TYPO3\CMS\Extbase\Persistence\Generic\Exception\NotImplementedException
-     * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException
-     * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
+     * @TYPO3\CMS\Extbase\Annotation\Validate("Madj2k\FeRegister\Validation\Consent\PrivacyValidator", param="topics")
+     * @TYPO3\CMS\Extbase\Annotation\Validate("Madj2k\FeRegister\Validation\Consent\MarketingValidator", param="topics")
      */
-    public function updateAction(array $topics = array(), int $privacy = 0)
+    public function updateAction(array $topics = array())
     {
 
         // FE-User has to be logged in or identified by hash
@@ -470,19 +469,6 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
                 LocalizationUtility::translate(
                     'subscriptionController.error.nothingChanged',
                     'rkw_newsletter'
-                ),
-                '',
-                AbstractMessage::ERROR
-            );
-            $this->forward('edit', null, null, $this->request->getArguments());
-        }
-
-        // check privacy field
-        if (!$privacy) {
-            $this->addFlashMessage(
-                LocalizationUtility::translate(
-                    'registrationController.error.accept_privacy',
-                    'fe_register'
                 ),
                 '',
                 AbstractMessage::ERROR

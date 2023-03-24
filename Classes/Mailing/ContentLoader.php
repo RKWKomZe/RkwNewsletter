@@ -56,17 +56,17 @@ class ContentLoader
 
 
     /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\ContentRepository|null
+     * @var \RKW\RkwNewsletter\Domain\Repository\ContentRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected ?ContentRepository $contentRepository = null;
+    protected ContentRepository $contentRepository;
 
 
     /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\PagesRepository<null
+     * @var \RKW\RkwNewsletter\Domain\Repository\PagesRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected ?PagesRepository $pagesRepository = null;
+    protected PagesRepository $pagesRepository;
 
 
     /**

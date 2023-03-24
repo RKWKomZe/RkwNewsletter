@@ -85,7 +85,7 @@
             <f:if condition="{content.headerLink}">
                 <tr>
                     <td style="padding: 13px 16px 24px">
-                        <a href="<postmaster:email.uri.typolink parameter='{content.headerLink}' />" target="_blank" style="color:#E64415; font-weight: 700; text-decoration: none; text-transform: uppercase">&gt;&gt; Mehr erfahren</a>
+                        <a href="<postmaster:email.uri.typolink parameter='{content.headerLink}' />" target="_blank" style="color:#E64415; font-weight: 700; text-decoration: none; text-transform: uppercase"><postmaster:email.translate key="partials_newsletter_body_items_default_content.more" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" /></a>
                     </td>
                 </tr>
             </f:if>

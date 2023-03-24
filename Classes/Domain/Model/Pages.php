@@ -72,7 +72,7 @@ class Pages extends \RKW\RkwAuthors\Domain\Model\Pages
     /**
      * @var \RKW\RkwNewsletter\Domain\Model\Issue|null
      */
-    protected ?Issue $txRkwnewsletterIssue;
+    protected ?Issue $txRkwnewsletterIssue = null;
 
 
     /**

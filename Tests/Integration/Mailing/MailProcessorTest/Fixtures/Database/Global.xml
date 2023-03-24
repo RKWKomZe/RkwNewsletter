@@ -14,12 +14,8 @@
         <pid>1</pid>
         <title>Subpage</title>
         <doktype>1</doktype>
+        <slug>abonnements</slug>
         <perms_everybody>15</perms_everybody>
     </pages>
 
-    <sys_domain>
-        <uid>1</uid>
-        <pid>1</pid>
-        <domainName>www.rkw-kompetenzzentrum.rkw.local</domainName>
-    </sys_domain>
 </dataset>

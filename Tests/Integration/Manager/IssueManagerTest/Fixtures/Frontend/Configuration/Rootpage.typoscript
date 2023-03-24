@@ -1,3 +1,24 @@
+config.tx_extbase.persistence {
+
+        #===============================================
+
+        RKW\RkwNewsletter\Domain\Model\Approval {
+
+            // storage for new records
+            newRecordStoragePid = 1
+        }
+
+        #===============================================
+
+        RKW\RkwNewsletter\Domain\Model\Issue {
+
+            // storage for new records
+             newRecordStoragePid = 1
+        }
+    }
+}
+
+
 # Extension configuration
 plugin.tx_rkwnewsletter {
 	view {
@@ -12,7 +33,7 @@ plugin.tx_rkwnewsletter {
         }
 	}
 	persistence {
-		storagePid =
+		storagePid = 1
 	}
 
 	settings {

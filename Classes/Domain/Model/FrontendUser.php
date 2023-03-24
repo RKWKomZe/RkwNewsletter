@@ -29,13 +29,6 @@ class FrontendUser extends \Madj2k\FeRegister\Domain\Model\FrontendUser
 {
 
     /**
-     * @var string
-     * @validate \SJBR\SrFreecap\Validation\Validator\CaptchaValidator
-     */
-    protected string $captchaResponse = '';
-
-
-    /**
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwNewsletter\Domain\Model\Topic>|null
      */
     protected ?ObjectStorage $txRkwnewsletterSubscription = null;
@@ -77,27 +70,6 @@ class FrontendUser extends \Madj2k\FeRegister\Domain\Model\FrontendUser
     protected function initStorageObjects(): void
     {
         $this->txRkwnewsletterSubscription = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
-    }
-
-
-    /**
-     * Sets the captchaResponse
-     *
-     * @param string $captchaResponse
-     * @return void
-     */
-    public function setCaptchaResponse(string $captchaResponse): void {
-        $this->captchaResponse = $captchaResponse;
-    }
-
-
-    /**
-     * Getter for captchaResponse
-     *
-     * @return string
-     */
-    public function getCaptchaResponse(): string {
-        return $this->captchaResponse;
     }
 
 

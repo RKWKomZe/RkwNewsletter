@@ -1,0 +1,24 @@
+routeEnhancers:
+  RkwNewsletter:
+    type: Extbase
+    namespace: 'tx_rkwnewsletter_subscription'
+    routes:
+      - routePath: '/rkw-newsletter/message'
+        _controller: 'Subscription::message'
+      - routePath: '/rkw-newsletter/message/{hash}'
+        _controller: 'Subscription::message'
+      - routePath: '/rkw-newsletter/new'
+        _controller: 'Subscription::new'
+      - routePath: '/rkw-newsletter/create'
+        _controller: 'Subscription::create'
+      - routePath: '/rkw-newsletter/update'
+        _controller: 'Subscription::update'
+      - routePath: '/rkw-newsletter/optin/{tokenUser}/{token}'
+        _controller: 'Subscription::optIn'
+      - routePath: '/rkw-newsletter/edit/{hash}'
+        _controller: 'Subscription::edit'
+    defaultController: 'Subscription::new'
+    requirements:
+      tokenUser: '[a-zA-Z0-9]{30}'
+      token: '[a-zA-Z0-9]{30}'
+      hash: '[a-zA-Z0-9]{40}'
