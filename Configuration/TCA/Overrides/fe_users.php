@@ -3,7 +3,7 @@ defined('TYPO3_MODE') || die('Access denied.');
 
 call_user_func(
     function () {
-    
+
         // extend "fe_users" TCA
         $tmpColsUser = [
             'tx_rkwnewsletter_subscription' => [
@@ -35,15 +35,16 @@ call_user_func(
                 ],
             ],
         ];
-        
+
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns(
             'fe_users', $tmpColsUser
         );
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
             'fe_users',
-            '--div--;LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:pages.tx_rkwnewsletter;,tx_rkwnewsletter_subscription, tx_rkwnewsletter_priority'
+            '--div--;LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:pages.tx_rkwnewsletter;,tx_rkwnewsletter_subscription, tx_rkwnewsletter_priority',
+            '0'
         );
-    
+
     }
 );
 
