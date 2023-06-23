@@ -14,6 +14,7 @@ namespace RKW\RkwNewsletter\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
+use Madj2k\FeRegister\Utility\FrontendUserSessionUtility;
 use RKW\RkwNewsletter\Domain\Model\FrontendUser;
 use RKW\RkwNewsletter\Domain\Repository\FrontendUserRepository;
 use RKW\RkwNewsletter\Domain\Repository\NewsletterRepository;
@@ -88,7 +89,10 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
         parent::initializeAction();
 
         // identify user by given hash value
-        if ($this->request->hasArgument('hash')) {
+        if (
+            ($this->request->hasArgument('hash'))
+            && ($this->request->getArgument('hash'))
+        ) {
 
             $this->frontendUserByHash = $this->frontendUserRepository->findOneByTxRkwnewsletterHash(
                 $this->request->getArgument('hash')
@@ -142,13 +146,11 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      */
     protected function getFrontendUserId(): int
     {
-        // is user logged in
-        $context = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Context\Context::class);
         if (
-            ($context->getPropertyFromAspect('frontend.user', 'isLoggedIn'))
-            && ($frontendUserId = $context->getPropertyFromAspect('frontend.user', 'id'))
+            ($frontendUser = FrontendUserSessionUtility::getLoggedInUser())
+            && (! FrontendUserUtility::isGuestUser($frontendUser))
         ){
-            return intval($frontendUserId);
+            return $frontendUser->getUid();
         }
 
         return 0;
@@ -156,9 +158,10 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
 
 
     /**
-     * Returns current logged in user object
+     * Returns current loggedin user object
      *
      * @return \RKW\RkwNewsletter\Domain\Model\FrontendUser|null
+     * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
      */
     protected function getFrontendUser():? FrontendUser
     {
@@ -194,6 +197,7 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      * @return void
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
      */
     public function newAction(FrontendUser $frontendUser = null, array $topics = []): void
     {
@@ -229,16 +233,17 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      * @return void
      * @throws \Madj2k\FeRegister\Exception
      * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
+     * @throws \TYPO3\CMS\Core\Crypto\PasswordHashing\InvalidPasswordHashException
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      * @throws \TYPO3\CMS\Extbase\Persistence\Generic\Exception
      * @throws \TYPO3\CMS\Extbase\Persistence\Generic\Exception\NotImplementedException
-     * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException
-     * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Generic\Exception\TooDirtyException
      * @TYPO3\CMS\Extbase\Annotation\Validate("RKW\RkwNewsletter\Validation\FormValidator", param="frontendUser")
      * @TYPO3\CMS\Extbase\Annotation\Validate("Madj2k\FeRegister\Validation\Consent\TermsValidator", param="frontendUser")
      * @TYPO3\CMS\Extbase\Annotation\Validate("Madj2k\FeRegister\Validation\Consent\PrivacyValidator", param="frontendUser")
@@ -546,6 +551,7 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      * action message
      *
      * @return void
+     * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
      */
     public function messageAction(): void
     {
