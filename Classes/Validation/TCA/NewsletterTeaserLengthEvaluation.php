@@ -86,6 +86,8 @@ class NewsletterTeaserLengthEvaluation
                     ),
                     FlashMessage::INFO
                 );
+
+                // @extensionScannerIgnoreLine
                 $messageQueue->addMessage($message);
             }
 
@@ -107,6 +109,8 @@ class NewsletterTeaserLengthEvaluation
                     ),
                     FlashMessage::INFO
                 );
+
+                // @extensionScannerIgnoreLine
                 $messageQueue->addMessage($message);
 
             }

@@ -126,6 +126,7 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
     {
         $title = str_replace("{D}", date("d", time()), $title);
         $title = str_replace("{M}", date("m", time()), $title);
+        $title = str_replace("{F}", date("F", time()), $title);
         $title = str_replace("{Y}", date("Y", time()), $title);
 
         return $title;
