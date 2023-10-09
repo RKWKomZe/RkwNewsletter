@@ -1,0 +1,25 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:rkwNewsletter="http://typo3.org/ns/RKW/RkwNewsletter/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+    <f:layout name="Default" />
+    
+    <f:section name="main">
+
+        <f:if condition="{issues}">
+            <ul>
+                <f:for each="{issues}" as="issue">
+                    <li>
+                        <f:link.action action="show" controller="WebView" extensionName="rkwNewsletter" 
+                                       pluginName="Webview" target="_blank" 
+                                       arguments="{issue: issue}" 
+                                       pageType="{settings.webViewPageNum}">
+                            {issue.title}
+                        </f:link.action>
+                    </li>
+                </f:for>
+            </ul>
+        </f:if>
+    </f:section>
+
+</html>

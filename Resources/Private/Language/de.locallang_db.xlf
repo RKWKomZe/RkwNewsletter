@@ -390,6 +390,14 @@
                 <source>Newsletter for subscription</source>
                 <target>Newsletter für Abonnement</target>
             </trans-unit>
+			<trans-unit id="flexform.archive.general">
+                <source>General</source>
+                <target>Allgemein</target>
+            </trans-unit>
+			<trans-unit id="flexform.archive.newsletter">
+                <source>Newsletter for Archive</source>
+                <target>Newsletter für Archiv</target>
+            </trans-unit>
 
 		</body>
 	</file>

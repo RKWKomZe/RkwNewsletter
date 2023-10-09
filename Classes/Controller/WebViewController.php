@@ -20,6 +20,8 @@ use Madj2k\CoreExtended\Utility\GeneralUtility;
 use Madj2k\Postmaster\Domain\Repository\QueueMailRepository;
 use Madj2k\Postmaster\Domain\Repository\QueueRecipientRepository;
 use RKW\RkwNewsletter\Domain\Model\Issue;
+use RKW\RkwNewsletter\Domain\Repository\IssueRepository;
+use RKW\RkwNewsletter\Domain\Repository\NewsletterRepository;
 use RKW\RkwNewsletter\Domain\Repository\TopicRepository;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
@@ -36,6 +38,13 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  */
 class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
+
+    /**
+     * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository
+     * @TYPO3\CMS\Extbase\Annotation\Inject
+     */
+    protected IssueRepository $issueRepository;
+
 
     /**
      * @var \RKW\RkwNewsletter\Domain\Repository\TopicRepository
@@ -56,6 +65,20 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected QueueRecipientRepository $queueRecipientRepository;
+
+
+    /**
+     * action list
+     */
+    public function listAction(): void
+    {
+
+        if ($newsletterUid = $this->settings['archive']['newsletterUid']) {
+            if ($issues = $this->issueRepository->findByNewsletterUidAndStatus($newsletterUid, 4)) {
+                $this->view->assign('issues', $issues);
+            }
+        }
+    }
 
 
     /**

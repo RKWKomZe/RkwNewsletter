@@ -15,12 +15,31 @@ call_user_func(
         );
 
         //=================================================================
+        // Register Plugins
+        //=================================================================
+        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
+            $extKey,
+            'Archive',
+            'RKW Newsletter: Archiv'
+        );
+
+        //=================================================================
         // Add Flexforms
         //=================================================================
         // plugin signature: <extension key without underscores> '_' <plugin name in lowercase>
         $pluginSignature = str_replace('_','', $extKey) . '_subscription';
         $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
         $fileName = 'FILE:EXT:rkw_newsletter/Configuration/FlexForms/Subscription.xml';
+
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
+            $pluginSignature,
+            $fileName
+        );
+
+        // plugin signature: <extension key without underscores> '_' <plugin name in lowercase>
+        $pluginSignature = str_replace('_','', $extKey) . '_archive';
+        $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
+        $fileName = 'FILE:EXT:rkw_newsletter/Configuration/FlexForms/Archive.xml';
 
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
             $pluginSignature,
