@@ -22,3 +22,12 @@ routeEnhancers:
       tokenUser: '[a-zA-Z0-9]{30}'
       token: '[a-zA-Z0-9]{30}'
       hash: '[a-zA-Z0-9]{40}'
+  RkwNewsletter1:
+    type: Extbase
+    namespace: 'tx_rkwnewsletter_webview'
+    routes:
+      - routePath: '/rkw-newsletter/webview/{issue}'
+        _controller: 'WebView::show'
+    defaultController: 'WebView::show'
+    requirements:
+      issue: '[0-9]+'

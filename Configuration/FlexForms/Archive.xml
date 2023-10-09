@@ -1,0 +1,32 @@
+<T3DataStructure>
+    <meta>
+        <langDisable>1</langDisable>
+    </meta>
+    <sheets>
+        <general>
+            <ROOT>
+                <TCEforms>
+                    <sheetTitle>LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:flexform.archive.general</sheetTitle>
+                </TCEforms>
+                <type>array</type>
+                <el>
+                    <settings.archive.newsletterUid>
+                        <TCEforms>
+                            <label>LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:flexform.archive.newsletter</label>
+                            <config>
+                                <size>5</size>
+                                <maxitems>1</maxitems>
+                                <minitems>1</minitems>
+                                <type>select</type>
+                                <foreign_table>tx_rkwnewsletter_domain_model_newsletter</foreign_table>
+                                <foreign_table_where>
+                                    AND tx_rkwnewsletter_domain_model_newsletter.deleted = 0 AND tx_rkwnewsletter_domain_model_newsletter.hidden = 0 ORDER BY tx_rkwnewsletter_domain_model_newsletter.name
+                                </foreign_table_where>
+                            </config>
+                        </TCEforms>
+                    </settings.archive.newsletterUid>
+                </el>
+            </ROOT>
+        </general>
+    </sheets>
+</T3DataStructure>

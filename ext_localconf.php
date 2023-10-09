@@ -34,6 +34,18 @@ call_user_func(
             )
         );
 
+        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+            'RKW.' . $extKey,
+            'Archive',
+            array(
+                'WebView' => 'list, show',
+            ),
+            // non-cacheable actions
+            array(
+                'WebView' => 'list, show',
+            )
+        );
+
         //=================================================================
         // Register TCA evaluation to be available in 'eval' of TCA
         //=================================================================

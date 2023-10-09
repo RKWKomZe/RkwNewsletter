@@ -15,6 +15,7 @@ namespace RKW\RkwNewsletter\Domain\Repository;
  */
 
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 /**
@@ -205,5 +206,29 @@ class IssueRepository extends AbstractRepository
 
         return $query->execute();
     }
+
+
+    /**
+     * findAllToApproveOnStage1
+     *
+     * @param int $newsletterUid
+     * @param int $status
+     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     */
+    public function findByNewsletterUidAndStatus(int $newsletterUid, int $status): QueryResultInterface
+    {
+        $query = $this->createQuery();
+        $query->getQuerySettings()->setIgnoreEnableFields(true);
+
+        $query->matching(
+            $query->logicalAnd(
+                $query->equals('newsletter', $newsletterUid),
+                $query->equals('status', $status)
+            )
+        )->setOrderings(['sent_tstamp' => QueryInterface::ORDER_DESCENDING]);
+
+        return $query->execute();
+    }
+
 
 }

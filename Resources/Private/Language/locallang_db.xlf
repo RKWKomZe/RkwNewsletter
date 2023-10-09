@@ -299,6 +299,12 @@
 			<trans-unit id="flexform.subscription.newsletter">
                 <source>Newsletter for subscription</source>
             </trans-unit>
+			<trans-unit id="flexform.archive.general">
+                <source>General</source>
+            </trans-unit>
+			<trans-unit id="flexform.archive.newsletter">
+                <source>Newsletter for Archive</source>
+            </trans-unit>
 		</body>
 	</file>
 </xliff>
