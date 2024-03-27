@@ -59,20 +59,38 @@ class ContentLoader
      * @var \RKW\RkwNewsletter\Domain\Repository\ContentRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected ContentRepository $contentRepository;
+    protected ?ContentRepository $contentRepository;
 
 
     /**
      * @var \RKW\RkwNewsletter\Domain\Repository\PagesRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected PagesRepository $pagesRepository;
+    protected ?PagesRepository $pagesRepository;
 
 
     /**
      * @var \TYPO3\CMS\Core\Log\Logger|null
      */
     protected ?Logger $logger = null;
+
+
+    /**
+     * @param \RKW\RkwNewsletter\Domain\Repository\ContentRepository $contentRepository
+     */
+    public function injectContentRepository(ContentRepository $contentRepository)
+    {
+        $this->contentRepository = $contentRepository;
+    }
+
+
+    /**
+     * @param \RKW\RkwNewsletter\Domain\Repository\PagesRepository $pagesRepository
+     */
+    public function injectPagesRepository(PagesRepository $pagesRepository)
+    {
+        $this->pagesRepository = $pagesRepository;
+    }
 
 
     /**

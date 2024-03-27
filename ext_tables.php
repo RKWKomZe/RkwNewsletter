@@ -11,18 +11,18 @@ call_user_func(
         if (TYPO3_MODE === 'BE') {
 
             \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-                'RKW.' . $extKey,
+                $extKey,
                 'tools',	 		// Make module a submodule of 'tools'
                 'management',		// Submodule key
                 '',					// Position
-                array(
-                    'Release' => 'confirmationList, approve, defer, testList, testSend, createIssueList, createIssue, sendList, sendConfirm, send',
-                ),
-                array(
+                [
+                    \RKW\RkwNewsletter\Controller\ReleaseController::class => 'confirmationList, approve, defer, testList, testSend, createIssueList, createIssue, sendList, sendConfirm, send',
+                ],
+                [
                     'access' => 'user,group',
                     'icon'   => 'EXT:' . $extKey . '/ext_icon.gif',
                     'labels' => 'LLL:EXT:' . $extKey . '/Resources/Private/Language/locallang_management.xlf',
-                )
+                ]
             );
         }
 
@@ -48,6 +48,6 @@ call_user_func(
 
 
     },
-    $_EXTKEY
+    'rkw_newsletter'
 );
 

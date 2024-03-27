@@ -40,7 +40,7 @@ class PagePermissions
      * @var \RKW\RkwNewsletter\Domain\Repository\PagesRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected PagesRepository $pagesRepository;
+    protected ?PagesRepository $pagesRepository;
 
 
     /**
@@ -49,13 +49,30 @@ class PagePermissions
      * @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected PersistenceManager $persistenceManager;
+    protected ?PersistenceManager $persistenceManager;
 
 
     /**
      * @var \TYPO3\CMS\Core\Log\Logger|null
      */
     protected ?Logger $logger = null;
+
+
+    /**
+     * @param \RKW\RkwNewsletter\Domain\Repository\PagesRepository $pagesRepository
+     */
+    public function injectPagesRepository(PagesRepository $pagesRepository)
+    {
+        $this->pagesRepository = $pagesRepository;
+    }
+
+    /**
+     * @param \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager $persistenceManager
+     */
+    public function injectPersistenceManager(PersistenceManager $persistenceManager)
+    {
+        $this->persistenceManager = $persistenceManager;
+    }
 
 
     /**

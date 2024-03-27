@@ -52,56 +52,56 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
      * @var \RKW\RkwNewsletter\Domain\Repository\NewsletterRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected NewsletterRepository $newsletterRepository;
+    protected ?NewsletterRepository $newsletterRepository;
 
 
     /**
      * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected IssueRepository $issueRepository;
-
-
-    /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\PagesRepository
-     * @TYPO3\CMS\Extbase\Annotation\Inject
-     */
-    protected PagesRepository $pagesRepository;
+    protected ?IssueRepository $issueRepository;
 
 
     /**
      * @var \RKW\RkwNewsletter\Domain\Repository\ContentRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected ContentRepository $contentRepository;
+    protected ?ContentRepository $contentRepository;
+
+
+    /**
+     * @var \RKW\RkwNewsletter\Domain\Repository\PagesRepository
+     * @TYPO3\CMS\Extbase\Annotation\Inject
+     */
+    protected ?PagesRepository $pagesRepository;
 
 
     /**
      * @var \Madj2k\CoreExtended\Domain\Repository\FileReferenceRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected FileReferenceRepository $fileReferenceRepository;
+    protected ?FileReferenceRepository $fileReferenceRepository;
 
 
     /**
      * @var \TYPO3\CMS\Extbase\Object\ObjectManager
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    private ObjectManager $objectManager;
+    private ?ObjectManager $objectManager;
 
 
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected PersistenceManager $persistenceManager;
+    protected ?PersistenceManager $persistenceManager;
 
 
     /**
      * @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected Dispatcher $signalSlotDispatcher;
+    protected ?Dispatcher $signalSlotDispatcher;
 
 
     /**
@@ -114,6 +114,78 @@ class IssueManager implements \TYPO3\CMS\Core\SingletonInterface
      * @const string
      */
     const SIGNAL_FOR_SENDING_MAIL_RELEASE = 'sendMailRelease';
+
+
+    /**
+     * @param \RKW\RkwNewsletter\Domain\Repository\NewsletterRepository $newsletterRepository
+     */
+    public function injectNewsletterRepository(NewsletterRepository $newsletterRepository)
+    {
+        $this->newsletterRepository = $newsletterRepository;
+    }
+
+
+    /**
+     * @param \RKW\RkwNewsletter\Domain\Repository\IssueRepository $issueRepository
+     */
+    public function injectIssueRepository(IssueRepository $issueRepository)
+    {
+        $this->issueRepository = $issueRepository;
+    }
+
+
+    /**
+     * @param \RKW\RkwNewsletter\Domain\Repository\ContentRepository $contentRepository
+     */
+    public function injectContentRepository(ContentRepository $contentRepository)
+    {
+        $this->contentRepository = $contentRepository;
+    }
+
+
+    /**
+     * @param \RKW\RkwNewsletter\Domain\Repository\PagesRepository $pagesRepository
+     */
+    public function injectPagesRepository(PagesRepository $pagesRepository)
+    {
+        $this->pagesRepository = $pagesRepository;
+    }
+
+
+    /**
+     * @param \Madj2k\CoreExtended\Domain\Repository\FileReferenceRepository $fileReferenceRepository
+     */
+    public function injectFileReferenceRepository(FileReferenceRepository $fileReferenceRepository)
+    {
+        $this->fileReferenceRepository = $fileReferenceRepository;
+    }
+
+
+    /**
+     * @param \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager $persistenceManager
+     */
+    public function injectPersistenceManager(PersistenceManager $persistenceManager)
+    {
+        $this->persistenceManager = $persistenceManager;
+    }
+
+
+    /**
+     * @param \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager
+     */
+    public function injectObjectManager(ObjectManager $objectManager)
+    {
+        $this->objectManager = $objectManager;
+    }
+
+
+    /**
+     * @param \TYPO3\CMS\Extbase\SignalSlot\Dispatcher $signalSlotDispatcher
+     */
+    public function injectDispatcher(Dispatcher $signalSlotDispatcher)
+    {
+        $this->signalSlotDispatcher = $signalSlotDispatcher;
+    }
 
 
     /**
