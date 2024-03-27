@@ -47,49 +47,102 @@ class ApprovalManager implements \TYPO3\CMS\Core\SingletonInterface
      * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected IssueRepository $issueRepository;
+    protected ?IssueRepository $issueRepository;
 
 
     /**
      * @var \RKW\RkwNewsletter\Domain\Repository\ApprovalRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected ApprovalRepository $approvalRepository;
-
+    protected ?ApprovalRepository $approvalRepository;
 
 
     /**
      * @var \RKW\RkwNewsletter\Domain\Repository\BackendUserRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected BackendUserRepository $backendUserRepository;
+    protected ?BackendUserRepository $backendUserRepository;
 
 
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected PersistenceManager $persistenceManager;
+    protected ?PersistenceManager $persistenceManager;
 
 
     /**
      * @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected Dispatcher $signalSlotDispatcher;
+    protected ?Dispatcher $signalSlotDispatcher;
 
 
     /**
      * @var \RKW\RkwNewsletter\Permissions\PagePermissions
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected PagePermissions $pagePermissions;
+    protected ?PagePermissions $pagePermissions;
 
 
     /**
      * @var \TYPO3\CMS\Core\Log\Logger|null
      */
     protected ?Logger $logger = null;
+
+
+    /**
+     * @param \RKW\RkwNewsletter\Domain\Repository\IssueRepository $issueRepository
+     */
+    public function injectIssueRepository(IssueRepository $issueRepository)
+    {
+        $this->issueRepository = $issueRepository;
+    }
+
+
+    /**
+     * @param \RKW\RkwNewsletter\Domain\Repository\ApprovalRepository $approvalRepository
+     */
+    public function injectApprovalRepository(ApprovalRepository $approvalRepository)
+    {
+        $this->approvalRepository = $approvalRepository;
+    }
+
+
+    /**
+     * @param \RKW\RkwNewsletter\Domain\Repository\BackendUserRepository $backendUserRepository
+     */
+    public function injectBackendUserRepository(BackendUserRepository $backendUserRepository)
+    {
+        $this->backendUserRepository = $backendUserRepository;
+    }
+
+
+    /**
+     * @param \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager $persistenceManager
+     */
+    public function injectPersistenceManager(PersistenceManager $persistenceManager)
+    {
+        $this->persistenceManager = $persistenceManager;
+    }
+
+
+    /**
+     * @param \TYPO3\CMS\Extbase\SignalSlot\Dispatcher $signalSlotDispatcher
+     */
+    public function injectDispatcher(Dispatcher $signalSlotDispatcher)
+    {
+        $this->signalSlotDispatcher = $signalSlotDispatcher;
+    }
+
+
+    /**
+     * @param \RKW\RkwNewsletter\Permissions\PagePermissions $pagePermissions
+     */
+    public function injectPagePermissions(PagePermissions $pagePermissions)
+    {
+        $this->pagePermissions = $pagePermissions;
+    }
 
 
     /**

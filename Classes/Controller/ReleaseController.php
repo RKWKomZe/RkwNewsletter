@@ -47,49 +47,112 @@ class ReleaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @var \RKW\RkwNewsletter\Domain\Repository\NewsletterRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected NewsletterRepository $newsletterRepository;
+    protected ?NewsletterRepository $newsletterRepository;
 
 
     /**
      * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected IssueRepository $issueRepository;
+    protected ?IssueRepository $issueRepository;
 
 
     /**
      * @var \RKW\RkwNewsletter\Domain\Repository\BackendUserRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected BackendUserRepository $backendUserRepository;
+    protected ?BackendUserRepository $backendUserRepository;
 
 
     /**
      * @var \RKW\RkwNewsletter\Manager\IssueManager
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected IssueManager $issueManager;
+    protected ?IssueManager $issueManager;
 
 
     /**
      * @var \RKW\RkwNewsletter\Manager\ApprovalManager
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected ApprovalManager $approvalManager;
+    protected ?ApprovalManager $approvalManager;
 
 
     /**
      * @var \RKW\RkwNewsletter\Mailing\MailProcessor
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected MailProcessor $mailProcessor;
+    protected ?MailProcessor $mailProcessor;
 
 
     /**
      * @var \RKW\RkwNewsletter\Validation\EmailValidator
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected EmailValidator $emailValidator;
+    protected ?EmailValidator $emailValidator;
+
+
+    /**
+     * @param \RKW\RkwNewsletter\Domain\Repository\NewsletterRepository $newsletterRepository
+     */
+    public function injectNewsletterRepository(NewsletterRepository $newsletterRepository)
+    {
+        $this->newsletterRepository = $newsletterRepository;
+    }
+
+
+    /**
+     * @param \RKW\RkwNewsletter\Domain\Repository\IssueRepository $issueRepository
+     */
+    public function injectIssueRepository(IssueRepository $issueRepository)
+    {
+        $this->issueRepository = $issueRepository;
+    }
+
+
+    /**
+     * @param \RKW\RkwNewsletter\Domain\Repository\BackendUserRepository $backendUserRepository
+     */
+    public function injectBackendUserRepository(BackendUserRepository $backendUserRepository)
+    {
+        $this->backendUserRepository = $backendUserRepository;
+    }
+
+
+    /**
+     * @param \RKW\RkwNewsletter\Manager\IssueManager $issueManager
+     */
+    public function injectIssueManager(IssueManager $issueManager)
+    {
+        $this->issueManager = $issueManager;
+    }
+
+
+    /**
+     * @param \RKW\RkwNewsletter\Manager\ApprovalManager $approvalManager
+     */
+    public function injectApprovalManager(ApprovalManager $approvalManager)
+    {
+        $this->approvalManager = $approvalManager;
+    }
+
+
+    /**
+     * @param \RKW\RkwNewsletter\Mailing\MailProcessor $mailProcessor
+     */
+    public function injectMailProcessor(MailProcessor $mailProcessor)
+    {
+        $this->mailProcessor = $mailProcessor;
+    }
+
+
+    /**
+     * @param \RKW\RkwNewsletter\Validation\EmailValidator $emailValidator
+     */
+    public function injectEmailValidator(EmailValidator $emailValidator)
+    {
+        $this->emailValidator = $emailValidator;
+    }
 
 
     /**

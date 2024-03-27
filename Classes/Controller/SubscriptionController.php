@@ -42,21 +42,21 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      * @var \RKW\RkwNewsletter\Domain\Repository\NewsletterRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected NewsletterRepository $newsletterRepository;
+    protected ?NewsletterRepository $newsletterRepository;
 
 
     /**
      * @var \RKW\RkwNewsletter\Domain\Repository\TopicRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected TopicRepository $topicRepository;
+    protected ?TopicRepository $topicRepository;
 
 
     /**
      * @var \RKW\RkwNewsletter\Domain\Repository\FrontendUserRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected FrontendUserRepository $frontendUserRepository;
+    protected ?FrontendUserRepository $frontendUserRepository;
 
 
     /**
@@ -73,6 +73,33 @@ class SubscriptionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      * @var \RKW\RkwNewsletter\Domain\Model\FrontendUser|null
      */
     protected ?FrontendUser $frontendUserByHash = null;
+
+
+    /**
+     * @param \RKW\RkwNewsletter\Domain\Repository\NewsletterRepository $newsletterRepository
+     */
+    public function injectNewsletterRepository(NewsletterRepository $newsletterRepository)
+    {
+        $this->newsletterRepository = $newsletterRepository;
+    }
+
+
+    /**
+     * @param \RKW\RkwNewsletter\Domain\Repository\TopicRepository $topicRepository
+     */
+    public function injectTopicRepository(TopicRepository $topicRepository)
+    {
+        $this->topicRepository = $topicRepository;
+    }
+
+
+    /**
+     * @param \RKW\RkwNewsletter\Domain\Repository\FrontendUserRepository $frontendUserRepository
+     */
+    public function injectFrontendUserRepository(FrontendUserRepository $frontendUserRepository)
+    {
+        $this->frontendUserRepository = $frontendUserRepository;
+    }
 
 
     /**

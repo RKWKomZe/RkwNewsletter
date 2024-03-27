@@ -34,7 +34,16 @@ class EmailValidator implements \TYPO3\CMS\Core\SingletonInterface
      * @var \TYPO3\CMS\Extbase\Object\ObjectManager
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected ObjectManager $objectManager;
+    protected ?ObjectManager $objectManager;
+
+
+    /**
+     * @param \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager
+     */
+    public function injectObjectManager(ObjectManager $objectManager)
+    {
+        $this->objectManager = $objectManager;
+    }
 
 
     /**
@@ -42,6 +51,7 @@ class EmailValidator implements \TYPO3\CMS\Core\SingletonInterface
      *
      * @param string $emailAddress
      * @return \TYPO3\CMS\Extbase\Error\Result
+     * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
     public function email(string $emailAddress): Result
     {

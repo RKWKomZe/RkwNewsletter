@@ -50,52 +50,52 @@ class MailProcessor
 
 
     /**
-     * @var \RKW\RkwNewsletter\Domain\Repository\FrontendUserRepository
-     * @TYPO3\CMS\Extbase\Annotation\Inject
-     */
-    protected FrontendUserRepository $frontendUserRepository;
-
-
-    /**
      * @var \RKW\RkwNewsletter\Domain\Repository\NewsletterRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected NewsletterRepository $newsletterRepository;
+    protected ?NewsletterRepository $newsletterRepository;
 
 
     /**
      * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected IssueRepository $issueRepository;
+    protected ?IssueRepository $issueRepository;
+
+
+    /**
+     * @var \RKW\RkwNewsletter\Domain\Repository\FrontendUserRepository
+     * @TYPO3\CMS\Extbase\Annotation\Inject
+     */
+    protected ?FrontendUserRepository $frontendUserRepository;
 
 
     /**
      * @var \RKW\RkwNewsletter\Mailing\ContentLoader
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected ContentLoader $contentLoader;
+    protected ?ContentLoader $contentLoader;
 
 
     /**
      * @var \Madj2k\Postmaster\Mail\MailMessage
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected MailMessage $mailMessage;
+    protected ?MailMessage $mailMessage;
 
 
     /**
      * @var \Madj2k\Postmaster\Validation\QueueMailValidator
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected QueueMailValidator $queueMailValidator;
+    protected ?QueueMailValidator $queueMailValidator;
 
 
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected PersistenceManager $persistenceManager;
+    protected ?PersistenceManager $persistenceManager;
 
 
     /**
@@ -108,6 +108,68 @@ class MailProcessor
      * @var array
      */
     protected array $settings = [];
+
+
+    /**
+     * @param \RKW\RkwNewsletter\Domain\Repository\NewsletterRepository $newsletterRepository
+     */
+    public function injectNewsletterRepository(NewsletterRepository $newsletterRepository)
+    {
+        $this->newsletterRepository = $newsletterRepository;
+    }
+
+
+    /**
+     * @param \RKW\RkwNewsletter\Domain\Repository\IssueRepository $issueRepository
+     */
+    public function injectIssueRepository(IssueRepository $issueRepository)
+    {
+        $this->issueRepository = $issueRepository;
+    }
+
+    /**
+     * @param \RKW\RkwNewsletter\Domain\Repository\FrontendUserRepository $frontendUserRepository
+     */
+    public function injectFrontendUserRepository(FrontendUserRepository $frontendUserRepository)
+    {
+        $this->frontendUserRepository = $frontendUserRepository;
+    }
+
+
+    /**
+     * @param \RKW\RkwNewsletter\Mailing\ContentLoader $contentLoader
+     */
+    public function injectContentLoader(ContentLoader $contentLoader)
+    {
+        $this->contentLoader = $contentLoader;
+    }
+
+
+    /**
+     * @param \Madj2k\Postmaster\Mail\MailMessage $mailMessage
+     */
+    public function injectMailMessage(MailMessage $mailMessage)
+    {
+        $this->mailMessage = $mailMessage;
+    }
+
+
+    /**
+     * @param \Madj2k\Postmaster\Validation\QueueMailValidator $queueMailValidator
+     */
+    public function injectQueueMailValidator(QueueMailValidator $queueMailValidator)
+    {
+        $this->queueMailValidator = $queueMailValidator;
+    }
+
+
+    /**
+     * @param \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager $persistenceManager
+     */
+    public function injectPersistenceManager(PersistenceManager $persistenceManager)
+    {
+        $this->persistenceManager = $persistenceManager;
+    }
 
 
     /**
@@ -794,7 +856,7 @@ class MailProcessor
     private static function debugTime(int $line, string $function): void
     {
 
-        if (GeneralUtility::getApplicationContext()->isDevelopment()) {
+        if (\TYPO3\CMS\Core\Core\Environment::getContext()->isDevelopment()) {
 
             $path = \TYPO3\CMS\Core\Core\Environment::getVarPath() . '/log/tx_rkwnewsletter_runtime.txt';
             file_put_contents($path, microtime() . ' ' . $line . ' ' . $function . "\n", FILE_APPEND);

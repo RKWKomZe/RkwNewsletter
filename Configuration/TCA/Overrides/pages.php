@@ -5,6 +5,32 @@ call_user_func(
 
     function () {
         $tmpColsPages = [
+
+            'perms_userid' => [
+                'config' => [
+                    'type' => 'passthrough'
+                ]
+            ],
+            'perms_groupid' => [
+                'config' => [
+                    'type' => 'passthrough'
+                ]
+            ],
+            'perms_user' => [
+                'config' => [
+                    'type' => 'passthrough'
+                ]
+            ],
+            'perms_group' => [
+                'config' => [
+                    'type' => 'passthrough'
+                ]
+            ],
+            'perms_everybody' => [
+                'config' => [
+                    'type' => 'passthrough'
+                ]
+            ],
             'tx_rkwnewsletter_newsletter'     => [
                 'exclude'  => 0,
                 'onChange' => 'reload',

@@ -43,28 +43,64 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @var \RKW\RkwNewsletter\Domain\Repository\IssueRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected IssueRepository $issueRepository;
+    protected ?IssueRepository $issueRepository;
 
 
     /**
      * @var \RKW\RkwNewsletter\Domain\Repository\TopicRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected TopicRepository $topicRepository;
+    protected ?TopicRepository $topicRepository;
 
 
     /**
      * @var \Madj2k\Postmaster\Domain\Repository\QueueMailRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected QueueMailRepository $queueMailRepository;
+    protected ?QueueMailRepository $queueMailRepository;
 
 
     /**
      * @var \Madj2k\Postmaster\Domain\Repository\QueueRecipientRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected QueueRecipientRepository $queueRecipientRepository;
+    protected ?QueueRecipientRepository $queueRecipientRepository;
+
+
+    /**
+     * @param \RKW\RkwNewsletter\Domain\Repository\IssueRepository $issueRepository
+     */
+    public function injectIssueRepository(IssueRepository $issueRepository)
+    {
+        $this->issueRepository = $issueRepository;
+    }
+
+
+    /**
+     * @param \RKW\RkwNewsletter\Domain\Repository\TopicRepository $topicRepository
+     */
+    public function injectTopicRepository(TopicRepository $topicRepository)
+    {
+        $this->topicRepository = $topicRepository;
+    }
+
+
+    /**
+     * @param \Madj2k\Postmaster\Domain\Repository\QueueMailRepository $queueMailRepository
+     */
+    public function injectQueueMailRepository(QueueMailRepository $queueMailRepository)
+    {
+        $this->queueMailRepository = $queueMailRepository;
+    }
+
+
+    /**
+     * @param \Madj2k\Postmaster\Domain\Repository\QueueRecipientRepository $queueRecipientRepository
+     */
+    public function injectQueueRecipientRepository(QueueRecipientRepository $queueRecipientRepository)
+    {
+        $this->queueRecipientRepository = $queueRecipientRepository;
+    }
 
 
     /**
