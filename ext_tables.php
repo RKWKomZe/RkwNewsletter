@@ -11,12 +11,12 @@ call_user_func(
         if (TYPO3_MODE === 'BE') {
 
             \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-                $extKey,
+                'RKW.' . $extKey,
                 'tools',	 		// Make module a submodule of 'tools'
                 'management',		// Submodule key
                 '',					// Position
                 [
-                    \RKW\RkwNewsletter\Controller\ReleaseController::class => 'confirmationList, approve, defer, testList, testSend, createIssueList, createIssue, sendList, sendConfirm, send',
+                    'Release' => 'confirmationList, approve, defer, testList, testSend, createIssueList, createIssue, sendList, sendConfirm, send',
                 ],
                 [
                     'access' => 'user,group',
