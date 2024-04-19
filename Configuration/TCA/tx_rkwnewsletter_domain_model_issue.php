@@ -16,9 +16,6 @@ return [
             'ignoreRootLevelRestriction' => true,
         ],
 	],
-	'interface' => [
-		'showRecordFieldList' => 'title, introduction, authors, status, release_tstamp, start_tstamp, sent_tstamp',
-	],
 	'types' => [
 		'1' => ['showitem' => 'title, introduction, authors, status, release_tstamp, start_tstamp, sent_tstamp'],
 	],

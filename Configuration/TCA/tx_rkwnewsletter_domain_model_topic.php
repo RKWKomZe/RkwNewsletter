@@ -17,9 +17,6 @@ return [
 		'searchFields' => 'name,short_description,approval_stage1,approval_stage2,topic_pid,',
 		'iconfile' => 'EXT:rkw_newsletter/Resources/Public/Icons/tx_rkwnewsletter_domain_model_topic.gif'
 	],
-	'interface' => [
-		'showRecordFieldList' => 'hidden, name, approval_stage1, approval_stage2, container_page, is_special',
-	],
 	'types' => [
 		'1' => ['showitem' => 'name, approval_stage1, approval_stage2, container_page, is_special, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, hidden,--palette--;;1, starttime, endtime'],
 	],

@@ -19,9 +19,6 @@ return [
 		'searchFields' => 'name, issue_title, sender_name, sender_mail, reply_mail, return_path, priority, template, settings_page, format, rythm, day_for_sending, approval, usergroup, topic, recently_sent,',
 		'iconfile' => 'EXT:rkw_newsletter/Resources/Public/Icons/tx_rkwnewsletter_domain_model_newsletter.gif'
 	],
-	'interface' => [
-		'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, issue_title, sender_name, sender_mail, reply_mail, return_path, template, type, settings_page, rythm, day_for_sending, approval, usergroup, topic, last_sent_tstamp, last_issue_tstamp, issue',
-	],
 	'types' => [
 		'1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, name, issue_title, sender_name, sender_mail, reply_mail, return_path, template, type, settings_page, encoding, charset, rythm, day_for_sending, approval, usergroup, topic, last_sent_tstamp, last_issue_tstamp, issue, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, hidden,--palette--;;1, starttime, endtime'],
 	],
@@ -47,7 +44,6 @@ return [
 		],
 		'l10n_parent' => [
 			'displayCond' => 'FIELD:sys_language_uid:>:0',
-			'exclude' => false,
 			'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
 			'config' => [
 				'type' => 'select',
