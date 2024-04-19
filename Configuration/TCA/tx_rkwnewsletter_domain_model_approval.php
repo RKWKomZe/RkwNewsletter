@@ -11,9 +11,6 @@ return [
 		'searchFields' => 'topic, pages, allowed_by_user_stage1, allowed_by_user_stage2, allowed_tstamp_stage1, allowed_tstamp_stage2, sent_info_tstamp_stage1, sent_info_tstamp_stage2, sent_reminder_tstamp_stage1, sent_reminder_tstamp_stage2,',
 		'iconfile' => 'EXT:rkw_newsletter/Resources/Public/Icons/tx_rkwnewsletter_domain_model_approval.gif'
 	],
-	'interface' => [
-		'showRecordFieldList' => 'topic, page, allowed_by_user_stage1, allowed_by_user_stage2, allowed_tstamp_stage1, allowed_tstamp_stage2, sent_info_tstamp_stage1, sent_info_tstamp_stage2, sent_reminder_tstamp_stage1, sent_reminder_tstamp_stage2',
-	],
 	'types' => [
 		'1' => ['showitem' => 'topic, page, allowed_by_user_stage1, allowed_by_user_stage2, allowed_tstamp_stage1, allowed_tstamp_stage2, sent_info_tstamp_stage1, sent_info_tstamp_stage2, sent_reminder_tstamp_stage1, sent_reminder_tstamp_stage2'],
 	],
