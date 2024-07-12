@@ -16,12 +16,14 @@
         <issue>1</issue>
         <topic>1</topic>
     </tx_rkwnewsletter_domain_model_newsletter>
-    
+
     <tx_rkwnewsletter_domain_model_issue>
         <uid>110</uid>
         <pid>0</pid>
         <newsletter>110</newsletter>
         <pages>2</pages>
+        <recipients/>
+        <introduction/>
     </tx_rkwnewsletter_domain_model_issue>
 
 
@@ -30,6 +32,8 @@
         <pid>0</pid>
         <newsletter>111</newsletter>
         <pages>1</pages>
+        <recipients/>
+        <introduction/>
     </tx_rkwnewsletter_domain_model_issue>
 
 
@@ -39,7 +43,7 @@
         <container_page>1</container_page>
         <newsletter>110</newsletter>
     </tx_rkwnewsletter_domain_model_topic>
-    
+
     <tx_rkwnewsletter_domain_model_topic>
         <uid>111</uid>
         <pid>0</pid>
@@ -70,6 +74,7 @@
         <tx_rkwnewsletter_issue>110</tx_rkwnewsletter_issue>
         <tx_rkwnewsletter_topic>110</tx_rkwnewsletter_topic>
         <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <tx_rkwnewsletter_teaser_text/>
         <no_search>11</no_search>
     </pages>
 
@@ -81,6 +86,7 @@
         <tx_rkwnewsletter_issue>110</tx_rkwnewsletter_issue>
         <tx_rkwnewsletter_topic>111</tx_rkwnewsletter_topic>
         <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <tx_rkwnewsletter_teaser_text/>
         <no_search>11</no_search>
     </pages>
 
@@ -92,6 +98,7 @@
         <tx_rkwnewsletter_issue>110</tx_rkwnewsletter_issue>
         <tx_rkwnewsletter_topic>112</tx_rkwnewsletter_topic>
         <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <tx_rkwnewsletter_teaser_text/>
         <no_search>11</no_search>
     </pages>
 
@@ -103,6 +110,7 @@
         <tx_rkwnewsletter_issue>111</tx_rkwnewsletter_issue>
         <tx_rkwnewsletter_topic>113</tx_rkwnewsletter_topic>
         <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <tx_rkwnewsletter_teaser_text/>
         <no_search>11</no_search>
     </pages>
 </dataset>

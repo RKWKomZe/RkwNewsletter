@@ -1,13 +1,11 @@
 <?php
 namespace RKW\RkwNewsletter\Tests\Functional\Controller;
 
-use Nimut\TestingFramework\TestCase\FunctionalTestCase;
-
-use Madj2k\Postmaster\Mail\MailMassage;
 use RKW\RkwNewsletter\Controller\SubscriptionController;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
+use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -39,6 +37,9 @@ class SubscriptionControllerTest extends FunctionalTestCase
      */
     protected $testExtensionsToLoad = [
         'typo3conf/ext/core_extended',
+        'typo3conf/ext/media_utils',
+        'typo3conf/ext/sms_responsive_images',
+        'typo3conf/ext/dr_seo',
         'typo3conf/ext/ajax_api',
         'typo3conf/ext/accelerator',
         'typo3conf/ext/persisted_sanitized_routing',

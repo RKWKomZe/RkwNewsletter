@@ -8,23 +8,24 @@
         <issue>1</issue>
         <topic>3</topic>
     </tx_rkwnewsletter_domain_model_newsletter>
-    
-    
+
+
     <tx_rkwnewsletter_domain_model_issue>
         <uid>10</uid>
         <pid>0</pid>
         <newsletter>10</newsletter>
         <pages>3</pages>
+        <introduction/>
     </tx_rkwnewsletter_domain_model_issue>
-    
-    
+
+
     <tx_rkwnewsletter_domain_model_topic>
         <uid>10</uid>
         <pid>0</pid>
         <container_page>1</container_page>
         <newsletter>10</newsletter>
     </tx_rkwnewsletter_domain_model_topic>
-    
+
     <tx_rkwnewsletter_domain_model_topic>
         <uid>11</uid>
         <pid>0</pid>
@@ -79,5 +80,5 @@
         <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
         <no_search>1</no_search>
     </pages>
-    
+
 </dataset>
