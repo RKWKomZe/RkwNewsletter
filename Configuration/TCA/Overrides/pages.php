@@ -67,6 +67,7 @@ call_user_func(
                     'items'               => [
                         ['LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:pages.tx_rkwnewsletter_topic.please_choose', 0],
                     ],
+                    'default'             => 0
                 ],
             ],
             'tx_rkwnewsletter_issue'          => [
