@@ -45,7 +45,7 @@ call_user_func(
                     ],
                     'minitems'            => 0,
                     'maxitems'            => 1,
-                    'default'             => '',
+                    'default'             => 0,
                     'foreign_table'       => 'tx_rkwnewsletter_domain_model_newsletter',
                     'foreign_table_where' => 'AND tx_rkwnewsletter_domain_model_newsletter.deleted = 0 AND tx_rkwnewsletter_domain_model_newsletter.hidden = 0',
                 ],
@@ -67,6 +67,7 @@ call_user_func(
                     'items'               => [
                         ['LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:pages.tx_rkwnewsletter_topic.please_choose', 0],
                     ],
+                    'default'             => 0
                 ],
             ],
             'tx_rkwnewsletter_issue'          => [
@@ -113,6 +114,7 @@ call_user_func(
                     'wrap'           => 'off',
                     'eval'           => 'RKW\\RkwNewsletter\\Validation\\TCA\\NewsletterTeaserLengthEvaluation,required',
                     'enableRichtext' => true,
+                    'default'        => ''
                 ],
             ],
             'tx_rkwnewsletter_teaser_image'   => [

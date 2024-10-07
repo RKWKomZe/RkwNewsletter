@@ -14,18 +14,18 @@ namespace RKW\RkwNewsletter\Tests\Integration\Mailing;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use RKW\RkwNewsletter\Domain\Model\Content;
 use RKW\RkwNewsletter\Domain\Model\Issue;
 use RKW\RkwNewsletter\Domain\Model\Pages;
 use RKW\RkwNewsletter\Domain\Model\Topic;
 use RKW\RkwNewsletter\Domain\Repository\ContentRepository;
+use RKW\RkwNewsletter\Domain\Repository\IssueRepository;
+use RKW\RkwNewsletter\Domain\Repository\TopicRepository;
 use RKW\RkwNewsletter\Mailing\ContentLoader;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
-use RKW\RkwNewsletter\Domain\Repository\IssueRepository;
-use RKW\RkwNewsletter\Domain\Repository\TopicRepository;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 
 /**

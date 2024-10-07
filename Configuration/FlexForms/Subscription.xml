@@ -18,6 +18,7 @@
                                 <maxitems>9999</maxitems>
                                 <minitems>0</minitems>
                                 <type>select</type>
+                                <renderType>selectMultipleSideBySide</renderType>
                                 <foreign_table>tx_rkwnewsletter_domain_model_newsletter</foreign_table>
                                 <foreign_table_where>
                                     AND tx_rkwnewsletter_domain_model_newsletter.deleted = 0 AND tx_rkwnewsletter_domain_model_newsletter.hidden = 0 ORDER BY tx_rkwnewsletter_domain_model_newsletter.name
