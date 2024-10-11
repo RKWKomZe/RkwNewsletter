@@ -234,7 +234,7 @@
 			</trans-unit>
 			<trans-unit id="templates_backend_release_testList.description">
 				<source>Here you can initiate a test dispatch for newsletter issues that have not yet been sent to your e-mail address. You can decide whether the test mailing should include all or only selected topics.</source>
-				<target>Hier können hier einen Testversand noch nicht versendete Newsletter-Ausgaben an Ihre E-Mailadresse anstoßen. Dabei können Sie entscheiden, ob der Testversand alle oder nur ausgewählte Themen berücksichtigen soll.</target>
+				<target>Hier können Sie einen Testversand noch nicht versendete Newsletter-Ausgaben an Ihre E-Mailadresse anstoßen. Dabei können Sie entscheiden, ob der Testversand alle oder nur ausgewählte Themen berücksichtigen soll.</target>
 			</trans-unit>
             <trans-unit id="templates_backend_release_testList.id">
                 <source>ID</source>
