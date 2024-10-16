@@ -14,7 +14,6 @@ namespace RKW\RkwNewsletter\Domain\Model;
  * The TYPO3 project - inspiring people to share!
  */
 
-use RKW\RkwAuthors\Domain\Model\Authors;
 use TYPO3\CMS\Extbase\Domain\Model\FrontendUserGroup;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
@@ -40,12 +39,6 @@ class Newsletter extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var string
      */
     protected string $name = '';
-
-
-    /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwAuthors\Domain\Model\Authors>|null
-     */
-    protected ?ObjectStorage $authors = null;
 
 
     /**
