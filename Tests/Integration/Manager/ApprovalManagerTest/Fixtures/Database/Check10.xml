@@ -6,6 +6,8 @@
         <pid>0</pid>
         <newsletter>0</newsletter>
         <pages>1</pages>
+        <introduction/>
+        <recipients/>
     </tx_rkwnewsletter_domain_model_issue>
 
     <tx_rkwnewsletter_domain_model_topic>
@@ -20,5 +22,6 @@
         <pid>0</pid>
         <title>Test-Title</title>
         <tx_rkwnewsletter_issue>10</tx_rkwnewsletter_issue>
+        <tx_rkwnewsletter_teaser_text/>
     </pages>
 </dataset>

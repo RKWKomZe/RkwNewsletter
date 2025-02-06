@@ -13,6 +13,8 @@
         <uid>50</uid>
         <pid>0</pid>
         <newsletter>40</newsletter>
+        <introduction/>
+        <recipients/>
     </tx_rkwnewsletter_domain_model_issue>
 
     <tx_rkwnewsletter_domain_model_topic>
@@ -26,8 +28,9 @@
         <uid>50</uid>
         <pid>1</pid>
         <title>Container</title>
+        <tx_rkwnewsletter_teaser_text/>
     </pages>
-    
+
     <pages>
         <uid>51</uid>
         <pid>1</pid>
@@ -37,5 +40,6 @@
         <tx_rkwnewsletter_teaser_text></tx_rkwnewsletter_teaser_text>
         <tx_rkwnewsletter_teaser_Link></tx_rkwnewsletter_teaser_Link>
         <tx_rkwauthors_authorship></tx_rkwauthors_authorship>
+        <tx_rkwnewsletter_teaser_text/>
     </pages>
 </dataset>

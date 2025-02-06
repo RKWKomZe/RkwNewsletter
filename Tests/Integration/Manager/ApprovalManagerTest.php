@@ -14,7 +14,6 @@ namespace RKW\RkwNewsletter\Tests\Integration\Manager;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use RKW\RkwNewsletter\Domain\Model\Approval;
 use RKW\RkwNewsletter\Domain\Model\BackendUser;
 use RKW\RkwNewsletter\Domain\Repository\ApprovalRepository;
@@ -25,13 +24,14 @@ use RKW\RkwNewsletter\Manager\ApprovalManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
+use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
  * ApprovalManagerTest
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
  * @copyright RKW Kompetenzzentrum
- * @package RKW_RkwMailer
+ * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class ApprovalManagerTest extends FunctionalTestCase
@@ -122,7 +122,7 @@ class ApprovalManagerTest extends FunctionalTestCase
                 'EXT:rkw_authors/Configuration/TypoScript/constants.typoscript',
                 'EXT:postmaster/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/constants.typoscript',
-                self::FIXTURE_PATH . '/Frontend/Configuration/Rootpage.typoscript',
+                'EXT:rkw_newsletter/Tests/Integration/Manager/ApprovalManagerTest/Fixtures/Frontend/Configuration/Rootpage.typoscript',
             ]
         );
 
@@ -217,6 +217,7 @@ class ApprovalManagerTest extends FunctionalTestCase
          * Given the approval-object has no value for the sentInfoTstampStage1-property set
          * Given the approval-object has no value for the sentReminderTstampStage1-property set
          * When the method is called
+         * Then true is returned
          * Then true is returned
          * Then the sentInfoTstampStage1-property is set
          * Then the changes to the approval-object are persisted

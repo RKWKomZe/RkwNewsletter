@@ -14,26 +14,24 @@ namespace RKW\RkwNewsletter\Tests\Integration\Mailing;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Madj2k\Postmaster\Cache\MailCache;
 use Madj2k\Postmaster\Domain\Model\QueueRecipient;
 use Madj2k\Postmaster\Domain\Repository\QueueMailRepository;
 use Madj2k\Postmaster\Domain\Repository\QueueRecipientRepository;
-use Madj2k\Postmaster\Utility\QueueMailUtility;
-use RKW\RkwNewsletter\Domain\Model\FrontendUser;
 use RKW\RkwNewsletter\Domain\Model\Issue;
 use RKW\RkwNewsletter\Domain\Model\Newsletter;
 use RKW\RkwNewsletter\Domain\Repository\BackendUserRepository;
 use RKW\RkwNewsletter\Domain\Repository\FrontendUserRepository;
-use RKW\RkwNewsletter\Mailing\MailProcessor;
-use RKW\RkwNewsletter\Status\IssueStatus;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use RKW\RkwNewsletter\Domain\Repository\IssueRepository;
 use RKW\RkwNewsletter\Domain\Repository\TopicRepository;
+use RKW\RkwNewsletter\Mailing\MailProcessor;
+use RKW\RkwNewsletter\Status\IssueStatus;
+use TYPO3\CMS\Core\Cache\CacheManager;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
-use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
+use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 
 /**
@@ -41,7 +39,7 @@ use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
  * @copyright RKW Kompetenzzentrum
- * @package RKW_RkwMailer
+ * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class MailProcessorTest extends FunctionalTestCase
@@ -149,11 +147,10 @@ class MailProcessorTest extends FunctionalTestCase
                 'EXT:core_extended/Configuration/TypoScript/constants.typoscript',
                 'EXT:postmaster/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/constants.typoscript',
-                self::FIXTURE_PATH . '/Frontend/Configuration/Rootpage.typoscript',
+                'EXT:rkw_newsletter/Tests/Integration/Mailing/MailProcessorTest/Fixtures/Frontend/Configuration/Rootpage.typoscript',
             ],
-            ['rkw-kompetenzzentrum.local' => self::FIXTURE_PATH . '/Frontend/Configuration/config.yaml']
-
         );
+        $this->setUpFrontendSite(1);
 
         /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
         $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
@@ -180,6 +177,29 @@ class MailProcessorTest extends FunctionalTestCase
         $this->subject = $this->objectManager->get(MailProcessor::class);
 
         $this->mailCache = $this->objectManager->get(MailCache::class);
+    }
+
+    /**
+     * Create a simple site config for the tests that
+     * call a frontend page.
+     *
+     * @param int $pageId
+     */
+    protected function setUpFrontendSite(int $pageId)
+    {
+        GeneralUtility::mkdir_deep($this->instancePath . '/typo3conf/sites/testing/');
+
+        $configuration = file_get_contents(self::FIXTURE_PATH . '/Frontend/Configuration/config.yaml');
+        $configuration = str_replace('{rootPageId}', $pageId, $configuration);
+        $fileName = $this->instancePath . '/typo3conf/sites/testing/config.yaml';
+
+        GeneralUtility::writeFile($fileName, $configuration);
+
+        // Ensure that no other site configuration was cached before
+        $cache = GeneralUtility::makeInstance(CacheManager::class)->getCache('core');
+        if ($cache->has('sites-configuration')) {
+            $cache->remove('sites-configuration');
+        }
     }
 
     //=============================================
@@ -414,6 +434,7 @@ class MailProcessorTest extends FunctionalTestCase
                 self::FIXTURE_PATH . '/Frontend/Configuration/Page21.typoscript',
             ]
         );
+        $this->setUpFrontendSite(21);
 
         /** @var \RKW\RkwNewsletter\Domain\Model\Issue $issue */
         $issue = $this->issueRepository->findByUid(21);

@@ -14,7 +14,6 @@ namespace RKW\RkwNewsletter\Tests\Integration\Manager;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Madj2k\CoreExtended\Domain\Model\FileReference;
 use Madj2k\CoreExtended\Domain\Repository\FileReferenceRepository;
 use RKW\RkwNewsletter\Domain\Model\Content;
@@ -37,13 +36,14 @@ use TYPO3\CMS\Core\Database\Query\Restriction\StartTimeRestriction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
+use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
  * IssueManagerTest
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
  * @copyright RKW Kompetenzzentrum
- * @package RKW_RkwMailer
+ * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class IssueManagerTest extends FunctionalTestCase
@@ -152,7 +152,7 @@ class IssueManagerTest extends FunctionalTestCase
                 'EXT:rkw_authors/Configuration/TypoScript/constants.typoscript',
                 'EXT:postmaster/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/constants.typoscript',
-                static::FIXTURE_PATH . '/Frontend/Configuration/Rootpage.typoscript',
+                'EXT:rkw_newsletter/Tests/Integration/Manager/IssueManagerTest/Fixtures/Frontend/Configuration/Rootpage.typoscript',
             ]
         );
 

@@ -26,7 +26,7 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
  * @copyright RKW Kompetenzzentrum
- * @package RKW_RkwMailer
+ * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class SubscriptionControllerTest extends FunctionalTestCase
@@ -39,7 +39,7 @@ class SubscriptionControllerTest extends FunctionalTestCase
         'typo3conf/ext/core_extended',
         'typo3conf/ext/media_utils',
         'typo3conf/ext/sms_responsive_images',
-        'typo3conf/ext/dr_seo',
+        'typo3conf/ext/dr_serp',
         'typo3conf/ext/ajax_api',
         'typo3conf/ext/accelerator',
         'typo3conf/ext/persisted_sanitized_routing',

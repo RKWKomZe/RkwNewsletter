@@ -6,6 +6,8 @@
         <pid>0</pid>
         <status>1</status>
         <pages>1</pages>
+        <introduction/>
+        <recipients/>
     </tx_rkwnewsletter_domain_model_issue>
 
     <tx_rkwnewsletter_domain_model_topic>
@@ -25,7 +27,7 @@
         <sent_reminder_tstamp_stage1>0</sent_reminder_tstamp_stage1>
         <sent_reminder_tstamp_stage2>0</sent_reminder_tstamp_stage2>
     </tx_rkwnewsletter_domain_model_approval>
-    
+
     <pages>
         <uid>20</uid>
         <pid>1</pid>
@@ -34,6 +36,7 @@
         <tx_rkwnewsletter_newsletter>0</tx_rkwnewsletter_newsletter>
         <tx_rkwnewsletter_topic>20</tx_rkwnewsletter_topic>
         <tx_rkwnewsletter_issue>20</tx_rkwnewsletter_issue>
+        <tx_rkwnewsletter_teaser_text />
     </pages>
-    
+
 </dataset>

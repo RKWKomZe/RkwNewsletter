@@ -8,8 +8,9 @@
         <doktype>1</doktype>
         <is_siteroot>1</is_siteroot>
         <perms_everybody>15</perms_everybody>
+        <tx_rkwnewsletter_teaser_text/>
     </pages>
-    
+
     <tx_rkwnewsletter_domain_model_newsletter>
         <uid>21</uid>
         <pid>0</pid>
@@ -22,14 +23,16 @@
         <settings_page>21</settings_page>
         <template>Managementletter</template>
     </tx_rkwnewsletter_domain_model_newsletter>
-    
+
     <tx_rkwnewsletter_domain_model_issue>
         <uid>21</uid>
         <pid>0</pid>
         <newsletter>21</newsletter>
         <title>Tester</title>
+        <introduction/>
+        <recipients/>
     </tx_rkwnewsletter_domain_model_issue>
-    
-    
-    
+
+
+
 </dataset>

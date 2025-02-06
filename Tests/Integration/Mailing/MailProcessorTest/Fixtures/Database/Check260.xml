@@ -13,14 +13,15 @@
         <return_path>return@testen.de</return_path>
         <settings_page>2</settings_page>
     </tx_rkwnewsletter_domain_model_newsletter>
-    
-    
+
+
     <tx_rkwnewsletter_domain_model_issue>
         <uid>260</uid>
         <pid>0</pid>
         <newsletter>260</newsletter>
         <pages>0</pages>
         <title>Test</title>
+        <introduction/>
         <recipients>260,261,262,263</recipients>
     </tx_rkwnewsletter_domain_model_issue>
 

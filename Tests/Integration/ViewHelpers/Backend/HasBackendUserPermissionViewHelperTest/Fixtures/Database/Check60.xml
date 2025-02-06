@@ -14,6 +14,8 @@
         <uid>60</uid>
         <pid>0</pid>
         <newsletter>60</newsletter>
+        <introduction/>
+        <recipients/>
     </tx_rkwnewsletter_domain_model_issue>
 
     <tx_rkwnewsletter_domain_model_topic>

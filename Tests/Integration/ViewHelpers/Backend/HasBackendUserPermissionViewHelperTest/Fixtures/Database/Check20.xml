@@ -23,12 +23,16 @@
         <uid>20</uid>
         <pid>0</pid>
         <newsletter>20</newsletter>
+        <introduction/>
+        <recipients/>
     </tx_rkwnewsletter_domain_model_issue>
 
     <tx_rkwnewsletter_domain_model_issue>
         <uid>21</uid>
         <pid>0</pid>
         <newsletter>21</newsletter>
+        <introduction/>
+        <recipients/>
     </tx_rkwnewsletter_domain_model_issue>
 
     <be_users>

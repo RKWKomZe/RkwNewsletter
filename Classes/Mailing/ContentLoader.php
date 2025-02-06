@@ -335,6 +335,8 @@ class ContentLoader
             );
         }
 
+        //  @todo: Without arrayZipMerge it should provide a separation by topics.
+
         // now mix topics together - pass array-items as separate parameters to arrayZipMerge
         $result = call_user_func_array(
             '\Madj2k\CoreExtended\Utility\GeneralUtility::arrayZipMerge',

@@ -7,6 +7,8 @@
         <pid>0</pid>
         <newsletter />
         <title>Tester</title>
+        <introduction/>
+        <recipients/>
     </tx_rkwnewsletter_domain_model_issue>
-    
+
 </dataset>

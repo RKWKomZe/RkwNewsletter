@@ -14,19 +14,19 @@ namespace RKW\RkwNewsletter\Tests\Integration\Permissions;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use RKW\RkwNewsletter\Domain\Repository\PagesRepository;
 use RKW\RkwNewsletter\Permissions\PagePermissions;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
+use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
  * PagePermissionsTest
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
  * @copyright RKW Kompetenzzentrum
- * @package RKW_RkwMailer
+ * @package RKW_RkwNewsletter
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class PagePermissionsTest extends FunctionalTestCase
@@ -97,6 +97,7 @@ class PagePermissionsTest extends FunctionalTestCase
                 'EXT:postmaster/Configuration/TypoScript/constants.typoscript',
                 'EXT:rkw_newsletter/Configuration/TypoScript/constants.typoscript',
                 static::FIXTURE_PATH . '/Frontend/Configuration/Rootpage.typoscript',
+                'EXT:rkw_newsletter/Tests/Integration/Permissions/PagePermissionsTest/Fixtures/Frontend/Configuration/Rootpage.typoscript',
             ]
         );
 

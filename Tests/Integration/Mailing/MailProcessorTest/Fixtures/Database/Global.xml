@@ -7,6 +7,7 @@
         <doktype>1</doktype>
         <is_siteroot>1</is_siteroot>
         <perms_everybody>15</perms_everybody>
+        <tx_rkwnewsletter_teaser_text/>
     </pages>
 
     <pages>
@@ -16,6 +17,7 @@
         <doktype>1</doktype>
         <slug>abonnements</slug>
         <perms_everybody>15</perms_everybody>
+        <tx_rkwnewsletter_teaser_text/>
     </pages>
 
 </dataset>

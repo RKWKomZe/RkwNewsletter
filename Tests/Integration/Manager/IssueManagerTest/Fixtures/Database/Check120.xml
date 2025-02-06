@@ -26,18 +26,22 @@
         <uid>120</uid>
         <pid>0</pid>
         <newsletter>120</newsletter>
+        <introduction/>
+        <recipients/>
     </tx_rkwnewsletter_domain_model_issue>
 
     <pages>
         <uid>120</uid>
         <pid>1</pid>
         <title>Container One</title>
+        <tx_rkwnewsletter_teaser_text/>
     </pages>
 
     <pages>
         <uid>121</uid>
         <pid>1</pid>
         <title>Container Two</title>
+        <tx_rkwnewsletter_teaser_text/>
     </pages>
-    
+
 </dataset>

@@ -6,8 +6,9 @@
         <pid>0</pid>
         <tx_rkwnewsletter_issue>250</tx_rkwnewsletter_issue>
         <tx_rkwnewsletter_topic>250</tx_rkwnewsletter_topic>
+        <tx_rkwnewsletter_teaser_text/>
     </pages>
-    
+
     <tx_rkwnewsletter_domain_model_issue>
         <uid>250</uid>
         <pid>0</pid>
@@ -16,6 +17,8 @@
         <status>1</status>
         <sent_tstamp>0</sent_tstamp>
         <release_tstamp>0</release_tstamp>
+        <introduction/>
+        <recipients/>
     </tx_rkwnewsletter_domain_model_issue>
 
     <tx_rkwnewsletter_domain_model_topic>
@@ -24,7 +27,7 @@
         <container_page>0</container_page>
         <newsletter>0</newsletter>
     </tx_rkwnewsletter_domain_model_topic>
-    
+
     <tx_rkwnewsletter_domain_model_approval>
         <uid>250</uid>
         <pid>0</pid>

@@ -19,6 +19,8 @@
         <newsletter>50</newsletter>
         <title>Tester</title>
         <queue_mail>50</queue_mail>
+        <introduction/>
+        <recipients/>
     </tx_rkwnewsletter_domain_model_issue>
 
     <tx_postmaster_domain_model_queuemail>

@@ -7,5 +7,6 @@
         <email>test1@rkw.de</email>
         <tx_rkwnewsletter_subscription />
         <tx_rkwnewsletter_hash>testhash</tx_rkwnewsletter_hash>
+        <company/>
     </fe_users>
 </dataset>

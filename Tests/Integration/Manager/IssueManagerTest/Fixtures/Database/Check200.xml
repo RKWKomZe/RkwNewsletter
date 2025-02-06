@@ -16,6 +16,8 @@
         <newsletter>200</newsletter>
         <info_tstamp>1000</info_tstamp>
         <reminder_tstamp>0</reminder_tstamp>
+        <introduction/>
+        <recipients/>
     </tx_rkwnewsletter_domain_model_issue>
 
     <tx_rkwnewsletter_domain_model_approval>
