@@ -6,7 +6,7 @@
     <!-- PLAINTEXT -->
     <f:section name="Plaintext">
         ==================================================\n
-        {content.header} – <f:render partial="Body/Items/Default/Badge" section="Plaintext" arguments="{_all}" />\n
+        {content.header}\n
         ==================================================\n
         <f:format.stripTags>
             <postmaster:email.replace.rteLinks plaintextFormat="true">
@@ -28,13 +28,6 @@
     <f:section name="Html">
 
         <table cellspacing="0" cellpadding="0" style="width: 100%; font-family: 'Arial', sans-serif; font-size: 14px">
-
-            <!-- badge -->
-            <tr>
-                <td valign="top" style="padding: 0 16px 0 16px;">
-                    <f:render partial="Body/Items/Default/Badge" section="Html" arguments="{_all}" />
-                </td>
-            </tr>
 
             <!-- headline -->
             <tr>

@@ -397,6 +397,12 @@
             </trans-unit>
 
 
+			<!-- Partials/Newsletter/*/Body/TopNews.html -->
+			<trans-unit id="partials_newsletter_body_topNews.headline">
+				<source>Out Top-News</source>
+			</trans-unit>
+
+
             <!-- Partials/Newsletter/*/Body/Items/Default/Contact.html -->
             <trans-unit id="partials_newsletter_body_items_default_contact.contact">
                 <source>Contact:</source>

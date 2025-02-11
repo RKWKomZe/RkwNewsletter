@@ -156,6 +156,7 @@ plugin.tx_rkwnewsletter {
         minTeaserLength = {$plugin.tx_rkwnewsletter.settings.minTeaserLength}
         maxTeaserLength = {$plugin.tx_rkwnewsletter.settings.maxTeaserLength}
         maxContentItems = {$plugin.tx_rkwnewsletter.settings.maxContentItems}
+        maxContentItemsPerTopic = {$plugin.tx_rkwnewsletter.settings.maxContentItemsPerTopic}
 
         pages {
             permissions {
