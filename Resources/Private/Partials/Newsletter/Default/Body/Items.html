@@ -23,7 +23,7 @@
                 </f:for>
 
                 <f:if condition="{f:count(subject: contentPerTopic.items)} < {contentPerTopic.maxItems}">
-                    <f:render partial="Body/Items/More" section="Plaintext" arguments="{_all}" />\n\n
+                    <f:render partial="Body/Items/More" section="Plaintext" arguments="{queueRecipient: queueRecipient, issue: issue, topics: topics, hash: hash, settings: settings, topic: contentPerTopic.topic}" />\n\n
                 </f:if>
 
             </f:for>
@@ -57,10 +57,10 @@
                 </f:for>
 
                 <!-- more link -->
-                <f:if condition="{f:count(subject: topics)} > 1 && {f:count(subject: contentPerTopic.items)} < {contentPerTopic.maxItems} && !{isWebView}">
+                <f:if condition="{f:count(subject: contentPerTopic.items)} < {contentPerTopic.maxItems} && !{isWebView}">
                     <tr>
                         <td style="padding: 16px 16px 0">
-                            <f:render partial="Body/Items/More" section="Html" arguments="{_all}" />
+                            <f:render partial="Body/Items/More" section="Html" arguments="{queueRecipient: queueRecipient, issue: issue, topics: topics, hash: hash, settings: settings, topic: contentPerTopic.topic}" />
                         </td>
                     </tr>
                 </f:if>

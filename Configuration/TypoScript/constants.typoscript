@@ -64,7 +64,7 @@ plugin.tx_rkwnewsletter {
         # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Maximum number of content items per newsletter-issue
         maxContentItems = 10
 
-        # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Maximum number of content items per topic
+        # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Maximum number of content items per topic within a newsletter-issue
         maxContentItemsPerTopic = 3
 
         pages {

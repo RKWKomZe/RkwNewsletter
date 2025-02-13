@@ -421,7 +421,7 @@ class MailProcessor
                         'hash'              => $this->getSubscriptionHash($frontendUser),
                         'limit'             => ($this->contentLoader->getTopics()->count() > 1)
                                                 ? $settings['settings']['maxContentItemsPerTopic']
-                                                : 0,
+                                                : $settings['settings']['maxContentItems'],
                         'settings'          => $settings['settings'],
                     ),
                     'subject' => $this->getSubject(),
@@ -496,7 +496,7 @@ class MailProcessor
                         'topics'            => $this->contentLoader->getTopics(),
                         'limit'             => ($this->contentLoader->getTopics()->count() > 1)
                                                 ? $settings['settings']['maxContentItemsPerTopic']
-                                                : 0,
+                                                : $settings['settings']['maxContentItems'],
                         'settings'          => $settings['settings'],
                     ),
                     'subject' => 'TEST: ' . $this->getSubject(),
