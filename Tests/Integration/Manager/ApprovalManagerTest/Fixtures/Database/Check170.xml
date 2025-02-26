@@ -6,14 +6,17 @@
         <pid>0</pid>
         <tx_rkwnewsletter_issue>170</tx_rkwnewsletter_issue>
         <tx_rkwnewsletter_topic>170</tx_rkwnewsletter_topic>
+        <tx_rkwnewsletter_teaser_text/>
     </pages>
 
     <tx_rkwnewsletter_domain_model_issue>
         <uid>170</uid>
         <pid>0</pid>
         <status>1</status>
+        <introduction/>
+        <recipients/>
     </tx_rkwnewsletter_domain_model_issue>
-        
+
     <tx_rkwnewsletter_domain_model_topic>
         <uid>170</uid>
         <pid>0</pid>
@@ -22,7 +25,7 @@
         <approval_stage1>170</approval_stage1>
         <approval_stage2>171</approval_stage2>
     </tx_rkwnewsletter_domain_model_topic>
-    
+
     <tx_rkwnewsletter_domain_model_approval>
         <uid>170</uid>
         <pid>0</pid>

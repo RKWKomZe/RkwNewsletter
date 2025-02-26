@@ -15,6 +15,8 @@
         <pid>0</pid>
         <newsletter>60</newsletter>
         <pages>1</pages>
+        <introduction/>
+        <recipients/>
     </tx_rkwnewsletter_domain_model_issue>
 
 
@@ -34,6 +36,7 @@
         <tx_rkwnewsletter_issue>60</tx_rkwnewsletter_issue>
         <tx_rkwnewsletter_topic />
         <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <tx_rkwnewsletter_teaser_text />
         <no_search>1</no_search>
     </pages>
 

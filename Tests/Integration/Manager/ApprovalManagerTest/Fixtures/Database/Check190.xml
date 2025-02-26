@@ -6,14 +6,17 @@
         <pid>0</pid>
         <tx_rkwnewsletter_issue>190</tx_rkwnewsletter_issue>
         <tx_rkwnewsletter_topic>190</tx_rkwnewsletter_topic>
+        <tx_rkwnewsletter_teaser_text/>
     </pages>
 
     <tx_rkwnewsletter_domain_model_issue>
         <uid>190</uid>
         <pid>0</pid>
         <status>1</status>
+        <introduction/>
+        <recipients/>
     </tx_rkwnewsletter_domain_model_issue>
-    
+
     <tx_rkwnewsletter_domain_model_topic>
         <uid>190</uid>
         <pid>0</pid>

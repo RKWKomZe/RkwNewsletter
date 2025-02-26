@@ -12,7 +12,9 @@
         <uid>130</uid>
         <pid>0</pid>
         <newsletter>130</newsletter>
+        <introduction/>
+        <recipients/>
     </tx_rkwnewsletter_domain_model_issue>
-    
-    
+
+
 </dataset>

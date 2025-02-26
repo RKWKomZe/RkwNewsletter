@@ -8,23 +8,25 @@
         <issue>1</issue>
         <topic>3</topic>
     </tx_rkwnewsletter_domain_model_newsletter>
-    
-    
+
+
     <tx_rkwnewsletter_domain_model_issue>
         <uid>90</uid>
         <pid>0</pid>
         <newsletter>90</newsletter>
         <pages>2</pages>
+        <introduction/>
+        <recipients/>
     </tx_rkwnewsletter_domain_model_issue>
-    
-    
+
+
     <tx_rkwnewsletter_domain_model_topic>
         <uid>90</uid>
         <pid>0</pid>
         <container_page>1</container_page>
         <newsletter>90</newsletter>
     </tx_rkwnewsletter_domain_model_topic>
-    
+
     <tx_rkwnewsletter_domain_model_topic>
         <uid>91</uid>
         <pid>0</pid>
@@ -39,7 +41,7 @@
         <newsletter>90</newsletter>
     </tx_rkwnewsletter_domain_model_topic>
 
-    
+
     <pages>
         <uid>90</uid>
         <pid>1</pid>
@@ -48,9 +50,10 @@
         <tx_rkwnewsletter_issue>90</tx_rkwnewsletter_issue>
         <tx_rkwnewsletter_topic>90</tx_rkwnewsletter_topic>
         <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <tx_rkwnewsletter_teaser_text/>
         <no_search>1</no_search>
     </pages>
-    
+
     <pages>
         <uid>91</uid>
         <pid>1</pid>
@@ -59,6 +62,7 @@
         <tx_rkwnewsletter_issue>90</tx_rkwnewsletter_issue>
         <tx_rkwnewsletter_topic>91</tx_rkwnewsletter_topic>
         <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <tx_rkwnewsletter_teaser_text/>
         <no_search>1</no_search>
     </pages>
 
@@ -70,6 +74,7 @@
         <tx_rkwnewsletter_issue />
         <tx_rkwnewsletter_topic>92</tx_rkwnewsletter_topic>
         <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <tx_rkwnewsletter_teaser_text/>
         <no_search>1</no_search>
     </pages>
 
@@ -80,7 +85,7 @@
         <header>Content 90.4</header>
         <sorting>4</sorting>
     </tt_content>
-    
+
     <tt_content>
         <uid>91</uid>
         <pid>90</pid>
@@ -146,5 +151,5 @@
         <sorting>1</sorting>
         <tx_rkwnewsletter_is_editorial>1</tx_rkwnewsletter_is_editorial>
     </tt_content>
-    
+
 </dataset>

@@ -26,12 +26,14 @@
         <uid>150</uid>
         <pid>1</pid>
         <title>Container One</title>
+        <tx_rkwnewsletter_teaser_text/>
     </pages>
 
     <pages>
         <uid>151</uid>
         <pid>1</pid>
         <title>Container Two</title>
+        <tx_rkwnewsletter_teaser_text/>
     </pages>
-    
+
 </dataset>

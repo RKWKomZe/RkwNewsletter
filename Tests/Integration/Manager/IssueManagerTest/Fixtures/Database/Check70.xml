@@ -14,6 +14,8 @@
         <uid>70</uid>
         <pid>0</pid>
         <newsletter>70</newsletter>
+        <introduction/>
+        <recipients/>
     </tx_rkwnewsletter_domain_model_issue>
 
     <tx_rkwnewsletter_domain_model_topic>
@@ -22,21 +24,23 @@
         <container_page>1</container_page>
         <newsletter>70</newsletter>
     </tx_rkwnewsletter_domain_model_topic>
-    
+
     <tx_rkwauthors_domain_model_authors>
         <uid>70</uid>
         <pid>0</pid>
+        <function_description/>
     </tx_rkwauthors_domain_model_authors>
 
     <tx_rkwauthors_pages_authors_mm>
         <uid_local>71</uid_local>
         <uid_foreign>70</uid_foreign>
     </tx_rkwauthors_pages_authors_mm>
-    
+
     <pages>
         <uid>70</uid>
         <pid>1</pid>
         <title>Container</title>
+        <tx_rkwnewsletter_teaser_text/>
     </pages>
 
     <pages>
@@ -48,5 +52,6 @@
         <tx_rkwnewsletter_teaser_text>Text</tx_rkwnewsletter_teaser_text>
         <tx_rkwnewsletter_teaser_Link>http://www.google.de</tx_rkwnewsletter_teaser_Link>
         <tx_rkwauthors_authorship>1</tx_rkwauthors_authorship>
+        <tx_rkwnewsletter_teaser_text/>
     </pages>
 </dataset>

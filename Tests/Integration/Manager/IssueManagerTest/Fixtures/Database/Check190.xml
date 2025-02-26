@@ -16,8 +16,10 @@
         <newsletter>190</newsletter>
         <info_tstamp>0</info_tstamp>
         <reminder_tstamp>0</reminder_tstamp>
+        <introduction/>
+        <recipients/>
     </tx_rkwnewsletter_domain_model_issue>
-    
+
     <tx_rkwnewsletter_domain_model_approval>
         <uid>190</uid>
         <pid>0</pid>

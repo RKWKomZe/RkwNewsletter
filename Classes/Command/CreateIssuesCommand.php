@@ -62,7 +62,7 @@ class CreateIssuesCommand extends Command
                 't',
                 InputOption::VALUE_REQUIRED,
                 'Tolerance for creating next issue according to last time an issue was built (in seconds, default: 604800)',
-                604800
+                1209600
             );
     }
 

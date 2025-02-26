@@ -4,18 +4,20 @@
     <tx_rkwnewsletter_domain_model_issue>
         <uid>80</uid>
         <pid>0</pid>
+        <introduction/>
+        <recipients/>
     </tx_rkwnewsletter_domain_model_issue>
 
     <tx_rkwnewsletter_domain_model_topic>
         <uid>80</uid>
         <pid>0</pid>
     </tx_rkwnewsletter_domain_model_topic>
-    
+
     <tx_rkwnewsletter_domain_model_approval>
         <uid>80</uid>
         <pid>0</pid>
         <issue>80</issue>
         <topic>0</topic>
     </tx_rkwnewsletter_domain_model_approval>
-    
+
 </dataset>

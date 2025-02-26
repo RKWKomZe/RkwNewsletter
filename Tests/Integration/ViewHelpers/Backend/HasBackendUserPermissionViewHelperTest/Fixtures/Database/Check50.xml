@@ -14,6 +14,8 @@
         <uid>50</uid>
         <pid>0</pid>
         <newsletter>50</newsletter>
+        <introduction/>
+        <recipients/>
     </tx_rkwnewsletter_domain_model_issue>
 
     <be_users>

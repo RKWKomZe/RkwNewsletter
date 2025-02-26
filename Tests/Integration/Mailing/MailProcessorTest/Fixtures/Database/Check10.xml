@@ -9,17 +9,19 @@
         <sender_name>Test</sender_name>
         <sender_mail>test@testen.de</sender_mail>
         <reply_mail>reply@testen.de</reply_mail>
-        <return_path>return@testen.de</return_path>        
+        <return_path>return@testen.de</return_path>
         <settings_page>2</settings_page>
     </tx_rkwnewsletter_domain_model_newsletter>
-    
+
     <tx_rkwnewsletter_domain_model_issue>
         <uid>10</uid>
         <pid>0</pid>
         <newsletter>10</newsletter>
         <title>Tester</title>
+        <introduction/>
+        <recipients/>
     </tx_rkwnewsletter_domain_model_issue>
-    
-    
-    
+
+
+
 </dataset>

@@ -8,16 +8,18 @@
         <issue>1</issue>
         <topic>2</topic>
     </tx_rkwnewsletter_domain_model_newsletter>
-    
-    
+
+
     <tx_rkwnewsletter_domain_model_issue>
         <uid>70</uid>
         <pid>0</pid>
         <newsletter>70</newsletter>
         <pages>2</pages>
+        <introduction/>
+        <recipients/>
     </tx_rkwnewsletter_domain_model_issue>
-    
-    
+
+
     <tx_rkwnewsletter_domain_model_topic>
         <uid>70</uid>
         <pid>0</pid>
@@ -31,8 +33,8 @@
         <container_page>1</container_page>
         <newsletter>70</newsletter>
     </tx_rkwnewsletter_domain_model_topic>
-    
-    
+
+
     <pages>
         <uid>70</uid>
         <pid>1</pid>
@@ -41,6 +43,7 @@
         <tx_rkwnewsletter_issue>70</tx_rkwnewsletter_issue>
         <tx_rkwnewsletter_topic>70</tx_rkwnewsletter_topic>
         <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <tx_rkwnewsletter_teaser_text />
         <no_search>1</no_search>
     </pages>
 
@@ -52,16 +55,17 @@
         <tx_rkwnewsletter_issue>70</tx_rkwnewsletter_issue>
         <tx_rkwnewsletter_topic>71</tx_rkwnewsletter_topic>
         <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <tx_rkwnewsletter_teaser_text />
         <no_search>1</no_search>
     </pages>
-    
+
     <tt_content>
         <uid>70</uid>
         <pid>70</pid>
         <header>Content 70.4</header>
         <sorting>4</sorting>
     </tt_content>
-    
+
     <tt_content>
         <uid>71</uid>
         <pid>70</pid>
@@ -82,7 +86,7 @@
         <header>Content 70.1</header>
         <sorting>1</sorting>
     </tt_content>
-    
+
     <tt_content>
         <uid>74</uid>
         <pid>71</pid>

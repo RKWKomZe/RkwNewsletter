@@ -4,6 +4,7 @@
     <fe_users>
         <uid>110</uid>
         <pid>0</pid>
+        <company/>
     </fe_users>
 
 </dataset>

@@ -13,17 +13,19 @@
         <return_path>return@testen.de</return_path>
         <settings_page>2</settings_page>
     </tx_rkwnewsletter_domain_model_newsletter>
-    
-    
+
+
     <tx_rkwnewsletter_domain_model_issue>
         <uid>100</uid>
         <pid>0</pid>
         <newsletter>100</newsletter>
         <pages>2</pages>
         <title>Test</title>
+        <introduction/>
+        <recipients/>
     </tx_rkwnewsletter_domain_model_issue>
-    
-    
+
+
     <tx_rkwnewsletter_domain_model_topic>
         <uid>100</uid>
         <pid>0</pid>
@@ -37,8 +39,8 @@
         <container_page>1</container_page>
         <newsletter>100</newsletter>
     </tx_rkwnewsletter_domain_model_topic>
-    
-    
+
+
     <pages>
         <uid>100</uid>
         <pid>1</pid>
@@ -47,6 +49,7 @@
         <tx_rkwnewsletter_issue>100</tx_rkwnewsletter_issue>
         <tx_rkwnewsletter_topic>100</tx_rkwnewsletter_topic>
         <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <tx_rkwnewsletter_teaser_text/>
         <no_search>1</no_search>
     </pages>
 
@@ -58,16 +61,17 @@
         <tx_rkwnewsletter_issue>100</tx_rkwnewsletter_issue>
         <tx_rkwnewsletter_topic>101</tx_rkwnewsletter_topic>
         <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <tx_rkwnewsletter_teaser_text/>
         <no_search>1</no_search>
     </pages>
-    
+
     <tt_content>
         <uid>100</uid>
         <pid>100</pid>
         <header>Content 70.4</header>
         <sorting>4</sorting>
     </tt_content>
-    
+
     <tt_content>
         <uid>101</uid>
         <pid>100</pid>
@@ -88,7 +92,7 @@
         <header>Content 70.1</header>
         <sorting>1</sorting>
     </tt_content>
-    
+
     <tt_content>
         <uid>104</uid>
         <pid>101</pid>
