@@ -5,6 +5,8 @@
         <uid>130</uid>
         <pid>0</pid>
         <pages>1</pages>
+        <introduction/>
+        <recipients/>
     </tx_rkwnewsletter_domain_model_issue>
 
     <tx_rkwnewsletter_domain_model_topic>
@@ -21,5 +23,5 @@
         <tx_rkwnewsletter_topic>130</tx_rkwnewsletter_topic>
         <tx_rkwnewsletter_issue>130</tx_rkwnewsletter_issue>
     </pages>
-    
+
 </dataset>

@@ -35,7 +35,25 @@
         <!-- Editorial & Content -->
         <postmaster:cache.renderCache queueMail="{queueMail}" additionalIdentifier="{rkwNewsletter:mailing.getCacheIdentifier(issue:'{issue}', topics:'{topics}')}" nonCachedMarkers="{hash: '{hash}'}">
             <f:render partial="Body/Editorial" section="Html" arguments="{_all}" />
+            <!-- Top-News -->
+            <f:if condition="{f:count(subject: topics)} > 1 && !{isWebView}">
+                <f:render partial="Body/TopNews" section="Html" arguments="{_all}" />
+            </f:if>
             <f:render partial="Body/Items" section="Html" arguments="{_all}" />
+            <f:if condition="{limit} > 0} && !{isWebView}">
+                <tr>
+                    <td style="padding: 0 16px">
+                        <table cellpadding="0" cellspacing="0" border="0" style="width: 100%; font-family: 'Arial', sans-serif; font-size: 14px">
+                            <tr>
+                                <td style="height: 16px">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td style="height: 16px">&nbsp;</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </f:if>
         </postmaster:cache.renderCache>
     </f:section>
 

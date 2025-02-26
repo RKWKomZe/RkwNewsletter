@@ -319,9 +319,20 @@ class ContentLoader
                 false
             )->toArray();
 
+            if ($limit > 0) {
+                $maxAvailableContentsOfTopic = $this->contentRepository->countByPageAndLanguage(
+                    $page,
+                    ($this->issue->getNewsletter()? $this->issue->getNewsletter()->getSysLanguageUid(): 0)
+                );
+            }
+
             // set contents to key according to desired order - this is already given via getPages()
             if ($contentsOfTopic) {
-                $contents[] = $contentsOfTopic;
+                $contents[] = [
+                    'topic' => $page->getTxRkwnewsletterTopic(),
+                    'items' => $contentsOfTopic,
+                    'maxItems' => $maxAvailableContentsOfTopic ?? 9999,
+                ];
             }
 
             $this->getLogger()->log(
@@ -335,11 +346,7 @@ class ContentLoader
             );
         }
 
-        // now mix topics together - pass array-items as separate parameters to arrayZipMerge
-        $result = call_user_func_array(
-            '\Madj2k\CoreExtended\Utility\GeneralUtility::arrayZipMerge',
-            $contents
-        );
+        $result = $contents;
 
         if (is_array($result)) {
             return $result;

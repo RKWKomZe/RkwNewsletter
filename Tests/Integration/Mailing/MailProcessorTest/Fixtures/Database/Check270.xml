@@ -14,7 +14,8 @@
         <pid>0</pid>
         <newsletter>270</newsletter>
         <title>Tester</title>
+        <introduction/>
+        <recipients/>
     </tx_rkwnewsletter_domain_model_issue>
-
 
 </dataset>

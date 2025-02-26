@@ -21,6 +21,8 @@
         <newsletter>240</newsletter>
         <pages>3</pages>
         <title>Test</title>
+        <introduction/>
+        <recipients/>
     </tx_rkwnewsletter_domain_model_issue>
 
 
@@ -58,6 +60,7 @@
         <tx_rkwnewsletter_issue>240</tx_rkwnewsletter_issue>
         <tx_rkwnewsletter_topic>240</tx_rkwnewsletter_topic>
         <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <tx_rkwnewsletter_teaser_text/>
         <no_search>1</no_search>
     </pages>
 
@@ -69,6 +72,7 @@
         <tx_rkwnewsletter_issue>240</tx_rkwnewsletter_issue>
         <tx_rkwnewsletter_topic>241</tx_rkwnewsletter_topic>
         <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <tx_rkwnewsletter_teaser_text/>
         <no_search>1</no_search>
     </pages>
 
@@ -80,6 +84,7 @@
         <tx_rkwnewsletter_issue>240</tx_rkwnewsletter_issue>
         <tx_rkwnewsletter_topic>242</tx_rkwnewsletter_topic>
         <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <tx_rkwnewsletter_teaser_text/>
         <no_search>1</no_search>
     </pages>
 
@@ -114,6 +119,7 @@
         <uid>240</uid>
         <pid>0</pid>
         <email>test@teste.de</email>
+        <company/>
         <tx_rkwnewsletter_subscription>240,242</tx_rkwnewsletter_subscription>
         <tx_rkwnewsletter_hash>HashMeIfYouCanButWeHaveToHaveFourtySigns</tx_rkwnewsletter_hash>
         <tx_feregister_language_key>de</tx_feregister_language_key>

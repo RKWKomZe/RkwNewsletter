@@ -14,16 +14,13 @@ namespace RKW\RkwNewsletter\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Madj2k\CoreExtended\Utility\SiteUtility;
-use Madj2k\Postmaster\Domain\Model\QueueRecipient;
 use Madj2k\CoreExtended\Utility\GeneralUtility;
+use Madj2k\Postmaster\Domain\Model\QueueRecipient;
 use Madj2k\Postmaster\Domain\Repository\QueueMailRepository;
 use Madj2k\Postmaster\Domain\Repository\QueueRecipientRepository;
 use RKW\RkwNewsletter\Domain\Model\Issue;
 use RKW\RkwNewsletter\Domain\Repository\IssueRepository;
-use RKW\RkwNewsletter\Domain\Repository\NewsletterRepository;
 use RKW\RkwNewsletter\Domain\Repository\TopicRepository;
-use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
@@ -222,6 +219,7 @@ class WebViewController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
         // override maxContentItems
         $settings['settings']['maxContentItems'] = 9999;
+
         $this->view->assignMultiple(
             array(
                 'issue'      => $issue,

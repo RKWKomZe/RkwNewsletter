@@ -5,6 +5,8 @@
         <uid>120</uid>
         <pid>0</pid>
         <pages>0</pages>
+        <introduction/>
+        <recipients/>
     </tx_rkwnewsletter_domain_model_issue>
 
     <tx_rkwnewsletter_domain_model_topic>
@@ -20,5 +22,5 @@
         <tx_rkwnewsletter_newsletter>120</tx_rkwnewsletter_newsletter>
         <tx_rkwnewsletter_topic>0</tx_rkwnewsletter_topic>
     </pages>
-    
+
 </dataset>

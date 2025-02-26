@@ -21,6 +21,8 @@
         <newsletter>230</newsletter>
         <pages>2</pages>
         <title>Test</title>
+        <introduction/>
+        <recipients/>
     </tx_rkwnewsletter_domain_model_issue>
 
 
@@ -49,6 +51,7 @@
         <tx_rkwnewsletter_issue>230</tx_rkwnewsletter_issue>
         <tx_rkwnewsletter_topic>230</tx_rkwnewsletter_topic>
         <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <tx_rkwnewsletter_teaser_text/>
         <no_search>1</no_search>
     </pages>
 
@@ -60,6 +63,7 @@
         <tx_rkwnewsletter_issue>230</tx_rkwnewsletter_issue>
         <tx_rkwnewsletter_topic>231</tx_rkwnewsletter_topic>
         <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <tx_rkwnewsletter_teaser_text/>
         <no_search>1</no_search>
     </pages>
 
@@ -126,33 +130,41 @@
         <uid>230</uid>
         <pid>0</pid>
         <email>test1@teste.de</email>
+        <username>test1@teste.de</username>
         <tx_rkwnewsletter_subscription>230,231</tx_rkwnewsletter_subscription>
         <tx_rkwnewsletter_hash>HashMeIfYouCanButWeHaveToHaveFourtySigns</tx_rkwnewsletter_hash>
         <tx_feregister_language_key>de</tx_feregister_language_key>
+        <company/>
     </fe_users>
 
     <fe_users>
         <uid>231</uid>
         <pid>0</pid>
         <email>test2@teste.de</email>
+        <username>test2@teste.de</username>
         <tx_rkwnewsletter_subscription>230</tx_rkwnewsletter_subscription>
         <tx_rkwnewsletter_hash>HashMeIfYouCanButWeHaveToHaveFourtySigns</tx_rkwnewsletter_hash>
         <tx_feregister_language_key>de</tx_feregister_language_key>
+        <company/>
     </fe_users>
 
     <fe_users>
         <uid>232</uid>
         <pid>0</pid>
         <email>test3@teste.de</email>
+        <username>test3@teste.de</username>
         <tx_rkwnewsletter_subscription>231</tx_rkwnewsletter_subscription>
         <tx_rkwnewsletter_hash>HashMeIfYouCanButWeHaveToHaveFourtySigns</tx_rkwnewsletter_hash>
         <tx_feregister_language_key>de</tx_feregister_language_key>
+        <company/>
     </fe_users>
 
     <fe_users>
         <uid>233</uid>
         <pid>0</pid>
         <email>test4@teste.de</email>
+        <username>test4@teste.de</username>
+        <company/>
         <tx_rkwnewsletter_subscription>231</tx_rkwnewsletter_subscription>
         <tx_rkwnewsletter_hash>HashMeIfYouCanButWeHaveToHaveFourtySigns</tx_rkwnewsletter_hash>
         <tx_feregister_language_key>de</tx_feregister_language_key>

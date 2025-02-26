@@ -13,17 +13,19 @@
         <return_path>return@testen.de</return_path>
         <settings_page>2</settings_page>
     </tx_rkwnewsletter_domain_model_newsletter>
-    
-    
+
+
     <tx_rkwnewsletter_domain_model_issue>
         <uid>200</uid>
         <pid>0</pid>
         <newsletter>200</newsletter>
         <pages>2</pages>
         <title>Test</title>
+        <introduction/>
+        <recipients/>
     </tx_rkwnewsletter_domain_model_issue>
-    
-    
+
+
     <tx_rkwnewsletter_domain_model_topic>
         <uid>200</uid>
         <pid>0</pid>
@@ -37,8 +39,8 @@
         <container_page>1</container_page>
         <newsletter>200</newsletter>
     </tx_rkwnewsletter_domain_model_topic>
-    
-    
+
+
     <pages>
         <uid>200</uid>
         <pid>1</pid>
@@ -47,6 +49,7 @@
         <tx_rkwnewsletter_issue>200</tx_rkwnewsletter_issue>
         <tx_rkwnewsletter_topic>200</tx_rkwnewsletter_topic>
         <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <tx_rkwnewsletter_teaser_text/>
         <no_search>1</no_search>
     </pages>
 
@@ -58,9 +61,10 @@
         <tx_rkwnewsletter_issue>200</tx_rkwnewsletter_issue>
         <tx_rkwnewsletter_topic>201</tx_rkwnewsletter_topic>
         <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
+        <tx_rkwnewsletter_teaser_text/>
         <no_search>1</no_search>
     </pages>
-    
+
     <tt_content>
         <uid>200</uid>
         <pid>201</pid>
@@ -82,5 +86,5 @@
         <sorting>1</sorting>
         <tx_rkwnewsletter_is_editorial>1</tx_rkwnewsletter_is_editorial>
     </tt_content>
-    
+
 </dataset>

@@ -1,4 +1,4 @@
-base: www.rkw-kompetenzzentrum.rkw.local
+base: example.com
 languages:
   -
     title: Deutsch

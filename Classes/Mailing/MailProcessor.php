@@ -419,6 +419,9 @@ class MailProcessor
                         'issue'             => $this->issue,
                         'topics'            => $this->contentLoader->getTopics(),
                         'hash'              => $this->getSubscriptionHash($frontendUser),
+                        'limit'             => ($this->contentLoader->getTopics()->count() > 1)
+                                                ? $settings['settings']['maxContentItemsPerTopic']
+                                                : $settings['settings']['maxContentItems'],
                         'settings'          => $settings['settings'],
                     ),
                     'subject' => $this->getSubject(),
@@ -491,6 +494,9 @@ class MailProcessor
                     'marker'  => array(
                         'issue'             => $this->issue,
                         'topics'            => $this->contentLoader->getTopics(),
+                        'limit'             => ($this->contentLoader->getTopics()->count() > 1)
+                                                ? $settings['settings']['maxContentItemsPerTopic']
+                                                : $settings['settings']['maxContentItems'],
                         'settings'          => $settings['settings'],
                     ),
                     'subject' => 'TEST: ' . $this->getSubject(),

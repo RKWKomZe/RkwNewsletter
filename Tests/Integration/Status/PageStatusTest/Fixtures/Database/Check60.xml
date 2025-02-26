@@ -6,6 +6,8 @@
         <pid>0</pid>
         <status>3</status>
         <pages>60</pages>
+        <introduction/>
+        <recipients/>
     </tx_rkwnewsletter_domain_model_issue>
 
     <tx_rkwnewsletter_domain_model_topic>
@@ -34,6 +36,7 @@
         <tx_rkwnewsletter_newsletter>0</tx_rkwnewsletter_newsletter>
         <tx_rkwnewsletter_topic>60</tx_rkwnewsletter_topic>
         <tx_rkwnewsletter_issue>60</tx_rkwnewsletter_issue>
+        <tx_rkwnewsletter_teaser_text />
     </pages>
-    
+
 </dataset>

@@ -67,6 +67,7 @@ class GetContentsViewHelper extends AbstractViewHelper
         if ($topics) {
             $contentLoader->setTopics($topics);
         }
+
         return $contentLoader->getContents($limit);
     }
 }

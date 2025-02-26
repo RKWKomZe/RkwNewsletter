@@ -19,6 +19,7 @@
         <uid>90</uid>
         <pid>1</pid>
         <title>Container</title>
+        <tx_rkwnewsletter_teaser_text/>
     </pages>
 
     <pages>
@@ -29,6 +30,7 @@
         <hidden>1</hidden>
         <tx_rkwnewsletter_newsletter>90</tx_rkwnewsletter_newsletter>
         <tx_rkwnewsletter_topic>90</tx_rkwnewsletter_topic>
+        <tx_rkwnewsletter_teaser_text/>
     </pages>
 
     <pages>
@@ -39,6 +41,7 @@
         <tx_rkwnewsletter_exclude>1</tx_rkwnewsletter_exclude>
         <tx_rkwnewsletter_newsletter>90</tx_rkwnewsletter_newsletter>
         <tx_rkwnewsletter_topic>90</tx_rkwnewsletter_topic>
+        <tx_rkwnewsletter_teaser_text/>
     </pages>
 
     <pages>
@@ -49,6 +52,7 @@
         <tx_rkwnewsletter_include_tstamp>1</tx_rkwnewsletter_include_tstamp>
         <tx_rkwnewsletter_newsletter>90</tx_rkwnewsletter_newsletter>
         <tx_rkwnewsletter_topic>90</tx_rkwnewsletter_topic>
+        <tx_rkwnewsletter_teaser_text/>
     </pages>
 
     <pages>
@@ -59,6 +63,7 @@
         <tx_rkwnewsletter_include_tstamp>1</tx_rkwnewsletter_include_tstamp>
         <tx_rkwnewsletter_newsletter>90</tx_rkwnewsletter_newsletter>
         <tx_rkwnewsletter_topic>90</tx_rkwnewsletter_topic>
+        <tx_rkwnewsletter_teaser_text/>
     </pages>
 
     <pages>
@@ -68,6 +73,7 @@
         <doktype>1</doktype>
         <tx_rkwnewsletter_newsletter>90</tx_rkwnewsletter_newsletter>
         <tx_rkwnewsletter_topic>90</tx_rkwnewsletter_topic>
+        <tx_rkwnewsletter_teaser_text/>
     </pages>
 
     <pages>
@@ -77,14 +83,16 @@
         <doktype>1</doktype>
         <tx_rkwnewsletter_newsletter>90</tx_rkwnewsletter_newsletter>
         <tx_rkwnewsletter_topic>90</tx_rkwnewsletter_topic>
+        <tx_rkwnewsletter_teaser_text/>
     </pages>
-    
+
     <pages>
         <uid>97</uid>
         <pid>1</pid>
         <title>Wrong Topic</title>
         <tx_rkwnewsletter_newsletter>90</tx_rkwnewsletter_newsletter>
         <tx_rkwnewsletter_topic>0</tx_rkwnewsletter_topic>
+        <tx_rkwnewsletter_teaser_text/>
     </pages>
-    
+
 </dataset>

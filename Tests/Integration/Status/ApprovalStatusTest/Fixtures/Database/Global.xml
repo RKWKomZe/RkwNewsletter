@@ -6,6 +6,7 @@
         <title>Rootpage</title>
         <doktype>1</doktype>
         <perms_everybody>15</perms_everybody>
+        <tx_rkwnewsletter_teaser_text />
     </pages>
 
 </dataset>

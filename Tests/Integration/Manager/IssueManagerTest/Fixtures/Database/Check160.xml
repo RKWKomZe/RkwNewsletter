@@ -16,7 +16,7 @@
         <topic>2</topic>
         <rythm>2</rythm>
     </tx_rkwnewsletter_domain_model_newsletter>
-    
+
     <tx_rkwnewsletter_domain_model_topic>
         <uid>160</uid>
         <pid>0</pid>
@@ -49,23 +49,27 @@
         <uid>160</uid>
         <pid>1</pid>
         <title>Container One</title>
+        <tx_rkwnewsletter_teaser_text/>
     </pages>
 
     <pages>
         <uid>161</uid>
         <pid>1</pid>
         <title>Container Two</title>
+        <tx_rkwnewsletter_teaser_text/>
     </pages>
-    
+
     <pages>
         <uid>162</uid>
         <pid>1</pid>
         <title>Container One</title>
+        <tx_rkwnewsletter_teaser_text/>
     </pages>
 
     <pages>
         <uid>163</uid>
         <pid>1</pid>
         <title>Container Two</title>
+        <tx_rkwnewsletter_teaser_text/>
     </pages>
 </dataset>

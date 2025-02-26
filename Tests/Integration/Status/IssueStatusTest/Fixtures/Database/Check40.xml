@@ -4,5 +4,7 @@
         <uid>40</uid>
         <pid>0</pid>
         <status>3</status>
+        <introduction/>
+        <recipients/>
     </tx_rkwnewsletter_domain_model_issue>
 </dataset>

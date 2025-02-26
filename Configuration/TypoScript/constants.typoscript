@@ -29,19 +29,19 @@ plugin.tx_rkwnewsletter {
 	settings {
 
 		# cat=plugin.tx_rkwnewsletter//a; type=integer; label=remind BackendUser on stage 1 to approve pages of a new issue
-		reminderApprovalStage1 = 302400
+		reminderApprovalStage1 = 604800
 
 		# cat=plugin.tx_rkwnewsletter//a; type=integer; label=remind BackendUser on stage 2 to approve pages of a new issue
-		reminderApprovalStage2 = 302400
+		reminderApprovalStage2 = 604800
 
 		# cat=plugin.tx_rkwnewsletter//a; type=integer; label=remind BackendUser on stage 3 to approve pages of a new issue
-		reminderApprovalStage3 = 302400
+		reminderApprovalStage3 = 604800
 
 		# cat=plugin.tx_rkwnewsletter//a; type=integer; label=automatic approval of stage 1 after a certain time
-		automaticApprovalStage1 = 604800
+		automaticApprovalStage1 = 1209600
 
 		# cat=plugin.tx_rkwnewsletter//a; type=integer; label=automatic approval of stage 2 after a certain time
-		automaticApprovalStage2 = 604800
+		automaticApprovalStage2 = 1209600
 
 		# cat=plugin.tx_rkwnewsletter//a; type=integer; label=Pid of login mask
 		loginPid =
@@ -63,6 +63,9 @@ plugin.tx_rkwnewsletter {
 
         # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Maximum number of content items per newsletter-issue
         maxContentItems = 10
+
+        # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Maximum number of content items per topic within a newsletter-issue
+        maxContentItemsPerTopic = 3
 
         pages {
             # permissions for pages elements
