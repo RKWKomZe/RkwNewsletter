@@ -593,7 +593,7 @@
 			</trans-unit>
 			<trans-unit id="templates_email_optInRequest.textOptOut">
 				<source>Did you change your mind or did you not request the subscription yourself? Simply click here to delete all data:</source>
-				<target>Sie haben es sich anders überlegt oder haben das Abonnement gar nicht selbst angefragt? Klicken Sie einfach hier, um alle Daten zu löschen:</target>
+				<target>Sie haben es sich anders überlegt oder haben das Abonnement gar nicht selbst angefragt? In Kürze werden die Daten Ihrer Anfrage automatisch gelöscht. Sie brauchen nichts weiter zu tun.</target>
 			</trans-unit>
 			<trans-unit id="templates_email_optInRequest.textOptInLinkLabel">
 				<source>Yes, I would like to subscribe to these newsletter topics</source>
