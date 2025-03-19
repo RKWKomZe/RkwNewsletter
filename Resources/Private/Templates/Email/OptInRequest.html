@@ -21,7 +21,6 @@
         <postmaster:email.uri.action action="optIn" controller="Subscription" extensionName="rkwNewsletter" pluginName="Subscription" absolute="true" pageUid="{pageUid}" additionalParams="{tx_rkwnewsletter_subscription: {token: optIn.tokenYes, tokenUser: optIn.tokenUser}}" section="rkw-newsletter" />
         \n\n
         <postmaster:email.translate key="templates_email_optInRequest.textOptOut" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />\n
-        <postmaster:email.uri.action action="optIn" controller="Subscription" extensionName="rkwNewsletter" pluginName="Subscription" absolute="true" pageUid="{pageUid}" additionalParams="{tx_rkwnewsletter_subscription: {token: optIn.tokenNo, tokenUser: optIn.tokenUser}}" section="rkw-newsletter" />
     </postmaster:email.plaintextLineBreaks></f:section>
 
     <!-- HTML -->
@@ -51,7 +50,6 @@
         </p>
         <p>
             <postmaster:email.translate key="templates_email_optInRequest.textOptOut" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" /><br>
-            <a href="<postmaster:email.uri.action action='optIn' controller='Subscription' extensionName='rkwNewsletter' pluginName='Subscription' absolute='true' pageUid='{pageUid}' additionalParams='{tx_rkwnewsletter_subscription: {token: optIn.tokenNo, tokenUser: optIn.tokenUser}}' section='rkw-newsletter' />"><postmaster:email.translate key="templates_email_optInRequest.textOptOutLinkLabel" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter"/></a>
         </p>
     </f:section>
 </html>
