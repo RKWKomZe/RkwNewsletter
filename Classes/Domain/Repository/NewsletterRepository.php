@@ -72,6 +72,13 @@ class NewsletterRepository extends AbstractRepository
                     rythm = 2
                     AND DATEDIFF(FROM_UNIXTIME(' . ($currentTime + $tolerance) . '), FROM_UNIXTIME(last_issue_tstamp)) >= 30
                     AND (DAY(FROM_UNIXTIME(' . ($currentTime + $tolerance) . ')) >= day_for_sending)
+                    AND (
+                        YEAR(FROM_UNIXTIME(' . ($currentTime + $tolerance) . ')) > YEAR(FROM_UNIXTIME(last_issue_tstamp))
+                        OR (
+                            YEAR(FROM_UNIXTIME(' . ($currentTime + $tolerance) . ')) = YEAR(FROM_UNIXTIME(last_issue_tstamp))
+                            AND MONTH(FROM_UNIXTIME(' . ($currentTime + $tolerance) . ')) > MONTH(FROM_UNIXTIME(last_issue_tstamp))
+                        )
+                    )
                 )
                 OR (
                     rythm = 3
