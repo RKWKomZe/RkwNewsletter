@@ -2,7 +2,7 @@
 	xmlns:postmaster="http://typo3.org/ns/Madj2k/Postmaster/ViewHelpers"
 	data-namespace-typo3-fluid="true">
 
-	
+
 	<!-- PLAINTEXT -->
 	<f:section name="Plaintext">
 		<f:if condition="{topics} && !{isWebView}">
@@ -30,16 +30,16 @@
 		Tel: 06196 495-0\n
 		www.rkw-kompetenzzentrum.de
 	</f:section>
-	
-	
+
+
 	<!-- HTML -->
 	<f:section name="Html">
 		<f:if condition="{topics} && !{isWebView}">
 			<tr>
-				<td style="padding-top:48px;">
+				<td style="padding: 32px 16px 0 16px;">
 					<table cellpadding="0" cellspacing="0" border="0" style="width: 100%; font-family: 'Arial', sans-serif; font-size: 14px">
 						<tr>
-							<td style="padding: 12px 16px; font-size: 16px; color:#fff; font-weight: 700; line-height: 16px; text-transform: uppercase; background: #303030; ">
+							<td style="padding: 16px; font-size: 16px; color:#fff; font-weight: 700; line-height: 16px; text-transform: uppercase; background: #303030; ">
 								<postmaster:email.translate key="partials_newsletter_global_footer.subscriptionHeadline" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />
 							</td>
 						</tr>
@@ -67,7 +67,7 @@
 				</td>
 			</tr>
 		</f:if>
-		
+
 		<tr>
 			<td style="padding: 32px 16px 0 16px">
 				<p style="margin: 0; padding: 9px 0 9px; border-top: 1px solid #333; font-size: 12px; line-height:12px;">
@@ -75,7 +75,7 @@
 				</p>
 			</td>
 		</tr>
-	
+
 		<tr>
 			<td style="padding: 0 16px 16px 16px" class="footer">
 				<p>
@@ -84,11 +84,11 @@
 					Düsseldorfer Straße 40 A<br>
 					65760 Eschborn<br>
 					Tel: 06196 495-0<br>
-					<a href="https://www.rkw-kompetenzzentrum.de" target="_blank">www.rkw-kompetenzzentrum.de</a>
+					<a href="https://www.rkw-kompetenzzentrum.de" target="_blank" style="color: #333;">www.rkw-kompetenzzentrum.de</a>
 				</p>
 			</td>
 		</tr>
-		
+
 	</f:section>
 
 </html>
