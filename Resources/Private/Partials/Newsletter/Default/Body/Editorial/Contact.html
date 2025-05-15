@@ -18,17 +18,14 @@
             </f:for>
         </f:if>
     </f:section>
-    
-    
+
+
     <!-- HTML for the first item-->
     <f:section name="Html">
-    
+
         <f:if condition="{authors} && {content}">
             <tr>
                 <td style="padding: 0 16px 16px 16px;">
-                    <p style="padding: 23px 0 0; border-top: 1px solid #606060; font-size: 12px; font-weight:bold;">
-                        <postmaster:email.translate key="partials_newsletter_body_editorial_contact.contact" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />
-                    </p>
                     <f:for each="{authors}" as="author" iteration="iteratorAuthor">
                         <f:if condition="{iteratorAuthor.isFirst}">
                             <table cellpadding="0" cellspacing="0" border="0" style="font-family: 'Arial', sans-serif; font-size: 14px">
@@ -39,9 +36,8 @@
                                         </td>
                                     </f:if>
                                     <td style="font-size: 12px; line-height: 24px">
-                                        <rkwAuthors:GetCombinedName author='{author}'/><br />
-                                        <rkwAuthors:GetFormattedPhoneNumber phoneExtensionLength="4" author="{author}"/><br />
-                                        <a href="mailto:{author.email}" style="color: #333; text-decoration: none">{author.email}</a>
+                                        <span style="font-weight: bold;"><rkwAuthors:GetCombinedName author='{author}'/></span><br />
+                                        <rkwAuthors:GetFormattedPhoneNumber phoneExtensionLength="4" author="{author}"/>, <a href="mailto:{author.email}" style="color: #333; text-decoration: none">{author.email}</a>
                                     </td>
                                 </tr>
                             </table>
