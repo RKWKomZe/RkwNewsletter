@@ -518,8 +518,8 @@
                 <target>Kontakt:</target>
             </trans-unit>
             <trans-unit id="partials_newsletter_body_items_default_content.more">
-                <source><![CDATA[>> read more]]></source>
-                <target><![CDATA[>> mehr erfahren]]></target>
+                <source>read more</source>
+                <target>mehr erfahren</target>
             </trans-unit>
 
             <!-- Partials/Newsletter/*/Body/Items/Separator.html -->
