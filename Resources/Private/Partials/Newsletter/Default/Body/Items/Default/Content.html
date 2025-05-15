@@ -35,7 +35,7 @@
                 <td style="padding: 12px; line-height: 24px">
                     <f:if condition="{content.headerLink}">
                         <f:then>
-                            <a href="{postmaster:email.uri.typolink(parameter:'{content.headerLink}')}" target="_blank" id="item-{itemIterator.cycle}" name="item-{itemIterator.cycle}" style="font-size: 24px; font-weight: 400; text-decoration: none; color:#E64415;">
+                            <a href="{postmaster:email.uri.typolink(parameter:'{content.headerLink}')}" target="_blank" id="item-{itemIterator.cycle}" name="item-{itemIterator.cycle}" style="font-size: 24px; font-weight: 400; text-decoration: none; color:#333;">
                                 {content.header}
                             </a>
                         </f:then>
@@ -97,7 +97,7 @@
                                         <f:if condition="{author.phone2}">
                                             <rkwAuthors:GetFormattedPhoneNumber phoneExtensionLength="4" author="{author}"/>,
                                         </f:if>
-                                        <a href="mailto:{author.email}" style="color: #333; text-decoration: none">{author.email}</a>
+                                        <a href="mailto:{author.email}" style="color: #333; text-decoration: underline;">{author.email}</a>
                                     </span>
                                 </f:if>
                             </f:for>
