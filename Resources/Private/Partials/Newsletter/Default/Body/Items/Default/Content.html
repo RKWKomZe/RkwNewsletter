@@ -1,6 +1,7 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
     xmlns:coreExtended="http://typo3.org/ns/Madj2k/CoreExtended/ViewHelpers"
     xmlns:postmaster="http://typo3.org/ns/Madj2k/Postmaster/ViewHelpers"
+    xmlns:rkwAuthors="http://typo3.org/ns/RKW/RkwAuthors/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
     <!-- PLAINTEXT -->
@@ -31,10 +32,10 @@
 
             <!-- headline -->
             <tr>
-                <td style="padding: 12px 16px 0; line-height: 24px">
+                <td style="padding: 12px; line-height: 24px">
                     <f:if condition="{content.headerLink}">
                         <f:then>
-                            <a href="{postmaster:email.uri.typolink(parameter:'{content.headerLink}')}" target="_blank" id="item-{itemIterator.cycle}" name="item-{itemIterator.cycle}" style="font-size: 24px; font-weight: 400; text-decoration: none; color:#E64415;">
+                            <a href="{postmaster:email.uri.typolink(parameter:'{content.headerLink}')}" target="_blank" id="item-{itemIterator.cycle}" name="item-{itemIterator.cycle}" style="font-size: 24px; font-weight: 400; text-decoration: none; color:#333;">
                                 {content.header}
                             </a>
                         </f:then>
@@ -49,9 +50,9 @@
 
             <!-- image -->
             <tr>
-                <td style="padding-top: 11px">
+                <td style="padding: 0 12px;">
                     <f:if condition="{content.image}">
-                        <postmaster:email.image image="{content.image.0}" treatIdAsReference="true" absolute="false" width="536" height="200c" style="display: block; width: 100%; height: auto" />
+                        <postmaster:email.image image="{content.image.0}" treatIdAsReference="true" absolute="false" width="544" height="200c" style="width: 100% !important;" />
                     </f:if>
                 </td>
             </tr>
@@ -86,9 +87,20 @@
             <!-- contact headline -->
             <f:if condition="{content.txRkwnewsletterAuthors}">
                 <tr>
-                    <td style="padding: 0 16px">
-                        <p style="margin: 0; padding: 23px 0 0; border-top: 1px solid #000; color: #333; font-size: 12px; font-weight:bold">
-                            <postmaster:email.translate key="partials_newsletter_body_items_default_content.contact" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />
+                    <td style="padding: 0 12px 12px 12px">
+                        <p style="margin: 0; padding-top: 12px; border-top: 1px solid #333; color: #333; font-size: 12px; font-weight:bold;">
+                            <f:for each="{content.txRkwnewsletterAuthors}" as="author" iteration="iteratorAuthor">
+                                <f:if condition="{iteratorAuthor.isFirst}">
+                                    <postmaster:email.translate key="partials_newsletter_body_items_default_content.contact" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />
+                                    <span style="font-weight: 400;">
+                                        <rkwAuthors:GetCombinedName author='{author}'/>,
+                                        <f:if condition="{author.phone2}">
+                                            <rkwAuthors:GetFormattedPhoneNumber phoneExtensionLength="4" author="{author}"/>,
+                                        </f:if>
+                                        <a href="mailto:{author.email}" style="color: #333; text-decoration: underline;">{author.email}</a>
+                                    </span>
+                                </f:if>
+                            </f:for>
                         </p>
                     </td>
                 </tr>
