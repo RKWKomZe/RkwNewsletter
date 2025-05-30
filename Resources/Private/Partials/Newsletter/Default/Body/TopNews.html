@@ -34,7 +34,7 @@
                             <td style="padding: 16px; background-color:#FFFFFF">
                                 <table cellpadding="0" cellspacing="0" border="0" style="width: 100%; font-family: 'Arial', sans-serif; font-size: 14px; line-height: 16px">
                                     <tr>
-                                        <td style="margin: 0; padding-bottom: 16px; color: #333; font-size: 24px; font-weight: 700; line-height:24px;">
+                                        <td style="margin: 0; padding-bottom: 16px; color: #333; font-size: 24px; font-weight: 700; line-height:24px;" colspan="2">
                                             <postmaster:email.translate key="partials_newsletter_body_topNews.headline" languageKey="{queueRecipient.languageCode}" extensionName="rkwNewsletter" />
                                         </td>
                                     </tr>
@@ -53,18 +53,24 @@
                                                 <f:if condition="{topicIterator.isLast}">
                                                     <f:then>
                                                         <tr>
-                                                            <td style="padding: 6px 0;">
+                                                            <td style="padding: 6px 0; line-height: 22px; vertical-align: top;">
+                                                                &bull;
+                                                            </td>
+                                                            <td style="padding: 6px 0 6px 6px;">
                                                                 <a href="#topic-{contentPerTopic.topic.uid}" style="color: #333; line-height: 22px; font-weight: 400; text-decoration: none;">
-                                                                    &bull; {content.header}
+                                                                    {content.header}
                                                                 </a>
                                                             </td>
                                                         </tr>
                                                     </f:then>
                                                     <f:else>
                                                         <tr>
-                                                            <td style="padding: 0 0 13px 0;">
+                                                            <td style="padding: 0 0 13px 0; line-height: 22px; vertical-align: top;">
+                                                                &bull;
+                                                            </td>
+                                                            <td style="padding: 0 0 13px 6px;">
                                                                 <a href="#topic-{contentPerTopic.topic.uid}" style="color: #333; line-height: 22px; font-weight: 400; text-decoration: none;">
-                                                                    &bull; {content.header}
+                                                                    {content.header}
                                                                 </a>
                                                             </td>
                                                         </tr>
