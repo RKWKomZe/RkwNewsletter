@@ -228,6 +228,14 @@
                 <source>Authors</source>
                 <target state="translated">Ansprechperson</target>
             </trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_issue.banner">
+                <source>Banner</source>
+                <target state="translated">Werbebanner</target>
+            </trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_issue.banner_link">
+                <source>Banner link</source>
+                <target state="translated">Werbebanner-Link</target>
+            </trans-unit>
 			<trans-unit id="tx_rkwnewsletter_domain_model_issue.status">
 				<source>Status</source>
 				<target state="translated">Status</target>
