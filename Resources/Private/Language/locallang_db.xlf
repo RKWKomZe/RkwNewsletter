@@ -176,6 +176,12 @@
             <trans-unit id="tx_rkwnewsletter_domain_model_issue.authors">
                 <source>Authors</source>
             </trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_issue.banner">
+                <source>Banner</source>
+            </trans-unit>
+            <trans-unit id="tx_rkwnewsletter_domain_model_issue.banner_link">
+                <source>Banner link</source>
+            </trans-unit>
 			<trans-unit id="tx_rkwnewsletter_domain_model_issue.status">
 				<source>Status</source>
 			</trans-unit>

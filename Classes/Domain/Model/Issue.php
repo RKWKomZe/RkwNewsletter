@@ -51,6 +51,18 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
 
     /**
+     * @var \TYPO3\CMS\Extbase\Domain\Model\FileReference|null
+     */
+    protected $banner = null;
+
+
+    /**
+     * @var string
+     */
+    protected string $bannerLink = '';
+
+
+    /**
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RKW\RkwAuthors\Domain\Model\Authors>|null
      */
     protected ?ObjectStorage $authors = null;
@@ -264,6 +276,52 @@ class Issue extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setAuthors(ObjectStorage $authors): void
     {
         $this->authors = $authors;
+    }
+
+
+    /**
+     * Returns the banner
+     *
+     * @return \TYPO3\CMS\Extbase\Domain\Model\FileReference|null
+     */
+    public function getBanner()
+    {
+        return $this->banner;
+    }
+
+
+    /**
+     * Sets the banner
+     *
+     * @param \TYPO3\CMS\Extbase\Domain\Model\FileReference|null $banner
+     * @return void
+     */
+    public function setBanner($banner): void
+    {
+        $this->banner = $banner;
+    }
+
+
+    /**
+     * Returns the bannerLink
+     *
+     * @return string
+     */
+    public function getBannerLink(): string
+    {
+        return $this->bannerLink;
+    }
+
+
+    /**
+     * Sets the bannerLink
+     *
+     * @param string $bannerLink
+     * @return void
+     */
+    public function setBannerLink(string $bannerLink): void
+    {
+        $this->bannerLink = $bannerLink;
     }
 
 

@@ -1,0 +1,28 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:postmaster="http://typo3.org/ns/Madj2k/Postmaster/ViewHelpers"
+    xmlns:rkwNewsletter="http://typo3.org/ns/RKW/RkwNewsletter/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+<!-- PLAINTEXT -->
+<f:section name="Plaintext" />
+
+
+<!-- HTML -->
+<f:section name="Html">
+<tr>
+    <td style="font-size:10px; text-align:center; color:#808080;">
+        <f:if condition="{issue.bannerLink}">
+            <f:then>
+                <a href="{postmaster:email.uri.typolink(parameter:'{issue.bannerLink}')}" target="_blank">
+                    <postmaster:email.image image="{issue.banner}" treatIdAsReference="true" absolute="false" style="width: 100% !important;" />
+                </a>
+            </f:then>
+            <f:else>
+                <postmaster:email.image image="{issue.banner}" treatIdAsReference="true" absolute="false" style="width: 100% !important;" />
+            </f:else>
+        </f:if>
+    </td>
+</tr>
+</f:section>
+
+</html>

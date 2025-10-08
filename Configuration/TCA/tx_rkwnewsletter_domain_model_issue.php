@@ -17,8 +17,8 @@ return [
         ],
 	],
 	'types' => [
-		'1' => ['showitem' => 'title, introduction, authors, status, release_tstamp, start_tstamp, sent_tstamp'],
-	],
+        '1' => ['showitem' => 'title, introduction, authors, banner, banner_link, status, release_tstamp, start_tstamp, sent_tstamp'],
+    ],
 	'palettes' => [
 		'1' => ['showitem' => ''],
 	],
@@ -44,6 +44,28 @@ return [
                 'enableRichtext' => true
             ],
         ],
+        'banner' => [
+            'exclude' => false,
+            'label'   => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_issue.banner',
+            'config'      => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
+                'banner',
+                [
+                    'maxitems' => 1
+                ],
+                $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
+            ),
+        ],
+        'banner_link'    => [
+            'exclude'     => false,
+            'label'   => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_issue.banner_link',
+            'config'      => [
+                'type'       => 'input',
+                'renderType' => 'inputLink',
+                'size'       => 30,
+                'eval'       => 'trim',
+                'softref'    => 'typolink'
+            ],
+        ],
         'authors' => [
             'exclude' => false,
             'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_issue.authors',
@@ -57,6 +79,7 @@ return [
                 'size'          => 5,
             ]
         ],
+
 		'status' => [
 			'exclude' => true,
 			'label' => 'LLL:EXT:rkw_newsletter/Resources/Private/Language/locallang_db.xlf:tx_rkwnewsletter_domain_model_issue.status',
