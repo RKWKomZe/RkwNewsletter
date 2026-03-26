@@ -56,10 +56,10 @@ plugin.tx_rkwnewsletter {
         requiredFieldsSubscription = txFeregisterGender, firstName, lastName
 
         # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Maximum teaser length
-        minTeaserLength = 500
+        minTeaserLength = 200
 
         # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Minimum teaser length
-        maxTeaserLength = 900
+        maxTeaserLength = 300
 
         # cat=plugin.tx_rkwnewsletter//a; type=integer; label=Maximum number of content items per newsletter-issue
         maxContentItems = 10
